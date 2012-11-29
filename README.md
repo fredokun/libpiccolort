@@ -7,3 +7,4 @@ Authors
 =======
 - Mickaël Menu
 - Maxence WO
+- Dany Siriphol
