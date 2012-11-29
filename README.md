@@ -9,4 +9,4 @@ Authors
 - Maxence WO
 - Dany Siriphol
 - Loïc Girault (loic.girault@gmail.com)
-- Joël Hing
+- Joël Hing (hing.joel@gmail.com)
