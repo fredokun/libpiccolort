@@ -10,3 +10,4 @@ Authors
 - Dany Siriphol
 - Loïc Girault (loic.girault@gmail.com)
 - Joël Hing (hing.joel@gmail.com)
+- Florian Thibord (florian.thibord@gmail.com)
