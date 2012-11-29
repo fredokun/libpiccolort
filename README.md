@@ -11,3 +11,4 @@ Authors
 - Loïc Girault (loic.girault@gmail.com)
 - Joël Hing (hing.joel@gmail.com)
 - Florian Thibord (florian.thibord@gmail.com)
+- Sergiu Tiganu (postaserg@gmail.com)
