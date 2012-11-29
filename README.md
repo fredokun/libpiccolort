@@ -5,4 +5,4 @@ multithreaded runtime environment for the pi compiler
 
 Authors
 =======
-- Mickaël Menu
+- Mickaël Menu (mickael.menu@gmail.com)
