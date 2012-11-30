@@ -31,14 +31,16 @@ typedef enum
 	OUT_COMMIT
 } PIT_CommitType;
 
-typedef enum {
+typedef enum 
+{
   STATUS_RUN,
   STATUS_CALL,
   STATUS_WAIT,
   STATUS_ENDED
 } PIT_StatusKind;
 
-typedef enum {
+typedef enum 
+{
   INT_VAL,
   FLOAT_VAL,
   STRING_VAL,
@@ -46,15 +48,18 @@ typedef enum {
   CHANNEL_VAL,
 } PIT_ValueKind;
 
-struct PIT_Clock {
+struct PIT_Clock 
+{
   PIT_AtomicInt val;
 };
 
-struct PIT_InCommit {
+struct PIT_InCommit 
+{
   int refvar;
 };
 
-struct PIT_OutCommit {
+struct PIT_OutCommit 
+{
   PIT_EvalFunction eval_func;
 };
 
@@ -74,7 +79,8 @@ struct PIT_Commit
 	} content;
 };
 
-struct PIT_SchedPool {
+struct PIT_SchedPool 
+{
   PIT_ReadyQueue ready;
   PIT_WaitQueue wait;
   PIT_Mutex lock;
@@ -83,7 +89,8 @@ struct PIT_SchedPool {
   int nb_waiting_slaves;
 };
 
-struct PIT_PiThread {
+struct PIT_PiThread 
+{
   PIT_StatusKind status;
   bool* enable;
   int enable_length;
@@ -98,14 +105,16 @@ struct PIT_PiThread {
   PIT_Mutex lock;
 };
 
-struct PIT_Channel {
+struct PIT_Channel 
+{
   PIT_Commit* incommits;
   PIT_Commit* outcommits;
   int global_rc;
   PIT_AtomicBoolean lock;
 };
 
-struct PIT_Value {
+struct PIT_Value 
+{
   PIT_ValueKind kind;
   union {
     int as_int;
