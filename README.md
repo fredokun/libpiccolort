@@ -7,7 +7,7 @@ Authors
 =======
 - Mickaël Menu (mickael.menu@gmail.com)
 - Maxence WO (darkmaxounet@gmail.com)
-- Dany Siriphol
+- Dany Siriphol (dany.siriphol@gmail.com)
 - Loïc Girault (loic.girault@gmail.com)
 - Joël Hing (hing.joel@gmail.com)
 - Florian Thibord (florian.thibord@gmail.com)

@@ -1,9 +1,9 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
+#include <pi_thread.h>
+
 /* Necessary to not include pi_thread.h */
-typedef struct PIT_PiThread PIT_PiThread;
-typedef struct PIT_Mutex *PIT_Mutex;
 
 typedef struct PIT_ReadyQueue PIT_ReadyQueue;
 typedef struct PIT_WaitQueue PIT_WaitQueue;
@@ -31,6 +31,5 @@ struct PIT_WaitQueue {
   PIT_Queue old;
   PIT_Mutex lock;
 }
-
 
 #endif /* QUEUE_H */

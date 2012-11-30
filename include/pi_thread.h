@@ -2,8 +2,9 @@
 #define PI_THREAD_H
 
 #include <stdbool.h>
+#include <pthread.h>
 
-#include "queue.h"
+#include <queue.h>
 
 typedef struct PIT_SchedPool PIT_SchedPool;
 typedef struct PIT_PiThread PIT_PiThread;
@@ -13,6 +14,7 @@ typedef struct PIT_InCommit PIT_InCommit;
 typedef struct PIT_OutCommit PIT_OutCommit;
 typedef struct PIT_Clock PIT_Clock;
 typedef struct PIT_Value PIT_Value;
+typedef struct PIT_AtomicBoolean PIT_AtomicBoolean;
 
 typedef struct PIT_Mutex *PIT_Mutex;
 typedef struct PIT_Condition *PIT_Condition;
@@ -22,7 +24,6 @@ typedef struct PIT_KnownsSet *PIT_KnownsSet;
 typedef char *PIT_Label;
 typedef void (*PIT_Function)(void);
 typedef PIT_Value (*PIT_EvalFunction)(PIT_PiThread);
-typedef bool PIT_AtomicBoolean;
 typedef int PIT_AtomicInt;
 
 typedef enum
@@ -48,8 +49,17 @@ typedef enum
   CHANNEL_VAL,
 } PIT_ValueKind;
 
-struct PIT_Clock 
-{
+struct PIT_AtomicBoolean {
+	pthread_mutex_t lock;
+	bool value;	
+};
+
+struct PIT_AtomicInt {
+	pthread_mutex_t lock;
+	int value;	
+};
+
+struct PIT_Clock {
   PIT_AtomicInt val;
 };
 
