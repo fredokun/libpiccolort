@@ -15,6 +15,7 @@ typedef struct PIT_OutCommit PIT_OutCommit;
 typedef struct PIT_Clock PIT_Clock;
 typedef struct PIT_Value PIT_Value;
 typedef struct PIT_AtomicBoolean PIT_AtomicBoolean;
+typedef struct PIT_AtomicInt PIT_AtomicInt;
 
 typedef struct PIT_Mutex *PIT_Mutex;
 typedef struct PIT_Condition *PIT_Condition;
@@ -24,7 +25,6 @@ typedef struct PIT_KnownsSet *PIT_KnownsSet;
 typedef char *PIT_Label;
 typedef void (*PIT_Function)(void);
 typedef PIT_Value (*PIT_EvalFunction)(PIT_PiThread);
-typedef int PIT_AtomicInt;
 
 typedef enum
 {
