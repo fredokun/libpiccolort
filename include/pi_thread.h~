@@ -1,0 +1,52 @@
+#ifndef PI_THREAD_H
+#define PI_THREAD_H
+
+#include <stdbool.h>
+
+typedef struct PIT_SchedPool *PIT_SchedPool;
+typedef struct PIT_PiThread *PIT_PiThread;
+typedef struct PIT_Channel *PIT_Channel;
+typedef struct PIT_Commit *PIT_Commit;
+typedef struct PIT_InCommit *PIT_InCommit;
+typedef struct PIT_OutCommit *PIT_OutCommit;
+typedef struct PIT_Clock *PIT_Clock;
+
+typedef struct PIT_ConcurentReadyQueue *PIT_ConcurentReadyQueue;
+typedef struct PIT_ConcurentWaitQueue *PIT_ConcurentReadyQueue;
+typedef struct PIT_Mutex *PIT_Mutex;
+typedef struct PIT_Condition *PIT_Condition;
+typedef struct PIT_KnownsSet *PIT_KnownsSet;
+typedef struct PIT_CommitSet *PIT_Set;
+typedef struct PIT_Value *PIT_Value;
+
+typedef PIT_Label int;
+typedef void (*PIT_Function)(void);
+
+typedef enum {
+  STATUS_RUN,
+  STATUS_CALL,
+  STATUS_WAIT,
+  STATUS_ENDED
+} PIT_StatusKind;
+
+struct PIT_SchedPool {
+  PIT_ConcurentReadyQueue ready;
+  PIT_ConcurentWaitQueue wait;
+  PIT_MUTEX lock;
+  PIT_Condition cond;
+  int nb_slaves;
+  int nb_waiting_slaves;
+};
+
+struct PIT_PiThread {
+  PIT_StatusKind status;
+  bool enable[];
+  int enable_length;
+  PIT_KnownsSet knowns;
+  PIT_Value env[];
+  int env_length;
+};
+
+
+
+#endif // PI_THREAD_H
