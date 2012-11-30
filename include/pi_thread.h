@@ -13,6 +13,7 @@ typedef struct PIT_InCommit PIT_InCommit;
 typedef struct PIT_OutCommit PIT_OutCommit;
 typedef struct PIT_Clock PIT_Clock;
 typedef struct PIT_Value PIT_Value;
+typedef struct PIT_AtomicBoolean PIT_AtomicBoolean;
 
 typedef struct PIT_Mutex *PIT_Mutex;
 typedef struct PIT_Condition *PIT_Condition;
@@ -24,6 +25,8 @@ typedef void (*PIT_Function)(void);
 typedef PIT_Value (*PIT_EvalFunction)(PIT_PiThread);
 typedef bool PIT_AtomicBoolean;
 typedef int PIT_AtomicInt;
+
+
 
 typedef enum
 {
@@ -45,6 +48,11 @@ typedef enum {
   BOOL_VAL,
   CHANNEL_VAL,
 } PIT_ValueKind;
+
+struct PIT_AtomicBoolean {
+	pthread_mutex_t lock;
+	bool value;	
+};
 
 struct PIT_Clock {
   PIT_AtomicInt val;

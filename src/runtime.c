@@ -1,9 +1,13 @@
 /**
  * @file runtime.c
  * File that contains definitions of the prototypes specified in runtime.h
- * Authors: Maxence WO
+ * Authors: Maxence WO , Dany SIRIPHOL
  */
+
 #include <runtime.h>
+#include <stdio.h>
+#include <sdbool.h>
+#include <pthread.h>
 
 /**
  * Second generation garbage collector.
@@ -18,13 +22,18 @@ int PIT_GC2(PIT_SchedPool schedpool)
 }
 
 /**
- * Function that generate a PIT_Channel.
- * @return PIT_Channel 
+ * Create a channel which contains 10 commitments
+ *
+ * @return created channel
  */
-PIT_Channel PIT_generate_channel()
+
+ PIT_Channel PIT_generate_channel()
 {
-	printf("Not implemented yet.\n");
-	return NULL;
+	PIT_Channel * channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
+	channel->global_rc = 1;
+	channel->incommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );
+	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );
+	return *channel;
 }
 
 PIT_PiThread PIT_generate_pithread()
