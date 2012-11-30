@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+#include "queue.h"
+
 typedef struct PIT_SchedPool PIT_SchedPool;
 typedef struct PIT_PiThread PIT_PiThread;
 typedef struct PIT_Channel PIT_Channel;
@@ -12,8 +14,6 @@ typedef struct PIT_OutCommit PIT_OutCommit;
 typedef struct PIT_Clock PIT_Clock;
 typedef struct PIT_Value PIT_Value;
 
-typedef struct PIT_concurrentReadyQueue *PIT_concurrentReadyQueue;
-typedef struct PIT_concurrentWaitQueue *PIT_concurrentWaitQueue;
 typedef struct PIT_Mutex *PIT_Mutex;
 typedef struct PIT_Condition *PIT_Condition;
 typedef struct PIT_KnownsSet *PIT_KnownsSet;
@@ -21,7 +21,7 @@ typedef struct PIT_KnownsSet *PIT_KnownsSet;
 
 typedef char *PIT_Label;
 typedef void (*PIT_Function)(void);
-typedef void (*PIT_EvalFunction)(PIT_PiThread);
+typedef PIT_Value (*PIT_EvalFunction)(PIT_PiThread);
 typedef bool PIT_AtomicBoolean;
 typedef int PIT_AtomicInt;
 
@@ -75,8 +75,8 @@ struct PIT_Commit
 };
 
 struct PIT_SchedPool {
-  PIT_concurrentReadyQueue ready;
-  PIT_concurrentWaitQueue wait;
+  PIT_ReadyQueue ready;
+  PIT_WaitQueue wait;
   PIT_Mutex lock;
   PIT_Condition cond;
   int nb_slaves;
