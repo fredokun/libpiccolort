@@ -1,86 +1,63 @@
-/*
-##############################################################################
-# runtime functions and compilation outlines
-# Authors: Maxence WO
-##############################################################################
-*/
+/**
+ * @file runtime.h
+ * File that contains headers of the runtime functions specified in the specification's document.
+ * Authors: Maxence WO
+ */
 
 #ifndef DEF_RUNTIME
 #define DEF_RUNTIME
 
+#include "pi_thread.h"
+
+int		PIT_GC2(PIT_SchedPool schedpool);
+
+PIT_Channel	PIT_generate_channel();
+PIT_PiThread	PIT_generate_pithread();
+PIT_Clock	PIT_generate_clock();
+
+void		PIT_scheduler_slave(PIT_SchedPool schedpool);
+void		PIT_scheduler_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor);
+
+
+//definir le type de v
+void		PIT_register_ouput_commitment(PIT_PiThread p, PIT_Channel ch, void* v, int cont_pc);
+void		PIT_register_input_commitment(PIT_PiThread p, PIT_Channel ch, int x, int cont_pc);
+int		PIT_is_valid_commit(PIT_Commit c);
+int		PIT_can_awake(PIT_PiThread p, PIT_Commit c);
+void		PIT_awake(PIT_scheduler sched, PIT_PiThread p);
+void		PIT_Channel_incr_ref_count(PIT_Channel ch);
+void		PIT_Channel_dec_ref_count(PIT_Channel ch);
+
+bool		PIT_is_valid_commit(PIT_Commit c);
+
 /*################### LIST UTILS ####################*/
 
-typedef struct
-{
-	union
-	{
-		Incommit in;
-		Outcommit out;
-	}
-} Commit;
-
-// PIT_commit_list_add : add the selected element at the end of the CommitList
-void PIT_commit_list_add(Commit* clist, Commit c);
-
-// PIT_commit_list_fetch : removes the first element from the commitlist and returns it
-Commit PIT_commit_list_fetch(Commit* clist);
+void 		PIT_Commit_list_add(PIT_Commit* clist, PIT_Commit c);
+PIT_Commit 	PIT_Commit_list_fetch(PIT_Commit* clist);
 
 /*####################################################*/
 
 /*################# QUEUE UTILS ######################*/
 
-// PIT_ready_queue_push : push a PiThread on the top of a readyqueue
-void PIT_ready_queue_push(Readyqueue rq, Pithread p);
-// PIT_ready_queue_add : add a pithread a the end of a Readyqueue
-void PIT_ready_queue_add(Readyqueue rq, Pithread p);
-// PIT_readyqueue_pop : pop a pithread from the top of a readyqueue
-Pithread PIT_readyqueue_pop(Readyqueue rq);
-// PIT_readyqueue_size : returns the number of elements in a Readyqueue
-int PIT_readyqueue_size(Readyqueue rq);
+void 		PIT_ReadyQueue_push(PIT_ReadyQueue rq, PIT_PiThread p);
+void 		PIT_ReadyQueue_add(PIT_ReadyQueue rq, PIT_PiThread p);
+PIT_PiThread	PIT_ReadyQueue_pop(PIT_ReadyQueue rq);
+int 		PIT_ReadyQueue_size(PIT_ReadyQueue rq);
+void 		PIT_WaitQueue_push(PIT_WaitQueue wq, PIT_PiThread p);
+PIT_PiThread 	PIT_WaitQueue_fetch(PIT_WaitQueue wq, PIT_PiThread p);
+void 		PIT_WaitQueue_push_old(PIT_WaitQueue wq, PIT_PiThread p);
+PIT_PiThread 	PIT_WaitQueue_pop_old(PIT_WaitQueue wq);
+int 		PIT_WaitQueue_size(PIT_WaitQueue wq);
+int 		PIT_WaitQueue_max_active(PIT_WaitQueue wq);
+int 		PIT_WaitQueue_max_active_reset(PIT_WaitQueue wq);
 
-// PIT_waitqueue_push : pushes a pithread at the top of a Waitqueue
-void PIT_waitqueue_push(Waitqueue wq, Pithread p);
-// PIT_waitqueue_fetch : pop a selected Pithread from a waitqueue
-Pithread PIT_waitqueue_fetch(Waitqueue wq, Pithread p);
-// PIT_waitqueue_push_old : pushes a Pithread at the top of the old Pithreads in a Waitqueue
-void PIT_waitqueue_push_old(Waitqueue wq, Pithread p);
-// PIT_waitqueue_pop_old : pop the older Pithread from a waitqueue
-Pithread PIT_waitqueue_pop_old(Waitqueue wq);
-// PIT_waitqueue_size : returns the number of elements in a Waitqueue
-int PIT_waitqueue_size(Waitqueue wq);
-// PIT_waitqueue_max_active : returns the number of active elements in a Waitqueue
-int PIT_waitqueue_max_active(Waitqueue wq);
-// PIT_waitqueue_max_active_reset : reset the counter of active elemnts ina a waitqueue (ie: active elements are now old elements)
-int PIT_waitqueue_max_active_reset(Waitqueue wq);
+Knowsset 	PIT_knows_set_knows(Knowsset ks);
+KnowsSet 	PIT_knows_set_forget(Knowsset ks);
+bool 		PIT_knows_register(Knowsset ks, Channel ch);
 
-// PIT_knows_set_knows : returns a subset of all KNOWN-STATE in a knowsset
-Knowsset PIT_knows_set_knows(Knowsset ks);
-// PIT_knows_set_forget : returns a subset of all FORGET-STATE in a Knowsset
-KnowsSet PIT_knows_set_forget(Knowsset ks);
-// PIT_knows_set_forget_to_unknown : switches an element of a Knowsset from the FORGET-STATE to the UNKNOWN-STATE
-// PIT_knows_register : looks for a channel in a Knowsset :
-// - if the channel is in the Knowsset in KNOWN-STATE, it returns false
-// - if the channel is in the Knowsset in FORGET-STATE, it switches it to KNOWN then  returns false
-// - else it add the channel in the Knowsset (KNOWS-STATE) then returns true
-int PIT_knows_register(Knowsset ks, Channel ch);
+void		PIT_acquire(PIT_AtomicBoolean b);
+void		PIT_release(PIT_AtomicBoolean b);
 
-/*####################################################*/
-
-/* Compilation outlines */
-
-/* Constants */
-
-// convert b:bool to pt.val
-pt CompileExprBool(int b);
-
-/* Variables */
-
-// get the value at position v in pt.env and affect it to pt.val
-// NB: pt.env[v] <=> pt.env[i] where i is the position of the variable v in pt.env (index solved in the compilation environnement)
-pt CompileExprVar(int v);
-
-/* unary operators */
-
-pt CompileExprUOp()
+PIT_Commit	PIT_fetch_commitment(PIT_Channel ch);
 
 #endif
