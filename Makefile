@@ -5,11 +5,12 @@ LIB=lib
 INCLUDE=include
 SRC=src
 HEADERS=runtime.h pithread.h
-OBJ=main.o runtime.o
+OBJ=runtime.o main.o
 
 all : $(BIN)/$(NAME)
 
 $(LIB)/%.o: $(SRC)/%.c $(DEPS)
+	mkdir -p -v lib
 	$(CC) -c -o $@ $< $(FLAGS)
 
 $(BIN)/$(NAME): $(LIB)/$(OBJ)

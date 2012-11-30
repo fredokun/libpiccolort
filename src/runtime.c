@@ -6,7 +6,8 @@
 
 #include <runtime.h>
 #include <stdio.h>
-#include <sdbool.h>
+#include <stdbool.h>
+#include <stdlib.h>
 #include <pthread.h>
 
 /**
@@ -29,7 +30,7 @@ int PIT_GC2(PIT_SchedPool schedpool)
 
  PIT_Channel PIT_generate_channel()
 {
-	PIT_Channel * channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
+	PIT_Channel *channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
 	channel->global_rc = 1;
 	channel->incommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );
 	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );
@@ -42,7 +43,7 @@ int PIT_GC2(PIT_SchedPool schedpool)
  * @return created channel
  */
 
- PIT_Channel PIT_generate_channel( int commit_size )
+PIT_Channel PIT_generate_channel_cn( int commit_size )
 {
 	PIT_Channel * channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
 	channel->global_rc = 1;
@@ -54,14 +55,16 @@ int PIT_GC2(PIT_SchedPool schedpool)
 
 PIT_PiThread PIT_generate_pithread()
 {
+  PIT_PiThread new_thread;
 	printf("Not implemented yet.\n");
-	return NULL;
+	return new_thread;
 }
 
 PIT_Clock PIT_generate_clock()
 {
+  PIT_Clock new_clock;
 	printf("Not implemented yet.\n");
-	return NULL;
+	return new_clock;
 }
 
 void PIT_SchedPool_slave(PIT_SchedPool schedpool)
@@ -88,10 +91,10 @@ void PIT_register_input_commitment(PIT_PiThread p, PIT_Channel ch, int x, int co
 	return;
 }
 
-int PIT_is_valid_commit(PIT_Commit c)
+bool PIT_is_valid_commit(PIT_Commit c)
 {
 	printf("Not implemented yet.\n");
-	return 0;
+	return false;
 }
 
 int PIT_can_awake(PIT_PiThread p, PIT_Commit c)

@@ -4,8 +4,6 @@
 #include <stdbool.h>
 #include <pthread.h>
 
-#include <queue.h>
-
 typedef struct PIT_SchedPool PIT_SchedPool;
 typedef struct PIT_PiThread PIT_PiThread;
 typedef struct PIT_Channel PIT_Channel;
@@ -16,15 +14,20 @@ typedef struct PIT_Clock PIT_Clock;
 typedef struct PIT_Value PIT_Value;
 typedef struct PIT_AtomicBoolean PIT_AtomicBoolean;
 typedef struct PIT_AtomicInt PIT_AtomicInt;
+typedef struct PIT_Known PIT_Known;
 
-typedef struct PIT_Mutex *PIT_Mutex;
+typedef pthread_mutex_t PIT_Mutex;
 typedef struct PIT_Condition *PIT_Condition;
-typedef struct PIT_KnownsSet *PIT_KnownsSet;
-
 
 typedef char *PIT_Label;
 typedef void (*PIT_Function)(void);
 typedef PIT_Value (*PIT_EvalFunction)(PIT_PiThread);
+
+typedef struct PIT_ReadyQueue PIT_ReadyQueue;
+typedef struct PIT_WaitQueue PIT_WaitQueue;
+
+typedef struct PIT_Queue PIT_Queue;
+typedef struct PIT_QueueCell PIT_QueueCell;
 
 typedef enum
 {
@@ -48,6 +51,13 @@ typedef enum
   BOOL_VAL,
   CHANNEL_VAL,
 } PIT_ValueKind;
+
+typedef enum
+{
+  UNKNOWN,
+  KNOWN,
+  FORGET
+} PIT_KnownsState;
 
 struct PIT_AtomicBoolean {
 	pthread_mutex_t lock;
@@ -89,6 +99,34 @@ struct PIT_Commit
 	} content;
 };
 
+struct PIT_QueueCell {
+  PIT_PiThread *thread;
+  PIT_QueueCell *next;
+};
+
+struct PIT_Queue {
+  PIT_QueueCell *head;
+  PIT_QueueCell *tail;
+  int size;
+};
+
+struct PIT_ReadyQueue {
+  PIT_Queue q;
+  PIT_Mutex lock;
+};
+
+struct PIT_WaitQueue {
+  PIT_Queue active;
+  PIT_Queue old;
+  PIT_Mutex lock;
+};
+
+struct PIT_Known
+{
+  PIT_Channel *pchannel;
+  PIT_KnownsState state;
+};
+
 struct PIT_SchedPool 
 {
   PIT_ReadyQueue ready;
@@ -104,7 +142,7 @@ struct PIT_PiThread
   PIT_StatusKind status;
   bool* enable;
   int enable_length;
-  PIT_KnownsSet knowns;
+  PIT_Known* knowns;
   PIT_Value* env;
   int env_length;
   PIT_Commit commit;

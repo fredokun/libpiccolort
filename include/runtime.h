@@ -12,6 +12,7 @@
 int		PIT_GC2(PIT_SchedPool schedpool);
 
 PIT_Channel	PIT_generate_channel();
+PIT_Channel     PIT_generate_channel_cn( int commit_size );
 PIT_PiThread	PIT_generate_pithread();
 PIT_Clock	PIT_generate_clock();
 
@@ -49,13 +50,15 @@ int 		PIT_WaitQueue_size(PIT_WaitQueue wq);
 int 		PIT_WaitQueue_max_active(PIT_WaitQueue wq);
 int 		PIT_WaitQueue_max_active_reset(PIT_WaitQueue wq);
 
-Knowsset 	PIT_knows_set_knows(Knowsset ks);
-KnowsSet 	PIT_knows_set_forget(Knowsset ks);
-bool 		PIT_knows_register(Knowsset ks, Channel ch);
+PIT_Known* 	PIT_knows_set_knows(PIT_Known *ks);
+PIT_Known* 	PIT_knows_set_forget(PIT_Known *ks);
+bool 		PIT_knows_register(PIT_Known *ks, PIT_Channel ch);
 
 void		PIT_acquire(PIT_AtomicBoolean b);
 void		PIT_release(PIT_AtomicBoolean b);
 
 PIT_Commit	PIT_fetch_commitment(PIT_Channel ch);
+
+PIT_AtomicBoolean PIT_create_atomic_boolean();
 
 #endif
