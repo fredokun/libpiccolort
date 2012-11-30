@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#include "queue.h"
+#include <queue.h>
 
 typedef struct PIT_SchedPool PIT_SchedPool;
 typedef struct PIT_PiThread PIT_PiThread;
@@ -23,7 +23,6 @@ typedef struct PIT_KnownsSet *PIT_KnownsSet;
 typedef char *PIT_Label;
 typedef void (*PIT_Function)(void);
 typedef PIT_Value (*PIT_EvalFunction)(PIT_PiThread);
-typedef bool PIT_AtomicBoolean;
 typedef int PIT_AtomicInt;
 
 

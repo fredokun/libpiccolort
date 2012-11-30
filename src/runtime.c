@@ -36,6 +36,22 @@ int PIT_GC2(PIT_SchedPool schedpool)
 	return *channel;
 }
 
+/**
+ * Create a channel which contains commit_size commitments
+ *
+ * @return created channel
+ */
+
+ PIT_Channel PIT_generate_channel( int commit_size )
+{
+	PIT_Channel * channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
+	channel->global_rc = 1;
+	channel->incommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * commit_size );
+	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * commit_size );
+	channel->lock = PIT_create_atomic_boolean();
+	return *channel;
+}
+
 PIT_PiThread PIT_generate_pithread()
 {
 	printf("Not implemented yet.\n");
@@ -90,16 +106,34 @@ void PIT_awake(PIT_SchedPool sched, PIT_PiThread p)
 	return 0;
 }
 
-void PIT_Channel_incr_ref_count(PIT_Channel ch)
+/**
+ * Increments by 1 the global reference count of a channel
+ *
+ * @param channel to update
+ */
+
+void PIT_channel_incr_ref_count( PIT_Channel channel ) 
 {
-	printf("Not implemented yet.\n");
-	return;
+	PIT_acquire( channel.lock);
+	channel.global_rc += 1;
+	PIT_release( channel.lock);
 }
 
-void PIT_Channel_dec_ref_count(PIT_Channel ch)
+/**
+ * decrements by 1 the global reference count of a channel
+ *
+ * @param channel to update
+ */
+
+void PIT_channel_dec_ref_count( PIT_Channel channel ) 
 {
-	printf("Not implemented yet.\n");
-	return;
+	PIT_acquire( channel.lock);
+	channel.global_rc -= 1;
+	PIT_release( channel.lock);
+	if(channel.global_rc == 0 )
+	{
+		PIT_reclaim_channel(channel);
+	}
 }
 
 int PIT_is_valid_commit(PIT_Commit c)
@@ -224,17 +258,26 @@ int PIT_knows_register(Knowsset ks, Channel ch)
 	return 0;
 }
 
-/* ATOMIC */
-void PIT_acquire(PIT_AtomicBoolean b)
-{
-	printf("Not implemented yet.\n");
-	return;
-}
+/**
+ * Acquire a mutex on an atomic boolean
+ *
+ * @param the atomic boolean containing the mutex
+ */
 
-void PIT_release(PIT_AtomicBoolean b)
+void PIT_acquire( PIT_AtomicBoolean ab )
 {
-	printf("Not implemented yet.\n");
-	return;
+	pthread_mutex_lock (ab.lock);
+	
+
+/**
+ * Release a mutex on an atomic boolean
+ *
+ * @param the atomic boolean containing the mutex
+ */
+
+void PIT_release( PIT_AtomicBoolean ab )
+{
+	pthread_mutex_unlock (ab.lock);
 }
 
 PIT_Commit PIT_fetch_commitment(PIT_Channel ch)
@@ -242,3 +285,19 @@ PIT_Commit PIT_fetch_commitment(PIT_Channel ch)
 	printf("Not implemented yet.\n");
 	return NULL;
 }
+
+/**
+ * Create and init an atomic boolean
+ *
+ * @return created atomic boolean
+ */
+
+PIT_AtomicBoolean PIT_create_atomic_boolean()
+{
+	PIT_AtomicBoolean ab;
+	ab.lock = pthread_mutex_init(&ab.lock, NULL);
+	ab.value = false;
+	return ab;
+}
+
+
