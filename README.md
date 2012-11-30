@@ -9,4 +9,6 @@ Authors
 - Maxence WO (darkmaxounet@gmail.com)
 - Dany Siriphol
 - Loïc Girault (loic.girault@gmail.com)
-- Joël Hing
+- Joël Hing (hing.joel@gmail.com)
+- Florian Thibord (florian.thibord@gmail.com)
+- Sergiu Tiganu (postaserg@gmail.com)
