@@ -3,10 +3,7 @@
  * File that contains definitions of the prototypes specified in runtime.h
  * Authors: Maxence WO
  */
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "../include/runtime.h"
+#include <runtime.h>
 
 /**
  * Second generation garbage collector.
@@ -42,13 +39,13 @@ PIT_Clock PIT_generate_clock()
 	return NULL;
 }
 
-void PIT_scheduler_slave(PIT_SchedPool schedpool)
+void PIT_SchedPool_slave(PIT_SchedPool schedpool)
 {
 	printf("Not implemented yet.\n");
 	return;
 }
 
-void PIT_scheduler_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor)
+void PIT_SchedPool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor)
 {
 	printf("Not implemented yet.\n");
 	return;
@@ -78,7 +75,7 @@ int PIT_can_awake(PIT_PiThread p, PIT_Commit c)
 	return 0;
 }
 
-void PIT_awake(PIT_scheduler sched, PIT_PiThread p)
+void PIT_awake(PIT_SchedPool sched, PIT_PiThread p)
 {
 	printf("Not implemented yet.\n");
 	return 0;

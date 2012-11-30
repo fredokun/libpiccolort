@@ -7,7 +7,7 @@
 #ifndef DEF_RUNTIME
 #define DEF_RUNTIME
 
-#include "pi_thread.h"
+#include <pi_thread.h>
 
 int		PIT_GC2(PIT_SchedPool schedpool);
 
@@ -15,20 +15,18 @@ PIT_Channel	PIT_generate_channel();
 PIT_PiThread	PIT_generate_pithread();
 PIT_Clock	PIT_generate_clock();
 
-void		PIT_scheduler_slave(PIT_SchedPool schedpool);
-void		PIT_scheduler_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor);
+void		PIT_SchedPool_slave(PIT_SchedPool schedpool);
+void		PIT_SchedPool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor);
 
 
 //definir le type de v
 void		PIT_register_ouput_commitment(PIT_PiThread p, PIT_Channel ch, void* v, int cont_pc);
 void		PIT_register_input_commitment(PIT_PiThread p, PIT_Channel ch, int x, int cont_pc);
-int		PIT_is_valid_commit(PIT_Commit c);
+bool		PIT_is_valid_commit(PIT_Commit c);
 int		PIT_can_awake(PIT_PiThread p, PIT_Commit c);
-void		PIT_awake(PIT_scheduler sched, PIT_PiThread p);
+void		PIT_awake(PIT_SchedPool sched, PIT_PiThread p);
 void		PIT_Channel_incr_ref_count(PIT_Channel ch);
 void		PIT_Channel_dec_ref_count(PIT_Channel ch);
-
-bool		PIT_is_valid_commit(PIT_Commit c);
 
 /*################### LIST UTILS ####################*/
 
