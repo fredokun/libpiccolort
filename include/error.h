@@ -42,22 +42,8 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <definitions.h>
 
-extern typedef enum PIT_ErrorId PIT_ErrorId;
-extern typedef struct PIT_Error PIT_Error;
-
-// TO BE MODIFIED WHEN YOU ADD AN ERROR ////////////////////////////////////////
-
-// Number of errors defined.
-#define NB_ERRORS 3
-
-// List of all errors defined.
-enum PIT_ErrorId {
-	ERR_WRONG_ARG = 1,
-	ERR_FOO_FAILED,
-	ERR_BAR_FAILED
-	/* ... */
-};
 
 // List of all error messages in order.
 static const char *error_messages[NB_ERRORS + 1] = {
