@@ -91,6 +91,9 @@ struct PIT_Error {
 #define ADD_ERROR(error, prev, id) \
 	PIT_add_error(error, prev, id, __FILE__, __LINE__)
 
+#define FORWARD_ERROR(error, prev) \
+	PIT_forward_error(error, prev)
+
 #define CRASH(error) \
 	PIT_crash(error, __FILE__, __FUNCTION__)
 
@@ -103,6 +106,7 @@ extern void PIT_add_error(PIT_Error *error, PIT_Error prev_error, PIT_ErrorId id
 extern PIT_Error *PIT_copy_error(const PIT_Error error);
 extern void PIT_crash(PIT_Error *error, const char *file, const char *fct);
 extern void PIT_print_error(PIT_Error *error, const char *file, const char *fct);
+extern void PIT_forward_error(PIT_Error *error, PIT_Error prev_error);
 extern const char *PIT_get_error_message(PIT_ErrorId id);
 extern void PIT_free_error(PIT_Error *error);
 
