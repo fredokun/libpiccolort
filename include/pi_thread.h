@@ -5,15 +5,15 @@
 
 #include <queue.h>
 
-typedef struct PIT_SchedPool PIT_SchedPool;
-typedef struct PIT_PiThread PIT_PiThread;
-typedef struct PIT_Channel PIT_Channel;
-typedef struct PIT_Commit PIT_Commit;
-typedef struct PIT_InCommit PIT_InCommit;
-typedef struct PIT_OutCommit PIT_OutCommit;
-typedef struct PIT_Clock PIT_Clock;
-typedef struct PIT_Value PIT_Value;
-typedef struct PIT_AtomicBoolean PIT_AtomicBoolean;
+typedef struct PIT_SchedPool *PIT_SchedPool;
+typedef struct PIT_PiThread *PIT_PiThread;
+typedef struct PIT_Channel *PIT_Channel;
+typedef struct PIT_Commit *PIT_Commit;
+typedef struct PIT_InCommit *PIT_InCommit;
+typedef struct PIT_OutCommit *PIT_OutCommit;
+typedef struct PIT_Clock *PIT_Clock;
+typedef struct PIT_Value *PIT_Value;
+typedef struct PIT_AtomicBoolean *PIT_AtomicBoolean;
 
 typedef struct PIT_Mutex *PIT_Mutex;
 typedef struct PIT_Condition *PIT_Condition;
@@ -121,6 +121,11 @@ struct PIT_Value {
     bool as_bool;
     PIT_Channel *as_channel;
   } content;
+};
+
+//IL FAUT LE FAIRE
+struct PIT_Known  sSet {
+  int a;
 };
 
 #endif // PI_THREAD_H

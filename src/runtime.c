@@ -31,9 +31,9 @@ int PIT_GC2(PIT_SchedPool schedpool)
  PIT_Channel PIT_generate_channel()
 {
 	PIT_Channel *channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
-	channel->global_rc = 1;
+	/*channel->global_rc = 1;
 	channel->incommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );
-	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );
+	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );*/
 	return *channel;
 }
 
@@ -46,10 +46,10 @@ int PIT_GC2(PIT_SchedPool schedpool)
 PIT_Channel PIT_generate_channel_cn( int commit_size )
 {
 	PIT_Channel * channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
-	channel->global_rc = 1;
+	/*channel->global_rc = 1;
 	channel->incommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * commit_size );
 	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * commit_size );
-	channel->lock = PIT_create_atomic_boolean();
+	channel->lock = PIT_create_atomic_boolean();*/
 	return *channel;
 }
 
@@ -79,7 +79,7 @@ void PIT_SchedPool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc
 	return;
 }
 
-void PIT_register_ouput_commitment(PIT_PiThread p, PIT_Channel ch, void* v, int cont_pc)
+void PIT_register_ouput_commitment(PIT_PiThread p, PIT_Channel ch, PIT_EvalFunction* v, int cont_pc)
 {
 	printf("Not implemented yet.\n");
 	return;
@@ -106,7 +106,7 @@ int PIT_can_awake(PIT_PiThread p, PIT_Commit c)
 void PIT_awake(PIT_SchedPool sched, PIT_PiThread p)
 {
 	printf("Not implemented yet.\n");
-	return 0;
+	return;
 }
 
 /**
@@ -117,9 +117,9 @@ void PIT_awake(PIT_SchedPool sched, PIT_PiThread p)
 
 void PIT_channel_incr_ref_count( PIT_Channel channel ) 
 {
-	PIT_acquire( channel.lock);
-	channel.global_rc += 1;
-	PIT_release( channel.lock);
+	PIT_acquire( channel->lock);
+	channel->global_rc += 1;
+	PIT_release( channel->lock);
 }
 
 /**
@@ -130,19 +130,13 @@ void PIT_channel_incr_ref_count( PIT_Channel channel )
 
 void PIT_channel_dec_ref_count( PIT_Channel channel ) 
 {
-	PIT_acquire( channel.lock);
+	/*PIT_acquire( channel.lock);
 	channel.global_rc -= 1;
 	PIT_release( channel.lock);
 	if(channel.global_rc == 0 )
 	{
 		PIT_reclaim_channel(channel);
-	}
-}
-
-int PIT_is_valid_commit(PIT_Commit c)
-{
-	printf("Not implemented yet.\n");
-	return;
+	}*/
 }
 
 // PIT_Commit_list_add : add the selected element at the end of the CommitList
@@ -155,6 +149,7 @@ void PIT_Commit_list_add(PIT_Commit* clist, PIT_Commit c)
 // PIT_Commit_list_fetch : removes the first element from the commitlist and returns it
 PIT_Commit PIT_Commit_list_fetch(PIT_Commit* clist)
 {
+  
 	printf("Not implemented yet.\n");
 	return NULL;
 }
@@ -237,25 +232,25 @@ int PIT_WaitQueue_max_active_reset(PIT_WaitQueue wq)
 }
 
 // PIT_knows_set_knows : returns a subset of all KNOWN-STATE in a knowsset
-Knowsset PIT_knows_set_knows(Knowsset ks)
+PIT_KnownsSet PIT_knows_set_knows(PIT_KnownsSet ks)
 {
 	printf("Not implemented yet.\n");
 	return NULL;
 }
 
-// PIT_knows_set_forget : returns a subset of all FORGET-STATE in a Knowsset
-KnowsSet PIT_knows_set_forget(Knowsset ks)
+// PIT_knows_set_forget : returns a subset of all FORGET-STATE in a PIT_KnownsSet
+PIT_KnownsSet PIT_knows_set_forget(PIT_KnownsSet ks)
 {
 	printf("Not implemented yet.\n");
 	return NULL;
 }
 
-// PIT_knows_set_forget_to_unknown : switches an element of a Knowsset from the FORGET-STATE to the UNKNOWN-STATE
-// PIT_knows_register : looks for a channel in a Knowsset :
-// - if the channel is in the Knowsset in KNOWN-STATE, it returns false
-// - if the channel is in the Knowsset in FORGET-STATE, it switches it to KNOWN then  returns false
-// - else it add the channel in the Knowsset (KNOWS-STATE) then returns true
-int PIT_knows_register(Knowsset ks, Channel ch)
+// PIT_knows_set_forget_to_unknown : switches an element of a PIT_KnownsSet from the FORGET-STATE to the UNKNOWN-STATE
+// PIT_knows_register : looks for a channel in a PIT_KnownsSet :
+// - if the channel is in the PIT_KnownsSet in KNOWN-STATE, it returns false
+// - if the channel is in the PIT_KnownsSet in FORGET-STATE, it switches it to KNOWN then  returns false
+// - else it add the channel in the PIT_KnownsSet (KNOWS-STATE) then returns true
+bool PIT_knows_register(PIT_KnownsSet ks, PIT_Channel ch)
 {
 	printf("Not implemented yet.\n");
 	return 0;
@@ -267,9 +262,10 @@ int PIT_knows_register(Knowsset ks, Channel ch)
  * @param the atomic boolean containing the mutex
  */
 
-void PIT_acquire( PIT_AtomicBoolean ab )
+void PIT_acquire(PIT_AtomicBoolean ab)
 {
-	pthread_mutex_lock (ab.lock);
+	//pthread_mutex_lock (ab.lock);
+}
 	
 
 /**
@@ -278,9 +274,9 @@ void PIT_acquire( PIT_AtomicBoolean ab )
  * @param the atomic boolean containing the mutex
  */
 
-void PIT_release( PIT_AtomicBoolean ab )
+void PIT_release(PIT_AtomicBoolean ab)
 {
-	pthread_mutex_unlock (ab.lock);
+	pthread_mutex_unlock(ab->lock);
 }
 
 PIT_Commit PIT_fetch_commitment(PIT_Channel ch)
@@ -297,10 +293,11 @@ PIT_Commit PIT_fetch_commitment(PIT_Channel ch)
 
 PIT_AtomicBoolean PIT_create_atomic_boolean()
 {
-	PIT_AtomicBoolean ab;
-	ab.lock = pthread_mutex_init(&ab.lock, NULL);
+	/*b.lock = pthread_mutex_init(&ab.lock, NULL);
 	ab.value = false;
 	return ab;
+	*/
+	return NULL;
 }
 
 

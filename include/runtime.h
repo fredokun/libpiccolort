@@ -9,7 +9,7 @@
 
 #include <pi_thread.h>
 
-int		PIT_GC2(PIT_SchedPool schedpool);
+int		  PIT_GC2(PIT_SchedPool schedpool);
 
 PIT_Channel	PIT_generate_channel();
 PIT_PiThread	PIT_generate_pithread();
@@ -22,7 +22,7 @@ void		PIT_SchedPool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_g
 void		PIT_register_ouput_commitment(PIT_PiThread p, PIT_Channel ch, PIT_EvalFunction* v, int cont_pc);
 void		PIT_register_input_commitment(PIT_PiThread p, PIT_Channel ch, int x, int cont_pc);
 bool		PIT_is_valid_commit(PIT_Commit c);
-int		PIT_can_awake(PIT_PiThread p, PIT_Commit c);
+int		  PIT_can_awake(PIT_PiThread p, PIT_Commit c);
 void		PIT_awake(PIT_SchedPool sched, PIT_PiThread p);
 void		PIT_Channel_incr_ref_count(PIT_Channel ch);
 void		PIT_Channel_dec_ref_count(PIT_Channel ch);
@@ -48,9 +48,9 @@ int 		PIT_WaitQueue_size(PIT_WaitQueue wq);
 int 		PIT_WaitQueue_max_active(PIT_WaitQueue wq);
 int 		PIT_WaitQueue_max_active_reset(PIT_WaitQueue wq);
 
-Knowsset 	PIT_knows_set_knows(Knowsset ks);
-KnowsSet 	PIT_knows_set_forget(Knowsset ks);
-bool 		PIT_knows_register(Knowsset ks, Channel ch);
+PIT_KnownsSet 	PIT_knows_set_knows(PIT_KnownsSet ks);
+PIT_KnownsSet 	PIT_knows_set_forget(PIT_KnownsSet ks);
+bool 		PIT_knows_register(PIT_KnownsSet ks, PIT_Channel ch);
 
 void		PIT_acquire(PIT_AtomicBoolean b);
 void		PIT_release(PIT_AtomicBoolean b);
