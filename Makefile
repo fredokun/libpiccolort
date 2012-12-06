@@ -1,3 +1,7 @@
+#############################
+# Authors: Maxence WO       #
+#############################
+
 CC=gcc
 FLAGS=-Wall -I\include
 NAME=pithread
