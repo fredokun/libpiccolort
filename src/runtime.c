@@ -165,11 +165,11 @@ void PIT_awake(PIT_SchedPool sched, PIT_PiThread p)
  *
  * @param channel to update
  */
-void PIT_channel_incr_ref_count( PIT_Channel channel ) 
+void PIT_channel_incr_ref_count(PIT_Channel channel) 
 {
-	PIT_acquire( channel->lock);
-	channel->global_rc += 1;
-	PIT_release( channel->lock);
+	PIT_acquire(channel.lock);
+	channel.global_rc += 1;
+	PIT_release(channel.lock);
 }
 
 /**
@@ -206,8 +206,9 @@ void PIT_commit_list_add(PIT_Commit* clist, PIT_Commit c)
  */
 PIT_Commit PIT_commit_list_fetch(PIT_Commit* clist)
 {
+	PIT_Commit p;
 	printf("Not implemented yet.\n");
-	return NULL;
+	return p;
 }
 
 /**
@@ -215,7 +216,7 @@ PIT_Commit PIT_commit_list_fetch(PIT_Commit* clist)
  * @param rq PIT_ReaduQueue
  * @param p PIT_PiThread
  */
-void PIT_ready_queue_push(PIT_ReadyQueue rq, PIT_PiThread p)
+void PIT_ready_queue_push(PIT_ReadyQueue *rq, PIT_PiThread p)
 {
 	printf("Not implemented yet.\n");
 	return;
@@ -226,7 +227,7 @@ void PIT_ready_queue_push(PIT_ReadyQueue rq, PIT_PiThread p)
  * @param rq PIT_ReadyQueue
  * @param p PIT_PiThread
  */
-void PIT_ready_queue_add(PIT_ReadyQueue rq, PIT_PiThread p)
+void PIT_ready_queue_add(PIT_ReadyQueue *rq, PIT_PiThread p)
 {
 	printf("Not implemented yet.\n");
 	return;
@@ -237,10 +238,11 @@ void PIT_ready_queue_add(PIT_ReadyQueue rq, PIT_PiThread p)
  * @param rq PIT_ReadyQueue
  * @return PIT_PiThread
  */
-PIT_PiThread PIT_ready_queue_pop(PIT_ReadyQueue rq)
+PIT_PiThread PIT_ready_queue_pop(PIT_ReadyQueue *rq)
 {
+	PIT_PiThread p;
 	printf("Not implemented yet.\n");
-	return NULL;
+	return p;
 }
 
 /**
@@ -248,7 +250,7 @@ PIT_PiThread PIT_ready_queue_pop(PIT_ReadyQueue rq)
  * @param rq PIT_ReadyQueue
  * @return number of elements in the PIT_ReadyQueue
  */
-int PIT_ready_queue_size(PIT_ReadyQueue rq)
+int PIT_ready_queue_size(PIT_ReadyQueue *rq)
 {
 	printf("Not implemented yet.\n");
 	return 0;
@@ -259,7 +261,7 @@ int PIT_ready_queue_size(PIT_ReadyQueue rq)
  * @param wq PIT_WaitQueue
  * @param p PIT_PiThread
  */
-void PIT_wait_queue_push(PIT_WaitQueue wq, PIT_PiThread p)
+void PIT_wait_queue_push(PIT_WaitQueue *wq, PIT_PiThread p)
 {
 	printf("Not implemented yet.\n");
 	return;
@@ -270,10 +272,10 @@ void PIT_wait_queue_push(PIT_WaitQueue wq, PIT_PiThread p)
  * @param rq PIT_ReadyQueue
  * @return number of elements in the PIT_ReadyQueue
  */
-PIT_PiThread PIT_wait_queue_fetch(PIT_WaitQueue wq, PIT_PiThread p)
+PIT_PiThread PIT_wait_queue_fetch(PIT_WaitQueue *wq, PIT_PiThread p)
 {
 	printf("Not implemented yet.\n");
-	return NULL;
+	return p;
 }
 
 /**
@@ -281,7 +283,7 @@ PIT_PiThread PIT_wait_queue_fetch(PIT_WaitQueue wq, PIT_PiThread p)
  * @param wq PIT_WaitQueue
  * @param p PIT_PiThread
  */
-void PIT_wait_queue_push_old(PIT_WaitQueue wq, PIT_PiThread p)
+void PIT_wait_queue_push_old(PIT_WaitQueue *wq, PIT_PiThread p)
 {
 	printf("Not implemented yet.\n");
 	return;
@@ -292,10 +294,11 @@ void PIT_wait_queue_push_old(PIT_WaitQueue wq, PIT_PiThread p)
  * @param wq PIT_WaitQueue
  * @return PIT_PiThread
  */
-PIT_PiThread PIT_wait_queue_pop_old(PIT_WaitQueue wq)
+PIT_PiThread PIT_wait_queue_pop_old(PIT_WaitQueue *wq)
 {
+	PIT_PiThread p;
 	printf("Not implemented yet.\n");
-	return NULL;
+	return p;
 }
 
 /**
@@ -303,7 +306,7 @@ PIT_PiThread PIT_wait_queue_pop_old(PIT_WaitQueue wq)
  * @param wq PIT_WaitQueue
  * @return number of elements in PIT_WaitQueue
  */
-int PIT_wait_queue_size(PIT_WaitQueue wq)
+int PIT_wait_queue_size(PIT_WaitQueue *wq)
 {
 	printf("Not implemented yet.\n");
 	return 0;
@@ -314,7 +317,7 @@ int PIT_wait_queue_size(PIT_WaitQueue wq)
  * @param wq PIT_WaitQueue
  * @return PIT_PiThread
  */
-int PIT_wait_queue_max_active(PIT_WaitQueue wq)
+int PIT_wait_queue_max_active(PIT_WaitQueue *wq)
 {
 	printf("Not implemented yet.\n");
 	return 0;
@@ -325,7 +328,7 @@ int PIT_wait_queue_max_active(PIT_WaitQueue wq)
  * @param wq PIT_WaitQueue
  * @return Number of elements ????????
  */
-int PIT_wait_queue_max_active_reset(PIT_WaitQueue wq)
+int PIT_wait_queue_max_active_reset(PIT_WaitQueue *wq)
 {
 	printf("Not implemented yet.\n");
 	return 0;
@@ -339,7 +342,7 @@ int PIT_wait_queue_max_active_reset(PIT_WaitQueue wq)
 PIT_KnownsSet PIT_knows_set_knows(PIT_KnownsSet ks)
 {
 	printf("Not implemented yet.\n");
-	return NULL;
+	return ks;
 }
 
 /**
@@ -350,7 +353,7 @@ PIT_KnownsSet PIT_knows_set_knows(PIT_KnownsSet ks)
 PIT_KnownsSet PIT_knows_set_forget(PIT_KnownsSet ks)
 {
 	printf("Not implemented yet.\n");
-	return NULL;
+	return ks;
 }
 
 /**
@@ -365,7 +368,7 @@ PIT_KnownsSet PIT_knows_set_forget(PIT_KnownsSet ks)
 bool PIT_knows_register(PIT_KnownsSet ks, PIT_Channel ch)
 {
 	printf("Not implemented yet.\n");
-	return 0;
+	return false;
 }
 
 /**
@@ -375,7 +378,7 @@ bool PIT_knows_register(PIT_KnownsSet ks, PIT_Channel ch)
  */
 void PIT_acquire(PIT_AtomicBoolean ab)
 {
-	pthread_mutex_lock (ab->lock);
+	pthread_mutex_lock(&ab.lock);
 }
 	
 
@@ -386,13 +389,14 @@ void PIT_acquire(PIT_AtomicBoolean ab)
  */
 void PIT_release(PIT_AtomicBoolean ab)
 {
-	pthread_mutex_unlock(ab->lock);
+	pthread_mutex_unlock(&ab.lock);
 }
 
 PIT_Commit PIT_fetch_commitment(PIT_Channel ch)
 {
+	PIT_Commit c;
 	printf("Not implemented yet.\n");
-	return NULL;
+	return c;
 }
 
 /**
@@ -402,9 +406,8 @@ PIT_Commit PIT_fetch_commitment(PIT_Channel ch)
  */
 PIT_AtomicBoolean PIT_create_atomic_boolean()
 {
-	/*b.lock = pthread_mutex_init(&ab.lock, NULL);
+	PIT_AtomicBoolean ab;
+	pthread_mutex_init(&ab.lock, NULL);
 	ab.value = false;
 	return ab;
-	*/
-	return NULL;
 }

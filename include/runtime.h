@@ -37,17 +37,17 @@ extern PIT_Commit PIT_commit_list_fetch(PIT_Commit* clist);
 
 /*################# QUEUE UTILS ######################*/
 
-extern void         PIT_ready_queue_push(PIT_ReadyQueue rq, PIT_PiThread p);
-extern void         PIT_ready_queue_add(PIT_ReadyQueue rq, PIT_PiThread p);
-extern PIT_PiThread PIT_ready_queue_pop(PIT_ReadyQueue rq);
-extern int          PIT_ready_queue_size(PIT_ReadyQueue rq);
-extern void         PIT_wait_queue_push(PIT_WaitQueue wq, PIT_PiThread p);
-extern PIT_PiThread PIT_wait_queue_fetch(PIT_WaitQueue wq, PIT_PiThread p);
-extern void         PIT_wait_queue_push_old(PIT_WaitQueue wq, PIT_PiThread p);
-extern PIT_PiThread PIT_wait_queue_pop_old(PIT_WaitQueue wq);
-extern int          PIT_wait_queue_size(PIT_WaitQueue wq);
-extern int          PIT_wait_queue_max_active(PIT_WaitQueue wq);
-extern int          PIT_wait_queue_max_active_reset(PIT_WaitQueue wq);
+extern void         PIT_ready_queue_push(PIT_ReadyQueue *rq, PIT_PiThread p);
+extern void         PIT_ready_queue_add(PIT_ReadyQueue *rq, PIT_PiThread p);
+extern PIT_PiThread PIT_ready_queue_pop(PIT_ReadyQueue *rq);
+extern int          PIT_ready_queue_size(PIT_ReadyQueue *rq);
+extern void         PIT_wait_queue_push(PIT_WaitQueue *wq, PIT_PiThread p);
+extern PIT_PiThread PIT_wait_queue_fetch(PIT_WaitQueue *wq, PIT_PiThread p);
+extern void         PIT_wait_queue_push_old(PIT_WaitQueue *wq, PIT_PiThread p);
+extern PIT_PiThread PIT_wait_queue_pop_old(PIT_WaitQueue *wq);
+extern int          PIT_wait_queue_size(PIT_WaitQueue *wq);
+extern int          PIT_wait_queue_max_active(PIT_WaitQueue *wq);
+extern int          PIT_wait_queue_max_active_reset(PIT_WaitQueue *wq);
 
 extern PIT_KnownsSet PIT_knows_set_knows(PIT_Knowns* ks);
 extern PIT_KnownsSet PIT_knows_set_forget(PIT_Knowns* ks);
