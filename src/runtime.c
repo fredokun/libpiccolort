@@ -79,7 +79,7 @@ PIT_Clock PIT_generate_clock()
  * ????????????????????
  * @param schedpool ????????????????
  */
-void PIT_SchedPool_slave(PIT_SchedPool schedpool)
+void PIT_sched_pool_slave(PIT_SchedPool schedpool)
 {
 	printf("Not implemented yet.\n");
 	return;
@@ -92,7 +92,7 @@ void PIT_SchedPool_slave(PIT_SchedPool schedpool)
  * @param quick_gc_fuel ????????????
  * @param active_factor ?????????????
  */
-void PIT_SchedPool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor)
+void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor)
 {
 	printf("Not implemented yet.\n");
 	return;
@@ -193,7 +193,7 @@ void PIT_channel_dec_ref_count( PIT_Channel channel )
  * @param clist PIT_Commit
  * @param c PIT_Commit
  */
-void PIT_Commit_list_add(PIT_Commit* clist, PIT_Commit c)
+void PIT_commit_list_add(PIT_Commit* clist, PIT_Commit c)
 {
 	printf("Not implemented yet.\n");
 	return;
@@ -204,7 +204,7 @@ void PIT_Commit_list_add(PIT_Commit* clist, PIT_Commit c)
  * @param clist PIT_Commit
  * @return PIT_Commit
  */
-PIT_Commit PIT_Commit_list_fetch(PIT_Commit* clist)
+PIT_Commit PIT_commit_list_fetch(PIT_Commit* clist)
 {
 	printf("Not implemented yet.\n");
 	return NULL;
@@ -215,7 +215,7 @@ PIT_Commit PIT_Commit_list_fetch(PIT_Commit* clist)
  * @param rq PIT_ReaduQueue
  * @param p PIT_PiThread
  */
-void PIT_ReadyQueue_push(PIT_ReadyQueue rq, PIT_PiThread p)
+void PIT_ready_queue_push(PIT_ReadyQueue rq, PIT_PiThread p)
 {
 	printf("Not implemented yet.\n");
 	return;
@@ -226,7 +226,7 @@ void PIT_ReadyQueue_push(PIT_ReadyQueue rq, PIT_PiThread p)
  * @param rq PIT_ReadyQueue
  * @param p PIT_PiThread
  */
-void PIT_ReadyQueue_add(PIT_ReadyQueue rq, PIT_PiThread p)
+void PIT_ready_queue_add(PIT_ReadyQueue rq, PIT_PiThread p)
 {
 	printf("Not implemented yet.\n");
 	return;
@@ -237,7 +237,7 @@ void PIT_ReadyQueue_add(PIT_ReadyQueue rq, PIT_PiThread p)
  * @param rq PIT_ReadyQueue
  * @return PIT_PiThread
  */
-PIT_PiThread PIT_ReadyQueue_pop(PIT_ReadyQueue rq)
+PIT_PiThread PIT_ready_queue_pop(PIT_ReadyQueue rq)
 {
 	printf("Not implemented yet.\n");
 	return NULL;
@@ -248,7 +248,7 @@ PIT_PiThread PIT_ReadyQueue_pop(PIT_ReadyQueue rq)
  * @param rq PIT_ReadyQueue
  * @return number of elements in the PIT_ReadyQueue
  */
-int PIT_ReadyQueue_size(PIT_ReadyQueue rq)
+int PIT_ready_queue_size(PIT_ReadyQueue rq)
 {
 	printf("Not implemented yet.\n");
 	return 0;
@@ -259,7 +259,7 @@ int PIT_ReadyQueue_size(PIT_ReadyQueue rq)
  * @param wq PIT_WaitQueue
  * @param p PIT_PiThread
  */
-void PIT_WaitQueue_push(PIT_WaitQueue wq, PIT_PiThread p)
+void PIT_wait_queue_push(PIT_WaitQueue wq, PIT_PiThread p)
 {
 	printf("Not implemented yet.\n");
 	return;
@@ -270,7 +270,7 @@ void PIT_WaitQueue_push(PIT_WaitQueue wq, PIT_PiThread p)
  * @param rq PIT_ReadyQueue
  * @return number of elements in the PIT_ReadyQueue
  */
-PIT_PiThread PIT_WaitQueue_fetch(PIT_WaitQueue wq, PIT_PiThread p)
+PIT_PiThread PIT_wait_queue_fetch(PIT_WaitQueue wq, PIT_PiThread p)
 {
 	printf("Not implemented yet.\n");
 	return NULL;
@@ -281,7 +281,7 @@ PIT_PiThread PIT_WaitQueue_fetch(PIT_WaitQueue wq, PIT_PiThread p)
  * @param wq PIT_WaitQueue
  * @param p PIT_PiThread
  */
-void PIT_WaitQueue_push_old(PIT_WaitQueue wq, PIT_PiThread p)
+void PIT_wait_queue_push_old(PIT_WaitQueue wq, PIT_PiThread p)
 {
 	printf("Not implemented yet.\n");
 	return;
@@ -292,7 +292,7 @@ void PIT_WaitQueue_push_old(PIT_WaitQueue wq, PIT_PiThread p)
  * @param wq PIT_WaitQueue
  * @return PIT_PiThread
  */
-PIT_PiThread PIT_WaitQueue_pop_old(PIT_WaitQueue wq)
+PIT_PiThread PIT_wait_queue_pop_old(PIT_WaitQueue wq)
 {
 	printf("Not implemented yet.\n");
 	return NULL;
@@ -303,7 +303,7 @@ PIT_PiThread PIT_WaitQueue_pop_old(PIT_WaitQueue wq)
  * @param wq PIT_WaitQueue
  * @return number of elements in PIT_WaitQueue
  */
-int PIT_WaitQueue_size(PIT_WaitQueue wq)
+int PIT_wait_queue_size(PIT_WaitQueue wq)
 {
 	printf("Not implemented yet.\n");
 	return 0;
@@ -314,7 +314,7 @@ int PIT_WaitQueue_size(PIT_WaitQueue wq)
  * @param wq PIT_WaitQueue
  * @return PIT_PiThread
  */
-int PIT_WaitQueue_max_active(PIT_WaitQueue wq)
+int PIT_wait_queue_max_active(PIT_WaitQueue wq)
 {
 	printf("Not implemented yet.\n");
 	return 0;
@@ -325,7 +325,7 @@ int PIT_WaitQueue_max_active(PIT_WaitQueue wq)
  * @param wq PIT_WaitQueue
  * @return Number of elements ????????
  */
-int PIT_WaitQueue_max_active_reset(PIT_WaitQueue wq)
+int PIT_wait_queue_max_active_reset(PIT_WaitQueue wq)
 {
 	printf("Not implemented yet.\n");
 	return 0;
