@@ -33,6 +33,8 @@
  *         b++;
  *     return b;
  * }
+ *
+ * @author Mickaël MENU
  */
 
 #ifndef ERROR_H
@@ -41,8 +43,8 @@
 #include <stdlib.h>
 #include <assert.h>
 
-typedef enum PIT_ErrorId PIT_ErrorId;
-typedef struct PIT_Error PIT_Error;
+extern typedef enum PIT_ErrorId PIT_ErrorId;
+extern typedef struct PIT_Error PIT_Error;
 
 // TO BE MODIFIED WHEN YOU ADD AN ERROR ////////////////////////////////////////
 

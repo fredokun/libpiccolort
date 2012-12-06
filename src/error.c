@@ -1,6 +1,8 @@
 /**
  * @file error.c
  * Provides several functions to handle errors.
+ *
+ * @author Mickaël MENU
  */
 
 #include <stdlib.h>

@@ -1,7 +1,9 @@
 /**
  * @file runtime.c
  * File that contains definitions of the prototypes specified in runtime.h
- * Authors: Maxence WO , Dany SIRIPHOL
+ * 
+ * @author Maxence WO
+ * @author Dany SIRIPHOL
  */
 
 #include <runtime.h>
@@ -57,7 +59,7 @@ PIT_Channel PIT_generate_channel_cn( int commit_size )
  */
 PIT_PiThread PIT_generate_pithread()
 {
-  PIT_PiThread new_thread;
+	PIT_PiThread new_thread;
 	printf("Not implemented yet.\n");
 	return new_thread;
 }
@@ -68,7 +70,7 @@ PIT_PiThread PIT_generate_pithread()
  */
 PIT_Clock PIT_generate_clock()
 {
-  PIT_Clock new_clock;
+	PIT_Clock new_clock;
 	printf("Not implemented yet.\n");
 	return new_clock;
 }
@@ -76,7 +78,6 @@ PIT_Clock PIT_generate_clock()
 /**
  * ????????????????????
  * @param schedpool ????????????????
- * @return ? ?????????????
  */
 void PIT_SchedPool_slave(PIT_SchedPool schedpool)
 {
@@ -90,7 +91,6 @@ void PIT_SchedPool_slave(PIT_SchedPool schedpool)
  * @param std_gc_fuel ?????????????
  * @param quick_gc_fuel ????????????
  * @param active_factor ?????????????
- * @return ? ?????????????
  */
 void PIT_SchedPool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor)
 {
@@ -103,8 +103,7 @@ void PIT_SchedPool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc
  * @param p Pithread
  * @param ch PIT_Channel
  * @param v 
- * @param cont_pc 
- * @return ? ?????????????
+ * @param cont_pc
  */
 void PIT_register_ouput_commitment(PIT_PiThread p, PIT_Channel ch, PIT_EvalFunction* v, int cont_pc)
 {
@@ -118,7 +117,6 @@ void PIT_register_ouput_commitment(PIT_PiThread p, PIT_Channel ch, PIT_EvalFunct
  * @param ch PIT_Channel
  * @param v 
  * @param cont_pc 
- * @return ? ?????????????
  */
 void PIT_register_input_commitment(PIT_PiThread p, PIT_Channel ch, int x, int cont_pc)
 {
@@ -130,6 +128,7 @@ void PIT_register_input_commitment(PIT_PiThread p, PIT_Channel ch, int x, int co
  * Function that verify if the commit is valid
  * @param c PIT_Commit
  * @return b bool
+ * @return ? ?????????????
  */
 bool PIT_is_valid_commit(PIT_Commit c)
 {
@@ -149,7 +148,12 @@ int PIT_can_awake(PIT_PiThread p, PIT_Commit c)
 	return 0;
 }
 
-
+/**
+ * ?????????????
+ * @param sched ???
+ * @param p ????
+ * @return ? ?????????????
+ */
 void PIT_awake(PIT_SchedPool sched, PIT_PiThread p)
 {
 	printf("Not implemented yet.\n");
@@ -161,7 +165,6 @@ void PIT_awake(PIT_SchedPool sched, PIT_PiThread p)
  *
  * @param channel to update
  */
-
 void PIT_channel_incr_ref_count( PIT_Channel channel ) 
 {
 	PIT_acquire( channel->lock);
@@ -174,7 +177,6 @@ void PIT_channel_incr_ref_count( PIT_Channel channel )
  *
  * @param channel to update
  */
-
 void PIT_channel_dec_ref_count( PIT_Channel channel ) 
 {
 	/*PIT_acquire( channel.lock);
@@ -204,7 +206,6 @@ void PIT_Commit_list_add(PIT_Commit* clist, PIT_Commit c)
  */
 PIT_Commit PIT_Commit_list_fetch(PIT_Commit* clist)
 {
-  
 	printf("Not implemented yet.\n");
 	return NULL;
 }

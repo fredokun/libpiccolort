@@ -5,47 +5,47 @@
 
 #include <queue.h>
 
-typedef struct PIT_SchedPool *PIT_SchedPool;
-typedef struct PIT_PiThread *PIT_PiThread;
-typedef struct PIT_Channel *PIT_Channel;
-typedef struct PIT_Commit *PIT_Commit;
-typedef struct PIT_InCommit *PIT_InCommit;
-typedef struct PIT_OutCommit *PIT_OutCommit;
-typedef struct PIT_Clock *PIT_Clock;
-typedef struct PIT_Value *PIT_Value;
-typedef struct PIT_AtomicBoolean *PIT_AtomicBoolean;
+extern typedef struct PIT_SchedPool PIT_SchedPool;
+extern typedef struct PIT_PiThread PIT_PiThread;
+extern typedef struct PIT_Channel PIT_Channel;
+extern typedef struct PIT_Commit PIT_Commit;
+extern typedef struct PIT_InCommit PIT_InCommit;
+extern typedef struct PIT_OutCommit PIT_OutCommit;
+extern typedef struct PIT_Clock PIT_Clock;
+extern typedef struct PIT_Value PIT_Value;
+extern typedef struct PIT_AtomicBoolean PIT_AtomicBoolean;
 
-typedef struct PIT_Mutex *PIT_Mutex;
-typedef struct PIT_Condition *PIT_Condition;
-typedef struct PIT_KnownsSet *PIT_KnownsSet;
-
-
-typedef char *PIT_Label;
-typedef void (*PIT_Function)(void);
-typedef PIT_Value (*PIT_EvalFunction)(PIT_PiThread);
-typedef int PIT_AtomicInt;
+extern typedef struct PIT_Mutex PIT_Mutex;
+extern typedef struct PIT_Condition PIT_Condition;
+extern typedef struct PIT_KnownsSet PIT_KnownsSet;
 
 
+extern typedef char *PIT_Label;
+extern typedef void (*PIT_Function)(void);
+extern typedef PIT_Value (*PIT_EvalFunction)(PIT_PiThread);
+extern typedef int PIT_AtomicInt;
 
-typedef enum
+
+
+extern typedef enum
 {
 	IN_COMMIT,
 	OUT_COMMIT
 } PIT_CommitType;
 
-typedef enum {
-  STATUS_RUN,
-  STATUS_CALL,
-  STATUS_WAIT,
-  STATUS_ENDED
+extern typedef enum {
+	STATUS_RUN,
+	STATUS_CALL,
+	STATUS_WAIT,
+	STATUS_ENDED
 } PIT_StatusKind;
 
-typedef enum {
-  INT_VAL,
-  FLOAT_VAL,
-  STRING_VAL,
-  BOOL_VAL,
-  CHANNEL_VAL,
+extern typedef enum {
+	INT_VAL,
+	FLOAT_VAL,
+	STRING_VAL,
+	BOOL_VAL,
+	CHANNEL_VAL,
 } PIT_ValueKind;
 
 struct PIT_AtomicBoolean {
@@ -54,15 +54,15 @@ struct PIT_AtomicBoolean {
 };
 
 struct PIT_Clock {
-  PIT_AtomicInt val;
+	PIT_AtomicInt val;
 };
 
 struct PIT_InCommit {
-  int refvar;
+	int refvar;
 };
 
 struct PIT_OutCommit {
-  PIT_EvalFunction eval_func;
+	PIT_EvalFunction eval_func;
 };
 
 struct PIT_Commit
@@ -82,50 +82,50 @@ struct PIT_Commit
 };
 
 struct PIT_SchedPool {
-  PIT_ReadyQueue ready;
-  PIT_WaitQueue wait;
-  PIT_Mutex lock;
-  PIT_Condition cond;
-  int nb_slaves;
-  int nb_waiting_slaves;
+	PIT_ReadyQueue ready;
+	PIT_WaitQueue wait;
+	PIT_Mutex lock;
+	PIT_Condition cond;
+	int nb_slaves;
+	int nb_waiting_slaves;
 };
 
 struct PIT_PiThread {
-  PIT_StatusKind status;
-  bool* enable;
-  int enable_length;
-  PIT_KnownsSet knowns;
-  PIT_Value* env;
-  int env_length;
-  PIT_Commit commit;
-  PIT_Commit* commits;
-  PIT_Function proc;
-  PIT_Label pc;
-  int fuel;
-  PIT_Mutex lock;
+	PIT_StatusKind status;
+	bool* enable;
+	int enable_length;
+	PIT_KnownsSet knowns;
+	PIT_Value* env;
+	int env_length;
+	PIT_Commit commit;
+	PIT_Commit* commits;
+	PIT_Function proc;
+	PIT_Label pc;
+	int fuel;
+	PIT_Mutex lock;
 };
 
 struct PIT_Channel {
-  PIT_Commit* incommits;
-  PIT_Commit* outcommits;
-  int global_rc;
-  PIT_AtomicBoolean lock;
+	PIT_Commit* incommits;
+	PIT_Commit* outcommits;
+	int global_rc;
+	PIT_AtomicBoolean lock;
 };
 
 struct PIT_Value {
-  PIT_ValueKind kind;
-  union {
-    int as_int;
-    double as_float;
-    char *as_string;
-    bool as_bool;
-    PIT_Channel *as_channel;
-  } content;
+	PIT_ValueKind kind;
+	union {
+		int as_int;
+		double as_float;
+		char *as_string;
+		bool as_bool;
+		PIT_Channel *as_channel;
+	} content;
 };
 
 //IL FAUT LE FAIRE
-struct PIT_Known  sSet {
-  int a;
+struct PIT_KnownsSet {
+	int a;
 };
 
 #endif // PI_THREAD_H
