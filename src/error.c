@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "../include/error.h"
+#include "error.h"
 
 /**
  * Initializes a new error with a given error ID, file and line.
@@ -108,6 +108,21 @@ void PIT_print_error(PIT_Error *error, const char *file, const char *fct)
 			PIT_free_error(error->prev);
 			error->prev = NULL;
 		}
+	}
+}
+
+/**
+ * Forwards an error by copying all the value of the previous error in the
+ * given error.
+ *
+ * @param error Current error.
+ * @param prev_error Previous error.
+ */
+void PIT_forward_error(PIT_Error *error, PIT_Error prev_error)
+{
+	if (error != NULL) {
+		PIT_init_error(error, prev_error.id, prev_error.file, prev_error.line);
+		error->prev = prev_error.prev;
 	}
 }
 

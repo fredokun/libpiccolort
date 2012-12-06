@@ -4,8 +4,8 @@ NAME=pithread
 LIB=lib
 INCLUDE=include
 SRC=src
-HEADERS=runtime.h pithread.h
-OBJ=runtime.o main.o
+HEADERS=runtime.h pithread.h error.h
+OBJ=runtime.o main.o error.o
 
 all : $(BIN)/$(NAME)
 
