@@ -33,7 +33,7 @@ extern bool PIT_is_valid_commit(PIT_Commit commit);
 extern int  PIT_can_awake(PIT_PiThread p, PIT_Commit c);
 extern void PIT_awake(PIT_SchedPool sched, PIT_PiThread p);
 extern void PIT_channel_incr_ref_count(PIT_Channel ch, PIT_Error *error);
-extern void PIT_channel_dec_ref_count(PIT_Channel ch,, PIT_Error *error);
+extern void PIT_channel_dec_ref_count(PIT_Channel ch, PIT_Error *error);
 
 /*################### LIST UTILS ####################*/
 
@@ -66,6 +66,7 @@ extern void PIT_acquire_bool(PIT_AtomicBoolean bool_val);
 extern void PIT_release_bool(PIT_AtomicBoolean bool_val,PIT_Error *error);
 
 extern PIT_Commit PIT_fetch_commitment(PIT_Channel ch);
+extern void PIT_cond_wait(PIT_Condition cond, PIT_Mutex lock);
 
 
 #endif

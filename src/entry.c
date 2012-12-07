@@ -31,7 +31,7 @@ void PIT_main(int nb_core_threads, PIT_PiThreadProc entrypoint)
 	PIT_PiThread *init_thread;
 	PIT_Args * args = (PIT_Args *)malloc(sizeof(PIT_Args));
 	args->error = error;
-	args->sched_pool = sched_pool;
+	args->sched_pool = &sched_pool;
 	void* function = PIT_sched_pool_slave;
 	int i;
 	pthread_t *threads;

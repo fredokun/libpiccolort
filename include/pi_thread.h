@@ -62,8 +62,8 @@ struct PIT_CommitList
 struct PIT_SchedPool {
 	PIT_ReadyQueue *ready;
 	PIT_WaitQueue *wait;
-	PIT_AtomicBoolean lock;
-	PIT_Condition *cond;
+	PIT_Mutex lock;
+	PIT_Condition cond;
 	int nb_slaves;
 	int nb_waiting_slaves;
 	bool running;

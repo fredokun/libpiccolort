@@ -160,36 +160,36 @@ PIT_Clock *PIT_create_clock()
  */
 void PIT_sched_pool_slave(PIT_Args *args)
 {
-	PIT_SchedPool sched_pool = args->sched_pool;
+	PIT_SchedPool *sched_pool = args->sched_pool;
 	PIT_Error *error = &(args->error);
 	
 	PIT_PiThread current;
 	
-	while(sched_pool.running)
+	while(sched_pool->running)
 	{
-		while(PIT_ready_queue_size(sched_pool.ready))
+		while(PIT_ready_queue_size(sched_pool->ready))
 		{
-			current = PIT_ready_queue_pop(sched_pool.ready);
+			current = PIT_ready_queue_pop(sched_pool->ready);
 			do
 			{
-				current.proc(sched_pool, current);
+				current.proc(*sched_pool, current);
 			} while(current.status == STATUS_CALL);
 			
 			if(current.status == STATUS_BLOCKED) // && safe_choice
 				NEW_ERROR(error,ERR_DEADLOCK);
 		}
 		
-		PIT_acquire_bool(sched_pool.lock);
-		sched_pool.nb_waiting_slaves++;
-		PIT_cond_wait(sched_pool.cond, sched_pool.lock);
-		sched_pool.nb_waiting_slaves--;
-		PIT_release_bool(sched_pool.lock,error);
+		PIT_acquire_mutex(sched_pool->lock);
+		sched_pool->nb_waiting_slaves++;
+		PIT_cond_wait(sched_pool->cond, sched_pool->lock);
+		sched_pool->nb_waiting_slaves--;
+		PIT_release_mutex(sched_pool->lock,error);
 
 	
 	}
 }
 
-void PIT_cond_wait(PIT_Cond cond, PIT_Mutex lock)
+void PIT_cond_wait(PIT_Condition cond, PIT_Mutex lock)
 {
 	pthread_cond_wait(cond, lock);
 }

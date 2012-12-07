@@ -30,7 +30,7 @@ typedef struct PIT_AtomicBoolean PIT_AtomicBoolean;
 typedef struct PIT_AtomicInt PIT_AtomicInt;
 
 typedef pthread_mutex_t PIT_Mutex;
-typedef pthread_cond_t *PIT_Condition;//typedef struct PIT_Condition PIT_Condition;
+typedef pthread_cond_t PIT_Condition;//typedef struct PIT_Condition PIT_Condition;
 typedef struct PIT_Knowns PIT_Knowns;
 typedef PIT_Knowns* PIT_KnownsSet;
 
