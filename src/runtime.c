@@ -163,14 +163,28 @@ function void PIT_register_in_commitment(PIT_PiThread pi_thread, PIT_Channel cha
 }
 /**
  * Function that verify if the commit is valid
- * @param c PIT_Commit
+ * @param commit PIT_Commit
  * @return b bool
- * @return ? ?????????????
  */
-bool PIT_is_valid_commit(PIT_Commit c)
+bool PIT_is_valid_commit(PIT_Commit commit)
 {
-	printf("Not implemented yet.\n");
+	PIT_acquire_int(commit.thread.clock.value);
+	if(commit.clock == commit.thread->clock)
+		if(commit.clockval == commit.thread.clock.val)
+		{
+			PIT_release_int(commit.thread.clock.value);
+			return true;
+		}
+	PIT_release_int(commit.thread.clock.value);
 	return false;
+}
+
+
+PIT_Commit PIT_fetch_commitment(PIT_Channel ch)
+{
+	PIT_Commit c;
+	printf("Not implemented yet.\n");
+	return c;
 }
 
 /**
@@ -413,27 +427,39 @@ bool PIT_knows_register(PIT_KnownsSet ks, PIT_Channel ch)
  *
  * @param the atomic boolean containing the mutex
  */
-void PIT_acquire(PIT_AtomicBoolean ab)
+void PIT_acquire_int(PIT_AtomicInt int_val)
 {
-	pthread_mutex_lock(&ab.lock);
-}
-	
+	pthread_mutex_lock(&int_val.lock);
+}	
 
 /**
  * Release a mutex on an atomic boolean
  *
  * @param the atomic boolean containing the mutex
  */
-void PIT_release(PIT_AtomicBoolean ab)
+void PIT_release_int(PIT_AtomicInt int_val)
 {
-	pthread_mutex_unlock(&ab.lock);
+	pthread_mutex_unlock(&int_val.lock);
 }
 
-PIT_Commit PIT_fetch_commitment(PIT_Channel ch)
+/**
+ * Acquire a mutex on an atomic boolean
+ *
+ * @param the atomic boolean containing the mutex
+ */
+void PIT_acquire_bool(PIT_AtomicBoolean bool_val)
 {
-	PIT_Commit c;
-	printf("Not implemented yet.\n");
-	return c;
+	pthread_mutex_lock(&bool_val.lock);
+}	
+
+/**
+ * Release a mutex on an atomic boolean
+ *
+ * @param the atomic boolean containing the mutex
+ */
+void PIT_release_bool(PIT_AtomicBoolean bool_val)
+{
+	pthread_mutex_unlock(&bool_val.lock);
 }
 
 /**
