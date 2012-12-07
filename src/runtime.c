@@ -116,11 +116,11 @@ void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_g
 }
 
 /**
- * Function that register an output commitment according to pithread and channel
+ * Function that register an output PIT_Commit according to pithread and channel
  *
- * @param pi_thread Pithread
- * @param channel PIT_Channel
- * @param function *PIT_EvalFunction
+ * @param the PIT_PiThread used to create the output PIT_Commit
+ * @param the PIT_Channel used to create the ourpur PIT_Commit
+ * @param refvar the index of the var used to create the output PIT_Commit
  * @param cont_pc
  */
 void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*PIT_EvalFunction)(PIT_PiThread) function, int cont_pc)
@@ -140,10 +140,10 @@ void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*
 }
 
 /**
- * Function that register an input commitment according to pithread and channe*
- * @param pi_thread Pithread
- * @param channel PIT_Channel
- * @param refvar the index of the var
+ * Function that register an input PIT_Commit according to pithread and channel
+ * @param the PIT_PiThread used to create the input PIT_Commit
+ * @param the PIT_Channel used to create the input PIT_Commit
+ * @param refvar the index of the var used to create the input PIT_Commit
  * @param cont_pc 
  */
 void PIT_register_in_commitment(PIT_PiThread pi_thread, PIT_Channel channel, int refvar, int cont_pc)
@@ -163,9 +163,9 @@ void PIT_register_in_commitment(PIT_PiThread pi_thread, PIT_Channel channel, int
 	PIT_commit_list_add(pi_thread->commits ,in_commit);	
 }
 /**
- * Function that verify if the commit is valid
- * @param commit PIT_Commit
- * @return b bool
+ * Function that verify if the PIT_Commit is valid
+ * @param the PIT_Commit whose validity to check
+ * @return true if the PIT_Commit is valid, false otherwise
  */
 bool PIT_is_valid_commit(PIT_Commit commit)
 {
@@ -180,7 +180,11 @@ bool PIT_is_valid_commit(PIT_Commit commit)
 	return false;
 }
 
-
+/**
+ * Function that fetch a PIT_Commit from a PIT_Channel
+ * @param the PIT_Channel in which to fetch
+ * @return the PIT_Commit fetched
+ */
 PIT_Commit PIT_fetch_commitment(PIT_Channel channel)
 {
 	PIT_Commit current_commit;
@@ -240,7 +244,7 @@ void PIT_channel_dec_ref_count( PIT_Channel channel )
 	}*/
 }
 
-/*
+/**
  * Function that creates the PIT_CommitList
  * @return the created PIT_CommitList
  */
@@ -253,7 +257,7 @@ void PIT_channel_dec_ref_count( PIT_Channel channel )
 	return new_commit_list;
 }
 
-/*
+/**
  * Function that creates the PIT_CommitListElement, an element of the PIT_CommitList
  * @return the created element PIT_CommitListElement, an element of the PIT_CommitList
  */
