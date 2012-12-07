@@ -30,7 +30,7 @@ int PIT_GC2(PIT_SchedPool schedpool)
  *
  * @return created channel
  */
- PIT_Channel *PIT_create_channel()
+PIT_Channel *PIT_create_channel()
 {
 	PIT_Channel *channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
 	/*channel->global_rc = 1;
@@ -44,7 +44,7 @@ int PIT_GC2(PIT_SchedPool schedpool)
  *
  * @return created channel
  */
-*PIT_Channel PIT_create_channel_cn( int commit_size )
+PIT_Channel *PIT_create_channel_cn( int commit_size )
 {
 	PIT_Channel *channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
 	/*channel->global_rc = 1;
@@ -58,7 +58,7 @@ int PIT_GC2(PIT_SchedPool schedpool)
  * Function that creates a PIT_PiThread.
  * @return PIT_PiThread a fresh new created PiThread
  */
-*PIT_PiThread PIT_create_pithread()
+PIT_PiThread *PIT_create_pithread()
 {
 	PIT_PiThread *new_thread = (PIT_Thread*)malloc(sizeof(PIT_Thread));
 	new_thread->knowns = (PIT_KnownsSet)malloc(sizeof(PIT_KnownsSet));
@@ -104,7 +104,7 @@ void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_g
  *
  * @return an input commitment
  */
-*PIT_Commit PIT_create_commitment()
+PIT_Commit *PIT_create_commitment()
 {
 	PIT_Commit *new_commit = (PIT_Commit*)malloc(sizeof(PIT_Commit));
 	new_commit->thread = malloc(sizeof(PIT_PiThread));
@@ -247,7 +247,7 @@ void PIT_channel_dec_ref_count( PIT_Channel channel )
  * Function that creates the PIT_CommitList
  * @return the created PIT_CommitList
  */
-*PIT_CommitList PIT_create_commit_list()
+PIT_CommitList *PIT_create_commit_list()
 {
 	PIT_CommitList *new_commit_list = (PIT_CommitList)malloc(sizeof(PIT_CommitList));
 	new_commit_list->head = NULL;
@@ -260,7 +260,7 @@ void PIT_channel_dec_ref_count( PIT_Channel channel )
  * Function that creates the PIT_CommitListElement, an element of the PIT_CommitList
  * @return the created element PIT_CommitListElement, an element of the PIT_CommitList
  */
-*PIT_CommitListElement PIT_create_commit_list_element(PIT_Commit *commit)
+PIT_CommitListElement *PIT_create_commit_list_element(PIT_Commit *commit)
 {
 	PIT_CommitListElement *new_commit_list_element = (PIT_CommitListElement)malloc(sizeof(PIT_CommitListElement));
 	new_commit_list_element->commit = commit;
