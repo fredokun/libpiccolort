@@ -33,9 +33,9 @@ int PIT_GC2(PIT_SchedPool schedpool)
  PIT_Channel PIT_generate_channel()
 {
 	PIT_Channel *channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
-	/*channel->global_rc = 1;
+	channel->global_rc = 1;
 	channel->incommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );
-	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );*/
+	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );
 	return *channel;
 }
 
@@ -47,10 +47,10 @@ int PIT_GC2(PIT_SchedPool schedpool)
 PIT_Channel PIT_generate_channel_cn( int commit_size )
 {
 	PIT_Channel * channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
-	/*channel->global_rc = 1;
+	channel->global_rc = 1;
 	channel->incommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * commit_size );
 	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * commit_size );
-	channel->lock = PIT_create_atomic_boolean();*/
+	channel->lock = PIT_create_atomic_boolean();
 	return *channel;
 }
 
