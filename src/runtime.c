@@ -7,12 +7,14 @@
  * @author Joel HING
  */
 
-#include <runtime.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <pthread.h>
 
+#include <definitions.h>
+#include <runtime.h>
+#include <pi_thread.h>
 /**
  * Second generation garbage collector.
  *
@@ -80,19 +82,36 @@ PIT_Clock PIT_create_clock()
  * Function that handle the behavior of a schedpool
  * @param schedpool the schedpool to manage
  */
-void PIT_sched_pool_slave(PIT_SchedPool schedpool)
+void PIT_sched_pool_slave(PIT_SchedPool schedpool, PIT_Error* error)
 {
-	PIT_PiThread *p = (PIT_PiThread*)malloc(sizeof(PIT_PiThread));
+	PIT_PiThread current;
 	
-	while()
+	while(schedpool.running)
 	{
-		while(PIT_ready_queue_size(shedpool.ready))
+		while(PIT_ready_queue_size(schedpool.ready))
 		{
+			current = PIT_ready_queue_pop(schedpool.ready);
+			do
+			{
+				current.proc(schedpool, current);
+			} while(current.status == STATUS_CALL);
 			
+			if(current.status == STATUS_BLOCKED) // && safe_choice
+				CRASH(NEW_ERROR(error, 2));
 		}
-	}
+		
+		PIT_acquire(schedpool.lock);
+		schedpool.nb_waiting_slaves++;
+		PIT_cond_wait(schedpool.cond, schedpool.lock);
+		schedpool.nb_waiting_slaves--;
+		PIT_release(schedpool.lock);
 	
-	free(p);
+	}
+}
+
+void PIT_cond_wait(PIT_Cond cond, PIT_Mutex lock)
+{
+	pthread_cond_wait(cond, lock);
 }
 
 /**

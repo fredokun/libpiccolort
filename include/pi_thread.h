@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <pthread.h>
 #include <definitions.h>
+#include <queue.h>
+#include <error.h>
 
 struct PIT_AtomicInt {
 	PIT_Mutex lock;

@@ -1,3 +1,10 @@
+/**
+ * @file definitions.h
+ * File that contains typedef + all enums of runtime.h
+ *
+ * @author Maxence WO
+ */
+
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
@@ -18,10 +25,9 @@ typedef struct PIT_AtomicBoolean PIT_AtomicBoolean;
 typedef struct PIT_AtomicInt PIT_AtomicInt;
 
 typedef pthread_mutex_t PIT_Mutex;
-typedef struct PIT_Condition PIT_Condition;
+typedef pthread_cond_t *PIT_Condition;//typedef struct PIT_Condition PIT_Condition;
 typedef struct PIT_Knowns PIT_Knowns;
 typedef PIT_Knowns* PIT_KnownsSet;
-
 
 typedef char *PIT_Label;
 typedef void (*PIT_PiThreadProc) (PIT_SchedPool, PIT_PiThread);
@@ -37,7 +43,8 @@ typedef enum {
 	STATUS_RUN,
 	STATUS_CALL,
 	STATUS_WAIT,
-	STATUS_ENDED
+	STATUS_ENDED,
+	STATUS_BLOCKED
 } PIT_StatusKind;
 
 typedef enum {

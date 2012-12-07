@@ -21,7 +21,7 @@ extern PIT_Commit  *PIT_create_commitment();
 extern PIT_CommitList *PIT_create_commit_list();
 extern PIT_CommitListElement *PIT_create_commit_list_element();
 
-extern void PIT_sched_pool_slave(PIT_SchedPool schedpool);
+extern void PIT_sched_pool_slave(PIT_SchedPool schedpool, PIT_Error* error);
 extern void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor);
 
 extern void PIT_main(int nb_core_threads, PIT_PiThreadProc entrypoint);
