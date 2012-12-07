@@ -179,11 +179,11 @@ void PIT_sched_pool_slave(PIT_Args *args)
 				NEW_ERROR(error,ERR_DEADLOCK);
 		}
 		
-		PIT_acquire_bool(schedpool.lock);
-		schedpool.nb_waiting_slaves++;
-		PIT_cond_wait(schedpool.cond, schedpool.lock);
-		schedpool.nb_waiting_slaves--;
-		PIT_release_bool(schedpool.lock,error);
+		PIT_acquire_bool(sched_pool.lock);
+		sched_pool.nb_waiting_slaves++;
+		PIT_cond_wait(sched_pool.cond, sched_pool.lock);
+		sched_pool.nb_waiting_slaves--;
+		PIT_release_bool(sched_pool.lock,error);
 
 	
 	}
