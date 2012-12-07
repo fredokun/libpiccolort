@@ -30,7 +30,7 @@ int PIT_GC2(PIT_SchedPool schedpool)
  *
  * @return created channel
  */
- PIT_Channel PIT_generate_channel()
+ PIT_Channel PIT_create_channel()
 {
 	PIT_Channel *channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
 	/*channel->global_rc = 1;
@@ -44,9 +44,9 @@ int PIT_GC2(PIT_SchedPool schedpool)
  *
  * @return created channel
  */
-PIT_Channel PIT_generate_channel_cn( int commit_size )
+PIT_Channel PIT_create_channel_cn( int commit_size )
 {
-	PIT_Channel * channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
+	PIT_Channel *channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
 	/*channel->global_rc = 1;
 	channel->incommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * commit_size );
 	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * commit_size );
@@ -55,24 +55,24 @@ PIT_Channel PIT_generate_channel_cn( int commit_size )
 }
 
 /**
- * Function that generate a PIT_PiThread.
- * @return PIT_PiThread a fresh new generated PiThread
+ * Function that creates a PIT_PiThread.
+ * @return PIT_PiThread a fresh new created PiThread
  */
-PIT_PiThread PIT_generate_pithread()
+PIT_PiThread PIT_create_pithread()
 {
-	PIT_PiThread new_thread;
-	printf("Not implemented yet.\n");
+	struct PIT_PiThread *new_thread = (struct PIT_Thread*)malloc(sizeof(PIT_Thread));
+	new_thread->knowns = (PIT_KnownsSet)malloc(sizeof(PIT_KnownsSet));
+	new_thread->fuel = FUEL_INIT;
 	return new_thread;
 }
 
 /**
- * Function that generate a clock
- * @return PIT_Clock a fresh new generated clock
+ * Function that creates a clock
+ * @return PIT_Clock a fresh new created clock
  */
-PIT_Clock PIT_generate_clock()
+PIT_Clock PIT_create_clock()
 {
-	PIT_Clock new_clock;
-	printf("Not implemented yet.\n");
+	PIT_Clock new_clock = (struct PIT_Clock*)malloc(sizeof(PIT_Clock));
 	return new_clock;
 }
 
@@ -104,14 +104,14 @@ void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_g
  *
  * @return an input commitment
  */
-function *PIT_commit PIT_create_commitment()
+*PIT_Commit PIT_create_commitment()
 {
-	struct PIT_commit* commit = (struct PIT_commit*)malloc(sizeof(PIT_commit));
-	commit->thread = malloc(sizeof(PIT_PiThread));
-	commit->clock = malloc(sizeof(PIT_Clock));
-	commit->channel = malloc(sizeof(PIT_Channel));
+	struct PIT_Commit *new_commit = (struct PIT_Commit*)malloc(sizeof(PIT_Commit));
+	new_commit->thread = malloc(sizeof(PIT_PiThread));
+	new_commit->clock = malloc(sizeof(PIT_Clock));
+	new_commit->channel = malloc(sizeof(PIT_Channel));
 	
-	return commit;
+	return new_commit;
 }
 
 /**
@@ -122,12 +122,12 @@ function *PIT_commit PIT_create_commitment()
  * @param function *PIT_EvalFunction
  * @param cont_pc
  */
-function void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*PIT_EvalFunction)(PIT_PiThread) function, int cont_pc)
+void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*PIT_EvalFunction)(PIT_PiThread) function, int cont_pc)
 {
 	PIT_OutCommit out = (struct PIT_OutCommit)malloc(sizeof(PIT_OutCommit));
 	out.eval_fun = function;
 
-	PIT_Commit* out_commit = PIT_create_commitment();
+	PIT_Commit *out_commit = PIT_create_commitment();
 	out_commit->out = out;
 	out_commit->thread = pi_thread;
 	out_commit->cont_pc = cont_pc;
@@ -145,12 +145,12 @@ function void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel ch
  * @param refvar the index of the var
  * @param cont_pc 
  */
-function void PIT_register_in_commitment(PIT_PiThread pi_thread, PIT_Channel channel, int refvar, int cont_pc)
+void PIT_register_in_commitment(PIT_PiThread pi_thread, PIT_Channel channel, int refvar, int cont_pc)
 { 
 	PIT_InCommit in = (struct PIT_InCommit)malloc(sizeof(PIT_InCommit));
 	in.refvar = refvar;
 
-	PIT_Commit* in_commit = PIT_create_commitment();
+	PIT_Commit *in_commit = PIT_create_commitment();
 	in_commit->in = in;
 	in_commit->thread = pi_thread;
 	in_commit->cont_pc = cont_pc;
