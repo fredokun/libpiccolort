@@ -10,7 +10,7 @@ LIB=lib
 INCLUDE=include
 SRC=src
 HEADERS=runtime.h pithread.h error.h definitions.h
-OBJ=$(LIB)/runtime.o $(LIB)/main.o $(LIB)/error.o
+OBJ=$(LIB)/entry.o $(LIB)/runtime.o $(LIB)/main.o $(LIB)/error.o
 
 all : $(BIN)/$(NAME)
 
