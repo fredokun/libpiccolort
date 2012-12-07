@@ -42,8 +42,8 @@
 
 #include <stdlib.h>
 #include <assert.h>
-#include <errors.h>
 #include <definitions.h>
+#include <errors.h>
 
 // An error stack.
 struct PIT_Error {

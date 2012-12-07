@@ -13,6 +13,22 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+
+
+/**
+ * Create and init an atomic boolean
+ *
+ * @return created atomic boolean
+ */
+PIT_AtomicBoolean PIT_create_atomic_boolean()
+{
+	PIT_AtomicBoolean ab;
+	pthread_mutex_init(&ab.lock, NULL);
+	ab.value = false;
+	return ab;
+}
+
+
 /**
  * Second generation garbage collector.
  *
@@ -30,13 +46,14 @@ int PIT_GC2(PIT_SchedPool schedpool)
  *
  * @return created channel
  */
- PIT_Channel * PIT_create_channel()
+
+PIT_Channel *PIT_create_channel()
 {
 	PIT_Channel *channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
 	channel->global_rc = 1;
 	channel->incommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );
 	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );
-	return *channel;
+	return channel;
 }
 
 /**
@@ -44,23 +61,24 @@ int PIT_GC2(PIT_SchedPool schedpool)
  *
  * @return created channel
  */
-PIT_Channel * PIT_create_channel_cn( int commit_size )
+
+PIT_Channel *PIT_create_channel_cn( int commit_size )
 {
 	PIT_Channel * channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
 	channel->global_rc = 1;
 	channel->incommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * commit_size );
 	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * commit_size );
 	channel->lock = PIT_create_atomic_boolean();
-	return *channel;
+	return channel;
 }
 
 /**
  * Function that creates a PIT_PiThread.
  * @return PIT_PiThread a fresh new created PiThread
  */
-PIT_PiThread PIT_create_pithread()
+PIT_PiThread *PIT_create_pithread()
 {
-	struct PIT_PiThread *new_thread = (struct PIT_Thread*)malloc(sizeof(PIT_Thread));
+	PIT_PiThread *new_thread = (PIT_PiThread*)malloc(sizeof(PIT_PiThread));
 	new_thread->knowns = (PIT_KnownsSet)malloc(sizeof(PIT_KnownsSet));
 	new_thread->fuel = FUEL_INIT;
 	return new_thread;
@@ -72,18 +90,27 @@ PIT_PiThread PIT_create_pithread()
  */
 PIT_Clock PIT_create_clock()
 {
-	PIT_Clock new_clock = (struct PIT_Clock*)malloc(sizeof(PIT_Clock));
+	PIT_Clock new_clock = (PIT_Clock*)malloc(sizeof(PIT_Clock));
 	return new_clock;
 }
 
 /**
- * ????????????????????
- * @param schedpool ????????????????
+ * Function that handle the behavior of a schedpool
+ * @param schedpool the schedpool to manage
  */
 void PIT_sched_pool_slave(PIT_SchedPool schedpool)
 {
-	printf("Not implemented yet.\n");
-	return;
+	PIT_PiThread *p = (PIT_PiThread*)malloc(sizeof(PIT_PiThread));
+	
+	while()
+	{
+		while(PIT_ready_queue_size(schedpool.ready))
+		{
+			
+		}
+	}
+	
+	free(p);
 }
 
 /**
@@ -104,9 +131,9 @@ void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_g
  *
  * @return an input commitment
  */
-*PIT_Commit PIT_create_commitment()
+PIT_Commit *PIT_create_commitment()
 {
-	struct PIT_Commit *new_commit = (struct PIT_Commit*)malloc(sizeof(PIT_Commit));
+	PIT_Commit *new_commit = (PIT_Commit*)malloc(sizeof(PIT_Commit));
 	new_commit->thread = malloc(sizeof(PIT_PiThread));
 	new_commit->clock = malloc(sizeof(PIT_Clock));
 	new_commit->channel = malloc(sizeof(PIT_Channel));
@@ -115,20 +142,20 @@ void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_g
 }
 
 /**
- * Function that register an output commitment according to pithread and channel
+ * Function that register an output PIT_Commit according to pithread and channel
  *
- * @param pi_thread Pithread
- * @param channel PIT_Channel
- * @param function *PIT_EvalFunction
+ * @param the PIT_PiThread used to create the output PIT_Commit
+ * @param the PIT_Channel used to create the ourpur PIT_Commit
+ * @param refvar the index of the var used to create the output PIT_Commit
  * @param cont_pc
  */
 void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*PIT_EvalFunction)(PIT_PiThread) function, int cont_pc)
 {
-	PIT_OutCommit out = (struct PIT_OutCommit)malloc(sizeof(PIT_OutCommit));
-	out.eval_fun = function;
+	PIT_OutCommit * out = (PIT_OutCommit *)malloc(sizeof(PIT_OutCommit));
+	out->eval_fun = function;
 
 	PIT_Commit *out_commit = PIT_create_commitment();
-	out_commit->out = out;
+	out_commit->out = &out;
 	out_commit->thread = pi_thread;
 	out_commit->cont_pc = cont_pc;
 	out_commit->type = OUT_COMMIT;
@@ -139,15 +166,15 @@ void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*
 }
 
 /**
- * Function that register an input commitment according to pithread and channe*
- * @param pi_thread Pithread
- * @param channel PIT_Channel
- * @param refvar the index of the var
+ * Function that register an input PIT_Commit according to pithread and channel
+ * @param the PIT_PiThread used to create the input PIT_Commit
+ * @param the PIT_Channel used to create the input PIT_Commit
+ * @param refvar the index of the var used to create the input PIT_Commit
  * @param cont_pc 
  */
 void PIT_register_in_commitment(PIT_PiThread pi_thread, PIT_Channel channel, int refvar, int cont_pc)
 { 
-	PIT_InCommit in = (struct PIT_InCommit)malloc(sizeof(PIT_InCommit));
+	PIT_InCommit in = (PIT_InCommit)malloc(sizeof(PIT_InCommit));
 	in.refvar = refvar;
 
 	PIT_Commit *in_commit = PIT_create_commitment();
@@ -162,9 +189,9 @@ void PIT_register_in_commitment(PIT_PiThread pi_thread, PIT_Channel channel, int
 	PIT_commit_list_add(pi_thread->commits ,in_commit);	
 }
 /**
- * Function that verify if the commit is valid
- * @param commit PIT_Commit
- * @return b bool
+ * Function that verify if the PIT_Commit is valid
+ * @param the PIT_Commit whose validity to check
+ * @return true if the PIT_Commit is valid, false otherwise
  */
 bool PIT_is_valid_commit(PIT_Commit commit)
 {
@@ -179,12 +206,16 @@ bool PIT_is_valid_commit(PIT_Commit commit)
 	return false;
 }
 
-
-PIT_Commit PIT_fetch_commitment(PIT_Channel ch)
+/**
+ * Function that fetch a PIT_Commit from a PIT_Channel
+ * @param the PIT_Channel in which to fetch
+ * @return the PIT_Commit fetched
+ */
+PIT_Commit PIT_fetch_commitment(PIT_Channel channel)
 {
-	PIT_Commit c;
-	printf("Not implemented yet.\n");
-	return c;
+	PIT_Commit current_commit;
+	
+	return current_commit;
 }
 
 /**
@@ -240,26 +271,55 @@ void PIT_channel_dec_ref_count( PIT_Channel channel )
 }
 
 /**
- * Function that add the selected element at the end of the CommitList
- * @param clist PIT_Commit
- * @param c PIT_Commit
+ * Function that creates the PIT_CommitList
+ * @return the created PIT_CommitList
  */
-void PIT_commit_list_add(PIT_Commit* clist, PIT_Commit c)
+PIT_CommitList *PIT_create_commit_list()
 {
-	printf("Not implemented yet.\n");
-	return;
+	PIT_CommitList *new_commit_list = (PIT_CommitList)malloc(sizeof(PIT_CommitList));
+	new_commit_list->head = NULL;
+	new_commit_list->tail = NULL;
+	new_commit_list->size = 0;
+	return new_commit_list;
+}
+
+/**
+ * Function that creates the PIT_CommitListElement, an element of the PIT_CommitList
+ * @return the created element PIT_CommitListElement, an element of the PIT_CommitList
+ */
+PIT_CommitListElement *PIT_create_commit_list_element(PIT_Commit *commit)
+{
+	PIT_CommitListElement *new_commit_list_element = (PIT_CommitListElement)malloc(sizeof(PIT_CommitListElement));
+	new_commit_list_element->commit = commit;
+	new_commit_list_element->next = NULL;
+	return new_commit_list_element;
+}
+
+/**
+ * Function that add the selected element at the end of the CommitList
+ * @param the PIT_CommitList in which to add a PIT_Commit
+ * @param the PIT_Commit to add
+ */
+void PIT_commit_list_add(PIT_Commit commit_list, PIT_Commit commit)
+{
+	PIT_CommitListElement *new_commit_list_element = PIT_create_commit_list_element(commit);
+	commit_list->tail->next = new_commit_list_element;
+	commit_list->tail = new_commit_list_element;
+	commit_list->size++:	
 }
 
 /**
  * Function that removes the first element from the commitlist and returns it
- * @param clist PIT_Commit
- * @return PIT_Commit
+ * @param the PIT_CommitList in which to fetch
+ * @return the PIT_Commit to retrieve
  */
-PIT_Commit PIT_commit_list_fetch(PIT_Commit* clist)
+PIT_Commit PIT_commit_list_fetch(PIT_Commit commit_list)
 {
-	PIT_Commit p;
-	printf("Not implemented yet.\n");
-	return p;
+	PIT_CommitListElement commit_list_element = commit_list->head;
+	commit_list->head = commit_list_element->next;
+	commit_list->size--;
+	commit_list_element->next = NULL;
+	return commit_list_element->commit;
 }
 
 /**
@@ -441,7 +501,7 @@ void PIT_release_int(PIT_AtomicInt int_val, PIT_Error *error)
 {
 	if (pthread_mutex_trylock(&int_val.lock) == 0)
 	{
-		NEW_ERROR(error, ERR_KERNEL_CRASH);
+		NEW_ERROR(error,ERR_KERNEL_ERROR);
 	}
 	else
 	{
@@ -465,12 +525,11 @@ void PIT_acquire_bool(PIT_AtomicBoolean bool_val)
  *
  * @param the atomic boolean containing the mutex
  */
-void PIT_release_bool(PIT_AtomicBoolean bool_val)
+void PIT_release_bool(PIT_AtomicBoolean bool_val, PIT_Error *error)
 {
-
 	if (pthread_mutex_trylock(&bool_val.lock) == 0)
 	{
-		NEW_ERROR(error, ERR_KERNEL_CRASH);
+		NEW_ERROR(error, ERR_KERNEL_ERROR);
 	}
 	else
 	{
@@ -478,15 +537,4 @@ void PIT_release_bool(PIT_AtomicBoolean bool_val)
 	}
 }
 
-/**
- * Create and init an atomic boolean
- *
- * @return created atomic boolean
- */
-PIT_AtomicBoolean PIT_create_atomic_boolean()
-{
-	PIT_AtomicBoolean ab;
-	pthread_mutex_init(&ab.lock, NULL);
-	ab.value = false;
-	return ab;
-}
+

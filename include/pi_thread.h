@@ -4,6 +4,9 @@
 #include <stdbool.h>
 #include <pthread.h>
 #include <definitions.h>
+#include <queue.h>
+
+#include <error.h>
 
 struct PIT_AtomicInt {
 	PIT_Mutex lock;
@@ -43,6 +46,19 @@ struct PIT_Commit
 	} content;
 };
 
+struct PIT_CommitListElement
+{
+	PIT_Commit *commit ;
+	struct PIT_CommitListElement *next;
+};
+
+struct PIT_CommitList
+{
+	PIT_CommitListElement *head;
+	PIT_CommitListElement *tail;
+	int size;
+} ;
+
 struct PIT_SchedPool {
 	PIT_ReadyQueue *ready;
 	PIT_WaitQueue *wait;
@@ -50,6 +66,7 @@ struct PIT_SchedPool {
 	PIT_Condition *cond;
 	int nb_slaves;
 	int nb_waiting_slaves;
+	bool running;
 };
 
 struct PIT_PiThread {
@@ -61,7 +78,7 @@ struct PIT_PiThread {
 	int env_length;
 	PIT_Commit commit;
 	PIT_Commit* commits;
-	PIT_Function proc;
+	PIT_PiThreadProc proc;
 	PIT_Label pc;
 	PIT_Clock clock;
 	int fuel;
