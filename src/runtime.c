@@ -32,6 +32,61 @@ PIT_AtomicBoolean PIT_create_atomic_boolean()
 }
 
 /**
+ * Acquire a mutex on an atomic boolean
+ *
+ * @param the atomic boolean containing the mutex
+ */
+void PIT_acquire_int(PIT_AtomicInt int_val)
+{
+	pthread_mutex_lock(&int_val.lock);
+}	
+
+/**
+ * Release a mutex on an atomic boolean
+ *
+ * @param the atomic boolean containing the mutex
+ */
+void PIT_release_int(PIT_AtomicInt int_val, PIT_Error *error)
+{
+	if (pthread_mutex_trylock(&int_val.lock) == 0)
+	{
+		NEW_ERROR(error,ERR_KERNEL_ERROR);
+	}
+	else
+	{
+		pthread_mutex_unlock(&int_val.lock);
+	}
+	
+}
+
+/**
+ * Acquire a mutex on an atomic boolean
+ *
+ * @param the atomic boolean containing the mutex
+ */
+void PIT_acquire_bool(PIT_AtomicBoolean bool_val)
+{
+	pthread_mutex_lock(&bool_val.lock);
+}	
+
+/**
+ * Release a mutex on an atomic boolean
+ *
+ * @param the atomic boolean containing the mutex
+ */
+void PIT_release_bool(PIT_AtomicBoolean bool_val, PIT_Error *error)
+{
+	if (pthread_mutex_trylock(&bool_val.lock) == 0)
+	{
+		NEW_ERROR(error, ERR_KERNEL_ERROR);
+	}
+	else
+	{
+		pthread_mutex_unlock(&bool_val.lock);
+	}
+}
+
+/**
  * Second generation garbage collector.
  *
  * @param schedpool The schedpool to clean.
@@ -93,9 +148,9 @@ PIT_PiThread *PIT_create_pithread()
  * Function that creates a clock
  * @return PIT_Clock a fresh new created clock
  */
-PIT_Clock PIT_create_clock()
+PIT_Clock *PIT_create_clock()
 {
-	PIT_Clock new_clock = (PIT_Clock*)malloc(sizeof(PIT_Clock));
+	PIT_Clock * new_clock = (PIT_Clock*)malloc(sizeof(PIT_Clock));
 	return new_clock;
 }
 
@@ -118,14 +173,14 @@ void PIT_sched_pool_slave(PIT_SchedPool schedpool, PIT_Error* error)
 			} while(current.status == STATUS_CALL);
 			
 			if(current.status == STATUS_BLOCKED) // && safe_choice
-				CRASH(NEW_ERROR(error, 2));
+				NEW_ERROR(error,ERR_DEADLOCK);
 		}
 		
-		PIT_acquire(schedpool.lock);
+		PIT_acquire_bool(schedpool.lock);
 		schedpool.nb_waiting_slaves++;
 		PIT_cond_wait(schedpool.cond, schedpool.lock);
 		schedpool.nb_waiting_slaves--;
-		PIT_release(schedpool.lock);
+		PIT_release_bool(schedpool.lock,error);
 	
 	}
 }
@@ -174,7 +229,7 @@ PIT_Commit *PIT_create_commitment()
 void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*PIT_EvalFunction)(PIT_PiThread) function, int cont_pc)
 {
 	PIT_OutCommit * out = (PIT_OutCommit *)malloc(sizeof(PIT_OutCommit));
-	out->eval_fun = function;
+	out->eval_func = function;
 
 	PIT_Commit *out_commit = PIT_create_commitment();
 	out_commit->out = &out;
@@ -269,11 +324,11 @@ void PIT_awake(PIT_SchedPool sched, PIT_PiThread p)
  *
  * @param channel to update
  */
-void PIT_channel_incr_ref_count(PIT_Channel channel) 
+void PIT_channel_incr_ref_count(PIT_Channel channel , PIT_Error *error) 
 {
-	PIT_acquire(channel.lock);
+	PIT_acquire_bool(channel.lock);
 	channel.global_rc += 1;
-	PIT_release(channel.lock);
+	PIT_release_bool(channel.lock,error);
 }
 
 /**
@@ -281,15 +336,15 @@ void PIT_channel_incr_ref_count(PIT_Channel channel)
  *
  * @param channel to update
  */
-void PIT_channel_dec_ref_count( PIT_Channel channel ) 
+void PIT_channel_dec_ref_count( PIT_Channel channel , PIT_Error *error) 
 {
-	/*PIT_acquire( channel.lock);
+	PIT_acquire_bool( channel.lock);
 	channel.global_rc -= 1;
-	PIT_release( channel.lock);
+	PIT_release_bool( channel.lock,error);
 	if(channel.global_rc == 0 )
 	{
 		PIT_reclaim_channel(channel);
-	}*/
+	}
 }
 
 /**
@@ -322,7 +377,7 @@ PIT_CommitListElement *PIT_create_commit_list_element(PIT_Commit *commit)
  * @param the PIT_CommitList in which to add a PIT_Commit
  * @param the PIT_Commit to add
  */
-void PIT_commit_list_add(PIT_Commit commit_list, PIT_Commit commit)
+void PIT_commit_list_add(PIT_CommitList commit_list, PIT_Commit commit)
 {
 	PIT_CommitListElement *new_commit_list_element = PIT_create_commit_list_element(commit);
 	commit_list->tail->next = new_commit_list_element;
@@ -335,13 +390,13 @@ void PIT_commit_list_add(PIT_Commit commit_list, PIT_Commit commit)
  * @param the PIT_CommitList in which to fetch
  * @return the PIT_Commit to retrieve
  */
-PIT_Commit PIT_commit_list_fetch(PIT_Commit commit_list)
+PIT_Commit PIT_commit_list_fetch(PIT_CommitList commit_list)
 {
-	PIT_CommitListElement commit_list_element = commit_list->head;
-	commit_list->head = commit_list_element->next;
-	commit_list->size--;
-	commit_list_element->next = NULL;
-	return commit_list_element->commit;
+	PIT_CommitListElement commit_list_element = commit_list.head;
+	commit_list.head = commit_list_element.next;
+	commit_list.size--;
+	commit_list_element.next = NULL;
+	return commit_list_element.commit;
 }
 
 /**
@@ -504,59 +559,5 @@ bool PIT_knows_register(PIT_KnownsSet ks, PIT_Channel ch)
 	return false;
 }
 
-/**
- * Acquire a mutex on an atomic boolean
- *
- * @param the atomic boolean containing the mutex
- */
-void PIT_acquire_int(PIT_AtomicInt int_val)
-{
-	pthread_mutex_lock(&int_val.lock);
-}	
-
-/**
- * Release a mutex on an atomic boolean
- *
- * @param the atomic boolean containing the mutex
- */
-void PIT_release_int(PIT_AtomicInt int_val, PIT_Error *error)
-{
-	if (pthread_mutex_trylock(&int_val.lock) == 0)
-	{
-		NEW_ERROR(error,ERR_KERNEL_ERROR);
-	}
-	else
-	{
-		pthread_mutex_unlock(&int_val.lock);
-	}
-	
-}
-
-/**
- * Acquire a mutex on an atomic boolean
- *
- * @param the atomic boolean containing the mutex
- */
-void PIT_acquire_bool(PIT_AtomicBoolean bool_val)
-{
-	pthread_mutex_lock(&bool_val.lock);
-}	
-
-/**
- * Release a mutex on an atomic boolean
- *
- * @param the atomic boolean containing the mutex
- */
-void PIT_release_bool(PIT_AtomicBoolean bool_val, PIT_Error *error)
-{
-	if (pthread_mutex_trylock(&bool_val.lock) == 0)
-	{
-		NEW_ERROR(error, ERR_KERNEL_ERROR);
-	}
-	else
-	{
-		pthread_mutex_unlock(&bool_val.lock);
-	}
-}
 
 
