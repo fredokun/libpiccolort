@@ -7,14 +7,16 @@
 
 #ifndef RUNTIME_H
 #define RUNTIME_H
+#define FUEL_INIT 358
 
 #include <pi_thread.h>
 
 extern int PIT_GC2(PIT_SchedPool schedpool);
 
-extern PIT_Channel  PIT_generate_channel();
-extern PIT_PiThread PIT_generate_pithread();
-extern PIT_Clock    PIT_generate_clock();
+extern PIT_Channel  PIT_create_channel();
+extern PIT_PiThread PIT_create_pithread();
+extern PIT_Clock    PIT_create_clock();
+extern *PIT_commit  PIT_create_commitment();
 
 extern void PIT_sched_pool_slave(PIT_SchedPool schedpool);
 extern void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor);
@@ -22,7 +24,7 @@ extern void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int 
 
 extern void PIT_register_ouput_commitment(PIT_PiThread p, PIT_Channel ch, PIT_EvalFunction* v, int cont_pc);
 extern void PIT_register_input_commitment(PIT_PiThread p, PIT_Channel ch, int x, int cont_pc);
-extern bool PIT_is_valid_commit(PIT_Commit c);
+extern bool PIT_is_valid_commit(PIT_Commit commit);
 extern int  PIT_can_awake(PIT_PiThread p, PIT_Commit c);
 extern void PIT_awake(PIT_SchedPool sched, PIT_PiThread p);
 extern void PIT_channel_incr_ref_count(PIT_Channel ch);
@@ -53,8 +55,10 @@ extern PIT_KnownsSet PIT_knows_set_knows(PIT_Knowns* ks);
 extern PIT_KnownsSet PIT_knows_set_forget(PIT_Knowns* ks);
 extern bool          PIT_knows_register(PIT_KnownsSet ks, PIT_Channel ch);
 
-extern void PIT_acquire(PIT_AtomicBoolean b);
-extern void PIT_release(PIT_AtomicBoolean b);
+extern void PIT_acquire_int(PIT_AtomicInt int_val);
+extern void PIT_release_int(PIT_AtomicInt int_val);
+extern void PIT_acquire_bool(PIT_AtomicBoolean bool_val);
+extern void PIT_release_bool(PIT_AtomicBoolean bool_val);
 
 extern PIT_Commit PIT_fetch_commitment(PIT_Channel ch);
 

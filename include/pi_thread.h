@@ -5,6 +5,11 @@
 #include <pthread.h>
 #include <definitions.h>
 
+struct PIT_AtomicInt {
+	PIT_Mutex lock;
+	int value;	
+};
+
 struct PIT_AtomicBoolean {
 	PIT_Mutex lock;
 	bool value;	
@@ -58,6 +63,7 @@ struct PIT_PiThread {
 	PIT_Commit* commits;
 	PIT_Function proc;
 	PIT_Label pc;
+	PIT_Clock clock;
 	int fuel;
 	PIT_Mutex lock;
 };
