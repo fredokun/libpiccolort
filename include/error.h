@@ -42,18 +42,8 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <errors.h>
 #include <definitions.h>
-
-
-// List of all error messages in order.
-static const char *error_messages[NB_ERRORS + 1] = {
-	"No error",
-	"The argument is wrong",
-	"Foo failed",
-	"Bar failed"
-};
-
-////////////////////////////////////////////////////////////////////////////////
 
 // An error stack.
 struct PIT_Error {
