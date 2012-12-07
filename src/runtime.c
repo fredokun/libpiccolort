@@ -30,7 +30,7 @@ int PIT_GC2(PIT_SchedPool schedpool)
  *
  * @return created channel
  */
- PIT_Channel *PIT_create_channel()
+PIT_Channel *PIT_create_channel()
 {
 	PIT_Channel *channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
 	/*channel->global_rc = 1;
@@ -44,7 +44,7 @@ int PIT_GC2(PIT_SchedPool schedpool)
  *
  * @return created channel
  */
-*PIT_Channel PIT_create_channel_cn( int commit_size )
+PIT_Channel *PIT_create_channel_cn( int commit_size )
 {
 	PIT_Channel *channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
 	/*channel->global_rc = 1;
@@ -58,7 +58,7 @@ int PIT_GC2(PIT_SchedPool schedpool)
  * Function that creates a PIT_PiThread.
  * @return PIT_PiThread a fresh new created PiThread
  */
-*PIT_PiThread PIT_create_pithread()
+PIT_PiThread *PIT_create_pithread()
 {
 	PIT_PiThread *new_thread = (PIT_Thread*)malloc(sizeof(PIT_Thread));
 	new_thread->knowns = (PIT_KnownsSet)malloc(sizeof(PIT_KnownsSet));
@@ -113,7 +113,7 @@ void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_g
  *
  * @return an input commitment
  */
-*PIT_Commit PIT_create_commitment()
+PIT_Commit *PIT_create_commitment()
 {
 	PIT_Commit *new_commit = (PIT_Commit*)malloc(sizeof(PIT_Commit));
 	new_commit->thread = malloc(sizeof(PIT_PiThread));
@@ -124,11 +124,11 @@ void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_g
 }
 
 /**
- * Function that register an output commitment according to pithread and channel
+ * Function that register an output PIT_Commit according to pithread and channel
  *
- * @param pi_thread Pithread
- * @param channel PIT_Channel
- * @param function *PIT_EvalFunction
+ * @param the PIT_PiThread used to create the output PIT_Commit
+ * @param the PIT_Channel used to create the ourpur PIT_Commit
+ * @param refvar the index of the var used to create the output PIT_Commit
  * @param cont_pc
  */
 void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*PIT_EvalFunction)(PIT_PiThread) function, int cont_pc)
@@ -148,10 +148,10 @@ void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*
 }
 
 /**
- * Function that register an input commitment according to pithread and channe*
- * @param pi_thread Pithread
- * @param channel PIT_Channel
- * @param refvar the index of the var
+ * Function that register an input PIT_Commit according to pithread and channel
+ * @param the PIT_PiThread used to create the input PIT_Commit
+ * @param the PIT_Channel used to create the input PIT_Commit
+ * @param refvar the index of the var used to create the input PIT_Commit
  * @param cont_pc 
  */
 void PIT_register_in_commitment(PIT_PiThread pi_thread, PIT_Channel channel, int refvar, int cont_pc)
@@ -171,9 +171,9 @@ void PIT_register_in_commitment(PIT_PiThread pi_thread, PIT_Channel channel, int
 	PIT_commit_list_add(pi_thread->commits ,in_commit);	
 }
 /**
- * Function that verify if the commit is valid
- * @param commit PIT_Commit
- * @return b bool
+ * Function that verify if the PIT_Commit is valid
+ * @param the PIT_Commit whose validity to check
+ * @return true if the PIT_Commit is valid, false otherwise
  */
 bool PIT_is_valid_commit(PIT_Commit commit)
 {
@@ -188,7 +188,11 @@ bool PIT_is_valid_commit(PIT_Commit commit)
 	return false;
 }
 
-
+/**
+ * Function that fetch a PIT_Commit from a PIT_Channel
+ * @param the PIT_Channel in which to fetch
+ * @return the PIT_Commit fetched
+ */
 PIT_Commit PIT_fetch_commitment(PIT_Channel channel)
 {
 	PIT_Commit current_commit;
@@ -248,11 +252,11 @@ void PIT_channel_dec_ref_count( PIT_Channel channel )
 	}*/
 }
 
-/*
+/**
  * Function that creates the PIT_CommitList
  * @return the created PIT_CommitList
  */
-*PIT_CommitList PIT_create_commit_list()
+PIT_CommitList *PIT_create_commit_list()
 {
 	PIT_CommitList *new_commit_list = (PIT_CommitList)malloc(sizeof(PIT_CommitList));
 	new_commit_list->head = NULL;
@@ -261,11 +265,11 @@ void PIT_channel_dec_ref_count( PIT_Channel channel )
 	return new_commit_list;
 }
 
-/*
+/**
  * Function that creates the PIT_CommitListElement, an element of the PIT_CommitList
  * @return the created element PIT_CommitListElement, an element of the PIT_CommitList
  */
-*PIT_CommitListElement PIT_create_commit_list_element(PIT_Commit *commit)
+PIT_CommitListElement *PIT_create_commit_list_element(PIT_Commit *commit)
 {
 	PIT_CommitListElement *new_commit_list_element = (PIT_CommitListElement)malloc(sizeof(PIT_CommitListElement));
 	new_commit_list_element->commit = commit;

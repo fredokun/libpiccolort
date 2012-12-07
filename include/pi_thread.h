@@ -63,6 +63,7 @@ struct PIT_SchedPool {
 	PIT_Condition *cond;
 	int nb_slaves;
 	int nb_waiting_slaves;
+	bool running;
 };
 
 struct PIT_PiThread {
@@ -74,7 +75,7 @@ struct PIT_PiThread {
 	int env_length;
 	PIT_Commit commit;
 	PIT_Commit* commits;
-	PIT_Function proc;
+	PIT_PiThredProc proc;
 	PIT_Label pc;
 	PIT_Clock clock;
 	int fuel;
