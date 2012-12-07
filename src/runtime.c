@@ -7,11 +7,14 @@
  * @author Joel HING
  */
 
-#include <runtime.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <pthread.h>
+
+#include <definitions.h>
+#include <runtime.h>
+#include <pi_thread.h>
 
 
 
@@ -27,7 +30,6 @@ PIT_AtomicBoolean PIT_create_atomic_boolean()
 	ab.value = false;
 	return ab;
 }
-
 
 /**
  * Second generation garbage collector.
@@ -55,6 +57,7 @@ PIT_Channel *PIT_create_channel()
 	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );
 
 	return channel;
+
 }
 
 /**
@@ -71,6 +74,7 @@ PIT_Channel *PIT_create_channel_cn( int commit_size )
 	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * commit_size );
 	channel->lock = PIT_create_atomic_boolean();
 	return channel;
+
 }
 
 /**
@@ -79,7 +83,7 @@ PIT_Channel *PIT_create_channel_cn( int commit_size )
  */
 PIT_PiThread *PIT_create_pithread()
 {
-	PIT_PiThread *new_thread = (PIT_PiThread*)malloc(sizeof(PIT_PiThread));
+	PIT_PiThread *new_thread = (PIT_Thread*)malloc(sizeof(PIT_Thread));
 	new_thread->knowns = (PIT_KnownsSet)malloc(sizeof(PIT_KnownsSet));
 	new_thread->fuel = FUEL_INIT;
 	return new_thread;
@@ -91,7 +95,7 @@ PIT_PiThread *PIT_create_pithread()
  */
 PIT_Clock PIT_create_clock()
 {
-	PIT_Clock new_clock;// = (PIT_Clock*)malloc(sizeof(PIT_Clock));
+	PIT_Clock new_clock = (PIT_Clock*)malloc(sizeof(PIT_Clock));
 	return new_clock;
 }
 
@@ -99,19 +103,36 @@ PIT_Clock PIT_create_clock()
  * Function that handle the behavior of a schedpool
  * @param schedpool the schedpool to manage
  */
-void PIT_sched_pool_slave(PIT_SchedPool schedpool)
+void PIT_sched_pool_slave(PIT_SchedPool schedpool, PIT_Error* error)
 {
-	PIT_PiThread *p = (PIT_PiThread*)malloc(sizeof(PIT_PiThread));
+	PIT_PiThread current;
 	
-	while()
+	while(schedpool.running)
 	{
 		while(PIT_ready_queue_size(schedpool.ready))
 		{
+			current = PIT_ready_queue_pop(schedpool.ready);
+			do
+			{
+				current.proc(schedpool, current);
+			} while(current.status == STATUS_CALL);
 			
+			if(current.status == STATUS_BLOCKED) // && safe_choice
+				CRASH(NEW_ERROR(error, 2));
 		}
-	}
+		
+		PIT_acquire(schedpool.lock);
+		schedpool.nb_waiting_slaves++;
+		PIT_cond_wait(schedpool.cond, schedpool.lock);
+		schedpool.nb_waiting_slaves--;
+		PIT_release(schedpool.lock);
 	
-	free(p);
+	}
+}
+
+void PIT_cond_wait(PIT_Cond cond, PIT_Mutex lock)
+{
+	pthread_cond_wait(cond, lock);
 }
 
 /**
@@ -136,7 +157,7 @@ PIT_Commit *PIT_create_commitment()
 {
 	PIT_Commit *new_commit = (PIT_Commit*)malloc(sizeof(PIT_Commit));
 	new_commit->thread = malloc(sizeof(PIT_PiThread));
-	new_commit->clock = PIT_create_clock();
+	new_commit->clock = malloc(sizeof(PIT_Clock));
 	new_commit->channel = malloc(sizeof(PIT_Channel));
 	
 	return new_commit;
@@ -150,9 +171,8 @@ PIT_Commit *PIT_create_commitment()
  * @param refvar the index of the var used to create the output PIT_Commit
  * @param cont_pc
  */
-void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, PIT_EvalFunction function, int cont_pc)
+void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*PIT_EvalFunction)(PIT_PiThread) function, int cont_pc)
 {
-
 	PIT_OutCommit * out = (PIT_OutCommit *)malloc(sizeof(PIT_OutCommit));
 	out->eval_fun = function;
 
@@ -162,9 +182,9 @@ void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, PI
 	out_commit->cont_pc = cont_pc;
 	out_commit->type = OUT_COMMIT;
 	out_commit->clock = pi_thread.clock;
-	out_commit->clockval = pi_thread.clock.val.value;
-	out_commit->channel = &channel;
-	PIT_commit_list_add(pi_thread.commits ,*out_commit);	
+	out_commit->clockval = pi_thread.clock.val;
+	out_commit->channel = channel;
+	PIT_commit_list_add(pi_thread->commits ,out_commit);	
 }
 
 /**
