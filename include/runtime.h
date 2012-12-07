@@ -7,14 +7,16 @@
 
 #ifndef RUNTIME_H
 #define RUNTIME_H
+#define FUEL_INIT 358
 
 #include <pi_thread.h>
 
 extern int PIT_GC2(PIT_SchedPool schedpool);
 
-extern PIT_Channel  PIT_generate_channel();
-extern PIT_PiThread PIT_generate_pithread();
-extern PIT_Clock    PIT_generate_clock();
+extern PIT_Channel  PIT_create_channel();
+extern PIT_PiThread PIT_create_pithread();
+extern PIT_Clock    PIT_create_clock();
+extern *PIT_commit  PIT_create_commitment();
 
 extern void PIT_sched_pool_slave(PIT_SchedPool schedpool);
 extern void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor);
