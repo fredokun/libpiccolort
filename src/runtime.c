@@ -4,6 +4,7 @@
  * 
  * @author Maxence WO
  * @author Dany SIRIPHOL
+ * @author Joel HING
  */
 
 #include <runtime.h>
@@ -99,31 +100,67 @@ void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_g
 }
 
 /**
- * Function that register an output commitment according to pithread and channel
- * @param p Pithread
- * @param ch PIT_Channel
- * @param v 
- * @param cont_pc
+ * Creates and returns a commitment
+ *
+ * @return an input commitment
  */
-void PIT_register_ouput_commitment(PIT_PiThread p, PIT_Channel ch, PIT_EvalFunction* v, int cont_pc)
+function *PIT_commit PIT_create_commitment()
 {
-	printf("Not implemented yet.\n");
-	return;
+	struct PIT_commit* commit = (struct PIT_commit*)malloc(sizeof(PIT_commit));
+	commit->thread = malloc(sizeof(PIT_PiThread));
+	commit->clock = malloc(sizeof(PIT_Clock));
+	commit->channel = malloc(sizeof(PIT_Channel));
+	
+	return commit;
 }
 
 /**
- * Function that register an input commitment according to pithread and channel
- * @param p Pithread
- * @param ch PIT_Channel
- * @param v 
- * @param cont_pc 
+ * Function that register an output commitment according to pithread and channel
+ *
+ * @param pi_thread Pithread
+ * @param channel PIT_Channel
+ * @param function *PIT_EvalFunction
+ * @param cont_pc
  */
-void PIT_register_input_commitment(PIT_PiThread p, PIT_Channel ch, int x, int cont_pc)
+function void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*PIT_EvalFunction)(PIT_PiThread) function, int cont_pc)
 {
-	printf("Not implemented yet.\n");
-	return;
+	PIT_OutCommit func = (struct PIT_OutCommit)malloc(sizeof(PIT_OutCommit));
+	func.eval_fun = function;
+
+	PIT_Commit* out_commit = PIT_create_commitment();
+	out_commit->out = func;
+	out_commit->thread = pi_thread;
+	out_commit->cont_pc = cont_pc;
+	out_commit->type = OUT_COMMIT;
+	out_commit->clock = pi_thread.clock;
+	out_commit->clockval = pi_thread.clock.val;
+	out_commit->channel = channel;
+	PIT_commit_list_add(pi_thread->commits ,out_commit);	
 }
 
+/**
+ * Function that register an input commitment according to pithread and channe*
+ * @param pi_thread Pithread
+ * @param channel PIT_Channel
+ * @param refvar the index of the var
+ * @param cont_pc 
+ */
+function void PIT_register_in_commitment(PIT_PiThread pi_thread, PIT_Channel channel, int refvar, int cont_pc)
+{ 
+	PIT_InCommit ref_v = (struct PIT_InCommit)malloc(sizeof(PIT_InCommit));
+	ref_v.refvar = refvar;
+
+	PIT_Commit* in_commit = PIT_create_commitment();
+	in_commit->in = ref_v;
+	in_commit->thread = pi_thread;
+	in_commit->cont_pc = cont_pc;
+	in_commit->type = IN_COMMIT;
+	in_commit->refvar = refvar;
+	in_commit->clock = pi_thread.clock;
+	in_commit->clockval = pi_thread.clock.val;
+	in_commit->channel = channel;
+	PIT_commit_list_add(pi_thread->commits ,in_commit);	
+}
 /**
  * Function that verify if the commit is valid
  * @param c PIT_Commit
