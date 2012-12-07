@@ -124,11 +124,11 @@ function *PIT_commit PIT_create_commitment()
  */
 function void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*PIT_EvalFunction)(PIT_PiThread) function, int cont_pc)
 {
-	PIT_OutCommit func = (struct PIT_OutCommit)malloc(sizeof(PIT_OutCommit));
-	func.eval_fun = function;
+	PIT_OutCommit out = (struct PIT_OutCommit)malloc(sizeof(PIT_OutCommit));
+	out.eval_fun = function;
 
 	PIT_Commit* out_commit = PIT_create_commitment();
-	out_commit->out = func;
+	out_commit->out = out;
 	out_commit->thread = pi_thread;
 	out_commit->cont_pc = cont_pc;
 	out_commit->type = OUT_COMMIT;
@@ -147,11 +147,11 @@ function void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel ch
  */
 function void PIT_register_in_commitment(PIT_PiThread pi_thread, PIT_Channel channel, int refvar, int cont_pc)
 { 
-	PIT_InCommit ref_v = (struct PIT_InCommit)malloc(sizeof(PIT_InCommit));
-	ref_v.refvar = refvar;
+	PIT_InCommit in = (struct PIT_InCommit)malloc(sizeof(PIT_InCommit));
+	in.refvar = refvar;
 
 	PIT_Commit* in_commit = PIT_create_commitment();
-	in_commit->in = ref_v;
+	in_commit->in = in;
 	in_commit->thread = pi_thread;
 	in_commit->cont_pc = cont_pc;
 	in_commit->type = IN_COMMIT;
