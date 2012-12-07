@@ -19,6 +19,8 @@ extern PIT_Clock    PIT_generate_clock();
 extern void PIT_sched_pool_slave(PIT_SchedPool schedpool);
 extern void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor);
 
+typedef void (*pi_thred_proc) (PIT_SchedPool, PIT_PiThread);
+extern void PIT_main(int nb_core_threads, pi_thread_proc entrypoint);
 
 extern void PIT_register_ouput_commitment(PIT_PiThread p, PIT_Channel ch, PIT_EvalFunction* v, int cont_pc);
 extern void PIT_register_input_commitment(PIT_PiThread p, PIT_Channel ch, int x, int cont_pc);

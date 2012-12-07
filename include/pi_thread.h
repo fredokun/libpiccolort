@@ -45,6 +45,7 @@ struct PIT_SchedPool {
 	PIT_Condition *cond;
 	int nb_slaves;
 	int nb_waiting_slaves;
+	bool running;
 };
 
 struct PIT_PiThread {
