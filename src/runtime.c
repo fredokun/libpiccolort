@@ -437,9 +437,17 @@ void PIT_acquire_int(PIT_AtomicInt int_val)
  *
  * @param the atomic boolean containing the mutex
  */
-void PIT_release_int(PIT_AtomicInt int_val)
+void PIT_release_int(PIT_AtomicInt int_val, PIT_Error *error)
 {
-	pthread_mutex_unlock(&int_val.lock);
+	if (pthread_mutex_trylock(&int_val.lock) == 0)
+	{
+		NEW_ERROR(error, ERR_KERNEL_CRASH);
+	}
+	else
+	{
+		pthread_mutex_unlock(&int_val.lock);
+	}
+	
 }
 
 /**
@@ -459,7 +467,15 @@ void PIT_acquire_bool(PIT_AtomicBoolean bool_val)
  */
 void PIT_release_bool(PIT_AtomicBoolean bool_val)
 {
-	pthread_mutex_unlock(&bool_val.lock);
+
+	if (pthread_mutex_trylock(&bool_val.lock) == 0)
+	{
+		NEW_ERROR(error, ERR_KERNEL_CRASH);
+	}
+	else
+	{
+		pthread_mutex_unlock(&bool_val.lock);
+	}
 }
 
 /**

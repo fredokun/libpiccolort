@@ -17,6 +17,7 @@ extern PIT_Channel  PIT_create_channel();
 extern PIT_PiThread PIT_create_pithread();
 extern PIT_Clock    PIT_create_clock();
 extern *PIT_commit  PIT_create_commitment();
+extern 
 
 extern void PIT_sched_pool_slave(PIT_SchedPool schedpool);
 extern void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor);
