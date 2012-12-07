@@ -36,7 +36,7 @@ int PIT_GC2(PIT_SchedPool schedpool)
 	/*channel->global_rc = 1;
 	channel->incommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );
 	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * 10 );*/
-	return *channel;
+	return channel;
 }
 
 /**
@@ -44,23 +44,23 @@ int PIT_GC2(PIT_SchedPool schedpool)
  *
  * @return created channel
  */
-*PIT_Channel PIT_create_channel_cn( int commit_size )
+PIT_Channel *PIT_create_channel_cn( int commit_size )
 {
 	PIT_Channel *channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
 	/*channel->global_rc = 1;
 	channel->incommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * commit_size );
 	channel->outcommits = (PIT_Commit *) malloc( sizeof( PIT_Commit ) * commit_size );
 	channel->lock = PIT_create_atomic_boolean();*/
-	return *channel;
+	return channel;
 }
 
 /**
  * Function that creates a PIT_PiThread.
  * @return PIT_PiThread a fresh new created PiThread
  */
-*PIT_PiThread PIT_create_pithread()
+PIT_PiThread *PIT_create_pithread()
 {
-	PIT_PiThread *new_thread = (PIT_Thread*)malloc(sizeof(PIT_Thread));
+	PIT_PiThread *new_thread = (PIT_PiThread*)malloc(sizeof(PIT_PiThread));
 	new_thread->knowns = (PIT_KnownsSet)malloc(sizeof(PIT_KnownsSet));
 	new_thread->fuel = FUEL_INIT;
 	return new_thread;
@@ -72,7 +72,7 @@ int PIT_GC2(PIT_SchedPool schedpool)
  */
 PIT_Clock PIT_create_clock()
 {
-	PIT_Clock new_clock = (PIT_Clock*)malloc(sizeof(PIT_Clock));
+	PIT_Clock new_clock;// = (PIT_Clock*)malloc(sizeof(PIT_Clock));
 	return new_clock;
 }
 
@@ -104,11 +104,11 @@ void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_g
  *
  * @return an input commitment
  */
-*PIT_Commit PIT_create_commitment()
+PIT_Commit *PIT_create_commitment()
 {
 	PIT_Commit *new_commit = (PIT_Commit*)malloc(sizeof(PIT_Commit));
 	new_commit->thread = malloc(sizeof(PIT_PiThread));
-	new_commit->clock = malloc(sizeof(PIT_Clock));
+	new_commit->clock = PIT_create_clock();
 	new_commit->channel = malloc(sizeof(PIT_Channel));
 	
 	return new_commit;
@@ -122,20 +122,20 @@ void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_g
  * @param function *PIT_EvalFunction
  * @param cont_pc
  */
-void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*PIT_EvalFunction)(PIT_PiThread) function, int cont_pc)
+void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, PIT_EvalFunction function, int cont_pc)
 {
-	PIT_OutCommit out = (PIT_OutCommit)malloc(sizeof(PIT_OutCommit));
-	out.eval_fun = function;
+	PIT_OutCommit out;
+	out.eval_func = function;
 
 	PIT_Commit *out_commit = PIT_create_commitment();
-	out_commit->out = out;
-	out_commit->thread = pi_thread;
+	out_commit->content.out = out;
+	out_commit->thread = &pi_thread;
 	out_commit->cont_pc = cont_pc;
 	out_commit->type = OUT_COMMIT;
 	out_commit->clock = pi_thread.clock;
-	out_commit->clockval = pi_thread.clock.val;
-	out_commit->channel = channel;
-	PIT_commit_list_add(pi_thread->commits ,out_commit);	
+	out_commit->clockval = pi_thread.clock.val.value;
+	out_commit->channel = &channel;
+	PIT_commit_list_add(pi_thread.commits ,*out_commit);	
 }
 
 /**

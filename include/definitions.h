@@ -24,7 +24,7 @@ typedef PIT_Knowns* PIT_KnownsSet;
 
 
 typedef char *PIT_Label;
-typedef void (*PIT_PiThredProc) (PIT_SchedPool, PIT_PiThread);
+typedef void (*PIT_PiThreadProc) (PIT_SchedPool, PIT_PiThread);
 typedef PIT_Value (*PIT_EvalFunction)(PIT_PiThread);
 
 typedef enum

@@ -75,7 +75,7 @@ struct PIT_PiThread {
 	int env_length;
 	PIT_Commit commit;
 	PIT_Commit* commits;
-	PIT_PiThredProc proc;
+	PIT_PiThreadProc proc;
 	PIT_Label pc;
 	PIT_Clock clock;
 	int fuel;
