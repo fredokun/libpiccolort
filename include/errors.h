@@ -5,8 +5,10 @@
  * @author Mickaël MENU
  */
 
+#include <definitions.h>
+
 // Number of errors defined.
-#define NB_ERRORS 5
+#define NB_ERRORS 100
 
 // List of all errors defined.
 enum PIT_ErrorId {

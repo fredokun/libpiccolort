@@ -77,13 +77,22 @@ PIT_Clock PIT_create_clock()
 }
 
 /**
- * ????????????????????
- * @param schedpool ????????????????
+ * Function that handle the behavior of a schedpool
+ * @param schedpool the schedpool to manage
  */
 void PIT_sched_pool_slave(PIT_SchedPool schedpool)
 {
-	printf("Not implemented yet.\n");
-	return;
+	PIT_PiThread *p = (PIT_PiThread*)malloc(sizeof(PIT_PiThread));
+	
+	while()
+	{
+		while(PIT_ready_queue_size(shedpool.ready))
+		{
+			
+		}
+	}
+	
+	free(p);
 }
 
 /**
