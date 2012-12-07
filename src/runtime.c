@@ -30,7 +30,7 @@ int PIT_GC2(PIT_SchedPool schedpool)
  *
  * @return created channel
  */
- PIT_Channel PIT_create_channel()
+ PIT_Channel *PIT_create_channel()
 {
 	PIT_Channel *channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
 	/*channel->global_rc = 1;
@@ -44,7 +44,7 @@ int PIT_GC2(PIT_SchedPool schedpool)
  *
  * @return created channel
  */
-PIT_Channel PIT_create_channel_cn( int commit_size )
+*PIT_Channel PIT_create_channel_cn( int commit_size )
 {
 	PIT_Channel *channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
 	/*channel->global_rc = 1;
@@ -58,9 +58,9 @@ PIT_Channel PIT_create_channel_cn( int commit_size )
  * Function that creates a PIT_PiThread.
  * @return PIT_PiThread a fresh new created PiThread
  */
-PIT_PiThread PIT_create_pithread()
+*PIT_PiThread PIT_create_pithread()
 {
-	struct PIT_PiThread *new_thread = (struct PIT_Thread*)malloc(sizeof(PIT_Thread));
+	PIT_PiThread *new_thread = (PIT_Thread*)malloc(sizeof(PIT_Thread));
 	new_thread->knowns = (PIT_KnownsSet)malloc(sizeof(PIT_KnownsSet));
 	new_thread->fuel = FUEL_INIT;
 	return new_thread;
@@ -72,7 +72,7 @@ PIT_PiThread PIT_create_pithread()
  */
 PIT_Clock PIT_create_clock()
 {
-	PIT_Clock new_clock = (struct PIT_Clock*)malloc(sizeof(PIT_Clock));
+	PIT_Clock new_clock = (PIT_Clock*)malloc(sizeof(PIT_Clock));
 	return new_clock;
 }
 
@@ -106,7 +106,7 @@ void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_g
  */
 *PIT_Commit PIT_create_commitment()
 {
-	struct PIT_Commit *new_commit = (struct PIT_Commit*)malloc(sizeof(PIT_Commit));
+	PIT_Commit *new_commit = (PIT_Commit*)malloc(sizeof(PIT_Commit));
 	new_commit->thread = malloc(sizeof(PIT_PiThread));
 	new_commit->clock = malloc(sizeof(PIT_Clock));
 	new_commit->channel = malloc(sizeof(PIT_Channel));
@@ -124,7 +124,7 @@ void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_g
  */
 void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*PIT_EvalFunction)(PIT_PiThread) function, int cont_pc)
 {
-	PIT_OutCommit out = (struct PIT_OutCommit)malloc(sizeof(PIT_OutCommit));
+	PIT_OutCommit out = (PIT_OutCommit)malloc(sizeof(PIT_OutCommit));
 	out.eval_fun = function;
 
 	PIT_Commit *out_commit = PIT_create_commitment();
@@ -147,7 +147,7 @@ void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*
  */
 void PIT_register_in_commitment(PIT_PiThread pi_thread, PIT_Channel channel, int refvar, int cont_pc)
 { 
-	PIT_InCommit in = (struct PIT_InCommit)malloc(sizeof(PIT_InCommit));
+	PIT_InCommit in = (PIT_InCommit)malloc(sizeof(PIT_InCommit));
 	in.refvar = refvar;
 
 	PIT_Commit *in_commit = PIT_create_commitment();
@@ -180,11 +180,11 @@ bool PIT_is_valid_commit(PIT_Commit commit)
 }
 
 
-PIT_Commit PIT_fetch_commitment(PIT_Channel ch)
+PIT_Commit PIT_fetch_commitment(PIT_Channel channel)
 {
-	PIT_Commit c;
-	printf("Not implemented yet.\n");
-	return c;
+	PIT_Commit current_commit;
+	
+	return current_commit;
 }
 
 /**
@@ -239,27 +239,56 @@ void PIT_channel_dec_ref_count( PIT_Channel channel )
 	}*/
 }
 
+/*
+ * Function that creates the PIT_CommitList
+ * @return the created PIT_CommitList
+ */
+*PIT_CommitList PIT_create_commit_list()
+{
+	PIT_CommitList *new_commit_list = (PIT_CommitList)malloc(sizeof(PIT_CommitList));
+	new_commit_list->head = NULL;
+	new_commit_list->tail = NULL;
+	new_commit_list->size = 0;
+	return new_commit_list;
+}
+
+/*
+ * Function that creates the PIT_CommitListElement, an element of the PIT_CommitList
+ * @return the created element PIT_CommitListElement, an element of the PIT_CommitList
+ */
+*PIT_CommitListElement PIT_create_commit_list_element(PIT_Commit *commit)
+{
+	PIT_CommitListElement *new_commit_list_element = (PIT_CommitListElement)malloc(sizeof(PIT_CommitListElement));
+	new_commit_list_element->commit = commit;
+	new_commit_list_element->next = NULL;
+	return new_commit_list_element;
+}
+
 /**
  * Function that add the selected element at the end of the CommitList
- * @param clist PIT_Commit
- * @param c PIT_Commit
+ * @param the PIT_CommitList in which to add a PIT_Commit
+ * @param the PIT_Commit to add
  */
-void PIT_commit_list_add(PIT_Commit* clist, PIT_Commit c)
+void PIT_commit_list_add(PIT_Commit commit_list, PIT_Commit commit)
 {
-	printf("Not implemented yet.\n");
-	return;
+	PIT_CommitListElement *new_commit_list_element = PIT_create_commit_list_element(commit);
+	commit_list->tail->next = new_commit_list_element;
+	commit_list->tail = new_commit_list_element;
+	commit_list->size++:	
 }
 
 /**
  * Function that removes the first element from the commitlist and returns it
- * @param clist PIT_Commit
- * @return PIT_Commit
+ * @param the PIT_CommitList in which to fetch
+ * @return the PIT_Commit to retrieve
  */
-PIT_Commit PIT_commit_list_fetch(PIT_Commit* clist)
+PIT_Commit PIT_commit_list_fetch(PIT_Commit commit_list)
 {
-	PIT_Commit p;
-	printf("Not implemented yet.\n");
-	return p;
+	PIT_CommitListElement commit_list_element = commit_list->head;
+	commit_list->head = commit_list_element->next;
+	commit_list->size--;
+	commit_list_element->next = NULL;
+	return commit_list_element->commit;
 }
 
 /**
