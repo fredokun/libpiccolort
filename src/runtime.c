@@ -100,32 +100,35 @@ PIT_Clock PIT_create_clock()
 }
 
 /**
- * Function that handle the behavior of a schedpool
- * @param schedpool the schedpool to manage
+ * Function that handle the behavior of a sched_pool
+ * @param sched_pool the sched_pool to manage
  */
-void PIT_sched_pool_slave(PIT_SchedPool schedpool, PIT_Error* error)
+void PIT_sched_pool_slave(PIT_Args *args)
 {
+	PIT_SchedPool sched_pool = args->sched_pool;
+	PIT_Error *error = &(args->error);
+	
 	PIT_PiThread current;
 	
-	while(schedpool.running)
+	while(sched_pool.running)
 	{
-		while(PIT_ready_queue_size(schedpool.ready))
+		while(PIT_ready_queue_size(sched_pool.ready))
 		{
-			current = PIT_ready_queue_pop(schedpool.ready);
+			current = PIT_ready_queue_pop(sched_pool.ready);
 			do
 			{
-				current.proc(schedpool, current);
+				current.proc(sched_pool, current);
 			} while(current.status == STATUS_CALL);
 			
 			if(current.status == STATUS_BLOCKED) // && safe_choice
 				CRASH(NEW_ERROR(error, 2));
 		}
 		
-		PIT_acquire(schedpool.lock);
-		schedpool.nb_waiting_slaves++;
-		PIT_cond_wait(schedpool.cond, schedpool.lock);
-		schedpool.nb_waiting_slaves--;
-		PIT_release(schedpool.lock);
+		PIT_acquire(sched_pool.lock);
+		sched_pool.nb_waiting_slaves++;
+		PIT_cond_wait(sched_pool.cond, sched_pool.lock);
+		sched_pool.nb_waiting_slaves--;
+		PIT_release(sched_pool.lock);
 	
 	}
 }
@@ -137,12 +140,12 @@ void PIT_cond_wait(PIT_Cond cond, PIT_Mutex lock)
 
 /**
  * ????????????????????
- * @param schedpool ????????????????
+ * @param sched_pool ????????????????
  * @param std_gc_fuel ?????????????
  * @param quick_gc_fuel ????????????
  * @param active_factor ?????????????
  */
-void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor)
+void PIT_sched_pool_master(PIT_SchedPool sched_pool, int std_gc_fuel, int quick_gc_fuel, int active_factor)
 {
 	printf("Not implemented yet.\n");
 	return;

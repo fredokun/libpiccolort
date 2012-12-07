@@ -3,6 +3,8 @@
  * File that contains the entry point of the runtime library 
  * 
  * @author Sergiu Tiganu
+ * @author Maxence WO
+ * @author Dany Siriphol
  */
  
 #include <stdio.h>
@@ -12,13 +14,7 @@
  
 #include <runtime.h>
 #include <error.h>
-
-struct PIT_Args
-{
-	PIT_Error error;
-	PIT_SchedPool sched_pool;
-};
-	
+#include <entry.h>
 
 /**
  * The entry point of the Runtime library. Initialises the real running 
@@ -33,7 +29,7 @@ void PIT_main(int nb_core_threads, PIT_PiThreadProc entrypoint)
 	ALLOC_ERROR(error); /* Contains all the errors */
 	PIT_SchedPool sched_pool;
 	PIT_PiThread *init_thread;
-	struct PIT_Args * args = (struct PIT_Args *)malloc(sizeof(struct PIT_Args));
+	PIT_Args * args = (PIT_Args *)malloc(sizeof(PIT_Args));
 	args->error = error;
 	args->sched_pool = sched_pool;
 	void* function = PIT_sched_pool_slave;
@@ -58,7 +54,7 @@ void PIT_main(int nb_core_threads, PIT_PiThreadProc entrypoint)
 	for (i = 0; i < nb_core_threads; ++i) 
 	{
 		status = pthread_create(&threads[i], NULL, 
-			function, (void *)args);
+			function, args);
 		if (status) 
 		{
 			NEW_ERROR(&error, ERR_READY_QUEUE_ADD/*ERR_THREAD_CREATE*/);

@@ -41,6 +41,8 @@ typedef char *PIT_Label;
 typedef void (*PIT_PiThreadProc) (PIT_SchedPool, PIT_PiThread);
 typedef PIT_Value (*PIT_EvalFunction)(PIT_PiThread);
 
+typedef struct PIT_Args PIT_Args;
+
 typedef enum
 {
 	IN_COMMIT,

@@ -5,7 +5,7 @@
 #include <pthread.h>
 #include <definitions.h>
 #include <queue.h>
-
+#include <entry.h>
 #include <error.h>
 
 struct PIT_AtomicInt {
