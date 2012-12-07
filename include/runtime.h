@@ -13,6 +13,7 @@
 
 extern int PIT_GC2(PIT_SchedPool schedpool);
 
+extern PIT_SchedPool PIT_create_sched_pool();
 extern PIT_Channel  *PIT_create_channel();
 extern PIT_PiThread *PIT_create_pithread();
 extern PIT_Clock    PIT_create_clock();
@@ -23,6 +24,7 @@ extern PIT_CommitListElement *PIT_create_commit_list_element();
 extern void PIT_sched_pool_slave(PIT_SchedPool schedpool);
 extern void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor);
 
+extern void PIT_main(int nb_core_threads, pi_thread_proc entrypoint);
 
 extern void PIT_register_ouput_commitment(PIT_PiThread p, PIT_Channel ch, PIT_EvalFunction* v, int cont_pc);
 extern void PIT_register_input_commitment(PIT_PiThread p, PIT_Channel ch, int x, int cont_pc);
