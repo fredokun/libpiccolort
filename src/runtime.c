@@ -12,7 +12,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include <errors.h>
 
 /**
  * Second generation garbage collector.
@@ -31,7 +30,7 @@ int PIT_GC2(PIT_SchedPool schedpool)
  *
  * @return created channel
  */
- PIT_Channel PIT_create_channel()
+ PIT_Channel *PIT_create_channel()
 {
 	PIT_Channel *channel = (PIT_Channel *)malloc( sizeof(PIT_Channel));
 	/*channel->global_rc = 1;
