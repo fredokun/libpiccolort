@@ -34,6 +34,8 @@ typedef pthread_cond_t *PIT_Condition;//typedef struct PIT_Condition PIT_Conditi
 typedef struct PIT_Knowns PIT_Knowns;
 typedef PIT_Knowns* PIT_KnownsSet;
 
+typedef enum PIT_ErrorId PIT_ErrorId;
+typedef struct PIT_Error PIT_Error;
 
 typedef char *PIT_Label;
 typedef void (*PIT_PiThreadProc) (PIT_SchedPool, PIT_PiThread);

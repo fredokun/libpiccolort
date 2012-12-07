@@ -83,7 +83,7 @@ PIT_Channel *PIT_create_channel_cn( int commit_size )
  */
 PIT_PiThread *PIT_create_pithread()
 {
-	PIT_PiThread *new_thread = (PIT_Thread*)malloc(sizeof(PIT_Thread));
+	PIT_PiThread *new_thread = (PIT_PiThread*)malloc(sizeof(PIT_PiThread));
 	new_thread->knowns = (PIT_KnownsSet)malloc(sizeof(PIT_KnownsSet));
 	new_thread->fuel = FUEL_INIT;
 	return new_thread;

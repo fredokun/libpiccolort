@@ -66,4 +66,6 @@ extern void PIT_release_bool(PIT_AtomicBoolean bool_val);
 
 extern PIT_Commit PIT_fetch_commitment(PIT_Channel ch);
 
+extern PIT_Clock PIT_create_clock();
+
 #endif

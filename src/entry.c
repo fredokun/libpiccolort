@@ -13,11 +13,12 @@
 #include <runtime.h>
 #include <error.h>
 
-/* Wrapper to pass PIT_sched_pool_slave to pthread_create */
-static void *sched_pool_slave_wrapper(void *p_sched_pool) {
-	PIT_sched_pool_slave(*(PIT_SchedPool *)p_sched_pool);
-	return NULL;
-}
+struct PIT_Args
+{
+	PIT_Error error;
+	PIT_SchedPool sched_pool;
+};
+	
 
 /**
  * The entry point of the Runtime library. Initialises the real running 
@@ -29,14 +30,18 @@ static void *sched_pool_slave_wrapper(void *p_sched_pool) {
  */ 
 void PIT_main(int nb_core_threads, PIT_PiThreadProc entrypoint) 
 {
+	ALLOC_ERROR(error); /* Contains all the errors */
 	PIT_SchedPool sched_pool;
 	PIT_PiThread *init_thread;
-	
+	struct PIT_Args * args = (struct PIT_Args *)malloc(sizeof(struct PIT_Args));
+	args->error = error;
+	args->sched_pool = sched_pool;
+	void* function = PIT_sched_pool_slave;
 	int i;
 	pthread_t *threads;
 	
 	int status;
-	ALLOC_ERROR(error); /* Contains all the errors */
+	
 	
 	sched_pool = PIT_create_sched_pool();
 	
@@ -49,10 +54,11 @@ void PIT_main(int nb_core_threads, PIT_PiThreadProc entrypoint)
 	
 	sched_pool.running = true;
 	
+	
 	for (i = 0; i < nb_core_threads; ++i) 
 	{
 		status = pthread_create(&threads[i], NULL, 
-			sched_pool_slave_wrapper, &sched_pool);
+			function, (void *)args);
 		if (status) 
 		{
 			NEW_ERROR(&error, ERR_READY_QUEUE_ADD/*ERR_THREAD_CREATE*/);
@@ -61,14 +67,16 @@ void PIT_main(int nb_core_threads, PIT_PiThreadProc entrypoint)
 		++(sched_pool.nb_slaves);
 	}
 	
+/*
 	while (sched_pool.nb_waiting_slaves != sched_pool.nb_slaves) {
 		status = pthread_yield();
 		if (status) 
 		{
-			NEW_ERROR(&error, ERR_READY_QUEUE_PUSH/*ERR_THREAD_YIELD*/);
+			NEW_ERROR(&error, ERR_READY_QUEUE_PUSH ERR_THREAD_YIELD);
 			CRASH(&error);
 		}
 	}
+*/
 	
 	init_thread = PIT_create_pithread();
 	init_thread->proc = entrypoint;
