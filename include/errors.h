@@ -10,7 +10,7 @@
 
 // List of all errors defined.
 enum PIT_ErrorId {
-	ERR_KERNEL_ERROR
+	ERR_KERNEL_ERROR,
 	ERR_DEADLOCK,
 
 	ERR_ALLOC_QUEUE_CELL,
@@ -18,6 +18,7 @@ enum PIT_ErrorId {
 	ERR_READY_QUEUE_ADD,
 	ERR_WAIT_QUEUE_PUSH,
 	ERR_WAIT_QUEUE_ADD,
+	ERR_WAIT_QUEUE_PUSH_OLD
 };
 
 // List of all error messages in order.
@@ -26,10 +27,11 @@ static const char *error_messages[NB_ERRORS + 1] = {
 
 	"Released a free mutex",
 	"Scheduler deadlock",
-	
+
 	"Can't alloc a new queue cell.",
-	"Can't push the PiThread on the ready queue."
-	"Can't append the PiThread on the ready queue."
-	"Can't push the PiThread on the wait queue."
-	"Can't append the PiThread on the wait queue."
+	"Can't push the PiThread on the ready queue.",
+	"Can't append the PiThread on the ready queue.",
+	"Can't push the PiThread on the wait queue.",
+	"Can't append the PiThread on the wait queue.",
+	"Can't push the PiThread on the old wait queue."
 };
