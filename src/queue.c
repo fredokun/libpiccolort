@@ -188,7 +188,7 @@ void PIT_wait_queue_push(PIT_WaitQueue *wq, PIT_PiThread *pt, PIT_Error *error)
 }
 
 
-PIT_PiThread *PIT_wait_queue_fetch(PIT_WaitQueue *wq, PIT_PiThread *pt, PIT_Error *error)
+PIT_PiThread *PIT_wait_queue_fetch(PIT_WaitQueue *wq, PIT_PiThread *pt)
 {
 	ASSERT(wq != NULL);
 	ASSERT(pt != NULL);
@@ -237,4 +237,89 @@ PIT_PiThread *PIT_wait_queue_fetch(PIT_WaitQueue *wq, PIT_PiThread *pt, PIT_Erro
 
 	UNLOCK_QUEUE(wq);
 	return NULL;
+}
+
+void PIT_wait_queue_push_old(PIT_WaitQueue *wq, PIT_PiThread *pt, PIT_Error *error)
+{
+	ASSERT(wq != NULL);
+	ASSERT(pt != NULL);
+
+	LOCK_QUEUE(wq);
+
+	// create queue cell
+	ALLOC_ERROR(cell_error);
+	PIT_QueueCell *cell = PIT_create_queue_cell(&cell_error);
+
+	if (HAS_ERROR) {
+		ADD_ERROR(error, cell_error, ERR_WAIT_QUEUE_PUSH_OLD);
+	} else {
+		cell->thread = pt;
+		if (wq->old.size == 0) {
+			wq->old.head = cell;
+			wq->old.tail = cell;
+			cell->next = NULL;
+		} else {
+			cell->next = wq->old.head;
+			wq->old.head = cell;
+		}
+
+		if (wq->active.size != 0)
+			wq->active.tail->next = cell;
+
+		wq->old.size++;
+	}
+
+	UNLOCK_QUEUE(wq);
+}
+
+// WARNING: WHY THE POP IS TAKING THE END OF THE QUEUE AND NOT THE HEAD ?
+PIT_PiThread *PIT_wait_queue_pop_old(PIT_WaitQueue *wq)
+{
+	ASSERT(wq != NULL);
+
+	LOCK_QUEUE(wq);
+	PIT_PiThread *popped_thread = NULL;
+
+	if (wq->old.size > 0) {
+		PIT_QueueCell *popped_cell = wq->old.tail;
+		popped_thread = popped_cell->thread;
+		wq->old.tail = popped_cell->prev;
+		wq->old.size--;
+	}
+
+	UNLOCK_QUEUE(wq);
+	return popped_thread;
+}
+
+int PIT_wait_queue_size(PIT_WaitQueue *wq)
+{
+	ASSERT(wq != NULL);
+	LOCK_QUEUE(wq);
+	int size = wq->active.size;
+	size += wq->old.size;
+	UNLOCK_QUEUE(wq);
+	return size;
+}
+
+int PIT_wait_queue_max_active(PIT_WaitQueue *wq)
+{
+	ASSERT(wq != NULL);
+	LOCK_QUEUE(wq);
+	int nb = wq->active.size;
+	UNLOCK_QUEUE(wq);
+	return nb;
+}
+
+void PIT_wait_queue_max_active_reset(PIT_WaitQueue *wq)
+{
+	ASSERT(wq != NULL);
+	LOCK_QUEUE(wq);
+
+	wq->old.size = wq->old.size + wq->active.size;
+	wq->active.size = 0;
+	wq->old.head = wq->active.head;
+	wq->active.head = NULL;
+	wq->active.tail = NULL;
+
+	UNLOCK_QUEUE(wq);
 }
