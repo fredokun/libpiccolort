@@ -21,7 +21,7 @@ typedef PIT_Knowns* PIT_KnownsSet;
 
 
 typedef char *PIT_Label;
-typedef void (*PIT_Function)(void);
+typedef void (*PIT_PiThredProc) (PIT_SchedPool, PIT_PiThread);
 typedef PIT_Value (*PIT_EvalFunction)(PIT_PiThread);
 typedef int PIT_AtomicInt;
 
@@ -54,18 +54,5 @@ typedef enum {
 
 typedef enum PIT_ErrorId PIT_ErrorId;
 typedef struct PIT_Error PIT_Error;
-
-// TO BE MODIFIED WHEN YOU ADD AN ERROR ////////////////////////////////////////
-
-// Number of errors defined.
-#define NB_ERRORS 3
-
-// List of all errors defined.
-enum PIT_ErrorId {
-	ERR_WRONG_ARG = 1,
-	ERR_FOO_FAILED,
-	ERR_BAR_FAILED
-	/* ... */
-};
 
 #endif
