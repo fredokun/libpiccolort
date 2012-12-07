@@ -42,7 +42,6 @@
 
 #include <stdlib.h>
 #include <assert.h>
-#include <errors.h>
 #include <definitions.h>
 
 // An error stack.

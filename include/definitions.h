@@ -26,7 +26,6 @@ typedef PIT_Knowns* PIT_KnownsSet;
 typedef char *PIT_Label;
 typedef void (*PIT_Function)(void);
 typedef PIT_Value (*PIT_EvalFunction)(PIT_PiThread);
-typedef int PIT_AtomicInt;
 
 typedef enum
 {
@@ -59,16 +58,35 @@ typedef enum PIT_ErrorId PIT_ErrorId;
 typedef struct PIT_Error PIT_Error;
 
 // TO BE MODIFIED WHEN YOU ADD AN ERROR ////////////////////////////////////////
-
 // Number of errors defined.
-#define NB_ERRORS 3
+#define NB_ERRORS 8
 
 // List of all errors defined.
 enum PIT_ErrorId {
-	ERR_WRONG_ARG = 1,
-	ERR_FOO_FAILED,
-	ERR_BAR_FAILED
-	/* ... */
+	ERR_KERNEL_ERROR,
+	ERR_DEADLOCK,
+
+	ERR_ALLOC_QUEUE_CELL,
+	ERR_READY_QUEUE_PUSH,
+	ERR_READY_QUEUE_ADD,
+	ERR_WAIT_QUEUE_PUSH,
+	ERR_WAIT_QUEUE_ADD,
+	ERR_WAIT_QUEUE_PUSH_OLD
+};
+
+// List of all error messages in order.
+static const char *error_messages[NB_ERRORS + 1] = {
+	"No error",
+
+	"Released a free mutex",
+	"Scheduler deadlock",
+
+	"Can't alloc a new queue cell.",
+	"Can't push the PiThread on the ready queue.",
+	"Can't append the PiThread on the ready queue.",
+	"Can't push the PiThread on the wait queue.",
+	"Can't append the PiThread on the wait queue.",
+	"Can't push the PiThread on the old wait queue."
 };
 
 #endif
