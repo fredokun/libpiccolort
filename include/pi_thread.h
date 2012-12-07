@@ -43,6 +43,19 @@ struct PIT_Commit
 	} content;
 };
 
+struct PIT_CommitListElement
+{
+	PIT_Commit *commit ;
+	struct PIT_CommitListElement *next;
+}
+
+struct PIT_CommitList
+{
+	PIT_CommitListElement *head;
+	PIT_CommitListElement *tail;
+	int size;
+} 
+
 struct PIT_SchedPool {
 	PIT_ReadyQueue *ready;
 	PIT_WaitQueue *wait;

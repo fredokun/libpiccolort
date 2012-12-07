@@ -8,11 +8,14 @@ typedef struct PIT_SchedPool PIT_SchedPool;
 typedef struct PIT_PiThread PIT_PiThread;
 typedef struct PIT_Channel PIT_Channel;
 typedef struct PIT_Commit PIT_Commit;
+typedef struct PIT_CommitList PIT_CommitList;
+typedef struct PIT_CommitListElement PIT_CommitListElement;
 typedef struct PIT_InCommit PIT_InCommit;
 typedef struct PIT_OutCommit PIT_OutCommit;
 typedef struct PIT_Clock PIT_Clock;
 typedef struct PIT_Value PIT_Value;
 typedef struct PIT_AtomicBoolean PIT_AtomicBoolean;
+typedef struct PIT_AtomicInt PIT_AtomicInt;
 
 typedef pthread_mutex_t PIT_Mutex;
 typedef struct PIT_Condition PIT_Condition;
