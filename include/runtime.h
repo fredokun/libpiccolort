@@ -27,9 +27,9 @@ extern void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int 
 
 extern void PIT_main(int nb_core_threads, PIT_PiThreadProc entrypoint);
 
-extern void PIT_register_ouput_commitment(PIT_PiThread p, PIT_Channel ch, PIT_EvalFunction f, int cont_pc);
-extern void PIT_register_input_commitment(PIT_PiThread p, PIT_Channel ch, int x, int cont_pc);
-extern bool PIT_is_valid_commit(PIT_Commit commit);
+extern void PIT_register_ouput_commitment(PIT_PiThread *p, PIT_Channel *ch, PIT_EvalFunction *f, int cont_pc);
+extern void PIT_register_input_commitment(PIT_PiThread *p, PIT_Channel *ch, int x, int cont_pc);
+extern bool PIT_is_valid_commit(PIT_Commit *commit);
 extern int  PIT_can_awake(PIT_PiThread p, PIT_Commit c);
 extern void PIT_awake(PIT_SchedPool sched, PIT_PiThread p);
 extern void PIT_channel_incr_ref_count(PIT_Channel ch, PIT_Error *error);
@@ -37,8 +37,8 @@ extern void PIT_channel_dec_ref_count(PIT_Channel ch, PIT_Error *error);
 
 /*################### LIST UTILS ####################*/
 
-extern void       PIT_commit_list_add(PIT_CommitList clist, PIT_Commit c);
-extern PIT_Commit PIT_commit_list_fetch(PIT_CommitList clist);
+extern void       PIT_commit_list_add(PIT_CommitList *clist, PIT_Commit *c);
+extern PIT_Commit PIT_commit_list_fetch(PIT_CommitList *clist);
 
 /*####################################################*/
 
@@ -60,12 +60,12 @@ extern PIT_KnownsSet PIT_knows_set_knows(PIT_Knowns* ks);
 extern PIT_KnownsSet PIT_knows_set_forget(PIT_Knowns* ks);
 extern bool          PIT_knows_register(PIT_KnownsSet ks, PIT_Channel ch);
 
-extern void PIT_acquire_int(PIT_AtomicInt int_val);
-extern void PIT_release_int(PIT_AtomicInt int_val,PIT_Error *error);
-extern void PIT_acquire_bool(PIT_AtomicBoolean bool_val);
-extern void PIT_release_bool(PIT_AtomicBoolean bool_val,PIT_Error *error);
+extern void PIT_acquire_int(PIT_AtomicInt *int_val);
+extern void PIT_release_int(PIT_AtomicInt *int_val,PIT_Error *error);
+extern void PIT_acquire_bool(PIT_AtomicBoolean *bool_val);
+extern void PIT_release_bool(PIT_AtomicBoolean *bool_val,PIT_Error *error);
 
-extern PIT_Commit PIT_fetch_commitment(PIT_Channel ch);
+extern PIT_Commit PIT_fetch_commitment(PIT_Channel *ch);
 extern void PIT_cond_wait(PIT_Condition cond, PIT_Mutex lock);
 
 
