@@ -19,19 +19,77 @@
  *
  * @return boolean true if it works else false
  */
-int check_pithread(PIT_Error error)
+bool check_pithread(PIT_Error error)
 {
-	PIT_PiThread *p = PIT_create_pithread;
+	PIT_PiThread *p;
+	
+	p = PIT_create_pithread;
 	if(p == NULL)
 	{
+		NEW_ERROR(error,ERR_NULLPOINTER_PITHREAD);
 		return false;
 	}
 	
-
 	free(p);
 	
-	return false;
+	return true;
 }
+
+bool check_commits(PIT_Error error)
+{
+	PIT_Commit *c, *c2, *c3;
+	PIT_CommitListElement clistelem;
+	PIT_CommitList *clist;
+
+	c = PIT_create_commitment();
+	if(c == NULL)
+	{
+		NEW_ERROR(error, ERR_NULLPOINTER_COMMIT);
+		return false;
+	}
+	c2 = PIT_create_commitment();
+	c3 = PIT_create_commitment();
+	
+	//is_valid ?
+	if(!PIT_is_valid_commit(c))
+	{
+		NEW_ERROR(error, ERR_INVALID_COMMIT);
+	}
+	
+	clistelem = PIT_create_commit_list_element();
+	if(clistelem == NULL)
+	{
+		NEW_ERROR(error, ERR_NULLPOINTER_COMMITLISTELEMENT);
+	}
+	
+	clist = PIT_create_commit_list();
+	if(clist == NULL)
+	{
+		NEW_ERROR(error, ERR_NULLPOINTER_COMMITLIST);
+		return false;
+	}
+	
+	clist->head = clistelem;
+	clist->tail = clistelem;
+	
+	c->cont_pc = 1;
+	c2->cont_pc = 2;
+	c3->cont_pc = 3;
+	
+	PIT_commit_list_add(clist, c);
+	PIT_commit_list_add(clist, c2);
+	PIT_commit_list_add(clist, c3);
+	
+	if(clist->head->)
+
+	free(c);
+	free(c2);
+	free(c3);
+	free(clistelem);
+	free(clist);
+}
+
+
 
 /*
 PIT_SchedPool PIT_create_sched_pool();

@@ -9,8 +9,8 @@ BIN=bin
 LIB=lib
 INCLUDE=include
 SRC=src
-HEADERS=runtime.h pithread.h error.h definitions.h
-OBJ=$(LIB)/entry.o $(LIB)/runtime.o $(LIB)/main.o $(LIB)/error.o
+HEADERS=runtime.h pithread.h error.h definitions.h entry.h
+OBJ=$(LIB)/entry.o $(LIB)/runtime.o $(LIB)/main.o $(LIB)/error.o $(LIB)/runtimeTests.o
 
 all : $(BIN)/$(NAME)
 
