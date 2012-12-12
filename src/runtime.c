@@ -273,16 +273,16 @@ void PIT_register_in_commitment(PIT_PiThread *pi_thread, PIT_Channel *channel, i
  * @param the PIT_Commit whose validity to check
  * @return true if the PIT_Commit is valid, false otherwise
  */
-bool PIT_is_valid_commit(PIT_Commit *commit)
+bool PIT_is_valid_commit(PIT_Commit *commit, PIT_Error *error)
 {
 	PIT_acquire_int(commit->thread->clock->val);
 	if(commit->clock == commit->thread->clock)
 		if(commit->clockval->value == commit->thread->clock->val->value)
 		{
-			PIT_release_int(commit->thread->clock->val);
+			PIT_release_int(commit->thread->clock->val, error);
 			return true;
 		}
-	PIT_release_int(commit->thread->clock->value);
+	PIT_release_int(commit->thread->clock->val, error);
 	return false;
 }
 
@@ -291,7 +291,7 @@ bool PIT_is_valid_commit(PIT_Commit *commit)
  * @param the PIT_Channel in which to fetch
  * @return the PIT_Commit fetched
  */
-PIT_Commit PIT_fetch_commitment(PIT_Channel channel)
+PIT_Commit PIT_fetch_commitment(PIT_Channel *channel)
 {
 	PIT_Commit current_commit;
 	
@@ -356,7 +356,7 @@ void PIT_channel_dec_ref_count( PIT_Channel channel , PIT_Error *error)
  */
 PIT_CommitList *PIT_create_commit_list()
 {
-	PIT_CommitList *new_commit_list = (PIT_CommitList)malloc(sizeof(PIT_CommitList));
+	PIT_CommitList *new_commit_list = (PIT_CommitList*)malloc(sizeof(PIT_CommitList));
 	new_commit_list->head = NULL;
 	new_commit_list->tail = NULL;
 	new_commit_list->size = 0;
@@ -369,7 +369,7 @@ PIT_CommitList *PIT_create_commit_list()
  */
 PIT_CommitListElement *PIT_create_commit_list_element(PIT_Commit *commit)
 {
-	PIT_CommitListElement *new_commit_list_element = (PIT_CommitListElement)malloc(sizeof(PIT_CommitListElement));
+	PIT_CommitListElement *new_commit_list_element = (PIT_CommitListElement*)malloc(sizeof(PIT_CommitListElement));
 	new_commit_list_element->commit = commit;
 	new_commit_list_element->next = NULL;
 	return new_commit_list_element;
@@ -385,7 +385,7 @@ void PIT_commit_list_add(PIT_CommitList *commit_list, PIT_Commit *commit)
 	PIT_CommitListElement *new_commit_list_element = PIT_create_commit_list_element(commit);
 	commit_list->tail->next = new_commit_list_element;
 	commit_list->tail = new_commit_list_element;
-	commit_list->size++:	
+	commit_list->size++;	
 }
 
 /**
@@ -393,10 +393,10 @@ void PIT_commit_list_add(PIT_CommitList *commit_list, PIT_Commit *commit)
  * @param the PIT_CommitList in which to fetch
  * @return the PIT_Commit to retrieve
  */
-PIT_Commit PIT_commit_list_fetch(PIT_CommitList *commit_list)
+PIT_Commit *PIT_commit_list_fetch(PIT_CommitList *commit_list)
 {
 	PIT_CommitListElement *commit_list_element = commit_list->head;
-	commit_list->head = commit_list_element.next;
+	commit_list->head = commit_list_element->next;
 	commit_list->size--;
 	commit_list_element->next = NULL;
 	return commit_list_element->commit;

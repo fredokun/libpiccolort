@@ -29,7 +29,7 @@ extern void PIT_main(int nb_core_threads, PIT_PiThreadProc entrypoint);
 
 extern void PIT_register_ouput_commitment(PIT_PiThread *p, PIT_Channel *ch, PIT_EvalFunction *f, int cont_pc);
 extern void PIT_register_input_commitment(PIT_PiThread *p, PIT_Channel *ch, int x, int cont_pc);
-extern bool PIT_is_valid_commit(PIT_Commit *commit);
+extern bool PIT_is_valid_commit(PIT_Commit *commit, PIT_Error *error);
 extern int  PIT_can_awake(PIT_PiThread p, PIT_Commit c);
 extern void PIT_awake(PIT_SchedPool sched, PIT_PiThread p);
 extern void PIT_channel_incr_ref_count(PIT_Channel ch, PIT_Error *error);
@@ -38,7 +38,7 @@ extern void PIT_channel_dec_ref_count(PIT_Channel ch, PIT_Error *error);
 /*################### LIST UTILS ####################*/
 
 extern void       PIT_commit_list_add(PIT_CommitList *clist, PIT_Commit *c);
-extern PIT_Commit PIT_commit_list_fetch(PIT_CommitList *clist);
+extern PIT_Commit *PIT_commit_list_fetch(PIT_CommitList *clist);
 
 /*####################################################*/
 
