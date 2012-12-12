@@ -36,9 +36,9 @@ PIT_AtomicBoolean PIT_create_atomic_boolean()
  *
  * @param the atomic boolean containing the mutex
  */
-void PIT_acquire_int(PIT_AtomicInt int_val)
+void PIT_acquire_int(PIT_AtomicInt *int_val)
 {
-	pthread_mutex_lock(&int_val.lock);
+	pthread_mutex_lock(int_val->lock);
 }	
 
 /**
@@ -46,15 +46,15 @@ void PIT_acquire_int(PIT_AtomicInt int_val)
  *
  * @param the atomic boolean containing the mutex
  */
-void PIT_release_int(PIT_AtomicInt int_val, PIT_Error *error)
+void PIT_release_int(PIT_AtomicInt *int_val, PIT_Error *error)
 {
-	if (pthread_mutex_trylock(&int_val.lock) == 0)
+	if (pthread_mutex_trylock(int_val->lock) == 0)
 	{
 		NEW_ERROR(error,ERR_KERNEL_ERROR);
 	}
 	else
 	{
-		pthread_mutex_unlock(&int_val.lock);
+		pthread_mutex_unlock(int_val->lock);
 	}
 	
 }
@@ -64,9 +64,9 @@ void PIT_release_int(PIT_AtomicInt int_val, PIT_Error *error)
  *
  * @param the atomic boolean containing the mutex
  */
-void PIT_acquire_bool(PIT_AtomicBoolean bool_val)
+void PIT_acquire_bool(PIT_AtomicBoolean *bool_val)
 {
-	pthread_mutex_lock(&bool_val.lock);
+	pthread_mutex_lock(bool_val->lock);
 }	
 
 /**
@@ -74,15 +74,15 @@ void PIT_acquire_bool(PIT_AtomicBoolean bool_val)
  *
  * @param the atomic boolean containing the mutex
  */
-void PIT_release_bool(PIT_AtomicBoolean bool_val, PIT_Error *error)
+void PIT_release_bool(PIT_AtomicBoolean *bool_val, PIT_Error *error)
 {
-	if (pthread_mutex_trylock(&bool_val.lock) == 0)
+	if (pthread_mutex_trylock(bool_val->lock) == 0)
 	{
 		NEW_ERROR(error, ERR_KERNEL_ERROR);
 	}
 	else
 	{
-		pthread_mutex_unlock(&bool_val.lock);
+		pthread_mutex_unlock(bool_val->lock);
 	}
 }
 
@@ -230,18 +230,18 @@ PIT_Commit *PIT_create_commitment()
  * @param refvar the index of the var used to create the output PIT_Commit
  * @param cont_pc
  */
-void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*PIT_EvalFunction)(PIT_PiThread) function, int cont_pc)
+void PIT_register_out_commitment(PIT_PiThread *pi_thread, PIT_Channel *channel, PIT_EvalFunction *function, int cont_pc)
 {
-	PIT_OutCommit * out = (PIT_OutCommit *)malloc(sizeof(PIT_OutCommit));
+	PIT_OutCommit *out = (PIT_OutCommit *)malloc(sizeof(PIT_OutCommit));
 	out->eval_func = function;
 
 	PIT_Commit *out_commit = PIT_create_commitment();
-	out_commit->out = &out;
+	out_commit->content.out = out;
 	out_commit->thread = pi_thread; 
 	out_commit->cont_pc = cont_pc;
 	out_commit->type = OUT_COMMIT;
-	out_commit->clock = pi_thread.clock;
-	out_commit->clockval = pi_thread.clock.val;
+	out_commit->clock = pi_thread->clock;
+	out_commit->clockval = pi_thread->clock->val;
 	out_commit->channel = channel;
 	PIT_commit_list_add(pi_thread->commits ,out_commit);	
 }
@@ -253,19 +253,18 @@ void PIT_register_out_commitment(PIT_PiThread pi_thread, PIT_Channel channel, (*
  * @param refvar the index of the var used to create the input PIT_Commit
  * @param cont_pc 
  */
-void PIT_register_in_commitment(PIT_PiThread pi_thread, PIT_Channel channel, int refvar, int cont_pc)
+void PIT_register_in_commitment(PIT_PiThread *pi_thread, PIT_Channel *channel, int refvar, int cont_pc)
 { 
-	PIT_InCommit in = (PIT_InCommit)malloc(sizeof(PIT_InCommit));
-	in.refvar = refvar;
+	PIT_InCommit *in = (PIT_InCommit *)malloc(sizeof(PIT_InCommit));
+	in->refvar = refvar;
 
 	PIT_Commit *in_commit = PIT_create_commitment();
-	in_commit->in = in;
+	in_commit->content.in = in;
 	in_commit->thread = pi_thread;
 	in_commit->cont_pc = cont_pc;
 	in_commit->type = IN_COMMIT;
-	in_commit->refvar = refvar;
-	in_commit->clock = pi_thread.clock;
-	in_commit->clockval = pi_thread.clock.val;
+	in_commit->clock = pi_thread->clock;
+	in_commit->clockval = pi_thread->clock->val;
 	in_commit->channel = channel;
 	PIT_commit_list_add(pi_thread->commits ,in_commit);	
 }
@@ -274,16 +273,16 @@ void PIT_register_in_commitment(PIT_PiThread pi_thread, PIT_Channel channel, int
  * @param the PIT_Commit whose validity to check
  * @return true if the PIT_Commit is valid, false otherwise
  */
-bool PIT_is_valid_commit(PIT_Commit commit)
+bool PIT_is_valid_commit(PIT_Commit *commit)
 {
-	PIT_acquire_int(commit.thread.clock.value);
-	if(commit.clock == commit.thread->clock)
-		if(commit.clockval == commit.thread.clock.val)
+	PIT_acquire_int(commit->thread->clock->val);
+	if(commit->clock == commit->thread->clock)
+		if(commit->clockval->value == commit->thread->clock->val->value)
 		{
-			PIT_release_int(commit.thread.clock.value);
+			PIT_release_int(commit->thread->clock->val);
 			return true;
 		}
-	PIT_release_int(commit.thread.clock.value);
+	PIT_release_int(commit->thread->clock->value);
 	return false;
 }
 
@@ -381,7 +380,7 @@ PIT_CommitListElement *PIT_create_commit_list_element(PIT_Commit *commit)
  * @param the PIT_CommitList in which to add a PIT_Commit
  * @param the PIT_Commit to add
  */
-void PIT_commit_list_add(PIT_CommitList commit_list, PIT_Commit commit)
+void PIT_commit_list_add(PIT_CommitList *commit_list, PIT_Commit *commit)
 {
 	PIT_CommitListElement *new_commit_list_element = PIT_create_commit_list_element(commit);
 	commit_list->tail->next = new_commit_list_element;
@@ -394,13 +393,13 @@ void PIT_commit_list_add(PIT_CommitList commit_list, PIT_Commit commit)
  * @param the PIT_CommitList in which to fetch
  * @return the PIT_Commit to retrieve
  */
-PIT_Commit PIT_commit_list_fetch(PIT_CommitList commit_list)
+PIT_Commit PIT_commit_list_fetch(PIT_CommitList *commit_list)
 {
-	PIT_CommitListElement commit_list_element = commit_list.head;
-	commit_list.head = commit_list_element.next;
-	commit_list.size--;
-	commit_list_element.next = NULL;
-	return commit_list_element.commit;
+	PIT_CommitListElement *commit_list_element = commit_list->head;
+	commit_list->head = commit_list_element.next;
+	commit_list->size--;
+	commit_list_element->next = NULL;
+	return commit_list_element->commit;
 }
 
 /**

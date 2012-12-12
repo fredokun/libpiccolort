@@ -19,7 +19,7 @@ struct PIT_AtomicBoolean {
 };
 
 struct PIT_Clock {
-	PIT_AtomicInt val;
+	PIT_AtomicInt *val;
 };
 
 struct PIT_InCommit {
@@ -27,22 +27,22 @@ struct PIT_InCommit {
 };
 
 struct PIT_OutCommit {
-	PIT_EvalFunction eval_func;
+	PIT_EvalFunction *eval_func;
 };
 
 struct PIT_Commit
 {
 	PIT_CommitType type;
 	PIT_PiThread *thread;
-	PIT_Clock clock;
-	int clockval;
+	PIT_Clock *clock;
+	PIT_AtomicInt *clockval;
 	int cont_pc;
 	PIT_Channel *channel;
 
 	union
 	{
-		PIT_InCommit in;
-		PIT_OutCommit out;
+		PIT_InCommit *in;
+		PIT_OutCommit *out;
 	} content;
 };
 
@@ -76,11 +76,11 @@ struct PIT_PiThread {
 	PIT_Knowns * knowns;
 	PIT_Value* env;
 	int env_length;
-	PIT_Commit commit;
-	PIT_Commit* commits;
+	PIT_Commit *commit;
+	PIT_CommitList *commits;
 	PIT_PiThreadProc proc;
 	PIT_Label pc;
-	PIT_Clock clock;
+	PIT_Clock *clock;
 	int fuel;
 	PIT_Mutex lock;
 };
