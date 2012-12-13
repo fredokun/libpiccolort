@@ -21,6 +21,27 @@
 
 
 
+
+void PICC_acquire_mutex(PIT_Mutex mutex)
+{
+	pthread_mutex_lock(&mutex);
+}
+
+void PICC_release_mutex(PIT_Mutex mutex, PIT_Error *error)
+{
+	if (pthread_mutex_trylock(&mutex) == 0)
+	{
+		NEW_ERROR(error,ERR_KERNEL_ERROR);
+	}
+	else
+	{
+		pthread_mutex_unlock(&mutex);
+	}
+
+}
+
+
+
 /**
  * Create and init an atomic boolean
  *
@@ -42,6 +63,7 @@ PICC_AtomicBoolean PICC_create_atomic_boolean()
 void PICC_acquire_int(PICC_AtomicInt *int_val)
 {
 	pthread_mutex_lock(&int_val->lock);
+
 }
 
 /**
@@ -101,6 +123,12 @@ int PICC_GC2(PICC_SchedPool schedpool)
 	return 0;
 }
 
+PIT_SchedPool *PIT_create_sched_pool()
+{
+	PIT_SchedPool *pool = (PIT_SchedPool *)malloc( sizeof(PIT_SchedPool));
+	return pool;
+}
+
 /**
  * Create a channel which contains 10 commitments
  *
@@ -123,7 +151,6 @@ PICC_Channel *PICC_create_channel()
  *
  * @return created channel
  */
-
 PICC_Channel *PICC_create_channel_cn( int commit_size )
 {
 	PICC_Channel * channel = (PICC_Channel *)malloc( sizeof(PICC_Channel));
@@ -187,8 +214,6 @@ void PICC_sched_pool_slave(PICC_Args *args)
 		PICC_cond_wait(sched_pool->cond, sched_pool->lock);
 		sched_pool->nb_waiting_slaves--;
 		pthread_mutex_unlock(&sched_pool->lock);
-
-
 	}
 }
 
@@ -271,6 +296,7 @@ void PICC_register_in_commitment(PICC_PiThread *pi_thread, PICC_Channel *channel
 	in_commit->channel = channel;
 	PICC_commit_list_add(pi_thread->commits ,in_commit);
 }
+
 /**
  * Function that verify if the PICC_Commit is valid
  * @param the PICC_Commit whose validity to check
@@ -347,12 +373,17 @@ void PICC_channel_dec_ref_count( PICC_Channel channel , PICC_Error *error)
 	PICC_acquire_bool(&channel.lock);
 	channel.global_rc -= 1;
 	PICC_release_bool(&channel.lock,error);
+
 	if(channel.global_rc == 0 )
 	{
-		// WARNING: WHERE IS THIS?
-		//PICC_reclaim_channel(channel);
-		//////////////////////////////////
+		PICC_reclaim_channel(channel);
 	}
+}
+
+void PIT_reclaim_channel(PIT_Channel channel)
+{
+	printf("Not implemented yet.\n");
+	return;
 }
 
 /**
