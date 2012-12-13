@@ -16,9 +16,11 @@ OBJ=$(LIB)/entry.o $(LIB)/runtime.o $(LIB)/main.o $(LIB)/error.o $(LIB)/runtimeT
 all : $(BIN)/$(NAME)
 
 $(LIB)/%.o: $(SRC)/%.c $(DEPS)
+	mkdir -p $(LIB)
 	$(CC) -c -o $@ $< $(FLAGS)
 
 $(LIB)/%.o: $(TESTS)/%.c $(DEPS)
+	mkdir -p $(TESTS)
 	$(CC) -c -o $@ $< $(FLAGS)
 
 $(BIN)/$(NAME): $(OBJ)
@@ -26,3 +28,4 @@ $(BIN)/$(NAME): $(OBJ)
 
 clean:
 	rm -f bin/* lib/*
+
