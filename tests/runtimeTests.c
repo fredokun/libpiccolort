@@ -18,6 +18,7 @@
 
 /**
  * Test : PICC_create_pithread
+ * PICC_PiThread *PICC_create_pithread();
  *
  * @return boolean true if it works else false
  */
@@ -37,6 +38,14 @@ bool check_pithread(PICC_Error *error)
     return true;
 }
 
+/**
+ * Test : Commitments
+ * PICC_Commit  *PICC_create_commitment();
+ * PICC_CommitList *PICC_create_commit_list();
+ * PICC_CommitListElement *PICC_create_commit_list_element();
+ *
+ * @return boolean true if it works else false
+ */
 bool check_commits(PICC_Error *error)
 {
     PICC_Commit *c, *c2, *c3;
@@ -82,23 +91,48 @@ bool check_commits(PICC_Error *error)
     PICC_commit_list_add(clist, c2);
     PICC_commit_list_add(clist, c3);
 
+    if(clist->head == NULL || clist->tail == NULL)
+    {
+        NEW_ERROR(error, ERR_NULLPOINTER_COMMITLISTELEM);
+        return false;
+    }
+
+    if(clist->head->commit->cont_pc != 1)
+    {
+        NEW_ERROR(error, ERR_INVALID_VALUE);
+        return false;
+    }
+
+    if(clist->head->next->cont_pc != 2)
+    {
+        NEW_ERROR(error, ERR_INVALID_VALUE);
+        return false;
+    }
+
+    if(clist->tail->commit != 3)
+    {
+        NEW_ERROR(error, ERR_INVALID_VALUE);
+        return false;
+    }
+
     free(c);
     free(c2);
     free(c3);
     free(clistelem);
     free(clist);
+
+    return true;
 }
 
-
-
 /*
+int  PICC_can_awake(PICC_PiThread p, PICC_Commit c);
+void PICC_awake(PICC_SchedPool sched, PICC_PiThread p);
+
+
 PICC_SchedPool PICC_create_sched_pool();
 PICC_Channel  *PICC_create_channel();
-PICC_PiThread *PICC_create_pithread();
+
 PICC_Clock    PICC_create_clock();
-PICC_Commit  *PICC_create_commitment();
-PICC_CommitList *PICC_create_commit_list();
-PICC_CommitListElement *PICC_create_commit_list_element();
 
 void PICC_sched_pool_slave(PICC_SchedPool schedpool, PICC_Error* error);
 void PICC_sched_pool_master(PICC_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor);
@@ -108,8 +142,7 @@ void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint);
 void PICC_register_ouput_commitment(PICC_PiThread p, PICC_Channel ch, PICC_EvalFunction f, int cont_pc);
 void PICC_register_input_commitment(PICC_PiThread p, PICC_Channel ch, int x, int cont_pc);
 bool PICC_is_valid_commit(PICC_Commit commit);
-int  PICC_can_awake(PICC_PiThread p, PICC_Commit c);
-void PICC_awake(PICC_SchedPool sched, PICC_PiThread p);
+
 void PICC_channel_incr_ref_count(PICC_Channel ch);
 void PICC_channel_dec_ref_count(PICC_Channel ch);
 
@@ -118,19 +151,6 @@ void PICC_channel_dec_ref_count(PICC_Channel ch);
 void       PICC_commit_list_add(PICC_Commit* clist, PICC_Commit c);
 PICC_Commit PICC_commit_list_fetch(PICC_Commit* clist);
 
-
-
-void         PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread p);
-void         PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread p);
-PICC_PiThread PICC_ready_queue_pop(PICC_ReadyQueue *rq);
-int          PICC_ready_queue_size(PICC_ReadyQueue *rq);
-void         PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread p);
-PICC_PiThread PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread p);
-void         PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread p);
-PICC_PiThread PICC_wait_queue_pop_old(PICC_WaitQueue *wq);
-int          PICC_wait_queue_size(PICC_WaitQueue *wq);
-int          PICC_wait_queue_max_active(PICC_WaitQueue *wq);
-int          PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq);
 
 PICC_KnownsSet PICC_knows_set_knows(PICC_Knowns* ks);
 PICC_KnownsSet PICC_knows_set_forget(PICC_Knowns* ks);

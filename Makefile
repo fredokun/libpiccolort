@@ -11,7 +11,7 @@ INCLUDE=include
 SRC=src
 TESTS=tests
 HEADERS=runtime.h pithread.h error.h definitions.h entry.h errors.h queue.h
-OBJ=$(LIB)/entry.o $(LIB)/runtime.o $(LIB)/main.o $(LIB)/error.o $(LIB)/runtimeTests.o $(LIB)/queue.o
+OBJ=$(LIB)/entry.o $(LIB)/runtime.o $(LIB)/error.o $(LIB)/runtimeTests.o $(LIB)/queue.o
 
 all : $(BIN)/$(NAME)
 
