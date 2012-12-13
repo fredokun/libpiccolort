@@ -49,36 +49,36 @@
 
 // An error stack.
 struct PICC_Error {
-	PICC_ErrorId id;  // ID of the error (0 if the error didn't occured).
-	char *file;      // File where the error occured.
-	int line;        // Line in <file> where the error occured.
-	PICC_Error *prev; // Link to the previous error (NULL if this is the first).
+    PICC_ErrorId id;  // ID of the error (0 if the error didn't occured).
+    char *file;      // File where the error occured.
+    int line;        // Line in <file> where the error occured.
+    PICC_Error *prev; // Link to the previous error (NULL if this is the first).
 };
 
 // macros used to handle the errors
 #define ASSERT(test) \
-	assert(test);
+    assert(test);
 
 #define ALLOC_ERROR(error) \
-	PICC_Error error = (PICC_Error){.id = 0, .file = NULL, .line = 0, .prev = NULL}
+    PICC_Error error = (PICC_Error){.id = 0, .file = NULL, .line = 0, .prev = NULL}
 
 #define HAS_ERROR(error) \
-	error.id > 0
+    error.id > 0
 
 #define NEW_ERROR(error, id) \
-	PICC_init_error(error, id, __FILE__, __LINE__)
+    PICC_init_error(error, id, __FILE__, __LINE__)
 
 #define ADD_ERROR(error, prev, id) \
-	PICC_add_error(error, prev, id, __FILE__, __LINE__)
+    PICC_add_error(error, prev, id, __FILE__, __LINE__)
 
 #define FORWARD_ERROR(error, prev) \
-	PICC_forward_error(error, prev)
+    PICC_forward_error(error, prev)
 
 #define CRASH(error) \
-	PICC_crash(error, __FILE__, __FUNCTION__)
+    PICC_crash(error, __FILE__, __FUNCTION__)
 
 #define PRINT_ERROR(error) \
-	PICC_print_error(error, __FILE__, __FUNCTION__)
+    PICC_print_error(error, __FILE__, __FUNCTION__)
 
 // underlying error functions
 extern void PICC_init_error(PICC_Error *error, PICC_ErrorId id, const char *file, int line);

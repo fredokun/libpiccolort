@@ -17,8 +17,8 @@
 
 struct PICC_Args
 {
-	PICC_Error error;
-	PICC_SchedPool *sched_pool;
+    PICC_Error error;
+    PICC_SchedPool *sched_pool;
 };
 
 #endif

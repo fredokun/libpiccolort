@@ -45,7 +45,7 @@ extern PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist);
 
 extern PICC_KnownsSet PICC_knows_set_knows(PICC_Knowns* ks);
 extern PICC_KnownsSet PICC_knows_set_forget(PICC_Knowns* ks);
-extern bool          PICC_knows_register(PICC_KnownsSet ks, PICC_Channel ch);
+extern bool           PICC_knows_register(PICC_KnownsSet ks, PICC_Channel ch);
 
 extern void PICC_acquire_int(PICC_AtomicInt *int_val);
 extern void PICC_release_int(PICC_AtomicInt *int_val,PICC_Error *error);

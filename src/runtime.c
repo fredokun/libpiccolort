@@ -24,19 +24,19 @@
 
 void PICC_acquire_mutex(PIT_Mutex mutex)
 {
-	pthread_mutex_lock(&mutex);
+    pthread_mutex_lock(&mutex);
 }
 
 void PICC_release_mutex(PIT_Mutex mutex, PIT_Error *error)
 {
-	if (pthread_mutex_trylock(&mutex) == 0)
-	{
-		NEW_ERROR(error,ERR_KERNEL_ERROR);
-	}
-	else
-	{
-		pthread_mutex_unlock(&mutex);
-	}
+    if (pthread_mutex_trylock(&mutex) == 0)
+    {
+        NEW_ERROR(error,ERR_KERNEL_ERROR);
+    }
+    else
+    {
+        pthread_mutex_unlock(&mutex);
+    }
 
 }
 
@@ -49,10 +49,10 @@ void PICC_release_mutex(PIT_Mutex mutex, PIT_Error *error)
  */
 PICC_AtomicBoolean PICC_create_atomic_boolean()
 {
-	PICC_AtomicBoolean ab;
-	pthread_mutex_init(&ab.lock, NULL);
-	ab.value = false;
-	return ab;
+    PICC_AtomicBoolean ab;
+    pthread_mutex_init(&ab.lock, NULL);
+    ab.value = false;
+    return ab;
 }
 
 /**
@@ -62,7 +62,7 @@ PICC_AtomicBoolean PICC_create_atomic_boolean()
  */
 void PICC_acquire_int(PICC_AtomicInt *int_val)
 {
-	pthread_mutex_lock(&int_val->lock);
+    pthread_mutex_lock(&int_val->lock);
 
 }
 
@@ -73,14 +73,14 @@ void PICC_acquire_int(PICC_AtomicInt *int_val)
  */
 void PICC_release_int(PICC_AtomicInt *int_val, PICC_Error *error)
 {
-	if (pthread_mutex_trylock(&int_val->lock) == 0)
-	{
-		NEW_ERROR(error,ERR_KERNEL_ERROR);
-	}
-	else
-	{
-		pthread_mutex_unlock(&int_val->lock);
-	}
+    if (pthread_mutex_trylock(&int_val->lock) == 0)
+    {
+        NEW_ERROR(error,ERR_KERNEL_ERROR);
+    }
+    else
+    {
+        pthread_mutex_unlock(&int_val->lock);
+    }
 
 }
 
@@ -91,7 +91,7 @@ void PICC_release_int(PICC_AtomicInt *int_val, PICC_Error *error)
  */
 void PICC_acquire_bool(PICC_AtomicBoolean *bool_val)
 {
-	pthread_mutex_lock(&bool_val->lock);
+    pthread_mutex_lock(&bool_val->lock);
 }
 
 /**
@@ -101,14 +101,14 @@ void PICC_acquire_bool(PICC_AtomicBoolean *bool_val)
  */
 void PICC_release_bool(PICC_AtomicBoolean *bool_val, PICC_Error *error)
 {
-	if (pthread_mutex_trylock(&bool_val->lock) == 0)
-	{
-		NEW_ERROR(error, ERR_KERNEL_ERROR);
-	}
-	else
-	{
-		pthread_mutex_unlock(&bool_val->lock);
-	}
+    if (pthread_mutex_trylock(&bool_val->lock) == 0)
+    {
+        NEW_ERROR(error, ERR_KERNEL_ERROR);
+    }
+    else
+    {
+        pthread_mutex_unlock(&bool_val->lock);
+    }
 }
 
 /**
@@ -119,14 +119,14 @@ void PICC_release_bool(PICC_AtomicBoolean *bool_val, PICC_Error *error)
  */
 int PICC_GC2(PICC_SchedPool schedpool)
 {
-	printf("Not implemented yet.\n");
-	return 0;
+    printf("Not implemented yet.\n");
+    return 0;
 }
 
 PIT_SchedPool *PIT_create_sched_pool()
 {
-	PIT_SchedPool *pool = (PIT_SchedPool *)malloc( sizeof(PIT_SchedPool));
-	return pool;
+    PIT_SchedPool *pool = (PIT_SchedPool *)malloc( sizeof(PIT_SchedPool));
+    return pool;
 }
 
 /**
@@ -137,12 +137,12 @@ PIT_SchedPool *PIT_create_sched_pool()
 
 PICC_Channel *PICC_create_channel()
 {
-	PICC_Channel *channel = (PICC_Channel *)malloc( sizeof(PICC_Channel));
-	channel->global_rc = 1;
-	channel->incommits = (PICC_Commit *) malloc( sizeof( PICC_Commit ) * 10 );
-	channel->outcommits = (PICC_Commit *) malloc( sizeof( PICC_Commit ) * 10 );
+    PICC_Channel *channel = (PICC_Channel *)malloc( sizeof(PICC_Channel));
+    channel->global_rc = 1;
+    channel->incommits = (PICC_Commit *) malloc( sizeof( PICC_Commit ) * 10 );
+    channel->outcommits = (PICC_Commit *) malloc( sizeof( PICC_Commit ) * 10 );
 
-	return channel;
+    return channel;
 
 }
 
@@ -153,12 +153,12 @@ PICC_Channel *PICC_create_channel()
  */
 PICC_Channel *PICC_create_channel_cn( int commit_size )
 {
-	PICC_Channel * channel = (PICC_Channel *)malloc( sizeof(PICC_Channel));
-	channel->global_rc = 1;
-	channel->incommits = (PICC_Commit *) malloc( sizeof( PICC_Commit ) * commit_size );
-	channel->outcommits = (PICC_Commit *) malloc( sizeof( PICC_Commit ) * commit_size );
-	channel->lock = PICC_create_atomic_boolean();
-	return channel;
+    PICC_Channel * channel = (PICC_Channel *)malloc( sizeof(PICC_Channel));
+    channel->global_rc = 1;
+    channel->incommits = (PICC_Commit *) malloc( sizeof( PICC_Commit ) * commit_size );
+    channel->outcommits = (PICC_Commit *) malloc( sizeof( PICC_Commit ) * commit_size );
+    channel->lock = PICC_create_atomic_boolean();
+    return channel;
 
 }
 
@@ -168,10 +168,10 @@ PICC_Channel *PICC_create_channel_cn( int commit_size )
  */
 PICC_PiThread *PICC_create_pithread()
 {
-	PICC_PiThread *new_thread = (PICC_PiThread*)malloc(sizeof(PICC_PiThread));
-	new_thread->knowns = (PICC_KnownsSet)malloc(sizeof(PICC_KnownsSet));
-	new_thread->fuel = FUEL_INIT;
-	return new_thread;
+    PICC_PiThread *new_thread = (PICC_PiThread*)malloc(sizeof(PICC_PiThread));
+    new_thread->knowns = (PICC_KnownsSet)malloc(sizeof(PICC_KnownsSet));
+    new_thread->fuel = FUEL_INIT;
+    return new_thread;
 }
 
 /**
@@ -180,8 +180,8 @@ PICC_PiThread *PICC_create_pithread()
  */
 PICC_Clock *PICC_create_clock()
 {
-	PICC_Clock * new_clock = (PICC_Clock*)malloc(sizeof(PICC_Clock));
-	return new_clock;
+    PICC_Clock * new_clock = (PICC_Clock*)malloc(sizeof(PICC_Clock));
+    return new_clock;
 }
 
 /**
@@ -190,36 +190,36 @@ PICC_Clock *PICC_create_clock()
  */
 void PICC_sched_pool_slave(PICC_Args *args)
 {
-	PICC_SchedPool *sched_pool = args->sched_pool;
-	PICC_Error *error = &(args->error);
+    PICC_SchedPool *sched_pool = args->sched_pool;
+    PICC_Error *error = &(args->error);
 
-	PICC_PiThread *current;
+    PICC_PiThread *current;
 
-	while(sched_pool->running)
-	{
-		while(PICC_ready_queue_size(sched_pool->ready))
-		{
-			current = PICC_ready_queue_pop(sched_pool->ready);
-			do
-			{
-				current->proc(*sched_pool, *current);
-			} while(current->status == PICC_STATUS_CALL);
+    while(sched_pool->running)
+    {
+        while(PICC_ready_queue_size(sched_pool->ready))
+        {
+            current = PICC_ready_queue_pop(sched_pool->ready);
+            do
+            {
+                current->proc(*sched_pool, *current);
+            } while(current->status == PICC_STATUS_CALL);
 
-			if(current->status == PICC_STATUS_BLOCKED) // && safe_choice
-				NEW_ERROR(error,ERR_DEADLOCK);
-		}
+            if(current->status == PICC_STATUS_BLOCKED) // && safe_choice
+                NEW_ERROR(error,ERR_DEADLOCK);
+        }
 
-		pthread_mutex_lock(&sched_pool->lock);
-		sched_pool->nb_waiting_slaves++;
-		PICC_cond_wait(sched_pool->cond, sched_pool->lock);
-		sched_pool->nb_waiting_slaves--;
-		pthread_mutex_unlock(&sched_pool->lock);
-	}
+        pthread_mutex_lock(&sched_pool->lock);
+        sched_pool->nb_waiting_slaves++;
+        PICC_cond_wait(sched_pool->cond, sched_pool->lock);
+        sched_pool->nb_waiting_slaves--;
+        pthread_mutex_unlock(&sched_pool->lock);
+    }
 }
 
 void PICC_cond_wait(PICC_Condition cond, PICC_Mutex lock)
 {
-	pthread_cond_wait(&cond, &lock);
+    pthread_cond_wait(&cond, &lock);
 }
 
 /**
@@ -231,8 +231,8 @@ void PICC_cond_wait(PICC_Condition cond, PICC_Mutex lock)
  */
 void PICC_sched_pool_master(PICC_SchedPool sched_pool, int std_gc_fuel, int quick_gc_fuel, int active_factor)
 {
-	printf("Not implemented yet.\n");
-	return;
+    printf("Not implemented yet.\n");
+    return;
 }
 
 /**
@@ -242,12 +242,12 @@ void PICC_sched_pool_master(PICC_SchedPool sched_pool, int std_gc_fuel, int quic
  */
 PICC_Commit *PICC_create_commitment()
 {
-	PICC_Commit *new_commit = (PICC_Commit*)malloc(sizeof(PICC_Commit));
-	new_commit->thread = malloc(sizeof(PICC_PiThread));
-	new_commit->clock = malloc(sizeof(PICC_Clock));
-	new_commit->channel = malloc(sizeof(PICC_Channel));
+    PICC_Commit *new_commit = (PICC_Commit*)malloc(sizeof(PICC_Commit));
+    new_commit->thread = malloc(sizeof(PICC_PiThread));
+    new_commit->clock = malloc(sizeof(PICC_Clock));
+    new_commit->channel = malloc(sizeof(PICC_Channel));
 
-	return new_commit;
+    return new_commit;
 }
 
 /**
@@ -260,18 +260,18 @@ PICC_Commit *PICC_create_commitment()
  */
 void PICC_register_out_commitment(PICC_PiThread *pi_thread, PICC_Channel *channel, PICC_EvalFunction *function, int cont_pc)
 {
-	PICC_OutCommit *out = (PICC_OutCommit *)malloc(sizeof(PICC_OutCommit));
-	out->eval_func = function;
+    PICC_OutCommit *out = (PICC_OutCommit *)malloc(sizeof(PICC_OutCommit));
+    out->eval_func = function;
 
-	PICC_Commit *out_commit = PICC_create_commitment();
-	out_commit->content.out = out;
-	out_commit->thread = pi_thread;
-	out_commit->cont_pc = cont_pc;
-	out_commit->type = PICC_OUT_COMMIT;
-	out_commit->clock = pi_thread->clock;
-	out_commit->clockval = pi_thread->clock->val;
-	out_commit->channel = channel;
-	PICC_commit_list_add(pi_thread->commits ,out_commit);
+    PICC_Commit *out_commit = PICC_create_commitment();
+    out_commit->content.out = out;
+    out_commit->thread = pi_thread;
+    out_commit->cont_pc = cont_pc;
+    out_commit->type = PICC_OUT_COMMIT;
+    out_commit->clock = pi_thread->clock;
+    out_commit->clockval = pi_thread->clock->val;
+    out_commit->channel = channel;
+    PICC_commit_list_add(pi_thread->commits ,out_commit);
 }
 
 /**
@@ -283,18 +283,18 @@ void PICC_register_out_commitment(PICC_PiThread *pi_thread, PICC_Channel *channe
  */
 void PICC_register_in_commitment(PICC_PiThread *pi_thread, PICC_Channel *channel, int refvar, int cont_pc)
 {
-	PICC_InCommit *in = (PICC_InCommit *)malloc(sizeof(PICC_InCommit));
-	in->refvar = refvar;
+    PICC_InCommit *in = (PICC_InCommit *)malloc(sizeof(PICC_InCommit));
+    in->refvar = refvar;
 
-	PICC_Commit *in_commit = PICC_create_commitment();
-	in_commit->content.in = in;
-	in_commit->thread = pi_thread;
-	in_commit->cont_pc = cont_pc;
-	in_commit->type = PICC_IN_COMMIT;
-	in_commit->clock = pi_thread->clock;
-	in_commit->clockval = pi_thread->clock->val;
-	in_commit->channel = channel;
-	PICC_commit_list_add(pi_thread->commits ,in_commit);
+    PICC_Commit *in_commit = PICC_create_commitment();
+    in_commit->content.in = in;
+    in_commit->thread = pi_thread;
+    in_commit->cont_pc = cont_pc;
+    in_commit->type = PICC_IN_COMMIT;
+    in_commit->clock = pi_thread->clock;
+    in_commit->clockval = pi_thread->clock->val;
+    in_commit->channel = channel;
+    PICC_commit_list_add(pi_thread->commits ,in_commit);
 }
 
 /**
@@ -304,15 +304,15 @@ void PICC_register_in_commitment(PICC_PiThread *pi_thread, PICC_Channel *channel
  */
 bool PICC_is_valid_commit(PICC_Commit *commit, PICC_Error *error)
 {
-	PICC_acquire_int(commit->thread->clock->val);
-	if(commit->clock == commit->thread->clock)
-		if(commit->clockval->value == commit->thread->clock->val->value)
-		{
-			PICC_release_int(commit->thread->clock->val, error);
-			return true;
-		}
-	PICC_release_int(commit->thread->clock->val, error);
-	return false;
+    PICC_acquire_int(commit->thread->clock->val);
+    if(commit->clock == commit->thread->clock)
+        if(commit->clockval->value == commit->thread->clock->val->value)
+        {
+            PICC_release_int(commit->thread->clock->val, error);
+            return true;
+        }
+    PICC_release_int(commit->thread->clock->val, error);
+    return false;
 }
 
 /**
@@ -322,9 +322,9 @@ bool PICC_is_valid_commit(PICC_Commit *commit, PICC_Error *error)
  */
 PICC_Commit PICC_fetch_commitment(PICC_Channel *channel)
 {
-	PICC_Commit current_commit;
+    PICC_Commit current_commit;
 
-	return current_commit;
+    return current_commit;
 }
 
 /**
@@ -335,8 +335,8 @@ PICC_Commit PICC_fetch_commitment(PICC_Channel *channel)
  */
 int PICC_can_awake(PICC_PiThread p, PICC_Commit c)
 {
-	printf("Not implemented yet.\n");
-	return 0;
+    printf("Not implemented yet.\n");
+    return 0;
 }
 
 /**
@@ -347,8 +347,8 @@ int PICC_can_awake(PICC_PiThread p, PICC_Commit c)
  */
 void PICC_awake(PICC_SchedPool sched, PICC_PiThread p)
 {
-	printf("Not implemented yet.\n");
-	return;
+    printf("Not implemented yet.\n");
+    return;
 }
 
 /**
@@ -358,9 +358,9 @@ void PICC_awake(PICC_SchedPool sched, PICC_PiThread p)
  */
 void PICC_channel_incr_ref_count(PICC_Channel channel , PICC_Error *error)
 {
-	PICC_acquire_bool(&channel.lock);
-	channel.global_rc += 1;
-	PICC_release_bool(&channel.lock, error);
+    PICC_acquire_bool(&channel.lock);
+    channel.global_rc += 1;
+    PICC_release_bool(&channel.lock, error);
 }
 
 /**
@@ -370,20 +370,20 @@ void PICC_channel_incr_ref_count(PICC_Channel channel , PICC_Error *error)
  */
 void PICC_channel_dec_ref_count( PICC_Channel channel , PICC_Error *error)
 {
-	PICC_acquire_bool(&channel.lock);
-	channel.global_rc -= 1;
-	PICC_release_bool(&channel.lock,error);
+    PICC_acquire_bool(&channel.lock);
+    channel.global_rc -= 1;
+    PICC_release_bool(&channel.lock,error);
 
-	if(channel.global_rc == 0 )
-	{
-		PICC_reclaim_channel(channel);
-	}
+    if(channel.global_rc == 0 )
+    {
+        PICC_reclaim_channel(channel);
+    }
 }
 
 void PIT_reclaim_channel(PIT_Channel channel)
 {
-	printf("Not implemented yet.\n");
-	return;
+    printf("Not implemented yet.\n");
+    return;
 }
 
 /**
@@ -392,11 +392,11 @@ void PIT_reclaim_channel(PIT_Channel channel)
  */
 PICC_CommitList *PICC_create_commit_list()
 {
-	PICC_CommitList *new_commit_list = (PICC_CommitList*)malloc(sizeof(PICC_CommitList));
-	new_commit_list->head = NULL;
-	new_commit_list->tail = NULL;
-	new_commit_list->size = 0;
-	return new_commit_list;
+    PICC_CommitList *new_commit_list = (PICC_CommitList*)malloc(sizeof(PICC_CommitList));
+    new_commit_list->head = NULL;
+    new_commit_list->tail = NULL;
+    new_commit_list->size = 0;
+    return new_commit_list;
 }
 
 /**
@@ -405,10 +405,10 @@ PICC_CommitList *PICC_create_commit_list()
  */
 PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit)
 {
-	PICC_CommitListElement *new_commit_list_element = (PICC_CommitListElement*)malloc(sizeof(PICC_CommitListElement));
-	new_commit_list_element->commit = commit;
-	new_commit_list_element->next = NULL;
-	return new_commit_list_element;
+    PICC_CommitListElement *new_commit_list_element = (PICC_CommitListElement*)malloc(sizeof(PICC_CommitListElement));
+    new_commit_list_element->commit = commit;
+    new_commit_list_element->next = NULL;
+    return new_commit_list_element;
 }
 
 /**
@@ -418,10 +418,10 @@ PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit)
  */
 void PICC_commit_list_add(PICC_CommitList *commit_list, PICC_Commit *commit)
 {
-	PICC_CommitListElement *new_commit_list_element = PICC_create_commit_list_element(commit);
-	commit_list->tail->next = new_commit_list_element;
-	commit_list->tail = new_commit_list_element;
-	commit_list->size++;
+    PICC_CommitListElement *new_commit_list_element = PICC_create_commit_list_element(commit);
+    commit_list->tail->next = new_commit_list_element;
+    commit_list->tail = new_commit_list_element;
+    commit_list->size++;
 }
 
 /**
@@ -431,11 +431,11 @@ void PICC_commit_list_add(PICC_CommitList *commit_list, PICC_Commit *commit)
  */
 PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *commit_list)
 {
-	PICC_CommitListElement *commit_list_element = commit_list->head;
-	commit_list->head = commit_list_element->next;
-	commit_list->size--;
-	commit_list_element->next = NULL;
-	return commit_list_element->commit;
+    PICC_CommitListElement *commit_list_element = commit_list->head;
+    commit_list->head = commit_list_element->next;
+    commit_list->size--;
+    commit_list_element->next = NULL;
+    return commit_list_element->commit;
 }
 
 /**
@@ -445,8 +445,8 @@ PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *commit_list)
  */
 PICC_KnownsSet PICC_knows_set_knows(PICC_KnownsSet ks)
 {
-	printf("Not implemented yet.\n");
-	return ks;
+    printf("Not implemented yet.\n");
+    return ks;
 }
 
 /**
@@ -456,8 +456,8 @@ PICC_KnownsSet PICC_knows_set_knows(PICC_KnownsSet ks)
  */
 PICC_KnownsSet PICC_knows_set_forget(PICC_KnownsSet ks)
 {
-	printf("Not implemented yet.\n");
-	return ks;
+    printf("Not implemented yet.\n");
+    return ks;
 }
 
 /**
@@ -471,8 +471,8 @@ PICC_KnownsSet PICC_knows_set_forget(PICC_KnownsSet ks)
  */
 bool PICC_knows_register(PICC_KnownsSet ks, PICC_Channel ch)
 {
-	printf("Not implemented yet.\n");
-	return false;
+    printf("Not implemented yet.\n");
+    return false;
 }
 
 

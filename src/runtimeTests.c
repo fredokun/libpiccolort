@@ -23,70 +23,70 @@
  */
 bool check_pithread(PIT_Error *error)
 {
-	PIT_PiThread *p;
+    PIT_PiThread *p;
 
-	p = PIT_create_pithread();
-	if(p == NULL)
-	{
-		NEW_ERROR(error,ERR_NULLPOINTER_PITHREAD);
-		return false;
-	}
+    p = PIT_create_pithread();
+    if(p == NULL)
+    {
+        NEW_ERROR(error,ERR_NULLPOINTER_PITHREAD);
+        return false;
+    }
 
-	free(p);
+    free(p);
 
-	return true;
+    return true;
 }
 
 bool check_commits(PIT_Error *error)
 {
-	PIT_Commit *c, *c2, *c3;
-	PIT_CommitListElement *clistelem;
-	PIT_CommitList *clist;
+    PIT_Commit *c, *c2, *c3;
+    PIT_CommitListElement *clistelem;
+    PIT_CommitList *clist;
 
-	c = PICC_create_commitment();
-	if(c == NULL)
-	{
-		NEW_ERROR(error, ERR_NULLPOINTER_COMMIT);
-		return false;
-	}
-	c2 = PICC_create_commitment();
-	c3 = PICC_create_commitment();
+    c = PICC_create_commitment();
+    if(c == NULL)
+    {
+        NEW_ERROR(error, ERR_NULLPOINTER_COMMIT);
+        return false;
+    }
+    c2 = PICC_create_commitment();
+    c3 = PICC_create_commitment();
 
-	//is_valid ?
-	if(!PIT_is_valid_commit(c,error))
-	{
-		NEW_ERROR(error, ERR_INVALID_COMMIT);
-	}
+    //is_valid ?
+    if(!PIT_is_valid_commit(c,error))
+    {
+        NEW_ERROR(error, ERR_INVALID_COMMIT);
+    }
 
-	clistelem = PICC_create_commit_list_element();
-	if(clistelem == NULL)
-	{
-		NEW_ERROR(error, ERR_NULLPOINTER_COMMITLISTELEM);
-	}
+    clistelem = PICC_create_commit_list_element();
+    if(clistelem == NULL)
+    {
+        NEW_ERROR(error, ERR_NULLPOINTER_COMMITLISTELEM);
+    }
 
-	clist = PICC_create_commit_list();
-	if(clist == NULL)
-	{
-		NEW_ERROR(error, ERR_NULLPOINTER_COMMITLIST);
-		return false;
-	}
+    clist = PICC_create_commit_list();
+    if(clist == NULL)
+    {
+        NEW_ERROR(error, ERR_NULLPOINTER_COMMITLIST);
+        return false;
+    }
 
-	clist->head = clistelem;
-	clist->tail = clistelem;
+    clist->head = clistelem;
+    clist->tail = clistelem;
 
-	c->cont_pc = 1;
-	c2->cont_pc = 2;
-	c3->cont_pc = 3;
+    c->cont_pc = 1;
+    c2->cont_pc = 2;
+    c3->cont_pc = 3;
 
-	PIT_commit_list_add(clist, c);
-	PIT_commit_list_add(clist, c2);
-	PIT_commit_list_add(clist, c3);
+    PIT_commit_list_add(clist, c);
+    PIT_commit_list_add(clist, c2);
+    PIT_commit_list_add(clist, c3);
 
-	free(c);
-	free(c2);
-	free(c3);
-	free(clistelem);
-	free(clist);
+    free(c);
+    free(c2);
+    free(c3);
+    free(clistelem);
+    free(clist);
 }
 
 

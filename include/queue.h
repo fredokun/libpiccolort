@@ -14,25 +14,25 @@
 #include <definitions.h>
 
 struct PICC_QueueCell {
-	PICC_PiThread *thread;
-	PICC_QueueCell *next;
+    PICC_PiThread *thread;
+    PICC_QueueCell *next;
 };
 
 struct PICC_Queue {
-	PICC_QueueCell *head;
-	PICC_QueueCell *tail;
-	int size;
+    PICC_QueueCell *head;
+    PICC_QueueCell *tail;
+    int size;
 };
 
 struct PICC_ReadyQueue {
-	PICC_Queue q;
-	PICC_Mutex lock;
+    PICC_Queue q;
+    PICC_Mutex lock;
 };
 
 struct PICC_WaitQueue {
-	PICC_Queue active;
-	PICC_Queue old;
-	PICC_Mutex lock;
+    PICC_Queue active;
+    PICC_Queue old;
+    PICC_Mutex lock;
 };
 
 extern void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt, PICC_Error *error);
