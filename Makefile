@@ -13,12 +13,12 @@ TESTS=tests
 HEADERS=runtime.h pithread.h error.h definitions.h entry.h errors.h queue.h
 OBJ=$(LIB)/main.o $(LIB)/entry.o $(LIB)/runtime.o $(LIB)/error.o $(LIB)/runtime_test.o $(LIB)/queue_test.o $(LIB)/queue.o
 
-all : init
+all : init $(BIN)/$(NAME)
+
+init :
 	mkdir -p $(LIB)
 	mkdir -p $(TESTS)
 	mkdir -p $(BIN)
-
-init : $(BIN)/$(NAME)
 
 $(LIB)/%.o: $(SRC)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(FLAGS)
