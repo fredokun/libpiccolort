@@ -29,7 +29,11 @@
 void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint)
 {
     ALLOC_ERROR(error); /* Contains all the errors */
-    PICC_SchedPool *sched_pool = PICC_create_sched_pool();
+    PICC_SchedPool *sched_pool = PICC_create_sched_pool(&error);
+    if (HAS_ERROR(error))
+    {
+        CRASH(&error);
+    }
     PICC_PiThread *init_thread;
     PICC_Args * args = (PICC_Args *)malloc(sizeof(PICC_Args));
     args->error = error;
