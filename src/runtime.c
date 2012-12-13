@@ -18,6 +18,27 @@
 
 
 
+
+void PIT_acquire_mutex(PIT_Mutex mutex)
+{
+	pthread_mutex_lock(&mutex);
+}
+
+void PIT_release_mutex(PIT_Mutex mutex, PIT_Error *error)
+{
+	if (pthread_mutex_trylock(&mutex) == 0)
+	{
+		NEW_ERROR(error,ERR_KERNEL_ERROR);
+	}
+	else
+	{
+		pthread_mutex_unlock(&mutex);
+	}
+	
+}	
+
+
+
 /**
  * Create and init an atomic boolean
  *
@@ -38,7 +59,7 @@ PIT_AtomicBoolean PIT_create_atomic_boolean()
  */
 void PIT_acquire_int(PIT_AtomicInt *int_val)
 {
-	pthread_mutex_lock(int_val->lock);
+	pthread_mutex_lock(&int_val->lock);
 }	
 
 /**
@@ -48,13 +69,13 @@ void PIT_acquire_int(PIT_AtomicInt *int_val)
  */
 void PIT_release_int(PIT_AtomicInt *int_val, PIT_Error *error)
 {
-	if (pthread_mutex_trylock(int_val->lock) == 0)
+	if (pthread_mutex_trylock(&int_val->lock) == 0)
 	{
 		NEW_ERROR(error,ERR_KERNEL_ERROR);
 	}
 	else
 	{
-		pthread_mutex_unlock(int_val->lock);
+		pthread_mutex_unlock(&int_val->lock);
 	}
 	
 }
@@ -66,7 +87,7 @@ void PIT_release_int(PIT_AtomicInt *int_val, PIT_Error *error)
  */
 void PIT_acquire_bool(PIT_AtomicBoolean *bool_val)
 {
-	pthread_mutex_lock(bool_val->lock);
+	pthread_mutex_lock(&bool_val->lock);
 }	
 
 /**
@@ -76,13 +97,13 @@ void PIT_acquire_bool(PIT_AtomicBoolean *bool_val)
  */
 void PIT_release_bool(PIT_AtomicBoolean *bool_val, PIT_Error *error)
 {
-	if (pthread_mutex_trylock(bool_val->lock) == 0)
+	if (pthread_mutex_trylock(&bool_val->lock) == 0)
 	{
 		NEW_ERROR(error, ERR_KERNEL_ERROR);
 	}
 	else
 	{
-		pthread_mutex_unlock(bool_val->lock);
+		pthread_mutex_unlock(&bool_val->lock);
 	}
 }
 
@@ -96,6 +117,12 @@ int PIT_GC2(PIT_SchedPool schedpool)
 {
 	printf("Not implemented yet.\n");
 	return 0;
+}
+
+PIT_SchedPool *PIT_create_sched_pool()
+{
+	PIT_SchedPool *pool = (PIT_SchedPool *)malloc( sizeof(PIT_SchedPool));
+	return pool;
 }
 
 /**
@@ -191,7 +218,7 @@ void PIT_sched_pool_slave(PIT_Args *args)
 
 void PIT_cond_wait(PIT_Condition cond, PIT_Mutex lock)
 {
-	pthread_cond_wait(cond, lock);
+	pthread_cond_wait(&cond, &lock);
 }
 
 /**
@@ -329,9 +356,9 @@ void PIT_awake(PIT_SchedPool sched, PIT_PiThread p)
  */
 void PIT_channel_incr_ref_count(PIT_Channel channel , PIT_Error *error) 
 {
-	PIT_acquire_bool(channel.lock);
+	PIT_acquire_bool(&channel.lock);
 	channel.global_rc += 1;
-	PIT_release_bool(channel.lock,error);
+	PIT_release_bool(&channel.lock,error);
 }
 
 /**
@@ -341,13 +368,19 @@ void PIT_channel_incr_ref_count(PIT_Channel channel , PIT_Error *error)
  */
 void PIT_channel_dec_ref_count( PIT_Channel channel , PIT_Error *error) 
 {
-	PIT_acquire_bool( channel.lock);
+	PIT_acquire_bool( &channel.lock);
 	channel.global_rc -= 1;
-	PIT_release_bool( channel.lock,error);
+	PIT_release_bool( &channel.lock,error);
 	if(channel.global_rc == 0 )
 	{
 		PIT_reclaim_channel(channel);
 	}
+}
+
+void PIT_reclaim_channel(PIT_Channel channel)
+{
+	printf("Not implemented yet.\n");
+	return;
 }
 
 /**

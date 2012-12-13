@@ -13,7 +13,7 @@
 
 extern int PIT_GC2(PIT_SchedPool schedpool);
 
-extern PIT_SchedPool PIT_create_sched_pool();
+extern PIT_SchedPool *PIT_create_sched_pool();
 extern PIT_Channel  *PIT_create_channel();
 extern PIT_PiThread *PIT_create_pithread();
 extern PIT_Clock    *PIT_create_clock();
@@ -34,6 +34,7 @@ extern int  PIT_can_awake(PIT_PiThread p, PIT_Commit c);
 extern void PIT_awake(PIT_SchedPool sched, PIT_PiThread p);
 extern void PIT_channel_incr_ref_count(PIT_Channel ch, PIT_Error *error);
 extern void PIT_channel_dec_ref_count(PIT_Channel ch, PIT_Error *error);
+extern void PIT_reclaim_channel(PIT_Channel channel);
 
 /*################### LIST UTILS ####################*/
 
@@ -64,6 +65,8 @@ extern void PIT_acquire_int(PIT_AtomicInt *int_val);
 extern void PIT_release_int(PIT_AtomicInt *int_val,PIT_Error *error);
 extern void PIT_acquire_bool(PIT_AtomicBoolean *bool_val);
 extern void PIT_release_bool(PIT_AtomicBoolean *bool_val,PIT_Error *error);
+extern void PIT_acquire_mutex(PIT_Mutex mutex);
+extern void PIT_release_mutex(PIT_Mutex mutex, PIT_Error *error);
 
 extern PIT_Commit PIT_fetch_commitment(PIT_Channel *ch);
 extern void PIT_cond_wait(PIT_Condition cond, PIT_Mutex lock);

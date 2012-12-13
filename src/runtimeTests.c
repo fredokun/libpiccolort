@@ -19,11 +19,11 @@
  *
  * @return boolean true if it works else false
  */
-bool check_pithread(PIT_Error error)
+bool check_pithread(PIT_Error *error)
 {
 	PIT_PiThread *p;
 	
-	p = PIT_create_pithread;
+	p = PIT_create_pithread();
 	if(p == NULL)
 	{
 		NEW_ERROR(error,ERR_NULLPOINTER_PITHREAD);
@@ -35,10 +35,10 @@ bool check_pithread(PIT_Error error)
 	return true;
 }
 
-bool check_commits(PIT_Error error)
+bool check_commits(PIT_Error *error)
 {
 	PIT_Commit *c, *c2, *c3;
-	PIT_CommitListElement clistelem;
+	PIT_CommitListElement *clistelem;
 	PIT_CommitList *clist;
 
 	c = PIT_create_commitment();
@@ -51,7 +51,7 @@ bool check_commits(PIT_Error error)
 	c3 = PIT_create_commitment();
 	
 	//is_valid ?
-	if(!PIT_is_valid_commit(c))
+	if(!PIT_is_valid_commit(c,error))
 	{
 		NEW_ERROR(error, ERR_INVALID_COMMIT);
 	}
@@ -59,7 +59,7 @@ bool check_commits(PIT_Error error)
 	clistelem = PIT_create_commit_list_element();
 	if(clistelem == NULL)
 	{
-		NEW_ERROR(error, ERR_NULLPOINTER_COMMITLISTELEMENT);
+		NEW_ERROR(error, ERR_NULLPOINTER_COMMITLISTELEM);
 	}
 	
 	clist = PIT_create_commit_list();
@@ -80,7 +80,6 @@ bool check_commits(PIT_Error error)
 	PIT_commit_list_add(clist, c2);
 	PIT_commit_list_add(clist, c3);
 	
-	if(clist->head->)
 
 	free(c);
 	free(c2);
