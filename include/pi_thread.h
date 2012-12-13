@@ -78,7 +78,7 @@ struct PICC_SchedPool {
 
 struct PICC_PiThread {
     PICC_StatusKind status;
-    bool* enable;
+    bool* enabled;
     int enable_length;
     PICC_Knowns * knowns;
     PICC_Value* env;

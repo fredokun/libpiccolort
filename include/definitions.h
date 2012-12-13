@@ -44,7 +44,7 @@ typedef struct PICC_Error PICC_Error;
 
 typedef char *PICC_Label;
 typedef void (*PICC_PiThreadProc) (PICC_SchedPool, PICC_PiThread);
-typedef PICC_Value (*PICC_EvalFunction)(PICC_PiThread);
+typedef PICC_Value* (*PICC_EvalFunction)(PICC_PiThread);
 
 typedef struct PICC_Args PICC_Args;
 

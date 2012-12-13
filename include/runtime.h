@@ -28,7 +28,7 @@ extern void PICC_sched_pool_master(PICC_SchedPool schedpool, int std_gc_fuel, in
 
 extern void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint);
 
-extern void PICC_register_ouput_commitment(PICC_PiThread *p, PICC_Channel *ch, PICC_EvalFunction *f, int cont_pc);
+extern void PICC_register_ouput_commitment(PICC_PiThread *p, PICC_Channel *ch, PICC_EvalFunction *f, PICC_Label cont_pc);
 extern void PICC_register_input_commitment(PICC_PiThread *p, PICC_Channel *ch, int x, int cont_pc);
 extern bool PICC_is_valid_commit(PICC_Commit *commit, PICC_Error *error);
 extern int  PICC_can_awake(PICC_PiThread p, PICC_Commit c);
