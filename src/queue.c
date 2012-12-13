@@ -66,7 +66,7 @@ void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt, PICC_Error *e
 			rq->q.tail = cell;
 			cell->next = NULL;
 		} else {
-			cell->next = rq->head;
+			cell->next = rq->q.head;
 			rq->q.head = cell;
 		}
 
@@ -104,7 +104,7 @@ void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt, PICC_Error *er
 		} else {
 			rq->q.tail->next = cell;
 			rq->q.tail = cell;
-			tail->next = NULL;
+			cell->next = NULL;
 		}
 
 		rq->q.size++;
@@ -180,7 +180,7 @@ void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error *err
 			cell->next = wq->old.head;
 		} else {
 			cell->next = wq->active.head;
-			wq->active.head = pt;
+			wq->active.head = cell;
 		}
 
 		wq->active.size++;
@@ -198,8 +198,8 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
 	LOCK_QUEUE(wq);
 
 	int zone = ACTIVE;
-	PICC_PiThread *current = wq->active.head;
-	PICC_PiThread *prev = NULL;
+	PICC_QueueCell *current = wq->active.head;
+	PICC_QueueCell *prev = NULL;
 
 	if (current == NULL) {
 		zone = OLD;
@@ -207,7 +207,7 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
 	}
 
 	while (current != NULL) {
-		if (current == pt) {
+		if (current->thread == pt) {
 			if (prev != NULL)
 				prev->next = current->next;
 
@@ -227,7 +227,7 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
 			}
 
 			UNLOCK_QUEUE(wq);
-			return current;
+			return current->thread;
 		}
 
 		prev = current;
@@ -285,8 +285,17 @@ PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq)
 	if (wq->old.size > 0) {
 		PICC_QueueCell *popped_cell = wq->old.tail;
 		popped_thread = popped_cell->thread;
-		wq->old.tail = popped_cell->prev;
-		wq->old.size--;
+
+		PICC_QueueCell *prev = wq->old.head;
+		while (prev != NULL && prev->next != popped_cell) {
+			prev = prev->next;
+		}
+
+		if (prev != NULL) {
+			prev->next = NULL;
+			wq->old.tail = prev;
+			wq->old.size--;
+		}
 	}
 
 	UNLOCK_QUEUE(wq);
