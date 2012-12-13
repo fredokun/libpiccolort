@@ -16,11 +16,9 @@ OBJ=$(LIB)/entry.o $(LIB)/runtime.o $(LIB)/main.o $(LIB)/error.o $(LIB)/runtimeT
 all : $(BIN)/$(NAME)
 
 $(LIB)/%.o: $(SRC)/%.c $(DEPS)
-    mkdir lib
 	$(CC) -c -o $@ $< $(FLAGS)
 
 $(LIB)/%.o: $(TESTS)/%.c $(DEPS)
-    mkdir tests
 	$(CC) -c -o $@ $< $(FLAGS)
 
 $(BIN)/$(NAME): $(OBJ)
