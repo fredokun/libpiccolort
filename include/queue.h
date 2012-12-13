@@ -1,5 +1,5 @@
 /**
- * @file queue.c
+ * @file queue.h
  * Concurrent ready and wait queues implementation
  *
  * This project is released under MIT License.

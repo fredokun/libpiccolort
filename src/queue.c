@@ -190,6 +190,12 @@ void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error *err
 }
 
 
+/**
+ * Gets a given PiThread from the wait queue.
+ *
+ * @param wq Wait queue
+ * @param pt PiThread
+ */
 PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
 {
 	ASSERT(wq != NULL);
@@ -241,6 +247,13 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
 	return NULL;
 }
 
+/**
+ * Pushes a PiThread in the old wait queue.
+ *
+ * @param wq Wait queue
+ * @param pt PiThread
+ * @param error Error stack
+ */
 void PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error *error)
 {
 	ASSERT(wq != NULL);
@@ -274,7 +287,13 @@ void PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error 
 	UNLOCK_QUEUE(wq);
 }
 
-// WARNING: WHY THE POP IS TAKING THE END OF THE QUEUE AND NOT THE HEAD ?
+/**
+ * Pops a PiThread from the old wait queue.
+ *
+ * WARNING: WHY THE POP IS TAKING THE END OF THE QUEUE AND NOT THE HEAD ?
+ *
+ * @param wq Wait queue
+ */
 PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq)
 {
 	ASSERT(wq != NULL);
@@ -302,6 +321,11 @@ PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq)
 	return popped_thread;
 }
 
+/**
+ * Returns the size of the active + old wait queues.
+ *
+ * @param wq Wait queue
+ */
 int PICC_wait_queue_size(PICC_WaitQueue *wq)
 {
 	ASSERT(wq != NULL);
@@ -312,6 +336,11 @@ int PICC_wait_queue_size(PICC_WaitQueue *wq)
 	return size;
 }
 
+/**
+ * Returns the size of the active wait queue.
+ *
+ * @param wq Wait queue
+ */
 int PICC_wait_queue_max_active(PICC_WaitQueue *wq)
 {
 	ASSERT(wq != NULL);
@@ -321,6 +350,11 @@ int PICC_wait_queue_max_active(PICC_WaitQueue *wq)
 	return nb;
 }
 
+/**
+ * Resets the active wait queue by pushing its cells in the old wait queue.
+ *
+ * @param wq Wait queue
+ */
 void PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq)
 {
 	ASSERT(wq != NULL);
