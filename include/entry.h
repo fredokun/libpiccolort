@@ -13,7 +13,6 @@
 
 #include <definitions.h>
 #include <pi_thread.h>
-#include <error.h>
 
 struct PICC_Args
 {

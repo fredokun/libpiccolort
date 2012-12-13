@@ -10,7 +10,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "error.h"
+#include <error.h>
+
+// List of all error messages in order.
+static const char *PICC_error_messages[PICC_NB_ERRORS + 1] = {
+    "No error",
+
+    "Released a free mutex",
+    "Scheduler deadlock",
+
+    "Can't alloc a new queue cell.",
+    "Can't push the PiThread on the ready queue.",
+    "Can't append the PiThread on the ready queue.",
+    "Can't push the PiThread on the wait queue.",
+    "Can't append the PiThread on the wait queue.",
+    "Can't push the PiThread on the old wait queue.",
+
+    "Out of memory.",
+    "Can't create the thread."
+};
 
 /**
  * Initializes a new error with a given error ID, file and line.

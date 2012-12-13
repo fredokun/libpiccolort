@@ -14,7 +14,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <pthread.h>
-
+#include <queue.h>
 #include <definitions.h>
 #include <runtime.h>
 #include <pi_thread.h>
