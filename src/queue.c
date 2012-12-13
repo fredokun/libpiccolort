@@ -40,6 +40,25 @@ PICC_QueueCell *PICC_create_queue_cell(PICC_Error *error)
 // READY QUEUES ////////////////////////////////////////////////////////////////
 
 /**
+ * Creates a new empty ready queue.
+ *
+ * @param error Error stack
+ */
+PICC_ReadyQueue *PICC_create_ready_queue(PICC_Error *error)
+{
+    PICC_ReadyQueue *queue = malloc(sizeof(PICC_ReadyQueue));
+    if (queue == NULL) {
+        NEW_ERROR(error, ERR_OUT_OF_MEMORY);
+    } else {
+        queue->q.head = NULL;
+        queue->q.tail = NULL;
+        queue->q.size = 0;
+    }
+
+    return queue;
+}
+
+/**
  * Pushes a PiThread on the given ready queue.
  *
  * @param rq Ready queue
@@ -151,6 +170,29 @@ int PICC_ready_queue_size(PICC_ReadyQueue *rq)
 }
 
 // WAIT QUEUES /////////////////////////////////////////////////////////////////
+
+/**
+ * Creates a new empty wait queue.
+ *
+ * @param error Error stack
+ */
+PICC_WaitQueue *PICC_create_wait_queue(PICC_Error *error)
+{
+    PICC_WaitQueue *queue = malloc(sizeof(PICC_WaitQueue));
+    if (queue == NULL) {
+        NEW_ERROR(error, ERR_OUT_OF_MEMORY);
+    } else {
+        queue->active.head = NULL;
+        queue->active.tail = NULL;
+        queue->active.size = 0;
+
+        queue->old.head = NULL;
+        queue->old.tail = NULL;
+        queue->old.size = 0;
+    }
+
+    return queue;
+}
 
 /**
  * Pushes a PiThread on the given wait queue.
