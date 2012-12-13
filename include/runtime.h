@@ -15,7 +15,7 @@
 
 extern int PICC_GC2(PICC_SchedPool schedpool);
 
-extern PICC_SchedPool PICC_create_sched_pool();
+extern PICC_SchedPool *PICC_create_sched_pool();
 extern PICC_Channel  *PICC_create_channel();
 extern PICC_PiThread *PICC_create_pithread();
 extern PICC_Clock    *PICC_create_clock();
@@ -35,6 +35,7 @@ extern int  PICC_can_awake(PICC_PiThread p, PICC_Commit c);
 extern void PICC_awake(PICC_SchedPool sched, PICC_PiThread p);
 extern void PICC_channel_incr_ref_count(PICC_Channel ch, PICC_Error *error);
 extern void PICC_channel_dec_ref_count(PICC_Channel ch, PICC_Error *error);
+extern void PICC_reclaim_channel(PICC_Channel channel);
 
 /*################### LIST UTILS ####################*/
 

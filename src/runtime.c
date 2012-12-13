@@ -22,12 +22,12 @@
 
 
 
-void PICC_acquire_mutex(PIT_Mutex mutex)
+void PICC_acquire_mutex(PICC_Mutex mutex)
 {
     pthread_mutex_lock(&mutex);
 }
 
-void PICC_release_mutex(PIT_Mutex mutex, PIT_Error *error)
+void PICC_release_mutex(PICC_Mutex mutex, PICC_Error *error)
 {
     if (pthread_mutex_trylock(&mutex) == 0)
     {
@@ -123,9 +123,9 @@ int PICC_GC2(PICC_SchedPool schedpool)
     return 0;
 }
 
-PIT_SchedPool *PIT_create_sched_pool()
+PICC_SchedPool *PICC_create_sched_pool()
 {
-    PIT_SchedPool *pool = (PIT_SchedPool *)malloc( sizeof(PIT_SchedPool));
+    PICC_SchedPool *pool = (PICC_SchedPool *)malloc( sizeof(PICC_SchedPool));
     return pool;
 }
 
@@ -363,6 +363,14 @@ void PICC_channel_incr_ref_count(PICC_Channel channel , PICC_Error *error)
     PICC_release_bool(&channel.lock, error);
 }
 
+
+
+void PICC_reclaim_channel( PICC_Channel channel )
+{
+    printf("Not implemented yet.\n");
+    return;
+}
+
 /**
  * decrements by 1 the global reference count of a channel
  *
@@ -380,11 +388,7 @@ void PICC_channel_dec_ref_count( PICC_Channel channel , PICC_Error *error)
     }
 }
 
-void PIT_reclaim_channel(PIT_Channel channel)
-{
-    printf("Not implemented yet.\n");
-    return;
-}
+
 
 /**
  * Function that creates the PICC_CommitList
