@@ -11,7 +11,7 @@
  *     return EXIT_SUCCESS;
  * }
  *
- * int foo(int a, PIT_Error *error) {
+ * int foo(int a, PICC_Error *error) {
  *     int f = 0;
  *     if (a < 0) {
  *         NEW_ERROR(error, ERR_WRONG_ARG);
@@ -26,13 +26,15 @@
  *     return f;
  * }
  *
- * int bar(int b, PIT_Error *error) {
+ * int bar(int b, PICC_Error *error) {
  *     if (b < 0)
  *         NEW_ERROR(error, ERR_WRONG_ARG);
  *     else
  *         b++;
  *     return b;
  * }
+ *
+ * This project is released under MIT License.
  *
  * @author Mickaël MENU
  */
@@ -46,11 +48,11 @@
 #include <errors.h>
 
 // An error stack.
-struct PIT_Error {
-	PIT_ErrorId id;  // ID of the error (0 if the error didn't occured).
+struct PICC_Error {
+	PICC_ErrorId id;  // ID of the error (0 if the error didn't occured).
 	char *file;      // File where the error occured.
 	int line;        // Line in <file> where the error occured.
-	PIT_Error *prev; // Link to the previous error (NULL if this is the first).
+	PICC_Error *prev; // Link to the previous error (NULL if this is the first).
 };
 
 // macros used to handle the errors
@@ -58,34 +60,34 @@ struct PIT_Error {
 	assert(test);
 
 #define ALLOC_ERROR(error) \
-	PIT_Error error = (PIT_Error){.id = 0, .file = NULL, .line = 0, .prev = NULL}
+	PICC_Error error = (PICC_Error){.id = 0, .file = NULL, .line = 0, .prev = NULL}
 
 #define HAS_ERROR(error) \
 	error.id > 0
 
 #define NEW_ERROR(error, id) \
-	PIT_init_error(error, id, __FILE__, __LINE__)
+	PICC_init_error(error, id, __FILE__, __LINE__)
 
 #define ADD_ERROR(error, prev, id) \
-	PIT_add_error(error, prev, id, __FILE__, __LINE__)
+	PICC_add_error(error, prev, id, __FILE__, __LINE__)
 
 #define FORWARD_ERROR(error, prev) \
-	PIT_forward_error(error, prev)
+	PICC_forward_error(error, prev)
 
 #define CRASH(error) \
-	PIT_crash(error, __FILE__, __FUNCTION__)
+	PICC_crash(error, __FILE__, __FUNCTION__)
 
 #define PRINT_ERROR(error) \
-	PIT_print_error(error, __FILE__, __FUNCTION__)
+	PICC_print_error(error, __FILE__, __FUNCTION__)
 
 // underlying error functions
-extern void PIT_init_error(PIT_Error *error, PIT_ErrorId id, const char *file, int line);
-extern void PIT_add_error(PIT_Error *error, PIT_Error prev_error, PIT_ErrorId id, const char *file, int line);
-extern PIT_Error *PIT_copy_error(const PIT_Error error);
-extern void PIT_crash(PIT_Error *error, const char *file, const char *fct);
-extern void PIT_print_error(PIT_Error *error, const char *file, const char *fct);
-extern void PIT_forward_error(PIT_Error *error, PIT_Error prev_error);
-extern const char *PIT_get_error_message(PIT_ErrorId id);
-extern void PIT_free_error(PIT_Error *error);
+extern void PICC_init_error(PICC_Error *error, PICC_ErrorId id, const char *file, int line);
+extern void PICC_add_error(PICC_Error *error, PICC_Error prev_error, PICC_ErrorId id, const char *file, int line);
+extern PICC_Error *PICC_copy_error(const PICC_Error error);
+extern void PICC_crash(PICC_Error *error, const char *file, const char *fct);
+extern void PICC_print_error(PICC_Error *error, const char *file, const char *fct);
+extern void PICC_forward_error(PICC_Error *error, PICC_Error prev_error);
+extern const char *PICC_get_error_message(PICC_ErrorId id);
+extern void PICC_free_error(PICC_Error *error);
 
 #endif

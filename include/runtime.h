@@ -2,6 +2,8 @@
  * @file runtime.h
  * File that contains headers of the runtime functions specified in the specification's document.
  *
+ * This project is released under MIT License.
+ *
  * @author Maxence WO
  */
 
@@ -11,62 +13,48 @@
 
 #include <pi_thread.h>
 
-extern int PIT_GC2(PIT_SchedPool schedpool);
+extern int PICC_GC2(PICC_SchedPool schedpool);
 
-extern PIT_SchedPool PIT_create_sched_pool();
-extern PIT_Channel  *PIT_create_channel();
-extern PIT_PiThread *PIT_create_pithread();
-extern PIT_Clock    *PIT_create_clock();
-extern PIT_Commit  *PIT_create_commitment();
-extern PIT_CommitList *PIT_create_commit_list();
-extern PIT_CommitListElement *PIT_create_commit_list_element();
+extern PICC_SchedPool PICC_create_sched_pool();
+extern PICC_Channel  *PICC_create_channel();
+extern PICC_PiThread *PICC_create_pithread();
+extern PICC_Clock    *PICC_create_clock();
+extern PICC_Commit  *PICC_create_commitment();
+extern PICC_CommitList *PICC_create_commit_list();
+extern PICC_CommitListElement *PICC_create_commit_list_element();
 
-//extern void PIT_sched_pool_slave(PIT_SchedPool schedpool, PIT_Error* error);
-extern void PIT_sched_pool_slave(PIT_Args *args);
-extern void PIT_sched_pool_master(PIT_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor);
+extern void PICC_sched_pool_slave(PICC_Args *args);
+extern void PICC_sched_pool_master(PICC_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor);
 
-extern void PIT_main(int nb_core_threads, PIT_PiThreadProc entrypoint);
+extern void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint);
 
-extern void PIT_register_ouput_commitment(PIT_PiThread *p, PIT_Channel *ch, PIT_EvalFunction *f, int cont_pc);
-extern void PIT_register_input_commitment(PIT_PiThread *p, PIT_Channel *ch, int x, int cont_pc);
-extern bool PIT_is_valid_commit(PIT_Commit *commit, PIT_Error *error);
-extern int  PIT_can_awake(PIT_PiThread p, PIT_Commit c);
-extern void PIT_awake(PIT_SchedPool sched, PIT_PiThread p);
-extern void PIT_channel_incr_ref_count(PIT_Channel ch, PIT_Error *error);
-extern void PIT_channel_dec_ref_count(PIT_Channel ch, PIT_Error *error);
+extern void PICC_register_ouput_commitment(PICC_PiThread *p, PICC_Channel *ch, PICC_EvalFunction *f, int cont_pc);
+extern void PICC_register_input_commitment(PICC_PiThread *p, PICC_Channel *ch, int x, int cont_pc);
+extern bool PICC_is_valid_commit(PICC_Commit *commit, PICC_Error *error);
+extern int  PICC_can_awake(PICC_PiThread p, PICC_Commit c);
+extern void PICC_awake(PICC_SchedPool sched, PICC_PiThread p);
+extern void PICC_channel_incr_ref_count(PICC_Channel ch, PICC_Error *error);
+extern void PICC_channel_dec_ref_count(PICC_Channel ch, PICC_Error *error);
 
 /*################### LIST UTILS ####################*/
 
-extern void       PIT_commit_list_add(PIT_CommitList *clist, PIT_Commit *c);
-extern PIT_Commit *PIT_commit_list_fetch(PIT_CommitList *clist);
+extern void       PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *c);
+extern PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist);
 
 /*####################################################*/
 
-/*################# QUEUE UTILS ######################*/
 
-extern void         PIT_ready_queue_push(PIT_ReadyQueue *rq, PIT_PiThread p);
-extern void         PIT_ready_queue_add(PIT_ReadyQueue *rq, PIT_PiThread p);
-extern PIT_PiThread PIT_ready_queue_pop(PIT_ReadyQueue *rq);
-extern int          PIT_ready_queue_size(PIT_ReadyQueue *rq);
-extern void         PIT_wait_queue_push(PIT_WaitQueue *wq, PIT_PiThread p);
-extern PIT_PiThread PIT_wait_queue_fetch(PIT_WaitQueue *wq, PIT_PiThread p);
-extern void         PIT_wait_queue_push_old(PIT_WaitQueue *wq, PIT_PiThread p);
-extern PIT_PiThread PIT_wait_queue_pop_old(PIT_WaitQueue *wq);
-extern int          PIT_wait_queue_size(PIT_WaitQueue *wq);
-extern int          PIT_wait_queue_max_active(PIT_WaitQueue *wq);
-extern int          PIT_wait_queue_max_active_reset(PIT_WaitQueue *wq);
+extern PICC_KnownsSet PICC_knows_set_knows(PICC_Knowns* ks);
+extern PICC_KnownsSet PICC_knows_set_forget(PICC_Knowns* ks);
+extern bool          PICC_knows_register(PICC_KnownsSet ks, PICC_Channel ch);
 
-extern PIT_KnownsSet PIT_knows_set_knows(PIT_Knowns* ks);
-extern PIT_KnownsSet PIT_knows_set_forget(PIT_Knowns* ks);
-extern bool          PIT_knows_register(PIT_KnownsSet ks, PIT_Channel ch);
+extern void PICC_acquire_int(PICC_AtomicInt *int_val);
+extern void PICC_release_int(PICC_AtomicInt *int_val,PICC_Error *error);
+extern void PICC_acquire_bool(PICC_AtomicBoolean *bool_val);
+extern void PICC_release_bool(PICC_AtomicBoolean *bool_val,PICC_Error *error);
 
-extern void PIT_acquire_int(PIT_AtomicInt *int_val);
-extern void PIT_release_int(PIT_AtomicInt *int_val,PIT_Error *error);
-extern void PIT_acquire_bool(PIT_AtomicBoolean *bool_val);
-extern void PIT_release_bool(PIT_AtomicBoolean *bool_val,PIT_Error *error);
-
-extern PIT_Commit PIT_fetch_commitment(PIT_Channel *ch);
-extern void PIT_cond_wait(PIT_Condition cond, PIT_Mutex lock);
+extern PICC_Commit PICC_fetch_commitment(PICC_Channel *ch);
+extern void PICC_cond_wait(PICC_Condition cond, PICC_Mutex lock);
 
 
 #endif

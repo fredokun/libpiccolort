@@ -2,73 +2,78 @@
  * @file definitions.h
  * File that contains typedef + all enums of runtime.h
  *
+ * This project is released under MIT License.
+ *
  * @author Maxence WO
+ * @author Mickaël MENU
  */
 
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
-typedef struct PIT_Queue PIT_Queue;
-typedef struct PIT_ReadyQueue PIT_ReadyQueue;
-typedef struct PIT_WaitQueue PIT_WaitQueue;
-typedef struct PIT_QueueCell PIT_QueueCell;
+#include <pthread.h>
 
-typedef struct PIT_SchedPool PIT_SchedPool;
-typedef struct PIT_PiThread PIT_PiThread;
+typedef struct PICC_Queue PICC_Queue;
+typedef struct PICC_ReadyQueue PICC_ReadyQueue;
+typedef struct PICC_WaitQueue PICC_WaitQueue;
+typedef struct PICC_QueueCell PICC_QueueCell;
 
-typedef struct PIT_Channel PIT_Channel;
+typedef struct PICC_SchedPool PICC_SchedPool;
+typedef struct PICC_PiThread PICC_PiThread;
 
-typedef struct PIT_Commit PIT_Commit;
-typedef struct PIT_CommitList PIT_CommitList;
-typedef struct PIT_CommitListElement PIT_CommitListElement;
-typedef struct PIT_InCommit PIT_InCommit;
-typedef struct PIT_OutCommit PIT_OutCommit;
+typedef struct PICC_Channel PICC_Channel;
 
-typedef struct PIT_Clock PIT_Clock;
-typedef struct PIT_Value PIT_Value;
-typedef struct PIT_AtomicBoolean PIT_AtomicBoolean;
-typedef struct PIT_AtomicInt PIT_AtomicInt;
+typedef struct PICC_Commit PICC_Commit;
+typedef struct PICC_CommitList PICC_CommitList;
+typedef struct PICC_CommitListElement PICC_CommitListElement;
+typedef struct PICC_InCommit PICC_InCommit;
+typedef struct PICC_OutCommit PICC_OutCommit;
 
-typedef pthread_mutex_t PIT_Mutex;
-typedef pthread_cond_t PIT_Condition;//typedef struct PIT_Condition PIT_Condition;
-typedef struct PIT_Knowns PIT_Knowns;
-typedef PIT_Knowns* PIT_KnownsSet;
+typedef struct PICC_Clock PICC_Clock;
+typedef struct PICC_Value PICC_Value;
+typedef struct PICC_AtomicBoolean PICC_AtomicBoolean;
+typedef struct PICC_AtomicInt PICC_AtomicInt;
 
-typedef enum PIT_ErrorId PIT_ErrorId;
-typedef struct PIT_Error PIT_Error;
+typedef pthread_mutex_t PICC_Mutex;
+typedef pthread_cond_t PICC_Condition;
+typedef struct PICC_Knowns PICC_Knowns;
+typedef PICC_Knowns* PICC_KnownsSet;
 
-typedef char *PIT_Label;
-typedef void (*PIT_PiThreadProc) (PIT_SchedPool, PIT_PiThread);
-typedef PIT_Value (*PIT_EvalFunction)(PIT_PiThread);
+typedef enum PICC_ErrorId PICC_ErrorId;
+typedef struct PICC_Error PICC_Error;
 
-typedef struct PIT_Args PIT_Args;
+typedef char *PICC_Label;
+typedef void (*PICC_PiThreadProc) (PICC_SchedPool, PICC_PiThread);
+typedef PICC_Value (*PICC_EvalFunction)(PICC_PiThread);
+
+typedef struct PICC_Args PICC_Args;
 
 typedef enum
 {
-	IN_COMMIT,
-	OUT_COMMIT
-} PIT_CommitType;
+	PICC_IN_COMMIT,
+	PICC_OUT_COMMIT
+} PICC_CommitType;
 
 typedef enum {
-	STATUS_RUN,
-	STATUS_CALL,
-	STATUS_WAIT,
-	STATUS_ENDED,
-	STATUS_BLOCKED
-} PIT_StatusKind;
+	PICC_STATUS_RUN,
+	PICC_STATUS_CALL,
+	PICC_STATUS_WAIT,
+	PICC_STATUS_ENDED,
+	PICC_STATUS_BLOCKED
+} PICC_StatusKind;
 
 typedef enum {
-	INT_VAL,
-	FLOAT_VAL,
-	STRING_VAL,
-	BOOL_VAL,
-	CHANNEL_VAL,
-} PIT_ValueKind;
+	PICC_INT_VAL,
+	PICC_FLOAT_VAL,
+	PICC_STRING_VAL,
+	PICC_BOOL_VAL,
+	PICC_CHANNEL_VAL,
+} PICC_ValueKind;
 
 typedef enum {
-	UNKNOWN,
-	KNOWN,
-	FORGET
-} PIT_KnownsState;
+	PICC_UNKNOWN,
+	PICC_KNOWN,
+	PICC_FORGET
+} PICC_KnownsState;
 
 #endif

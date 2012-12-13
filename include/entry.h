@@ -2,6 +2,8 @@
  * @file entry.h
  * struct for entry.c
  *
+ * This project is released under MIT License.
+ *
  * @author Maxence WO
  * @author Dany Siriphol
  */
@@ -13,10 +15,10 @@
 #include <pi_thread.h>
 #include <error.h>
 
-struct PIT_Args
+struct PICC_Args
 {
-	PIT_Error error;
-	PIT_SchedPool *sched_pool;
+	PICC_Error error;
+	PICC_SchedPool *sched_pool;
 };
 
 #endif

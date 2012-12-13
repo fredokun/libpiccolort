@@ -2,6 +2,8 @@
  * @file error.c
  * Provides several functions to handle errors.
  *
+ * This project is released under MIT License.
+ *
  * @author Mickaël MENU
  */
 
@@ -18,13 +20,13 @@
  * @param line Line in <file> where the error occured.
  * @return Initialized error.
  */
-void PIT_init_error(PIT_Error *error, PIT_ErrorId id, const char *file, int line)
+void PICC_init_error(PICC_Error *error, PICC_ErrorId id, const char *file, int line)
 {
 	if (error != NULL) {
 		error->id = id;
 		error->file = malloc(strlen(file) * sizeof(char));
 		if (error->file == NULL) {
-			perror("Unable to create a new PIT_Error");
+			perror("Unable to create a new PICC_Error");
 			exit(EXIT_FAILURE);
 		}
 		strncpy(error->file, file, strlen(file));
@@ -43,11 +45,11 @@ void PIT_init_error(PIT_Error *error, PIT_ErrorId id, const char *file, int line
  * @param line Line in <file> where the error occured.
  * @return New error linked to previous error.
  */
-void PIT_add_error(PIT_Error *error, PIT_Error prev_error, PIT_ErrorId id, const char *file, int line)
+void PICC_add_error(PICC_Error *error, PICC_Error prev_error, PICC_ErrorId id, const char *file, int line)
 {
 	if (error != NULL) {
-		PIT_init_error(error, id, file, line);
-		error->prev = PIT_copy_error(prev_error);
+		PICC_init_error(error, id, file, line);
+		error->prev = PICC_copy_error(prev_error);
 	}
 }
 
@@ -60,14 +62,14 @@ void PIT_add_error(PIT_Error *error, PIT_Error prev_error, PIT_ErrorId id, const
  * @param error Error to be copied.
  * @param Copy of <error>.
  */
-PIT_Error *PIT_copy_error(const PIT_Error error)
+PICC_Error *PICC_copy_error(const PICC_Error error)
 {
-	PIT_Error *copy = malloc(sizeof(PIT_Error));
+	PICC_Error *copy = malloc(sizeof(PICC_Error));
 	if (copy == NULL) {
-		fprintf(stderr, "Error: Can't create a new PIT_Error.\n");
+		fprintf(stderr, "Error: Can't create a new PICC_Error.\n");
 		exit(EXIT_FAILURE);
 	}
-	PIT_init_error(copy, error.id, error.file, error.line);
+	PICC_init_error(copy, error.id, error.file, error.line);
 	copy->prev = error.prev;
 	return copy;
 }
@@ -80,9 +82,9 @@ PIT_Error *PIT_copy_error(const PIT_Error error)
  * @param file File where the crash occured (for DEBUG)
  * @param fct Function where the crash occured (for DEBUG)
  */
-void PIT_crash(PIT_Error *error, const char *file, const char *fct)
+void PICC_crash(PICC_Error *error, const char *file, const char *fct)
 {
-	PIT_print_error(error, file, fct);
+	PICC_print_error(error, file, fct);
 	exit(EXIT_FAILURE);
 }
 
@@ -94,20 +96,20 @@ void PIT_crash(PIT_Error *error, const char *file, const char *fct)
  * @param file File where the print occured (for DEBUG)
  * @param fct Function where the print occured (for DEBUG)
  */
-void PIT_print_error(PIT_Error *error, const char *file, const char *fct)
+void PICC_print_error(PICC_Error *error, const char *file, const char *fct)
 {
 	if (error->id > 0) {
 		fprintf(stderr, "%s: In function '%s':\n", file, fct);
-		fprintf(stderr, "%s:%d: error: %s\n", error->file, error->line, PIT_get_error_message(error->id));
+		fprintf(stderr, "%s:%d: error: %s\n", error->file, error->line, PICC_get_error_message(error->id));
 
 		if (error->prev != NULL) {
-			PIT_Error *prev = error->prev;
+			PICC_Error *prev = error->prev;
 			while (prev != NULL) {
-				fprintf(stderr, "%s:%d: error: %s\n", prev->file, prev->line, PIT_get_error_message(prev->id));
+				fprintf(stderr, "%s:%d: error: %s\n", prev->file, prev->line, PICC_get_error_message(prev->id));
 				prev = prev->prev;
 			}
 
-			PIT_free_error(error->prev);
+			PICC_free_error(error->prev);
 			error->prev = NULL;
 		}
 	}
@@ -120,10 +122,10 @@ void PIT_print_error(PIT_Error *error, const char *file, const char *fct)
  * @param error Current error.
  * @param prev_error Previous error.
  */
-void PIT_forward_error(PIT_Error *error, PIT_Error prev_error)
+void PICC_forward_error(PICC_Error *error, PICC_Error prev_error)
 {
 	if (error != NULL) {
-		PIT_init_error(error, prev_error.id, prev_error.file, prev_error.line);
+		PICC_init_error(error, prev_error.id, prev_error.file, prev_error.line);
 		error->prev = prev_error.prev;
 	}
 }
@@ -134,9 +136,9 @@ void PIT_forward_error(PIT_Error *error, PIT_Error prev_error)
  * @param id Error identifier
  * @return Error message
  */
-const char *PIT_get_error_message(PIT_ErrorId id)
+const char *PICC_get_error_message(PICC_ErrorId id)
 {
-	return error_messages[id];
+	return PICC_error_messages[id];
 }
 
 /**
@@ -144,11 +146,11 @@ const char *PIT_get_error_message(PIT_ErrorId id)
  *
  * @param error Error stack.
  */
-void PIT_free_error(PIT_Error *error)
+void PICC_free_error(PICC_Error *error)
 {
 	if (error->file != NULL)
 		free(error->file);
 	if (error->prev != NULL)
-		PIT_free_error(error->prev);
+		PICC_free_error(error->prev);
 	free(error);
 }

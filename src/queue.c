@@ -2,6 +2,8 @@
  * @file queue.c
  * Concurrent ready and wait queues implementation
  *
+ * This project is released under MIT License.
+ *
  * @author Mickaël MENU
  */
 
@@ -24,9 +26,9 @@ const static int OLD = 0;
  *
  * @return Allocated queue cell
  */
-PIT_QueueCell *PIT_create_queue_cell(PIT_Error *error)
+PICC_QueueCell *PICC_create_queue_cell(PICC_Error *error)
 {
-	PIT_QueueCell *cell = malloc(sizeof(PIT_QueueCell));
+	PICC_QueueCell *cell = malloc(sizeof(PICC_QueueCell));
 	if (cell == NULL) {
 		NEW_ERROR(error, ERR_ALLOC_QUEUE_CELL);
 	} else {
@@ -44,7 +46,7 @@ PIT_QueueCell *PIT_create_queue_cell(PIT_Error *error)
  * @param rq Ready queue
  * @param pt PiThread
  */
-void PIT_ready_queue_push(PIT_ReadyQueue *rq, PIT_PiThread *pt, PIT_Error *error)
+void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt, PICC_Error *error)
 {
 	ASSERT(rq != NULL);
 	ASSERT(pt != NULL);
@@ -53,7 +55,7 @@ void PIT_ready_queue_push(PIT_ReadyQueue *rq, PIT_PiThread *pt, PIT_Error *error
 
 	// create queue cell
 	ALLOC_ERROR(cell_error);
-	PIT_QueueCell *cell = PIT_create_queue_cell(&cell_error);
+	PICC_QueueCell *cell = PICC_create_queue_cell(&cell_error);
 
 	if (HAS_ERROR) {
 		ADD_ERROR(error, cell_error, ERR_READY_QUEUE_PUSH);
@@ -80,7 +82,7 @@ void PIT_ready_queue_push(PIT_ReadyQueue *rq, PIT_PiThread *pt, PIT_Error *error
  * @param rq Ready queue
  * @param pt PiThread
  */
-void PIT_ready_queue_add(PIT_ReadyQueue *rq, PIT_PiThread *pt, PIT_Error *error)
+void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt, PICC_Error *error)
 {
 	ASSERT(rq != NULL);
 	ASSERT(pt != NULL);
@@ -89,7 +91,7 @@ void PIT_ready_queue_add(PIT_ReadyQueue *rq, PIT_PiThread *pt, PIT_Error *error)
 
 	// create queue cell
 	ALLOC_ERROR(cell_error);
-	PIT_QueueCell *cell = PIT_create_queue_cell(&cell_error);
+	PICC_QueueCell *cell = PICC_create_queue_cell(&cell_error);
 
 	if (HAS_ERROR) {
 		ADD_ERROR(error, cell_error, ERR_READY_QUEUE_ADD);
@@ -117,15 +119,15 @@ void PIT_ready_queue_add(PIT_ReadyQueue *rq, PIT_PiThread *pt, PIT_Error *error)
  * @param rq Ready queue
  * @return Popped PiThread
  */
-PIT_PiThread *PIT_ready_queue_pop(PIT_ReadyQueue *rq)
+PICC_PiThread *PICC_ready_queue_pop(PICC_ReadyQueue *rq)
 {
 	ASSERT(rq != NULL);
 
 	LOCK_QUEUE(rq);
-	PIT_PiThread *popped_thread = NULL;
+	PICC_PiThread *popped_thread = NULL;
 
 	if (rq->q.size > 0) {
-		PIT_QueueCell *popped_cell = rq->q.head;
+		PICC_QueueCell *popped_cell = rq->q.head;
 		popped_thread = popped_cell->thread;
 		rq->q.head = popped_cell->next;
 		rq->q.size--;
@@ -140,7 +142,7 @@ PIT_PiThread *PIT_ready_queue_pop(PIT_ReadyQueue *rq)
  *
  * @return Size of the ready queue
  */
-int PIT_ready_queue_size(PIT_ReadyQueue *rq)
+int PICC_ready_queue_size(PICC_ReadyQueue *rq)
 {
 	ASSERT(rq != NULL);
 	LOCK_QUEUE(rq);
@@ -157,7 +159,7 @@ int PIT_ready_queue_size(PIT_ReadyQueue *rq)
  * @param wq Wait queue
  * @param pt PiThread
  */
-void PIT_wait_queue_push(PIT_WaitQueue *wq, PIT_PiThread *pt, PIT_Error *error)
+void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error *error)
 {
 	ASSERT(wq != NULL);
 	ASSERT(pt != NULL);
@@ -166,7 +168,7 @@ void PIT_wait_queue_push(PIT_WaitQueue *wq, PIT_PiThread *pt, PIT_Error *error)
 
 	// create queue cell
 	ALLOC_ERROR(cell_error);
-	PIT_QueueCell *cell = PIT_create_queue_cell(&cell_error);
+	PICC_QueueCell *cell = PICC_create_queue_cell(&cell_error);
 
 	if (HAS_ERROR) {
 		ADD_ERROR(error, cell_error, ERR_WAIT_QUEUE_PUSH);
@@ -188,7 +190,7 @@ void PIT_wait_queue_push(PIT_WaitQueue *wq, PIT_PiThread *pt, PIT_Error *error)
 }
 
 
-PIT_PiThread *PIT_wait_queue_fetch(PIT_WaitQueue *wq, PIT_PiThread *pt)
+PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
 {
 	ASSERT(wq != NULL);
 	ASSERT(pt != NULL);
@@ -196,8 +198,8 @@ PIT_PiThread *PIT_wait_queue_fetch(PIT_WaitQueue *wq, PIT_PiThread *pt)
 	LOCK_QUEUE(wq);
 
 	int zone = ACTIVE;
-	PIT_PiThread *current = wq->active.head;
-	PIT_PiThread *prev = NULL;
+	PICC_PiThread *current = wq->active.head;
+	PICC_PiThread *prev = NULL;
 
 	if (current == NULL) {
 		zone = OLD;
@@ -239,7 +241,7 @@ PIT_PiThread *PIT_wait_queue_fetch(PIT_WaitQueue *wq, PIT_PiThread *pt)
 	return NULL;
 }
 
-void PIT_wait_queue_push_old(PIT_WaitQueue *wq, PIT_PiThread *pt, PIT_Error *error)
+void PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error *error)
 {
 	ASSERT(wq != NULL);
 	ASSERT(pt != NULL);
@@ -248,7 +250,7 @@ void PIT_wait_queue_push_old(PIT_WaitQueue *wq, PIT_PiThread *pt, PIT_Error *err
 
 	// create queue cell
 	ALLOC_ERROR(cell_error);
-	PIT_QueueCell *cell = PIT_create_queue_cell(&cell_error);
+	PICC_QueueCell *cell = PICC_create_queue_cell(&cell_error);
 
 	if (HAS_ERROR) {
 		ADD_ERROR(error, cell_error, ERR_WAIT_QUEUE_PUSH_OLD);
@@ -273,15 +275,15 @@ void PIT_wait_queue_push_old(PIT_WaitQueue *wq, PIT_PiThread *pt, PIT_Error *err
 }
 
 // WARNING: WHY THE POP IS TAKING THE END OF THE QUEUE AND NOT THE HEAD ?
-PIT_PiThread *PIT_wait_queue_pop_old(PIT_WaitQueue *wq)
+PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq)
 {
 	ASSERT(wq != NULL);
 
 	LOCK_QUEUE(wq);
-	PIT_PiThread *popped_thread = NULL;
+	PICC_PiThread *popped_thread = NULL;
 
 	if (wq->old.size > 0) {
-		PIT_QueueCell *popped_cell = wq->old.tail;
+		PICC_QueueCell *popped_cell = wq->old.tail;
 		popped_thread = popped_cell->thread;
 		wq->old.tail = popped_cell->prev;
 		wq->old.size--;
@@ -291,7 +293,7 @@ PIT_PiThread *PIT_wait_queue_pop_old(PIT_WaitQueue *wq)
 	return popped_thread;
 }
 
-int PIT_wait_queue_size(PIT_WaitQueue *wq)
+int PICC_wait_queue_size(PICC_WaitQueue *wq)
 {
 	ASSERT(wq != NULL);
 	LOCK_QUEUE(wq);
@@ -301,7 +303,7 @@ int PIT_wait_queue_size(PIT_WaitQueue *wq)
 	return size;
 }
 
-int PIT_wait_queue_max_active(PIT_WaitQueue *wq)
+int PICC_wait_queue_max_active(PICC_WaitQueue *wq)
 {
 	ASSERT(wq != NULL);
 	LOCK_QUEUE(wq);
@@ -310,7 +312,7 @@ int PIT_wait_queue_max_active(PIT_WaitQueue *wq)
 	return nb;
 }
 
-void PIT_wait_queue_max_active_reset(PIT_WaitQueue *wq)
+void PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq)
 {
 	ASSERT(wq != NULL);
 	LOCK_QUEUE(wq);

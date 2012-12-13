@@ -1,3 +1,10 @@
+/**
+ * @file pi_thread.h
+ * Pi-Threads
+ *
+ * This project is released under MIT License.
+ */
+
 #ifndef PI_THREAD_H
 #define PI_THREAD_H
 
@@ -8,104 +15,104 @@
 #include <entry.h>
 #include <error.h>
 
-struct PIT_AtomicInt {
-	PIT_Mutex lock;
-	int value;	
+struct PICC_AtomicInt {
+	PICC_Mutex lock;
+	int value;
 };
 
-struct PIT_AtomicBoolean {
-	PIT_Mutex lock;
-	bool value;	
+struct PICC_AtomicBoolean {
+	PICC_Mutex lock;
+	bool value;
 };
 
-struct PIT_Clock {
-	PIT_AtomicInt *val;
+struct PICC_Clock {
+	PICC_AtomicInt *val;
 };
 
-struct PIT_InCommit {
+struct PICC_InCommit {
 	int refvar;
 };
 
-struct PIT_OutCommit {
-	PIT_EvalFunction *eval_func;
+struct PICC_OutCommit {
+	PICC_EvalFunction *eval_func;
 };
 
-struct PIT_Commit
+struct PICC_Commit
 {
-	PIT_CommitType type;
-	PIT_PiThread *thread;
-	PIT_Clock *clock;
-	PIT_AtomicInt *clockval;
+	PICC_CommitType type;
+	PICC_PiThread *thread;
+	PICC_Clock *clock;
+	PICC_AtomicInt *clockval;
 	int cont_pc;
-	PIT_Channel *channel;
+	PICC_Channel *channel;
 
 	union
 	{
-		PIT_InCommit *in;
-		PIT_OutCommit *out;
+		PICC_InCommit *in;
+		PICC_OutCommit *out;
 	} content;
 };
 
-struct PIT_CommitListElement
+struct PICC_CommitListElement
 {
-	PIT_Commit *commit;
-	struct PIT_CommitListElement *next;
+	PICC_Commit *commit;
+	struct PICC_CommitListElement *next;
 };
 
-struct PIT_CommitList
+struct PICC_CommitList
 {
-	PIT_CommitListElement *head;
-	PIT_CommitListElement *tail;
+	PICC_CommitListElement *head;
+	PICC_CommitListElement *tail;
 	int size;
 };
 
-struct PIT_SchedPool {
-	PIT_ReadyQueue *ready;
-	PIT_WaitQueue *wait;
-	PIT_Mutex lock;
-	PIT_Condition cond;
+struct PICC_SchedPool {
+	PICC_ReadyQueue *ready;
+	PICC_WaitQueue *wait;
+	PICC_Mutex lock;
+	PICC_Condition cond;
 	int nb_slaves;
 	int nb_waiting_slaves;
 	bool running;
 };
 
-struct PIT_PiThread {
-	PIT_StatusKind status;
+struct PICC_PiThread {
+	PICC_StatusKind status;
 	bool* enable;
 	int enable_length;
-	PIT_Knowns * knowns;
-	PIT_Value* env;
+	PICC_Knowns * knowns;
+	PICC_Value* env;
 	int env_length;
-	PIT_Commit *commit;
-	PIT_CommitList *commits;
-	PIT_PiThreadProc proc;
-	PIT_Label pc;
-	PIT_Clock *clock;
+	PICC_Commit *commit;
+	PICC_CommitList *commits;
+	PICC_PiThreadProc proc;
+	PICC_Label pc;
+	PICC_Clock *clock;
 	int fuel;
-	PIT_Mutex lock;
+	PICC_Mutex lock;
 };
 
-struct PIT_Channel {
-	PIT_Commit* incommits;
-	PIT_Commit* outcommits;
+struct PICC_Channel {
+	PICC_Commit* incommits;
+	PICC_Commit* outcommits;
 	int global_rc;
-	PIT_AtomicBoolean lock;
+	PICC_AtomicBoolean lock;
 };
 
-struct PIT_Value {
-	PIT_ValueKind kind;
+struct PICC_Value {
+	PICC_ValueKind kind;
 	union {
 		int as_int;
 		double as_float;
 		char *as_string;
 		bool as_bool;
-		PIT_Channel *as_channel;
+		PICC_Channel *as_channel;
 	} content;
 };
 
-struct PIT_Knowns {
-	PIT_Channel *channel;
-	PIT_KnownsState state;
+struct PICC_Knowns {
+	PICC_Channel *channel;
+	PICC_KnownsState state;
 };
 
 #endif // PI_THREAD_H

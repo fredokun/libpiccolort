@@ -1,7 +1,9 @@
 /**
  * @file runtime.c
  * File that the main process
- * 
+ *
+ * This project is released under MIT License.
+ *
  * @author Maxence WO
  */
 
