@@ -15,7 +15,7 @@
 
 extern int PICC_GC2(PICC_SchedPool schedpool);
 
-extern PICC_SchedPool *PICC_create_sched_pool();
+extern PICC_SchedPool *PICC_create_sched_pool(PICC_Error *error);
 extern PICC_Channel  *PICC_create_channel();
 extern PICC_PiThread *PICC_create_pithread();
 extern PICC_Clock    *PICC_create_clock();

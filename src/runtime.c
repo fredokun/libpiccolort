@@ -123,9 +123,31 @@ int PICC_GC2(PICC_SchedPool schedpool)
     return 0;
 }
 
-PICC_SchedPool *PICC_create_sched_pool()
+/**
+ * Creates a new scheduler
+ * 
+ * @param error the error container
+ * 
+ * @return the created scheduler structure
+ */
+PICC_SchedPool *PICC_create_sched_pool(PICC_Error *error)
 {
-    PICC_SchedPool *pool = (PICC_SchedPool *)malloc( sizeof(PICC_SchedPool));
+    PICC_SchedPool *pool = (PICC_SchedPool *)malloc(sizeof(struct PICC_SchedPool));
+    if (pool == NULL) {
+        NEW_ERROR(error, ERR_OUT_OF_MEMORY);
+    } else {
+		ALLOC_ERROR(alloc1_error);
+		pool->ready = PICC_create_ready_queue(&alloc1_error);
+		if (HAS_ERROR(alloc1_error)) {
+			ADD_ERROR(error, alloc1_error, ERR_OUT_OF_MEMORY);
+		}
+		ALLOC_ERROR(alloc2_error);
+		pool->wait = PICC_create_wait_queue(&alloc2_error);
+		if (HAS_ERROR(alloc2_error)) {
+			ADD_ERROR(error, alloc2_error, ERR_OUT_OF_MEMORY);
+		}
+		pool->nb_slaves = pool->nb_waiting_slaves = 0;		
+	}
     return pool;
 }
 
