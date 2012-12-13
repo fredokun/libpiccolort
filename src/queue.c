@@ -9,7 +9,6 @@
 
 #include <stdlib.h>
 #include <queue.h>
-#include <error.h>
 
 #define LOCK_QUEUE(q) \
     pthread_mutex_lock(&(q->lock));
@@ -57,7 +56,7 @@ void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt, PICC_Error *e
     ALLOC_ERROR(cell_error);
     PICC_QueueCell *cell = PICC_create_queue_cell(&cell_error);
 
-    if (HAS_ERROR) {
+    if (HAS_ERROR(cell_error)) {
         ADD_ERROR(error, cell_error, ERR_READY_QUEUE_PUSH);
     } else {
         cell->thread = pt;
@@ -93,7 +92,7 @@ void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt, PICC_Error *er
     ALLOC_ERROR(cell_error);
     PICC_QueueCell *cell = PICC_create_queue_cell(&cell_error);
 
-    if (HAS_ERROR) {
+    if (HAS_ERROR(cell_error)) {
         ADD_ERROR(error, cell_error, ERR_READY_QUEUE_ADD);
     } else {
         cell->thread = pt;
@@ -170,7 +169,7 @@ void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error *err
     ALLOC_ERROR(cell_error);
     PICC_QueueCell *cell = PICC_create_queue_cell(&cell_error);
 
-    if (HAS_ERROR) {
+    if (HAS_ERROR(cell_error)) {
         ADD_ERROR(error, cell_error, ERR_WAIT_QUEUE_PUSH);
     } else {
         cell->thread = pt;
@@ -265,7 +264,7 @@ void PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error 
     ALLOC_ERROR(cell_error);
     PICC_QueueCell *cell = PICC_create_queue_cell(&cell_error);
 
-    if (HAS_ERROR) {
+    if (HAS_ERROR(cell_error)) {
         ADD_ERROR(error, cell_error, ERR_WAIT_QUEUE_PUSH_OLD);
     } else {
         cell->thread = pt;

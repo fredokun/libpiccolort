@@ -39,9 +39,6 @@ typedef pthread_cond_t PICC_Condition;
 typedef struct PICC_Knowns PICC_Knowns;
 typedef PICC_Knowns* PICC_KnownsSet;
 
-typedef enum PICC_ErrorId PICC_ErrorId;
-typedef struct PICC_Error PICC_Error;
-
 typedef char *PICC_Label;
 typedef void (*PICC_PiThreadProc) (PICC_SchedPool, PICC_PiThread);
 typedef PICC_Value* (*PICC_EvalFunction)(PICC_PiThread);

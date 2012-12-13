@@ -3,7 +3,7 @@
 #############################
 
 CC=gcc
-FLAGS=-Wall -lpthread -I\include
+FLAGS=-Wall -std=c99 -lpthread -I\include
 NAME=pithread
 BIN=bin
 LIB=lib

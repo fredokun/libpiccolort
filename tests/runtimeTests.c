@@ -65,12 +65,14 @@ bool check_commits(PICC_Error *error)
     if(!PICC_is_valid_commit(c,error))
     {
         NEW_ERROR(error, ERR_INVALID_COMMIT);
+        return false;
     }
 
     clistelem = PICC_create_commit_list_element();
     if(clistelem == NULL)
     {
         NEW_ERROR(error, ERR_NULLPOINTER_COMMITLISTELEM);
+        return false;
     }
 
     clist = PICC_create_commit_list();
