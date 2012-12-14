@@ -12,23 +12,36 @@
 #include <string.h>
 #include <error.h>
 
-// List of all error messages in order.
-static const char *PICC_error_messages[PICC_NB_ERRORS + 1] = {
-    "No error",
+#ifndef TESTS
 
-    "Released a free mutex",
-    "Scheduler deadlock",
+// APPLICATION ERROR MESSAGES /////////////////////////////////////////////////
 
-    "Can't alloc a new queue cell.",
-    "Can't push the PiThread on the ready queue.",
-    "Can't append the PiThread on the ready queue.",
-    "Can't push the PiThread on the wait queue.",
-    "Can't append the PiThread on the wait queue.",
-    "Can't push the PiThread on the old wait queue.",
+    static const char *PICC_error_messages[PICC_NB_ERRORS + 1] = {
+        "No error",
 
-    "Out of memory.",
-    "Can't create the thread."
-};
+        "Released a free mutex",
+        "Scheduler deadlock",
+
+        "Can't alloc a new queue cell.",
+        "Can't push the PiThread on the ready queue.",
+        "Can't append the PiThread on the ready queue.",
+        "Can't push the PiThread on the wait queue.",
+        "Can't append the PiThread on the wait queue.",
+        "Can't push the PiThread on the old wait queue.",
+
+        "Out of memory.",
+        "Can't create the thread."
+    };
+
+#else
+
+// TESTS ERROR MESSAGES ///////////////////////////////////////////////////////
+
+    static const char *PICC_error_messages[PICC_NB_ERRORS + 1] = {
+        "Test 1"
+    };
+
+#endif
 
 /**
  * Initializes a new error with a given error ID, file and line.
