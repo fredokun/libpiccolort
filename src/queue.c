@@ -11,10 +11,10 @@
 #include <queue.h>
 
 #define LOCK_QUEUE(q) \
-    pthread_mutex_lock(&(q->lock));
+    PICC_acquire(q->lock);
 
 #define UNLOCK_QUEUE(q) \
-    pthread_mutex_unlock(&(q->lock));
+    PICC_release(q->lock, NULL);
 
 // used for wait queue zones
 const static int ACTIVE = 1;

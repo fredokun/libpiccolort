@@ -11,12 +11,13 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include <definitions.h>
+#include <pi_thread.h>
+#include <sync.h>
 #include <error.h>
 
 typedef struct _PICC_QueueCell {
-    PICC_PiThread *thread;
-    PICC_QueueCell *next;
+    struct _PICC_PiThread *thread;
+    struct _PICC_QueueCell *next;
 } PICC_QueueCell;
 
 typedef struct _PICC_Queue {
@@ -37,16 +38,16 @@ typedef struct _PICC_WaitQueue {
 } PICC_WaitQueue;
 
 extern PICC_ReadyQueue *PICC_create_ready_queue(PICC_Error *error);
-extern void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt, PICC_Error *error);
-extern void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt, PICC_Error *error);
-extern PICC_PiThread *PICC_ready_queue_pop(PICC_ReadyQueue *rq);
+extern void PICC_ready_queue_push(PICC_ReadyQueue *rq, struct _PICC_PiThread *pt, PICC_Error *error);
+extern void PICC_ready_queue_add(PICC_ReadyQueue *rq, struct _PICC_PiThread *pt, PICC_Error *error);
+extern struct _PICC_PiThread *PICC_ready_queue_pop(PICC_ReadyQueue *rq);
 extern int PICC_ready_queue_size(PICC_ReadyQueue *rq);
 
 extern PICC_WaitQueue *PICC_create_wait_queue(PICC_Error *error);
-extern void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error *error);
-extern PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt);
-extern void PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error *error);
-extern PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq);
+extern void PICC_wait_queue_push(PICC_WaitQueue *wq, struct _PICC_PiThread *pt, PICC_Error *error);
+extern struct _PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, struct _PICC_PiThread *pt);
+extern void PICC_wait_queue_push_old(PICC_WaitQueue *wq, struct _PICC_PiThread *pt, PICC_Error *error);
+extern struct _PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq);
 extern int PICC_wait_queue_size(PICC_WaitQueue *wq);
 extern int PICC_wait_queue_max_active(PICC_WaitQueue *wq);
 extern void PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq);

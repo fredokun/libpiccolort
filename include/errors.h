@@ -32,6 +32,8 @@
         ERR_OUT_OF_MEMORY,
         ERR_THREAD_CREATE,
 
+        ERR_MUTEX_ALREADY_UNLOCKED,
+
         ERR_NULLPOINTER_PITHREAD,
         ERR_NULLPOINTER_COMMIT,
         ERR_NULLPOINTER_COMMITLISTELEM,
@@ -39,7 +41,7 @@
 
         ERR_INVALID_COMMIT,
         ERR_INVALID_VALUE,
-        
+
     } PICC_ErrorId;
 
 #else

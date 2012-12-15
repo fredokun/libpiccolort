@@ -10,11 +10,12 @@
 #ifndef RUNTIME_H
 #define RUNTIME_H
 
+#include <scheduler.h>
 #include <pi_thread.h>
 
 static const int PICC_FUEL_INIT 358
 
-extern int PICC_GC2(PICC_SchedPool schedpool);
+extern int PICC_GC2(PICC_SchedPool *schedpool);
 extern void PICC_main(int nb_core_threads, PICC_PiThreadProc *entrypoint);
 
 #endif

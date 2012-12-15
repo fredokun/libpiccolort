@@ -19,25 +19,73 @@
 #include <runtime.h>
 #include <pi_thread.h>
 
-
-
-
-void PICC_acquire_mutex(PICC_Mutex mutex)
+/**
+ * The entry point of the Runtime library. Initialises the real running
+ * threads and starts the scheduler
+ *
+ * @param nb_core_threads the maximum number of core threads that can
+ * rum at the same time
+ * @param entrypoint the entry procedure the for the first thread
+ */
+void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint)
 {
-    pthread_mutex_lock(&mutex);
-}
-
-void PICC_release_mutex(PICC_Mutex mutex, PICC_Error *error)
-{
-    if (pthread_mutex_trylock(&mutex) == 0)
+    ALLOC_ERROR(error); /* Contains all the errors */
+    PICC_SchedPool *sched_pool = PICC_create_sched_pool(&error);
+    if (HAS_ERROR(error))
     {
-        NEW_ERROR(error,ERR_KERNEL_ERROR);
+        CRASH(&error);
     }
-    else
+    PICC_PiThread *init_thread;
+    PICC_Args * args = (PICC_Args *)malloc(sizeof(PICC_Args));
+    args->error = error;
+    args->sched_pool = sched_pool;
+    void* function = PICC_sched_pool_slave;
+    int i;
+    pthread_t *threads;
+
+    int status;
+
+    threads = (pthread_t *)malloc(nb_core_threads * sizeof(pthread_t));
+    if (threads == NULL)
     {
-        pthread_mutex_unlock(&mutex);
+        NEW_ERROR(&error, ERR_OUT_OF_MEMORY);
+        CRASH(&error);
     }
 
+    sched_pool->running = true;
+
+
+    for (i = 0; i < nb_core_threads; ++i)
+    {
+        status = pthread_create(&threads[i], NULL,
+            function, args);
+        if (status)
+        {
+            NEW_ERROR(&error, ERR_THREAD_CREATE);
+            CRASH(&error);
+        }
+        ++(sched_pool->nb_slaves);
+    }
+
+/*
+    while (sched_pool.nb_waiting_slaves != sched_pool.nb_slaves) {
+        status = pthread_yield();
+        if (status)
+        {
+            NEW_ERROR(&error, ERR_READY_QUEUE_PUSH ERR_THREAD_YIELD);
+            CRASH(&error);
+        }
+    }
+*/
+
+    init_thread = PICC_create_pithread();
+    init_thread->proc = entrypoint;
+
+    PICC_ready_queue_push(sched_pool->ready, init_thread, &error);
+    if (HAS_ERROR(error))
+        CRASH(&error);
+
+    PICC_sched_pool_master(*sched_pool, 2, 2, 2);
 }
 
 
@@ -50,65 +98,9 @@ void PICC_release_mutex(PICC_Mutex mutex, PICC_Error *error)
 PICC_AtomicBoolean PICC_create_atomic_boolean()
 {
     PICC_AtomicBoolean ab;
-    pthread_mutex_init(&ab.lock, NULL);
+    PICC_init_mutex(ab.lock);
     ab.value = false;
     return ab;
-}
-
-/**
- * Acquire a mutex on an atomic boolean
- *
- * @param the atomic boolean containing the mutex
- */
-void PICC_acquire_int(PICC_AtomicInt *int_val)
-{
-    pthread_mutex_lock(&int_val->lock);
-
-}
-
-/**
- * Release a mutex on an atomic boolean
- *
- * @param the atomic boolean containing the mutex
- */
-void PICC_release_int(PICC_AtomicInt *int_val, PICC_Error *error)
-{
-    if (pthread_mutex_trylock(&int_val->lock) == 0)
-    {
-        NEW_ERROR(error,ERR_KERNEL_ERROR);
-    }
-    else
-    {
-        pthread_mutex_unlock(&int_val->lock);
-    }
-
-}
-
-/**
- * Acquire a mutex on an atomic boolean
- *
- * @param the atomic boolean containing the mutex
- */
-void PICC_acquire_bool(PICC_AtomicBoolean *bool_val)
-{
-    pthread_mutex_lock(&bool_val->lock);
-}
-
-/**
- * Release a mutex on an atomic boolean
- *
- * @param the atomic boolean containing the mutex
- */
-void PICC_release_bool(PICC_AtomicBoolean *bool_val, PICC_Error *error)
-{
-    if (pthread_mutex_trylock(&bool_val->lock) == 0)
-    {
-        NEW_ERROR(error, ERR_KERNEL_ERROR);
-    }
-    else
-    {
-        pthread_mutex_unlock(&bool_val->lock);
-    }
 }
 
 /**
@@ -125,9 +117,9 @@ int PICC_GC2(PICC_SchedPool schedpool)
 
 /**
  * Creates a new scheduler
- * 
+ *
  * @param error the error container
- * 
+ *
  * @return the created scheduler structure
  */
 PICC_SchedPool *PICC_create_sched_pool(PICC_Error *error)
@@ -146,43 +138,12 @@ PICC_SchedPool *PICC_create_sched_pool(PICC_Error *error)
 		if (HAS_ERROR(alloc2_error)) {
 			ADD_ERROR(error, alloc2_error, ERR_OUT_OF_MEMORY);
 		}
-		pool->nb_slaves = pool->nb_waiting_slaves = 0;		
+		pool->nb_slaves = pool->nb_waiting_slaves = 0;
 	}
     return pool;
 }
 
-/**
- * Create a channel which contains 10 commitments
- *
- * @return created channel
- */
 
-PICC_Channel *PICC_create_channel()
-{
-    PICC_Channel *channel = (PICC_Channel *)malloc( sizeof(PICC_Channel));
-    channel->global_rc = 1;
-    channel->incommits = (PICC_Commit *) malloc( sizeof( PICC_Commit ) * 10 );
-    channel->outcommits = (PICC_Commit *) malloc( sizeof( PICC_Commit ) * 10 );
-
-    return channel;
-
-}
-
-/**
- * Create a channel which contains commit_size commitments
- *
- * @return created channel
- */
-PICC_Channel *PICC_create_channel_cn( int commit_size )
-{
-    PICC_Channel * channel = (PICC_Channel *)malloc( sizeof(PICC_Channel));
-    channel->global_rc = 1;
-    channel->incommits = (PICC_Commit *) malloc( sizeof( PICC_Commit ) * commit_size );
-    channel->outcommits = (PICC_Commit *) malloc( sizeof( PICC_Commit ) * commit_size );
-    channel->lock = PICC_create_atomic_boolean();
-    return channel;
-
-}
 
 /**
  * Function that creates a PICC_PiThread.
@@ -231,17 +192,12 @@ void PICC_sched_pool_slave(PICC_Args *args)
                 NEW_ERROR(error,ERR_DEADLOCK);
         }
 
-        pthread_mutex_lock(&sched_pool->lock);
+        PICC_acquire(sched_pool->lock);
         sched_pool->nb_waiting_slaves++;
         PICC_cond_wait(sched_pool->cond, sched_pool->lock);
         sched_pool->nb_waiting_slaves--;
-        pthread_mutex_unlock(&sched_pool->lock);
+        PICC_release(sched_pool->lock);
     }
-}
-
-void PICC_cond_wait(PICC_Condition cond, PICC_Mutex lock)
-{
-    pthread_cond_wait(&cond, &lock);
 }
 
 /**

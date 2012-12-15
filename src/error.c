@@ -30,7 +30,9 @@
         "Can't push the PiThread on the old wait queue.",
 
         "Out of memory.",
-        "Can't create the thread."
+        "Can't create the thread.",
+
+        "The mutex is already unlocked."
     };
 
 #else
