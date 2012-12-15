@@ -18,6 +18,8 @@
 #include <sync.h>
 #include <error.h>
 
+static const int PICC_FUEL_INIT = 358;
+
 struct _PICC_PiThread;
 struct _PICC_SchedPool;
 typedef int PICC_Label;
@@ -35,7 +37,7 @@ typedef struct _PICC_PiThread {
     PICC_StatusKind status;
     bool *enabled;
     int enabled_length;
-    struct _PICC_Knowns *knowns;
+    struct _PICC_KnownsSet *knowns;
     PICC_Value **env;
     int env_length;
     struct _PICC_Commit *commit;
@@ -48,8 +50,8 @@ typedef struct _PICC_PiThread {
     PICC_Mutex lock;
 } PICC_PiThread;
 
-extern PICC_PiThread *PICC_create_pithread(PICC_Error *error, int env_length);
-extern bool PICC_can_awake(PICC_PiThread *pt, struct _PICC_Commit *c);
-extern void PICC_awake(struct _PICC_SchedPool *sched, PICC_PiThread *pt);
+extern PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, PICC_Error *error);
+extern bool PICC_can_awake(PICC_PiThread *pt, struct _PICC_Commit *commit, PICC_Error *error);
+extern void PICC_awake(struct _PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Error *error);
 
 #endif

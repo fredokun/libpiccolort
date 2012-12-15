@@ -145,17 +145,6 @@ PICC_SchedPool *PICC_create_sched_pool(PICC_Error *error)
 
 
 
-/**
- * Function that creates a PICC_PiThread.
- * @return PICC_PiThread a fresh new created PiThread
- */
-PICC_PiThread *PICC_create_pithread()
-{
-    PICC_PiThread *new_thread = (PICC_PiThread*)malloc(sizeof(PICC_PiThread));
-    new_thread->knowns = (PICC_KnownsSet)malloc(sizeof(PICC_KnownsSet));
-    new_thread->fuel = FUEL_INIT;
-    return new_thread;
-}
 
 /**
  * Function that creates a clock
@@ -212,33 +201,6 @@ void PICC_sched_pool_master(PICC_SchedPool sched_pool, int std_gc_fuel, int quic
     printf("Not implemented yet.\n");
     return;
 }
-
-
-/**
- * Function that register an output commitment according to pithread and channel
- * @param p PiThread
- * @param c PICC_Commit
- * @return ? ?????????????
- */
-int PICC_can_awake(PICC_PiThread p, PICC_Commit c)
-{
-    printf("Not implemented yet.\n");
-    return 0;
-}
-
-/**
- * ?????????????
- * @param sched ???
- * @param p ????
- * @return ? ?????????????
- */
-void PICC_awake(PICC_SchedPool sched, PICC_PiThread p)
-{
-    printf("Not implemented yet.\n");
-    return;
-}
-
-/
 
 /**
  * Function that creates the PICC_CommitList
