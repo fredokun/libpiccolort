@@ -20,19 +20,19 @@
  */
 PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, PICC_Error *error)
 {
-	// TO BE COMPLETED...
-	NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
-	return NULL;
+    // TO BE COMPLETED...
+    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    return NULL;
 
-	// PICC_ALLOC(thread, PICC_PiThread, error) {
-	// 	ALLOC_ERROR(sub_error);
-	// 	thread->knowns = PICC_create_knowns_set(knowns_length, &sub_error);
-	// 	if (HAS_ERROR(sub_error)) {
-	// 		ADD_ERROR(error, sub_error, ERR_THREAD_CREATE);
-	// 	} else {
-	// 		thread->fuel = PICC_FUEL_INIT;
-	// 	}
-	// }
+    // PICC_ALLOC(thread, PICC_PiThread, error) {
+    //  ALLOC_ERROR(sub_error);
+    //  thread->knowns = PICC_create_knowns_set(knowns_length, &sub_error);
+    //  if (HAS_ERROR(sub_error)) {
+    //      ADD_ERROR(error, sub_error, ERR_THREAD_CREATE);
+    //  } else {
+    //      thread->fuel = PICC_FUEL_INIT;
+    //  }
+    // }
 
  //    return new_thread;
 }
@@ -46,8 +46,8 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, PICC_Erro
  */
 bool PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit, PICC_Error *error)
 {
-	NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
-	return false;
+    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    return false;
 }
 
 /**
@@ -58,5 +58,5 @@ bool PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit, PICC_Error *error)
  */
 void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Error *error)
 {
-	NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
 }

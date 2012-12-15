@@ -37,8 +37,8 @@ typedef struct _PICC_Knowns {
 } PICC_Knowns;
 
 typedef struct _PICC_KnownsSet {
-	PICC_Knowns **knowns;
-	int length;
+    PICC_Knowns **knowns;
+    int length;
 } PICC_KnownsSet;
 
 extern PICC_Channel *PICC_create_channel(PICC_Error *error);

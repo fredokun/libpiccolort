@@ -17,11 +17,11 @@
     PICC_release(commit->thread->clock->val->lock, NULL);
 
 #define INIT_COMMIT(commit, pt, ch, pc) \
-	commit->thread = pt; \
-	commit->cont_pc = pc; \
-	commit->clock = pt->clock; \
-	commit->clockval = pt->clock->val; \
-	commit->channel = ch;
+    commit->thread = pt; \
+    commit->cont_pc = pc; \
+    commit->clock = pt->clock; \
+    commit->clockval = pt->clock->val; \
+    commit->channel = ch;
 
 /**
  * Creates and returns a commitment.
@@ -30,11 +30,11 @@
  */
 PICC_Commit *PICC_create_commitment(PICC_Error *error)
 {
-	PICC_ALLOC(commit, PICC_Commit, error) {
-	    commit->thread = NULL;
-	    commit->clock = NULL;
-	    commit->channel = NULL;
-	}
+    PICC_ALLOC(commit, PICC_Commit, error) {
+        commit->thread = NULL;
+        commit->clock = NULL;
+        commit->channel = NULL;
+    }
 
     return commit;
 }
@@ -47,12 +47,12 @@ PICC_Commit *PICC_create_commitment(PICC_Error *error)
  */
 PICC_CommitList *PICC_create_commit_list(PICC_Error *error)
 {
-	PICC_ALLOC(clist, PICC_CommitList, error) {
-	    clist->head = NULL;
-	    clist->tail = NULL;
-	    clist->size = 0;
-	}
-	return clist;
+    PICC_ALLOC(clist, PICC_CommitList, error) {
+        clist->head = NULL;
+        clist->tail = NULL;
+        clist->size = 0;
+    }
+    return clist;
 }
 
 /**
@@ -64,10 +64,10 @@ PICC_CommitList *PICC_create_commit_list(PICC_Error *error)
  */
 PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PICC_Error *error)
 {
-	PICC_ALLOC(clist_elem, PICC_CommitListElement, error) {
-	    clist_elem->commit = commit;
-	    clist_elem->next = NULL;
-	}
+    PICC_ALLOC(clist_elem, PICC_CommitListElement, error) {
+        clist_elem->commit = commit;
+        clist_elem->next = NULL;
+    }
     return clist_elem;
 }
 
@@ -82,27 +82,27 @@ PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PIC
  */
 void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_EvalFunction *eval, PICC_Label cont_pc, PICC_Error *error)
 {
-	PICC_ALLOC(out, PICC_OutCommit, error) {
-	    out->eval_func = eval;
-	    ALLOC_ERROR(sub_error);
-	    PICC_Commit *commit = PICC_create_commitment(&sub_error);
-	    if (HAS_ERROR(sub_error)) {
-	    	ADD_ERROR(error, sub_error, ERR_REGISTER_OUT_COMMIT);
-	    	free(out);
-	    } else {
-	    	INIT_COMMIT(commit, pt, ch, cont_pc);
-			commit->content.out = out;
-		    commit->type = PICC_OUT_COMMIT;
+    PICC_ALLOC(out, PICC_OutCommit, error) {
+        out->eval_func = eval;
+        ALLOC_ERROR(sub_error);
+        PICC_Commit *commit = PICC_create_commitment(&sub_error);
+        if (HAS_ERROR(sub_error)) {
+            ADD_ERROR(error, sub_error, ERR_REGISTER_OUT_COMMIT);
+            free(out);
+        } else {
+            INIT_COMMIT(commit, pt, ch, cont_pc);
+            commit->content.out = out;
+            commit->type = PICC_OUT_COMMIT;
 
-		    ALLOC_ERROR(add_error);
-		    PICC_commit_list_add(pt->commits, commit, &add_error);
-		    if (HAS_ERROR(add_error)) {
-		    	ADD_ERROR(error, add_error, ERR_REGISTER_IN_COMMIT);
-		    	free(commit);
-		    	free(out);
-		    }
-		}
-	}
+            ALLOC_ERROR(add_error);
+            PICC_commit_list_add(pt->commits, commit, &add_error);
+            if (HAS_ERROR(add_error)) {
+                ADD_ERROR(error, add_error, ERR_REGISTER_IN_COMMIT);
+                free(commit);
+                free(out);
+            }
+        }
+    }
 }
 
 /**
@@ -116,27 +116,27 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
  */
 void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int refvar, int cont_pc, PICC_Error *error)
 {
-	PICC_ALLOC(in, PICC_InCommit, error) {
-    	in->refvar = refvar;
-	    ALLOC_ERROR(sub_error);
-	    PICC_Commit *commit = PICC_create_commitment(&sub_error);
-	    if (HAS_ERROR(sub_error)) {
-	    	ADD_ERROR(error, sub_error, ERR_REGISTER_IN_COMMIT);
-	    	free(in);
-	    } else {
-	    	INIT_COMMIT(commit, pt, ch, cont_pc);
-		    commit->content.in = in;
-		    commit->type = PICC_IN_COMMIT;
+    PICC_ALLOC(in, PICC_InCommit, error) {
+        in->refvar = refvar;
+        ALLOC_ERROR(sub_error);
+        PICC_Commit *commit = PICC_create_commitment(&sub_error);
+        if (HAS_ERROR(sub_error)) {
+            ADD_ERROR(error, sub_error, ERR_REGISTER_IN_COMMIT);
+            free(in);
+        } else {
+            INIT_COMMIT(commit, pt, ch, cont_pc);
+            commit->content.in = in;
+            commit->type = PICC_IN_COMMIT;
 
-		    ALLOC_ERROR(add_error);
-		    PICC_commit_list_add(pt->commits, commit, &add_error);
-		    if (HAS_ERROR(add_error)) {
-		    	ADD_ERROR(error, add_error, ERR_REGISTER_IN_COMMIT);
-		    	free(commit);
-		    	free(in);
-		    }
-		}
-	}
+            ALLOC_ERROR(add_error);
+            PICC_commit_list_add(pt->commits, commit, &add_error);
+            if (HAS_ERROR(add_error)) {
+                ADD_ERROR(error, add_error, ERR_REGISTER_IN_COMMIT);
+                free(commit);
+                free(in);
+            }
+        }
+    }
 }
 
 /**
@@ -147,7 +147,7 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
  */
 bool PICC_is_valid_commit(PICC_Commit *commit)
 {
-	bool valid = false;
+    bool valid = false;
     LOCK_CLOCK(commit);
     if (commit->clock == commit->thread->clock
     && commit->clockval == commit->thread->clock->val)
@@ -166,15 +166,15 @@ bool PICC_is_valid_commit(PICC_Commit *commit)
  */
 void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Error *error)
 {
-	ALLOC_ERROR(create_error);
+    ALLOC_ERROR(create_error);
     PICC_CommitListElement *clist_elem = PICC_create_commit_list_element(commit, &create_error);
     if (HAS_ERROR(create_error)) {
-    	ADD_ERROR(error, create_error, ERR_ADD_COMMIT_TO_LIST);
+        ADD_ERROR(error, create_error, ERR_ADD_COMMIT_TO_LIST);
     } else {
-	    clist->tail->next = clist_elem;
-	    clist->tail = clist_elem;
-	    clist->size++;
-	}
+        clist->tail->next = clist_elem;
+        clist->tail = clist_elem;
+        clist->size++;
+    }
 }
 
 /**

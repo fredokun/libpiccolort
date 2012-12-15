@@ -27,7 +27,7 @@
  */
 PICC_Channel *PICC_create_channel(PICC_Error *error)
 {
-	return PICC_create_channel_cn(10, error);
+    return PICC_create_channel_cn(10, error);
 }
 
 /**
@@ -38,16 +38,16 @@ PICC_Channel *PICC_create_channel(PICC_Error *error)
  */
 PICC_Channel *PICC_create_channel_cn(int commit_size, PICC_Error *error)
 {
-	PICC_ALLOC(channel, PICC_Channel, error) {
-	    channel->global_rc = 1;
-	    channel->incommits = malloc(sizeof(PICC_Commit) * commit_size);
-	    channel->outcommits = malloc(sizeof(PICC_Commit) * commit_size);
-	    if (channel->incommits == NULL || channel->outcommits == NULL) {
-	    	NEW_ERROR(error, ERR_OUT_OF_MEMORY);
-	    	free(channel);
-	    	channel = NULL;
-	    }
-	}
+    PICC_ALLOC(channel, PICC_Channel, error) {
+        channel->global_rc = 1;
+        channel->incommits = malloc(sizeof(PICC_Commit) * commit_size);
+        channel->outcommits = malloc(sizeof(PICC_Commit) * commit_size);
+        if (channel->incommits == NULL || channel->outcommits == NULL) {
+            NEW_ERROR(error, ERR_OUT_OF_MEMORY);
+            free(channel);
+            channel = NULL;
+        }
+    }
     return channel;
 }
 
@@ -59,11 +59,11 @@ PICC_Channel *PICC_create_channel_cn(int commit_size, PICC_Error *error)
  */
 PICC_Knowns *PICC_create_knowns(PICC_Error *error)
 {
-	PICC_ALLOC(knowns, PICC_Knowns, error) {
-		knowns->channel = NULL;
-		knowns->state = PICC_UNKNOWN;
-	}
-	return knowns;
+    PICC_ALLOC(knowns, PICC_Knowns, error) {
+        knowns->channel = NULL;
+        knowns->state = PICC_UNKNOWN;
+    }
+    return knowns;
 }
 
 /**
@@ -74,17 +74,17 @@ PICC_Knowns *PICC_create_knowns(PICC_Error *error)
  */
 PICC_KnownsSet *PICC_create_knowns_set(int length, PICC_Error *error)
 {
-	PICC_ALLOC(knowns_set, PICC_KnownsSet, error) {
-		knowns_set->knowns = malloc(sizeof(PICC_Knowns) * length);
-		if (knowns_set->knowns == NULL) {
-			NEW_ERROR(error, ERR_OUT_OF_MEMORY);
-			free(knowns_set);
-			knowns_set = NULL;
-		} else {
-			knowns_set->length = length;
-		}
-	}
-	return knowns_set;
+    PICC_ALLOC(knowns_set, PICC_KnownsSet, error) {
+        knowns_set->knowns = malloc(sizeof(PICC_Knowns) * length);
+        if (knowns_set->knowns == NULL) {
+            NEW_ERROR(error, ERR_OUT_OF_MEMORY);
+            free(knowns_set);
+            knowns_set = NULL;
+        } else {
+            knowns_set->length = length;
+        }
+    }
+    return knowns_set;
 }
 
 /**
@@ -106,7 +106,7 @@ void PICC_channel_incr_ref_count(PICC_Channel *channel , PICC_Error *error)
  */
 void PICC_channel_dec_ref_count(PICC_Channel *channel , PICC_Error *error)
 {
-   	LOCK_CHANNEL(channel);
+    LOCK_CHANNEL(channel);
     channel->global_rc--;
     RELEASE_CHANNEL(channel);
 
@@ -122,7 +122,7 @@ void PICC_channel_dec_ref_count(PICC_Channel *channel , PICC_Error *error)
  */
 void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
 {
-	NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
 }
 
 /**
@@ -134,8 +134,8 @@ void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
  */
 PICC_KnownsSet *PICC_knowns_set_knows(PICC_KnownsSet *ks, PICC_Error *error)
 {
-	NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
-	return NULL;
+    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    return NULL;
 }
 
 /**
@@ -147,7 +147,7 @@ PICC_KnownsSet *PICC_knowns_set_knows(PICC_KnownsSet *ks, PICC_Error *error)
  */
 PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks, PICC_Error *error)
 {
-	NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
     return NULL;
 }
 
@@ -166,6 +166,6 @@ PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks, PICC_Error *error)
  */
 bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch, PICC_Error *error)
 {
-	NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
-	return false;
+    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    return false;
 }

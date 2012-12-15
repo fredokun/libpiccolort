@@ -28,21 +28,21 @@
  */
 PICC_SchedPool *PICC_create_sched_pool(PICC_Error *error)
 {
-	PICC_ALLOC(pool, PICC_SchedPool, error) {
-		ALLOC_ERROR(sub_error);
-		pool->ready = PICC_create_ready_queue(&sub_error);
-		pool->wait = PICC_create_wait_queue(&sub_error);
-		if (HAS_ERROR(sub_error)) {
-			ADD_ERROR(error, sub_error, ERR_SCHED_POOL_CREATE);
-			free(pool);
-			pool = NULL;
-		} else {
-			pool->nb_slaves = 0;
-			pool->nb_waiting_slaves = 0;
-			pool->running = false;
-		}
-	}
-	return pool;
+    PICC_ALLOC(pool, PICC_SchedPool, error) {
+        ALLOC_ERROR(sub_error);
+        pool->ready = PICC_create_ready_queue(&sub_error);
+        pool->wait = PICC_create_wait_queue(&sub_error);
+        if (HAS_ERROR(sub_error)) {
+            ADD_ERROR(error, sub_error, ERR_SCHED_POOL_CREATE);
+            free(pool);
+            pool = NULL;
+        } else {
+            pool->nb_slaves = 0;
+            pool->nb_waiting_slaves = 0;
+            pool->running = false;
+        }
+    }
+    return pool;
 }
 
 /**
@@ -78,7 +78,7 @@ void PICC_sched_pool_slave(PICC_Args *args)
         while(PICC_ready_queue_size(sched_pool->ready)) {
             current = PICC_ready_queue_pop(sched_pool->ready);
             do {
-            	current->proc(sched_pool, current);
+                current->proc(sched_pool, current);
             } while(current->status == PICC_STATUS_CALL);
 
             if (current->status == PICC_STATUS_BLOCKED) // && safe_choice
@@ -104,5 +104,5 @@ void PICC_sched_pool_slave(PICC_Args *args)
  */
 void PICC_sched_pool_master(PICC_SchedPool *sp, int std_gc_fuel, int quick_gc_fuel, int active_factor, PICC_Error *error)
 {
-	NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
 }
