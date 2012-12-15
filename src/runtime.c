@@ -115,34 +115,6 @@ int PICC_GC2(PICC_SchedPool schedpool)
     return 0;
 }
 
-/**
- * Creates a new scheduler
- *
- * @param error the error container
- *
- * @return the created scheduler structure
- */
-PICC_SchedPool *PICC_create_sched_pool(PICC_Error *error)
-{
-    PICC_SchedPool *pool = (PICC_SchedPool *)malloc(sizeof(struct PICC_SchedPool));
-    if (pool == NULL) {
-        NEW_ERROR(error, ERR_OUT_OF_MEMORY);
-    } else {
-		ALLOC_ERROR(alloc1_error);
-		pool->ready = PICC_create_ready_queue(&alloc1_error);
-		if (HAS_ERROR(alloc1_error)) {
-			ADD_ERROR(error, alloc1_error, ERR_OUT_OF_MEMORY);
-		}
-		ALLOC_ERROR(alloc2_error);
-		pool->wait = PICC_create_wait_queue(&alloc2_error);
-		if (HAS_ERROR(alloc2_error)) {
-			ADD_ERROR(error, alloc2_error, ERR_OUT_OF_MEMORY);
-		}
-		pool->nb_slaves = pool->nb_waiting_slaves = 0;
-	}
-    return pool;
-}
-
 
 
 
@@ -154,52 +126,6 @@ PICC_Clock *PICC_create_clock()
 {
     PICC_Clock * new_clock = (PICC_Clock*)malloc(sizeof(PICC_Clock));
     return new_clock;
-}
-
-/**
- * Function that handle the behavior of a sched_pool
- * @param sched_pool the sched_pool to manage
- */
-void PICC_sched_pool_slave(PICC_Args *args)
-{
-    PICC_SchedPool *sched_pool = args->sched_pool;
-    PICC_Error *error = &(args->error);
-
-    PICC_PiThread *current;
-
-    while(sched_pool->running)
-    {
-        while(PICC_ready_queue_size(sched_pool->ready))
-        {
-            current = PICC_ready_queue_pop(sched_pool->ready);
-            do
-            {
-                current->proc(*sched_pool, *current);
-            } while(current->status == PICC_STATUS_CALL);
-
-            if(current->status == PICC_STATUS_BLOCKED) // && safe_choice
-                NEW_ERROR(error,ERR_DEADLOCK);
-        }
-
-        PICC_acquire(sched_pool->lock);
-        sched_pool->nb_waiting_slaves++;
-        PICC_cond_wait(sched_pool->cond, sched_pool->lock);
-        sched_pool->nb_waiting_slaves--;
-        PICC_release(sched_pool->lock);
-    }
-}
-
-/**
- * ????????????????????
- * @param sched_pool ????????????????
- * @param std_gc_fuel ?????????????
- * @param quick_gc_fuel ????????????
- * @param active_factor ?????????????
- */
-void PICC_sched_pool_master(PICC_SchedPool sched_pool, int std_gc_fuel, int quick_gc_fuel, int active_factor)
-{
-    printf("Not implemented yet.\n");
-    return;
 }
 
 /**

@@ -23,7 +23,7 @@ static const int PICC_FUEL_INIT = 358;
 struct _PICC_PiThread;
 struct _PICC_SchedPool;
 typedef int PICC_Label;
-typedef void (*PICC_PiThreadProc)(struct _PICC_SchedPool *, struct _PICC_PiThread *);
+typedef void (PICC_PiThreadProc)(struct _PICC_SchedPool *, struct _PICC_PiThread *);
 
 typedef enum _PICC_StatusKind {
     PICC_STATUS_RUN,

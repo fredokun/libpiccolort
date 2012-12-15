@@ -16,7 +16,7 @@
 #include <error.h>
 
 struct _PICC_PiThread;
-typedef struct _PICC_Value *(*PICC_EvalFunction)(struct _PICC_PiThread *);
+typedef struct _PICC_Value *(PICC_EvalFunction)(struct _PICC_PiThread *);
 
 typedef enum _PICC_CommitType {
     PICC_IN_COMMIT,

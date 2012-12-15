@@ -35,6 +35,7 @@
         "Can't register a new out commit.",
         "Can't register a new in commit.",
         "Can't create the thread.",
+        "Can't create the scheduler pool.",
 
         "The mutex is already unlocked."
     };
