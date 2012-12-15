@@ -34,10 +34,17 @@ typedef struct _PICC_Value {
     } content;
 } PICC_Value;
 
-typedef struct _PICC_Value PICC_Clock;
 typedef struct _PICC_Value PICC_AtomicBoolean;
 typedef struct _PICC_Value PICC_AtomicInt;
 
-extern PICC_Clock *PICC_create_clock();
+typedef struct _PICC_Clock {
+    PICC_AtomicInt *val;
+} PICC_Clock;
+
+
+extern PICC_Value *PICC_create_value(PICC_Error *error);
+extern PICC_AtomicBoolean *PICC_create_atomic_bool(PICC_Error *error);
+extern PICC_AtomicInt *PICC_create_atomic_int(PICC_Error *error);
+extern PICC_Clock *PICC_create_clock(PICC_Error *error);
 
 #endif

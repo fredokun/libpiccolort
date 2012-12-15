@@ -29,7 +29,11 @@
         "Can't append the PiThread on the wait queue.",
         "Can't push the PiThread on the old wait queue.",
 
+        "Not implemented yet.",
         "Out of memory.",
+        "Can't create the commit.",
+        "Can't register a new out commit.",
+        "Can't register a new in commit.",
         "Can't create the thread.",
 
         "The mutex is already unlocked."

@@ -20,7 +20,7 @@
 
 struct _PICC_PiThread;
 struct _PICC_SchedPool;
-typedef char * PICC_Label;
+typedef int PICC_Label;
 typedef void (*PICC_PiThreadProc)(struct _PICC_SchedPool *, struct _PICC_PiThread *);
 
 typedef enum _PICC_StatusKind {
