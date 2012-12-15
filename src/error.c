@@ -16,10 +16,8 @@
 
 // APPLICATION ERROR MESSAGES /////////////////////////////////////////////////
 
-    static const char *PICC_error_messages[PICC_NB_ERRORS + 1] = {
+    static const char *PICC_error_messages[PICC_NB_ERRORS] = {
         "No error",
-
-        "Released a free mutex",
         "Scheduler deadlock",
 
         "Can't alloc a new queue cell.",
@@ -29,8 +27,18 @@
         "Can't append the PiThread on the wait queue.",
         "Can't push the PiThread on the old wait queue.",
 
+        "Not implemented yet.",
         "Out of memory.",
-        "Can't create the thread."
+        "Can't create the commit.",
+        "Can't add the commit to given commit list.",
+        "Can't register a new out commit.",
+        "Can't register a new in commit.",
+        "Can't create the PiThread.",
+        "Can't create the POSIX thread.",
+        "Can't create the scheduler pool.",
+        "Can't create the clock.",
+
+        "Released a free mutex"
     };
 
 #else

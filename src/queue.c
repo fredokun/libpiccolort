@@ -11,10 +11,10 @@
 #include <queue.h>
 
 #define LOCK_QUEUE(q) \
-    pthread_mutex_lock(&(q->lock));
+    PICC_acquire(q->lock);
 
-#define UNLOCK_QUEUE(q) \
-    pthread_mutex_unlock(&(q->lock));
+#define RELEASE_QUEUE(q) \
+    PICC_release(q->lock, NULL);
 
 // used for wait queue zones
 const static int ACTIVE = 1;
@@ -91,7 +91,7 @@ void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt, PICC_Error *e
         rq->q.size++;
     }
 
-    UNLOCK_QUEUE(rq);
+    RELEASE_QUEUE(rq);
 }
 
 /**
@@ -128,7 +128,7 @@ void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt, PICC_Error *er
         rq->q.size++;
     }
 
-    UNLOCK_QUEUE(rq);
+    RELEASE_QUEUE(rq);
 }
 
 /**
@@ -151,7 +151,7 @@ PICC_PiThread *PICC_ready_queue_pop(PICC_ReadyQueue *rq)
         rq->q.size--;
     }
 
-    UNLOCK_QUEUE(rq);
+    RELEASE_QUEUE(rq);
     return popped_thread;
 }
 
@@ -165,7 +165,7 @@ int PICC_ready_queue_size(PICC_ReadyQueue *rq)
     ASSERT(rq != NULL);
     LOCK_QUEUE(rq);
     int size = rq->q.size;
-    UNLOCK_QUEUE(rq);
+    RELEASE_QUEUE(rq);
     return size;
 }
 
@@ -227,7 +227,7 @@ void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error *err
         wq->active.size++;
     }
 
-    UNLOCK_QUEUE(wq);
+    RELEASE_QUEUE(wq);
 }
 
 
@@ -273,7 +273,7 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
                 wq->old.size--;
             }
 
-            UNLOCK_QUEUE(wq);
+            RELEASE_QUEUE(wq);
             return current->thread;
         }
 
@@ -284,7 +284,7 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
             zone = OLD;
     }
 
-    UNLOCK_QUEUE(wq);
+    RELEASE_QUEUE(wq);
     return NULL;
 }
 
@@ -325,7 +325,7 @@ void PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error 
         wq->old.size++;
     }
 
-    UNLOCK_QUEUE(wq);
+    RELEASE_QUEUE(wq);
 }
 
 /**
@@ -358,7 +358,7 @@ PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq)
         }
     }
 
-    UNLOCK_QUEUE(wq);
+    RELEASE_QUEUE(wq);
     return popped_thread;
 }
 
@@ -373,7 +373,7 @@ int PICC_wait_queue_size(PICC_WaitQueue *wq)
     LOCK_QUEUE(wq);
     int size = wq->active.size;
     size += wq->old.size;
-    UNLOCK_QUEUE(wq);
+    RELEASE_QUEUE(wq);
     return size;
 }
 
@@ -387,7 +387,7 @@ int PICC_wait_queue_max_active(PICC_WaitQueue *wq)
     ASSERT(wq != NULL);
     LOCK_QUEUE(wq);
     int nb = wq->active.size;
-    UNLOCK_QUEUE(wq);
+    RELEASE_QUEUE(wq);
     return nb;
 }
 
@@ -407,5 +407,5 @@ void PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq)
     wq->active.head = NULL;
     wq->active.tail = NULL;
 
-    UNLOCK_QUEUE(wq);
+    RELEASE_QUEUE(wq);
 }

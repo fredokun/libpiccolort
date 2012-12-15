@@ -19,7 +19,6 @@
 
     // List of all errors defined.
     typedef enum _PICC_ErrorId {
-        ERR_KERNEL_ERROR,
         ERR_DEADLOCK,
 
         ERR_ALLOC_QUEUE_CELL,
@@ -29,8 +28,18 @@
         ERR_WAIT_QUEUE_ADD,
         ERR_WAIT_QUEUE_PUSH_OLD,
 
+        ERR_NOT_IMPLEMENTED,
         ERR_OUT_OF_MEMORY,
+        ERR_COMMIT_CREATE,
+        ERR_ADD_COMMIT_TO_LIST,
+        ERR_REGISTER_OUT_COMMIT,
+        ERR_REGISTER_IN_COMMIT,
         ERR_THREAD_CREATE,
+        ERR_PTHREAD_CREATE,
+        ERR_SCHED_POOL_CREATE,
+        ERR_CLOCK_CREATE,
+
+        ERR_MUTEX_ALREADY_UNLOCKED,
 
         ERR_NULLPOINTER_PITHREAD,
         ERR_NULLPOINTER_COMMIT,
@@ -39,7 +48,7 @@
 
         ERR_INVALID_COMMIT,
         ERR_INVALID_VALUE,
-        
+
     } PICC_ErrorId;
 
 #else

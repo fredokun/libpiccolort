@@ -24,18 +24,19 @@
  */
 bool check_pithread(PICC_Error *error)
 {
-    PICC_PiThread *p;
 
-    p = PICC_create_pithread();
-    if(p == NULL)
-    {
+    ALLOC_ERROR(create_error);
+    PICC_PiThread *p = PICC_create_pithread(1, 1, &create_error);
+    if (HAS_ERROR(create_error)) {
+        FORWARD_ERROR(error, create_error);
+    } else if (p == NULL) {
         NEW_ERROR(error,ERR_NULLPOINTER_PITHREAD);
-        return false;
+    } else {
+        free(p);
+        return true;
     }
 
-    free(p);
-
-    return true;
+    return false;
 }
 
 /**
@@ -52,32 +53,52 @@ bool check_commits(PICC_Error *error)
     PICC_CommitListElement *clistelem;
     PICC_CommitList *clist;
 
-    c = PICC_create_commitment();
-    if(c == NULL)
-    {
+    ALLOC_ERROR(create_error);
+    c = PICC_create_commitment(&create_error);
+    if (HAS_ERROR(create_error)) {
+        FORWARD_ERROR(error, create_error);
+        return false;
+
+    } else if (c == NULL) {
         NEW_ERROR(error, ERR_NULLPOINTER_COMMIT);
         return false;
     }
-    c2 = PICC_create_commitment();
-    c3 = PICC_create_commitment();
+
+    c2 = PICC_create_commitment(&create_error);
+    if (HAS_ERROR(create_error)) {
+        FORWARD_ERROR(error, create_error);
+        return false;
+    }
+
+    c3 = PICC_create_commitment(&create_error);
+    if (HAS_ERROR(create_error)) {
+        FORWARD_ERROR(error, create_error);
+        return false;
+    }
+
 
     //is_valid ?
-    if(!PICC_is_valid_commit(c,error))
+    if(!PICC_is_valid_commit(c))
     {
         NEW_ERROR(error, ERR_INVALID_COMMIT);
         return false;
     }
 
-    clistelem = PICC_create_commit_list_element();
-    if(clistelem == NULL)
-    {
+    clistelem = PICC_create_commit_list_element(c, &create_error);
+    if (HAS_ERROR(create_error)) {
+        FORWARD_ERROR(error, create_error);
+        return false;
+    } else if(clistelem == NULL) {
         NEW_ERROR(error, ERR_NULLPOINTER_COMMITLISTELEM);
         return false;
     }
 
-    clist = PICC_create_commit_list();
-    if(clist == NULL)
-    {
+    clist = PICC_create_commit_list(&create_error);
+    if (HAS_ERROR(create_error)) {
+        FORWARD_ERROR(error, create_error);
+        return false;
+
+    } else if(clist == NULL) {
         NEW_ERROR(error, ERR_NULLPOINTER_COMMITLIST);
         return false;
     }
@@ -89,9 +110,14 @@ bool check_commits(PICC_Error *error)
     c2->cont_pc = 2;
     c3->cont_pc = 3;
 
-    PICC_commit_list_add(clist, c);
-    PICC_commit_list_add(clist, c2);
-    PICC_commit_list_add(clist, c3);
+    ALLOC_ERROR(add_error);
+    PICC_commit_list_add(clist, c, &add_error);
+    PICC_commit_list_add(clist, c2, &add_error);
+    PICC_commit_list_add(clist, c3, &add_error);
+    if (HAS_ERROR(add_error)) {
+        FORWARD_ERROR(error, add_error);
+        return false;
+    }
 
     if(clist->head == NULL || clist->tail == NULL)
     {
