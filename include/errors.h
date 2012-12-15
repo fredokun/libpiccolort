@@ -19,7 +19,6 @@
 
     // List of all errors defined.
     typedef enum _PICC_ErrorId {
-        ERR_KERNEL_ERROR,
         ERR_DEADLOCK,
 
         ERR_ALLOC_QUEUE_CELL,

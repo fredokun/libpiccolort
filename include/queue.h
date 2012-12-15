@@ -7,7 +7,6 @@
  * @author Mickaël MENU
  */
 
-
 #ifndef QUEUE_H
 #define QUEUE_H
 

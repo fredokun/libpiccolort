@@ -15,7 +15,7 @@ INCLUDE=include
 SRC=src
 TESTS=tests
 HEADERS=runtime.h pithread.h error.h definitions.h entry.h errors.h queue.h
-OBJ=$(LIB)/main.o $(LIB)/pi_thread.o $(LIB)/commit.o $(LIB)/channel.o $(LIB)/scheduler.o $(LIB)/value.o $(LIB)/queue.o $(LIB)/sync.o $(LIB)/runtime.o $(LIB)/error.o $(LIB)/runtime_test.o $(LIB)/queue_test.o
+OBJ=$(LIB)/pi_thread.o $(LIB)/commit.o $(LIB)/channel.o $(LIB)/scheduler.o $(LIB)/value.o $(LIB)/queue.o $(LIB)/sync.o $(LIB)/runtime.o $(LIB)/error.o $(LIB)/runtime_test.o $(LIB)/queue_test.o
 
 all : clean init $(BIN)/$(NAME)
 

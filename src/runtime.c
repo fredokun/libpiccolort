@@ -15,6 +15,15 @@
 #include <queue.h>
 
 /**
+ * Temporary main entry point.
+ */
+int main() {
+    ALLOC_ERROR(error);
+    NEW_ERROR(&error, ERR_NOT_IMPLEMENTED);
+    CRASH(&error);
+}
+
+/**
  * Second generation garbage collector.
  *
  * @param schedpool The schedpool to clean

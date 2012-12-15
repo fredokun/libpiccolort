@@ -16,10 +16,8 @@
 
 // APPLICATION ERROR MESSAGES /////////////////////////////////////////////////
 
-    static const char *PICC_error_messages[PICC_NB_ERRORS + 1] = {
+    static const char *PICC_error_messages[PICC_NB_ERRORS] = {
         "No error",
-
-        "Released a free mutex",
         "Scheduler deadlock",
 
         "Can't alloc a new queue cell.",
@@ -40,7 +38,7 @@
         "Can't create the scheduler pool.",
         "Can't create the clock.",
 
-        "The mutex is already unlocked."
+        "Released a free mutex"
     };
 
 #else
