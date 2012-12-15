@@ -13,7 +13,7 @@
 #include <scheduler.h>
 #include <pi_thread.h>
 
-extern int PICC_GC2(PICC_SchedPool *schedpool);
+extern int PICC_GC2(PICC_SchedPool *sp, PICC_Error *error);
 extern void PICC_main(int nb_core_threads, PICC_PiThreadProc *entrypoint);
 
 #endif

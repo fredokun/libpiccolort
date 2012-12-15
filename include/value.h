@@ -42,7 +42,7 @@ typedef struct _PICC_Clock {
 } PICC_Clock;
 
 
-extern PICC_Value *PICC_create_value(PICC_Error *error);
+extern PICC_Value *PICC_create_value(PICC_ValueKind type, PICC_Error *error);
 extern PICC_AtomicBoolean *PICC_create_atomic_bool(PICC_Error *error);
 extern PICC_AtomicInt *PICC_create_atomic_int(PICC_Error *error);
 extern PICC_Clock *PICC_create_clock(PICC_Error *error);

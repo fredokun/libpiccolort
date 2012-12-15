@@ -46,6 +46,23 @@ PICC_SchedPool *PICC_create_sched_pool(PICC_Error *error)
 }
 
 /**
+ * Creates a new set of arguments to passe to a scheduler.
+ *
+ * @param sp Scheduler pool
+ * @param err Scheduler error stack
+ * @param error Error stack
+ * @return Created set of arguments
+ */
+PICC_Args *PICC_create_args(PICC_SchedPool *sp, PICC_Error *err, PICC_Error *error)
+{
+    PICC_ALLOC(args, PICC_Args, error) {
+        args->sched_pool = sp;
+        args->error = err;
+    }
+    return args;
+}
+
+/**
  * Handles the behavior of a scheduler pool.
  *
  * @param args Arguments containing the scheduler pool and the error stack

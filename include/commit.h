@@ -34,8 +34,8 @@ typedef struct _PICC_OutCommit {
 typedef struct _PICC_Commit {
     PICC_CommitType type;
     struct _PICC_PiThread *thread;
-    PICC_Clock *clock;
-    PICC_Value *clockval;
+    struct _PICC_Clock *clock;
+    struct _PICC_Value *clockval;
     int cont_pc;
     struct _PICC_Channel *channel;
     union {
@@ -57,14 +57,14 @@ typedef struct _PICC_CommitList {
 
 extern PICC_Commit *PICC_create_commitment(PICC_Error *error);
 extern PICC_CommitList *PICC_create_commit_list(PICC_Error *error);
-extern PICC_CommitListElement *PICC_create_commit_list_element(PICC_Error *error);
+extern PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PICC_Error *error);
 
-extern void PICC_register_ouput_commitment(struct _PICC_PiThread *p, struct _PICC_Channel *ch, PICC_EvalFunction *eval, char *cont_pc, PICC_Error *error);
-extern void PICC_register_input_commitment(struct _PICC_PiThread *p, struct _PICC_Channel *ch, int refvar, char *cont_pc, PICC_Error *error);
+extern void PICC_register_ouput_commitment(struct _PICC_PiThread *p, struct _PICC_Channel *ch, PICC_EvalFunction *eval, int cont_pc, PICC_Error *error);
+extern void PICC_register_input_commitment(struct _PICC_PiThread *p, struct _PICC_Channel *ch, int refvar, int cont_pc, PICC_Error *error);
 
 extern bool PICC_is_valid_commit(PICC_Commit *commit, PICC_Error *error);
-extern void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *c);
-extern PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist, PICC_Error *error);
+extern void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *c, PICC_Error *error);
+extern PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist);
 extern PICC_Commit *PICC_fetch_commitment(struct _PICC_Channel *ch, PICC_Error *error);
 
 #endif

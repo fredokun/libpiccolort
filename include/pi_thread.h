@@ -38,14 +38,14 @@ typedef struct _PICC_PiThread {
     bool *enabled;
     int enabled_length;
     struct _PICC_KnownsSet *knowns;
-    PICC_Value **env;
+    struct _PICC_Value **env;
     int env_length;
     struct _PICC_Commit *commit;
     struct _PICC_CommitList *commits;
     PICC_PiThreadProc *proc;
     PICC_Label pc;
-    PICC_Value *val;
-    PICC_Clock *clock;
+    struct _PICC_Value *val;
+    struct _PICC_Clock *clock;
     int fuel;
     PICC_Mutex lock;
 } PICC_PiThread;

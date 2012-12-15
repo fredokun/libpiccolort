@@ -33,6 +33,38 @@ PICC_Commit *PICC_create_commitment(PICC_Error *error)
 }
 
 /**
+ * Creates a new commit list.
+ *
+ * @param error Error stack
+ * @return Created commit list
+ */
+PICC_CommitList *PICC_create_commit_list(PICC_Error *error)
+{
+	PICC_ALLOC(clist, PICC_CommitList, error) {
+	    clist->head = NULL;
+	    clist->tail = NULL;
+	    clist->size = 0;
+	}
+	return clist;
+}
+
+/**
+ * Creates a new  element of commit list.
+ *
+ * @param commit Commit associated
+ * @param error Error stack
+ * @return Created commit list element
+ */
+PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PICC_Error *error)
+{
+	PICC_ALLOC(clist_elem, PICC_CommitListElement, error) {
+	    clist_elem->commit = commit;
+	    clist_elem->next = NULL;
+	}
+    return clist_elem;
+}
+
+/**
  * Registers an output commit with given PiThread and channel.
  *
  * @param pt PiThread associated with the commit
@@ -41,7 +73,7 @@ PICC_Commit *PICC_create_commitment(PICC_Error *error)
  * @param cont_pc Programm counter
  * @param error Error stack
  */
-void PICC_register_out_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_EvalFunction *eval, PICC_Label cont_pc, PICC_Error *error)
+void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_EvalFunction *eval, PICC_Label cont_pc, PICC_Error *error)
 {
 	PICC_ALLOC(out, PICC_OutCommit, error) {
 	    out->eval_func = eval;
@@ -58,7 +90,14 @@ void PICC_register_out_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_Eval
 		    commit->clock = pt->clock;
 		    commit->clockval = pt->clock->val;
 		    commit->channel = ch;
-		    PICC_commit_list_add(pt->commits, commit);
+
+		    ALLOC_ERROR(add_error);
+		    PICC_commit_list_add(pt->commits, commit, &add_error);
+		    if (HAS_ERROR(add_error)) {
+		    	ADD_ERROR(error, add_error, ERR_REGISTER_IN_COMMIT);
+		    	free(commit);
+		    	free(out);
+		    }
 		}
 	}
 }
@@ -72,7 +111,7 @@ void PICC_register_out_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_Eval
  * @param cont_pc Program counter
  * @param error Error stack
  */
-void PICC_register_in_commitment(PICC_PiThread *pt, PICC_Channel *ch, int refvar, int cont_pc, PICC_Error *error)
+void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int refvar, int cont_pc, PICC_Error *error)
 {
 	PICC_ALLOC(in, PICC_InCommit, error) {
     	in->refvar = refvar;
@@ -89,7 +128,14 @@ void PICC_register_in_commitment(PICC_PiThread *pt, PICC_Channel *ch, int refvar
 		    commit->clock = pt->clock;
 		    commit->clockval = pt->clock->val;
 		    commit->channel = ch;
-		    PICC_commit_list_add(pt->commits ,commit);
+
+		    ALLOC_ERROR(add_error);
+		    PICC_commit_list_add(pt->commits, commit, &add_error);
+		    if (HAS_ERROR(add_error)) {
+		    	ADD_ERROR(error, add_error, ERR_REGISTER_IN_COMMIT);
+		    	free(commit);
+		    	free(in);
+		    }
 		}
 	}
 }
@@ -111,16 +157,40 @@ bool PICC_is_valid_commit(PICC_Commit *commit, PICC_Error *error)
     return valid;
 }
 
+
+/**
+ * Adds the given element at the end of the commit list.
+ *
+ * @param clist Commit list
+ * @param commit Commit to add
+ * @param error Error stack
+ */
+void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Error *error)
+{
+	ALLOC_ERROR(create_error);
+    PICC_CommitListElement *clist_elem = PICC_create_commit_list_element(commit, &create_error);
+    if (HAS_ERROR(create_error)) {
+    	ADD_ERROR(error, create_error, ERR_ADD_COMMIT_TO_LIST);
+    } else {
+	    clist->tail->next = clist_elem;
+	    clist->tail = clist_elem;
+	    clist->size++;
+	}
+}
+
 /**
  * ????????????????????
  *
  * @param clist ???????
  * @return ????????????
  */
-PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist, PICC_Error *error)
+PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
 {
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
-    return NULL;
+    PICC_CommitListElement *commit_list_element = clist->head;
+    clist->head = commit_list_element->next;
+    clist->size--;
+    commit_list_element->next = NULL;
+    return commit_list_element->commit;
 }
 
 /**
