@@ -146,7 +146,7 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
  * @param commit Commit to validate
  * @return Whether the commit is valid
  */
-bool PICC_is_valid_commit(PICC_Commit *commit, PICC_Error *error)
+bool PICC_is_valid_commit(PICC_Commit *commit)
 {
 	bool valid = false;
     LOCK_CLOCK(commit);
