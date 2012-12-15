@@ -46,6 +46,8 @@
 #include <assert.h>
 #include <errors.h>
 
+extern static char *PICC_error_messages[PICC_NB_ERRORS + 1];
+
 // An error stack.
 typedef struct _PICC_Error {
     enum _PICC_ErrorId id;  // ID of the error (0 if the error didn't occured).

@@ -148,8 +148,6 @@ bool PICC_is_valid_commit(PICC_Commit commit);
 void PICC_channel_incr_ref_count(PICC_Channel ch);
 void PICC_channel_dec_ref_count(PICC_Channel ch);
 
-
-
 void       PICC_commit_list_add(PICC_Commit* clist, PICC_Commit c);
 PICC_Commit PICC_commit_list_fetch(PICC_Commit* clist);
 
