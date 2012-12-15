@@ -16,6 +16,13 @@
 #define RELEASE_CLOCK(commit) \
     PICC_release(commit->thread->clock->val->lock, NULL);
 
+#define INIT_COMMIT(commit, pt, ch, pc) \
+	commit->thread = pt; \
+	commit->cont_pc = pc; \
+	commit->clock = pt->clock; \
+	commit->clockval = pt->clock->val; \
+	commit->channel = ch;
+
 /**
  * Creates and returns a commitment.
  *
@@ -83,13 +90,9 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
 	    	ADD_ERROR(error, sub_error, ERR_REGISTER_OUT_COMMIT);
 	    	free(out);
 	    } else {
-		    commit->content.out = out;
-		    commit->thread = pt;
-		    commit->cont_pc = cont_pc;
+	    	INIT_COMMIT(commit, pt, ch, cont_pc);
+			commit->content.out = out;
 		    commit->type = PICC_OUT_COMMIT;
-		    commit->clock = pt->clock;
-		    commit->clockval = pt->clock->val;
-		    commit->channel = ch;
 
 		    ALLOC_ERROR(add_error);
 		    PICC_commit_list_add(pt->commits, commit, &add_error);
@@ -121,13 +124,9 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
 	    	ADD_ERROR(error, sub_error, ERR_REGISTER_IN_COMMIT);
 	    	free(in);
 	    } else {
+	    	INIT_COMMIT(commit, pt, ch, cont_pc);
 		    commit->content.in = in;
-		    commit->thread = pt;
-		    commit->cont_pc = cont_pc;
 		    commit->type = PICC_IN_COMMIT;
-		    commit->clock = pt->clock;
-		    commit->clockval = pt->clock->val;
-		    commit->channel = ch;
 
 		    ALLOC_ERROR(add_error);
 		    PICC_commit_list_add(pt->commits, commit, &add_error);
