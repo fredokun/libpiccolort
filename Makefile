@@ -19,6 +19,14 @@ OBJ=$(LIB)/pi_thread.o $(LIB)/commit.o $(LIB)/channel.o $(LIB)/scheduler.o $(LIB
 
 all : clean init $(BIN)/$(NAME)
 
+test : $(BIN)/main
+
+$(BIN)/main: $(LIB)/main.o
+	$(CC) -o $@ $^ $(OFLAGS)
+
+$(LIB)/main.o: $(SRC)/main.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
+
 init :
 	mkdir -p $(LIB)
 	mkdir -p $(TESTS)
