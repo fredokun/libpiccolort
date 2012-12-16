@@ -45,7 +45,7 @@
 
 // TESTS ERROR MESSAGES ///////////////////////////////////////////////////////
 
-    static const char *PICC_error_messages[PICC_NB_ERRORS + 1] = {
+    static const char *PICC_error_messages[PICC_NB_ERRORS] = {
         "Test 1"
     };
 
