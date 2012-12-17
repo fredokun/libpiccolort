@@ -17,11 +17,11 @@
 /**
  * Temporary main entry point.
  */
-int main() {
+/*int main() {
     ALLOC_ERROR(error);
     NEW_ERROR(&error, ERR_NOT_IMPLEMENTED);
     CRASH(&error);
-}
+}*/
 
 /**
  * Second generation garbage collector.

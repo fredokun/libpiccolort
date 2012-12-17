@@ -48,6 +48,7 @@
 
         ERR_INVALID_COMMIT,
         ERR_INVALID_VALUE,
+        ERR_INVALID_TYPE,
 
     } PICC_ErrorId;
 
