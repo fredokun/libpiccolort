@@ -1,3 +1,12 @@
+/**
+ * @file main.c
+ * Main for generic sets tests.
+ *
+ * This project is released under MIT License.
+ *
+ * @author Maxence WO
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -37,12 +46,12 @@ void printer(PICC_Set* commit_set)
 void test_map(void* c)
 {
     PICC_Commit* cc = (PICC_Commit*)c;
-    printf("1/ my commit : %d\n", cc->cont_pc);
+    printf("1/ MAP my commit : %d\n", cc->cont_pc);
 }
 
 void test_map2(PICC_Commit* c)
 {
-    printf("2/ my commit : %d\n", c->cont_pc);
+    printf("2/ MAP my commit : %d\n", c->cont_pc);
 }
 
 int main()
@@ -51,7 +60,9 @@ int main()
 
     // -------- IS_EMPTY --------
 
+    #ifdef DEBUG
     printf("is empty ? => %s\n", (PICC_set_is_empty(commit_set))?"true":"false");
+    #endif
 
     PICC_Commit* c = PICC_create_commitment(NULL);
     c->cont_pc = 1;
@@ -66,18 +77,22 @@ int main()
 
     // ---------- ADD -----------
 
-    printf("+ adding commitment...\n");
+    #ifdef DEBUG
+    printf("+ adding commitments...\n");
+    #endif
+
     PICC_SET_ADD(commit_set, el);
-    printf("+ adding commitment...\n");
     PICC_SET_ADD(commit_set, el2);
-    printf("+ adding commitment...\n");
     PICC_SET_ADD(commit_set, el3);
 
     // -------- IS_EMPTY --------
 
+    #ifdef DEBUG
     printf("is empty ? => %s\n", (PICC_set_is_empty(commit_set))?"true":"false");
+    #endif
 
     // ---------- MEM -----------
+    // avant de tester, il faut modifier la fonction PICC_set_cmp_commit (respectivement PICC_set_cmp_knowns) pour décider quand est-ce que 2 commits sont identiques (respectivement 2 knowns).
     
     // ---------- MAP -----------
     PICC_SET_MAP(commit_set, test_map);
@@ -89,6 +104,11 @@ int main()
     printer(commit_set);
 
     #endif
+
+    free(c);
+    free(c2);
+    free(c3);
+    free(commit_set);
 
     return 0;
 }

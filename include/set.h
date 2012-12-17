@@ -20,7 +20,6 @@ typedef enum _PICC_SetType
 } PICC_SetType;
 
 typedef struct _PICC_CommitL PICC_CommitL;
-
 struct _PICC_CommitL
 {
     PICC_Commit* val;
@@ -28,7 +27,6 @@ struct _PICC_CommitL
 };
 
 typedef struct _PICC_KnownsList PICC_KnownsList;
-
 struct _PICC_KnownsList
 {
     PICC_Knowns* val;
