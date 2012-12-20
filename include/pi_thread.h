@@ -21,33 +21,63 @@
 static const int PICC_FUEL_INIT = 358;
 
 struct _PICC_PiThread;
+
+/**
+ * @see scheduler.h
+ */
 struct _PICC_SchedPool;
+
+/**
+ * The label type. Used by the pi-threads to point to a place where to 
+ * start it's procedure.
+ */
 typedef int PICC_Label;
+
+/**
+ * The procedure type that a pi-thread executes. May use a couple of 
+ * labels to show where it shoud start.
+ */
 typedef void (PICC_PiThreadProc)(struct _PICC_SchedPool *, struct _PICC_PiThread *);
 
+/**
+ * The status of a pi-thread
+ */
 typedef enum _PICC_StatusKind {
-    PICC_STATUS_RUN,
-    PICC_STATUS_CALL,
-    PICC_STATUS_WAIT,
-    PICC_STATUS_ENDED,
-    PICC_STATUS_BLOCKED
+    PICC_STATUS_RUN, /**< A pi-thread that is ready to run */
+    PICC_STATUS_CALL, /**< A pi-thread that is actually running */
+    PICC_STATUS_WAIT, /**< A waiting pi-thread */
+    PICC_STATUS_ENDED, /**< An ended pi-thread */
+    PICC_STATUS_BLOCKED /**< A blocked pi-thread (a sleeping pi-thread 
+                        that can't be awaked) */
 } PICC_StatusKind;
 
+/**
+ * The PiThread data type
+ */
 typedef struct _PICC_PiThread {
-    PICC_StatusKind status;
-    bool *enabled;
-    int enabled_length;
-    struct _PICC_KnownsSet *knowns;
-    struct _PICC_Value **env;
-    int env_length;
-    struct _PICC_Commit *commit;
-    struct _PICC_CommitList *commits;
-    PICC_PiThreadProc *proc;
-    PICC_Label pc;
-    struct _PICC_Value *val;
-    struct _PICC_Clock *clock;
-    int fuel;
-    PICC_Mutex lock;
+    /**@{*/
+    PICC_StatusKind status; /**< The pi-thread status */
+    bool *enabled; /**< TODO see spec */
+    int enabled_length; /**< Length of enabeled choices at the next 
+                            step */
+    struct _PICC_KnownsSet *knowns; /**< TODO see spec */
+    struct _PICC_Value **env; /**< The local pi-thread variables */
+    int env_length; /**< The number of variables in the environment */
+    struct _PICC_Commit *commit; /**< The last commitment of the 
+                                    pi-thread */
+    struct _PICC_CommitList *commits; /** The commitments of this 
+                                    pi-thread */
+    PICC_PiThreadProc *proc; /**< The pi-thread procedure to execute */
+    PICC_Label pc; /**< The label to the execution point of the 
+                        pi-thread procedure */
+    struct _PICC_Value *val; /**< The last transmited lalue over the 
+                                current channel */
+    struct _PICC_Clock *clock; /**< The pi-tjread clock. TODO see 
+                                spec */
+    int fuel; /**< Number of iterations of the pi-thread execution after 
+                wich the garbage collector tries to free some space */
+    PICC_Mutex lock; /**< The lock of the pi-thread. TODO see spec */
+    /**@}*/
 } PICC_PiThread;
 
 extern PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, PICC_Error *error);

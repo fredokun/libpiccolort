@@ -18,27 +18,48 @@
 #include <sync.h>
 #include <error.h>
 
+/**
+ * The type of the pi-thread channels
+ */
 typedef struct _PICC_Channel {
-    struct _PICC_Commit* incommits;
-    struct _PICC_Commit* outcommits;
-    int global_rc;
-    PICC_Mutex lock;
+    /**@{*/
+    struct _PICC_Commit* incommits; /**< The input commits list */
+    struct _PICC_Commit* outcommits; /**< The output commits list */
+    int global_rc; /**< The number of commitments to that reference 
+                    this channel (TODO see spec)*/
+    PICC_Mutex lock; /**< This channel lock to protect from concurrent 
+                        accesses*/
+    /**@}*/
 } PICC_Channel;
 
+/**
+ * The known state of a channel
+ */
 typedef enum _PICC_KnowsState {
-    PICC_UNKNOWN,
-    PICC_KNOWN,
-    PICC_FORGET
+    PICC_UNKNOWN, /**< TODO see spec */
+    PICC_KNOWN, /**< TODO see spec */
+    PICC_FORGET /**< TODO see spec */
 } PICC_KnownsState;
 
+/**
+ * The type of a channel with a known state
+ */
 typedef struct _PICC_Knowns {
-    PICC_Channel *channel;
-    PICC_KnownsState state;
+    /**@{*/
+    PICC_Channel *channel; /**< a reference to the tracked channel */
+    PICC_KnownsState state; /**< the known state */
+    /**@}*/
 } PICC_Knowns;
 
+/**
+ * The set of known channels
+ */
 typedef struct _PICC_KnownsSet {
-    PICC_Knowns **knowns;
-    int length;
+    /**@{*/
+    PICC_Knowns **knowns; /**< A pointer to an array of knowns. 
+                            Contains all the data */
+    int length; /**< The size of the set */
+    /**@}*/
 } PICC_KnownsSet;
 
 extern PICC_Channel *PICC_create_channel(PICC_Error *error);

@@ -14,26 +14,53 @@
 #include <sync.h>
 #include <error.h>
 
+/**
+ * The standard PiThread queue cell type
+ */
 typedef struct _PICC_QueueCell {
-    struct _PICC_PiThread *thread;
-    struct _PICC_QueueCell *next;
+    /**@{*/
+    struct _PICC_PiThread *thread; /**< The pi-thread contained in the 
+                                        cell */
+    struct _PICC_QueueCell *next; /**< A pointer to the next cell or 
+                                        NULL if it does not exist */
+    /**@}*/
 } PICC_QueueCell;
 
+/**
+ * The standard PiThread queue type
+ */
 typedef struct _PICC_Queue {
-    PICC_QueueCell *head;
-    PICC_QueueCell *tail;
-    int size;
+    /**@{*/
+    PICC_QueueCell *head; /**< The head of the queue */
+    PICC_QueueCell *tail; /**< The tail of the queue */
+    int size; /**< The size of the queue */
+    /**@}*/
 } PICC_Queue;
 
+/**
+ * The ready PiThread queue type
+ */
 typedef struct _PICC_ReadyQueue {
-    PICC_Queue q;
-    PICC_Mutex lock;
+    /**@{*/
+    PICC_Queue q; /**< The standard PiThread queue that contains all 
+                    the data */
+    PICC_Mutex lock; /**< The mutex used to sinchronize the data with 
+                        the other threads */
+    /**@}*/                    
 } PICC_ReadyQueue;
 
+/**
+ * The wait PiThread queue type
+ */
 typedef struct _PICC_WaitQueue {
-    PICC_Queue active;
-    PICC_Queue old;
-    PICC_Mutex lock;
+    /**@{*/
+    PICC_Queue active; /**< The standard queue that contains the 
+                        PiThreads that are not waiting for a long time */
+    PICC_Queue old; /**< The standard queue that contains the PiThreads 
+                        that are waiting a lot of time */
+    PICC_Mutex lock; /**< The mutex used to sinchronize the queues with 
+                        the other threads */
+    /**@}*/
 } PICC_WaitQueue;
 
 extern PICC_ReadyQueue *PICC_create_ready_queue(PICC_Error *error);

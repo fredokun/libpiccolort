@@ -14,10 +14,14 @@
 
 // APPLICATION ERROR MESSAGES /////////////////////////////////////////////////
 
-    // Number of errors defined.
+    /**
+     * Number of errors defined.
+     */
     #define PICC_NB_ERRORS 500
 
-    // List of all errors defined.
+    /**
+     *  List of all errors defined.
+     */
     typedef enum _PICC_ErrorId {
         ERR_DEADLOCK,
 
@@ -29,12 +33,12 @@
         ERR_WAIT_QUEUE_PUSH_OLD,
 
         ERR_NOT_IMPLEMENTED,
-        ERR_OUT_OF_MEMORY,
+        ERR_OUT_OF_MEMORY, /**< No more memory available */
         ERR_COMMIT_CREATE,
         ERR_ADD_COMMIT_TO_LIST,
         ERR_REGISTER_OUT_COMMIT,
         ERR_REGISTER_IN_COMMIT,
-        ERR_THREAD_CREATE,
+        ERR_THREAD_CREATE, /**< Unable to create a new posix thread */
         ERR_PTHREAD_CREATE,
         ERR_SCHED_POOL_CREATE,
         ERR_CLOCK_CREATE,
@@ -56,10 +60,14 @@
 
 // TESTS ERROR MESSAGES ///////////////////////////////////////////////////////
 
-    // Number of errors defined.
+    /**
+     *  Number of errors defined.
+     */
     #define PICC_NB_ERRORS 500
 
-    // List of all errors defined.
+    /**
+     *  List of all errors defined.
+     */
     typedef enum _PICC_ErrorId {
         ERR_TEST1
     } PICC_ErrorId;

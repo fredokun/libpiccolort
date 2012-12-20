@@ -16,44 +16,91 @@
 #include <value.h>
 #include <error.h>
 
+/**
+ * @see pi_thread.h
+ */
 struct _PICC_PiThread;
+
+/**
+ * TODO see spec
+ */
 typedef struct _PICC_Value *(PICC_EvalFunction)(struct _PICC_PiThread *);
 
+/**
+ * The type of the commitment
+ */
 typedef enum _PICC_CommitType {
-    PICC_IN_COMMIT,
-    PICC_OUT_COMMIT
+    PICC_IN_COMMIT, /**< Designes an input commit */
+    PICC_OUT_COMMIT /**< Designes an output commit */
 } PICC_CommitType;
 
+/**
+ * The input commitment specific part
+ */
 typedef struct _PICC_InCommit {
-    int refvar;
+    /**@{*/
+    int refvar; /**< The reference to a variable in the pi-thread 
+                    referenced by this commit */
+    /**@}*/
 } PICC_InCommit;
 
+/**
+ * The output commitment specific part
+ */
 typedef struct _PICC_OutCommit {
-    PICC_EvalFunction *eval_func;
+    /**@{*/
+    PICC_EvalFunction *eval_func; /**< The function that evaluates the 
+                                    * expression passed to the channel 
+                                    * referenced by this commit */
+    /**@}*/
 } PICC_OutCommit;
 
+/**
+ * The commitment common part
+ */
 typedef struct _PICC_Commit {
-    PICC_CommitType type;
-    struct _PICC_PiThread *thread;
-    struct _PICC_Clock *clock;
-    struct _PICC_Value *clockval;
-    int cont_pc;
-    struct _PICC_Channel *channel;
+    /**@{*/
+    PICC_CommitType type; /**< The type of the commit */
+    struct _PICC_PiThread *thread; /**< The pi-thread that has this 
+                                    commit */
+    struct _PICC_Clock *clock; /**< The time when the commitment has 
+                                been made */
+    struct _PICC_Value *clockval; /**< TODO see spec */
+    int cont_pc; /**< TODO see spec */
+    struct _PICC_Channel *channel; /**< The channel of this commitment */
+    /**@}*/
+    /**
+     * @name The specific pârt of the commitments. One of the pointers 
+     * below should always be NULL.
+     */
     union {
-        PICC_InCommit *in;
-        PICC_OutCommit *out;
+        /**@{*/
+        PICC_InCommit *in; /**< The in commitment specific part */
+        PICC_OutCommit *out; /**< The out commitment specific part */
+        /**@}*/
     } content;
 } PICC_Commit;
 
+/**
+ * The type of an element of a commit list
+ */
 typedef struct _PICC_CommitListElement {
-    PICC_Commit *commit;
-    struct _PICC_CommitListElement *next;
+    /**@{*/
+    PICC_Commit *commit; /**< The refferenced commit*/
+    struct _PICC_CommitListElement *next; /**< A pointer to the next 
+                                            element or NULL if none */
+    /**@}*/
 } PICC_CommitListElement;
 
+/**
+ * The commit list type
+ */
 typedef struct _PICC_CommitList {
-    PICC_CommitListElement *head;
-    PICC_CommitListElement *tail;
-    int size;
+    /**@{*/
+    PICC_CommitListElement *head; /**< The head of the commit list */
+    PICC_CommitListElement *tail; /**< The tail of the commit list */
+    int size; /**< The size of the commit list */
+    /**@}*/
 } PICC_CommitList;
 
 extern PICC_Commit *PICC_create_commitment(PICC_Error *error);
