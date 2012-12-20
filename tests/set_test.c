@@ -1,5 +1,5 @@
 /**
- * @file main.c
+ * @file set_test.c
  * Main for generic sets tests.
  *
  * This project is released under MIT License.
@@ -97,7 +97,6 @@ int PICC_test_generic_sets()
     // ---------- MAP -----------
     PICC_SET_MAP(commit_set, test_map);
     PICC_SET_MAP(commit_set, (void*)(void*)test_map2);
-    
 
     #ifdef DEBUG
 
