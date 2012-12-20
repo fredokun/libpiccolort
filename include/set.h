@@ -72,6 +72,8 @@ extern bool PICC_set_is_empty(PICC_Set* s);
 extern void PICC_set_map(PICC_Set* s, void (* func)(void*));
 extern void PICC_set_destroy(PICC_Set* s);
 
+extern int PICC_test_generic_sets();
+
 
 #define PICC_SET_ADD(s,e) \
     PICC_set_add(s, e, NULL)

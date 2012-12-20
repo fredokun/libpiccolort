@@ -1,3 +1,12 @@
+/**
+ * @file set.c
+ * Provides several functions to generic sets.
+ *
+ * This project is released under MIT License.
+ *
+ * @author Maxence WO
+ */
+
 #include <stdio.h>
 #include <set.h>
 #include <tools.h>
