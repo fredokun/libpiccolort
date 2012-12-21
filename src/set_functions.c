@@ -84,7 +84,7 @@ void PICC_set_add_knowns(PICC_Set* s, PICC_Knowns* elem)
  */
 bool PICC_cmp_commit(PICC_Commit* c, PICC_Commit* c2, PICC_Error* err)
 {
-    bool res = ((c->type == c2->type)
+/*    bool res = ((c->type == c2->type)
     && (c->thread == c2->thread)
     && (c->clock == c2->clock)
     && (c->clockval == c2->clockval)
@@ -95,7 +95,8 @@ bool PICC_cmp_commit(PICC_Commit* c, PICC_Commit* c2, PICC_Error* err)
         return res && (c->content.in->refvar == c2->content.in->refvar);
     if(c->type == PICC_OUT_COMMIT)
         return res && (c->content.out->eval_func == c2->content.out->eval_func);
-
+*/
+    bool res = (c->type == c2->type) && (c->cont_pc == c2->cont_pc);
     return res;
 }
 
@@ -200,4 +201,132 @@ void PICC_set_map_knowns(PICC_Set* s, void (* func)(PICC_Knowns*))
         func(current->val);
         current = current->next;
     }
+}
+
+PICC_Commit* PICC_clone_commit(PICC_Commit* c)
+{
+    PICC_ALLOC(result, PICC_Commit, NULL);
+
+    /*result->type = c->type;
+    result->thread = c->thread;
+    result->clock = c->clock;
+    result->clockval = c->clockval;
+    result->cont_pc = c->cont_pc;
+    result->channel = c->channel;
+    result->content = c->content;
+    */
+    result = c;
+
+    return result;
+}
+
+PICC_Knowns* PICC_clone_knowns(PICC_Knowns* k)
+{
+    PICC_ALLOC(result, PICC_Knowns, NULL);
+
+    result->channel = k->channel;
+    result->state = k->state;
+
+    return result;
+}
+
+PICC_Set* PICC_set_inter_commit(PICC_Set* s1, PICC_Set* s2)
+{
+    ASSERT(s1->set_type == s2->set_type && s1->set_type == PICC_COMMIT);
+
+    PICC_Set* result = PICC_set_make(PICC_COMMIT);
+    PICC_CommitL* current = s1->element.commit;
+    PICC_CommitL* current2;
+
+    for(;;)
+    {
+        if(current == NULL)
+            break;
+
+        current2 = s2->element.commit;
+
+        for(;;)
+        {
+            if(current2 == NULL)
+                break;
+
+            if(PICC_cmp_commit(current->val, current2->val, NULL))
+                PICC_set_add_commit(result, PICC_clone_commit(current->val));
+
+            current2 = current2->next;
+        }
+
+        current = current->next;
+    };
+    
+    return result;
+}
+
+PICC_Set* PICC_set_inter_knowns(PICC_Set* s1, PICC_Set* s2)
+{
+    ASSERT(s1->set_type == s2->set_type && s1->set_type == PICC_KNOWNS);
+
+    PICC_Set* result = PICC_set_make(PICC_KNOWNS);
+    PICC_KnownsList* current = s1->element.knowns;
+    PICC_KnownsList* current2;
+
+    for(;;)
+    {
+        if(current == NULL)
+            break;
+
+        current2 = s2->element.knowns;
+
+        for(;;)
+        {
+            if(current2 == NULL)
+                break;
+
+            if(PICC_cmp_knowns(current->val, current2->val, NULL))
+                PICC_set_add_knowns(result, PICC_clone_knowns(current->val));
+
+            current2 = current2->next;
+        }
+
+        current = current->next;
+    };
+    
+    return result;
+}
+
+PICC_Set* PICC_set_inter(PICC_Set* s1, PICC_Set* s2)
+{
+    if(s1->set_type == PICC_COMMIT)
+        return PICC_set_inter_commit(s1, s2);
+    else
+        return PICC_set_inter_knowns(s1, s2);
+}
+
+void PICC_set_iter_commit(PICC_Set* s, void (*func)(PICC_Commit* arg))
+{
+    PICC_CommitL* it = s->element.commit;
+
+    do
+    {
+        func(it->val);
+        it = it->next;
+    }while(it != NULL);
+}
+
+void PICC_set_iter_knowns(PICC_Set* s, void (*func)(PICC_Knowns* arg))
+{
+    PICC_KnownsList* it = s->element.knowns;
+    do
+    {
+        func(it->val);
+        it = it->next;
+    }while(it != NULL);
+}
+
+void PICC_set_iter(PICC_Set* s, void (*func)(void*))
+{
+    if(s->set_type == PICC_COMMIT)
+        PICC_set_iter_commit(s, (void*)(PICC_Commit*)func);
+    else
+        PICC_set_iter_knowns(s, (void*)(PICC_Knowns*)func);
 }
