@@ -16,20 +16,22 @@
 typedef enum _PICC_SetType
 {
     PICC_COMMIT,
-    PICC_KNOWNS
+    PICC_KNOWNS,
 } PICC_SetType;
 
-typedef struct _PICC_CommitList
+typedef struct _PICC_CommitL PICC_CommitL;
+struct _PICC_CommitL
 {
     PICC_Commit* val;
-    PICC_Commit* next;
-} PICC_CommitList;
+    PICC_CommitL* next;
+};
 
-typedef struct _PICC_KnownsList
+typedef struct _PICC_KnownsList PICC_KnownsList;
+struct _PICC_KnownsList
 {
     PICC_Knowns* val;
-    PICC_Knowns* next;
-} PICC_KnownsList;
+    PICC_KnownsList* next;
+};
 
 typedef struct _PICC_Set
 {
@@ -38,25 +40,67 @@ typedef struct _PICC_Set
 
     union
     {
-        PICC_CommitList* commit;
+        PICC_CommitL* commit;
         PICC_KnownsList* knowns;
     } element;
 } PICC_Set;
 
-PICC_Set* PICC_set_make(PICC_SetType type);
-void PICC_set_add_commit(PICC_Set* s, PICC_Commit* elem);
-void PICC_set_add_knowns(PICC_Set* s, PICC_Knowns* elem);
+typedef struct _PICC_SetElement
+{
+    PICC_SetType type;
+
+    union
+    {
+        PICC_Commit* c;
+        PICC_Knowns* k;
+    } element;
+} PICC_SetElement;
+
+extern PICC_Commit* PICC_clone_commit(PICC_Commit* c);
+extern PICC_Knowns* PICC_clone_knowns(PICC_Knowns* k);
+
+extern bool PICC_cmp_commit(PICC_Commit* c, PICC_Commit* c2, PICC_Error* err);
+extern bool PICC_cmp_knowns(PICC_Knowns* k, PICC_Knowns* k2, PICC_Error* err);
+extern bool PICC_set_mem_knowns(PICC_Set* s, PICC_Knowns* k, PICC_Error* err);
+extern bool PICC_set_mem_commit(PICC_Set* s, PICC_Commit* c, PICC_Error* err);
+extern void PICC_set_add_commit(PICC_Set* s, PICC_Commit* elem);
+extern void PICC_set_add_knowns(PICC_Set* s, PICC_Knowns* elem);
+extern void PICC_set_map_commit(PICC_Set* s, void (* func)(PICC_Commit*));
+extern void PICC_set_map_knowns(PICC_Set* s, void (* func)(PICC_Knowns*));
+//extern PICC_Set* PICC_set_inter_commit(PICC_Set* s1, PICC_Set* s2);
+
+extern PICC_Set* PICC_set_make(PICC_SetType type);
+extern void PICC_set_add(PICC_Set* s, PICC_SetElement* elem, PICC_Error* err);
+extern bool PICC_set_mem(PICC_Set* s, PICC_SetElement* elem, PICC_Error* err);
+extern bool PICC_set_is_empty(PICC_Set* s);
+extern void PICC_set_map(PICC_Set* s, void (* func)(void*));
+extern void PICC_set_destroy(PICC_Set* s);
+extern PICC_Set* PICC_set_inter_commit(PICC_Set* s1, PICC_Set* s2);
+extern PICC_Set* PICC_set_inter_knowns(PICC_Set* s1, PICC_Set* s2);
+extern PICC_Set* PICC_set_inter(PICC_Set* s1, PICC_Set* s2);
+extern void PICC_set_iter_commit(PICC_Set* s, void (*func)(PICC_Commit* arg));
+extern void PICC_set_iter_knowns(PICC_Set* s, void (*func)(PICC_Knowns* arg));
+extern void PICC_set_iter(PICC_Set* s, void (*func)(void* arg));
+
+extern int PICC_test_generic_sets();
+
 
 #define PICC_SET_ADD(s,e) \
-    switch(s->set_type) \
-    { \
-        case PICC_COMMIT: \
-        PICC_set_add_commit(s,e); \
-        break; \
-        \
-        case PICC_KNOWNS: \
-        PICC_set_add_knowns(s,e); \
-        break; \
-    }
+    PICC_set_add(s, e, NULL)
+
+#define PICC_SET_IS_EMPTY(s) \
+    PICC_set_is_empty(s)
+
+#define PICC_SET_MEM(s,e) \
+    PICC_set_mem(s, e)
+
+#define PICC_SET_MAP(s,f) \
+    PICC_set_map(s, f)
+
+#define PICC_SET_ITER(s, f) \
+    PICC_set_iter(s, f);
+
+#define PICC_SET_INTER(s1, s2) \
+    PICC_set_inter(s1, s2);
 
 #endif

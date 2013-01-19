@@ -5,6 +5,7 @@
  * This project is released under MIT License.
  *
  * @author Mickaël MENU
+ * @author Maxence WO
  */
 
 #ifndef COMMIT_H
@@ -44,7 +45,7 @@ typedef struct _PICC_Commit {
     } content;
 } PICC_Commit;
 
-/*typedef struct _PICC_CommitListElement {
+typedef struct _PICC_CommitListElement {
     PICC_Commit *commit;
     struct _PICC_CommitListElement *next;
 } PICC_CommitListElement;
@@ -53,10 +54,10 @@ typedef struct _PICC_CommitList {
     PICC_CommitListElement *head;
     PICC_CommitListElement *tail;
     int size;
-} PICC_CommitList;*/
+} PICC_CommitList;
 
 extern PICC_Commit *PICC_create_commitment(PICC_Error *error);
-/*extern PICC_CommitList *PICC_create_commit_list(PICC_Error *error);
+extern PICC_CommitList *PICC_create_commit_list(PICC_Error *error);
 extern PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PICC_Error *error);
 
 extern void PICC_register_ouput_commitment(struct _PICC_PiThread *p, struct _PICC_Channel *ch, PICC_EvalFunction *eval, int cont_pc, PICC_Error *error);
@@ -66,5 +67,5 @@ extern bool PICC_is_valid_commit(PICC_Commit *commit);
 extern void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *c, PICC_Error *error);
 extern PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist);
 extern PICC_Commit *PICC_fetch_commitment(struct _PICC_Channel *ch, PICC_Error *error);
-*/
+
 #endif

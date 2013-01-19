@@ -5,6 +5,7 @@
  * This project is released under MIT License.
  *
  * @author Mickaël MENU
+ * @author Maxence WO
  */
 
 #include <sync.h>
