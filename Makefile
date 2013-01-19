@@ -6,9 +6,9 @@
 # @author Mickaël MENU
 
 CC=gcc
-CFLAGS=-Wall -std=c99 -I\include
+CFLAGS=-Wall -std=c99 -fnested-functions -I\include
 OFLAGS= -lpthread
-NAME=pithread
+NAME=run_tests
 BIN=bin
 LIB=lib
 INCLUDE=include

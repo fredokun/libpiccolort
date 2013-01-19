@@ -1,6 +1,6 @@
 /**
  * @file set_test.c
- * Main for generic sets tests.
+ * Generic sets tests.
  *
  * This project is released under MIT License.
  *
@@ -105,7 +105,7 @@ int PICC_test_generic_sets()
 
     // ---------- MEM -----------
     // avant de tester, il faut modifier la fonction PICC_set_cmp_commit (respectivement PICC_set_cmp_knowns) pour décider quand est-ce que 2 commits sont identiques (respectivement 2 knowns).
-    
+
     // ---------- MAP -----------
     PICC_SET_MAP(commit_set, test_map);
     PICC_SET_MAP(commit_set, (void*)(void*)test_map2);
@@ -133,13 +133,13 @@ int PICC_test_generic_sets()
     PICC_SET_ADD(commit_set2, el6);
 
     PICC_Set* intersec = PICC_SET_INTER(commit_set, commit_set2);
-    
+
     #ifdef DEBUG
 
     printer(intersec);
 
     #endif
-    // ------------------------    
+    // ------------------------
 
 
     // à modifier une fois que tous les CommitList etc seront transformés en Set
