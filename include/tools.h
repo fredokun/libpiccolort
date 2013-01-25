@@ -25,7 +25,7 @@
     } else
 
 #define PICC_FREE_MUTEX(m) \
-    pthread_mutex_destroy(m);
+    pthread_mutex_destroy(&m);
 
 #define PICC_FREE_COMMIT(c) \
     free(c->clock); \
@@ -56,8 +56,8 @@
 
 #define PICC_FREE_CHANNEL(chan) \
     PICC_FREE_MUTEX(chan->lock); \
-    PICC_FREE_SET(incommits); \
-    PICC_FREE_SET(outcommits);
+    PICC_FREE_SET(chan->incommits); \
+    PICC_FREE_SET(chan->outcommits);
 
 #define PICC_FREE_SET(s) \
     PICC_set_destroy(s);

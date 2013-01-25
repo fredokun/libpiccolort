@@ -120,3 +120,45 @@ void PICC_set_map(PICC_Set* s, void (*func)(void*))
         PICC_set_map_knowns(s, (void*)(PICC_Knowns*)func);
     }
 }
+
+/**
+ * Free a Set
+ *
+ * @param s Set to free
+ */
+/*void PICC_set_destroy(PICC_Set* s)
+{
+
+    if(s->set_type == PICC_COMMIT)
+    {
+        PICC_CommitL* current = s->element.commit->next;
+        while(current != NULL)
+        {
+            PICC_FREE_COMMIT(current->val);
+            current = current->next;
+        }
+        free(s->element.commit);
+    }
+    else
+    {
+        PICC_KnownsList* current = s->element.knowns->next;
+        while(current != NULL)
+        {
+            PICC_FREE_CHANNEL(current->val->channel);
+            free(current->val);
+        }
+        free(s->element.knowns);
+    }
+
+    free(s);
+}*/
+void PICC_set_destroy(PICC_Set* s)
+{
+}
+
+/*PICC_Set* PICC_set_inter(PICC_Set* s1, PICC_Set* s2)
+{
+    ASSERT(s1->set_type == s2->set_type);
+
+    return NULL;
+}*/
