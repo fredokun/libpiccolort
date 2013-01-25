@@ -17,7 +17,7 @@
 //int PICC_GC2(PICC_SchedPool schedpool);
 
 /**
- * Test : PICC_create_pithread
+ * Test : PICC_create_pithread \n
  * PICC_PiThread *PICC_create_pithread();
  *
  * @return boolean true if it works else false
@@ -40,9 +40,9 @@ bool check_pithread(PICC_Error *error)
 }
 
 /**
- * Test : Commitments
- * PICC_Commit  *PICC_create_commitment();
- * PICC_CommitList *PICC_create_commit_list();
+ * Test : Commitments \n
+ * PICC_Commit  *PICC_create_commitment(); \n
+ * PICC_CommitList *PICC_create_commit_list(); \n
  * PICC_CommitListElement *PICC_create_commit_list_element();
  *
  * @return boolean true if it works else false
