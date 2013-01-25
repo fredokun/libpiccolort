@@ -25,9 +25,9 @@ typedef struct _PICC_Channel {
     /**@{*/
     struct _PICC_Commit* incommits; /**< The input commits list */
     struct _PICC_Commit* outcommits; /**< The output commits list */
-    int global_rc; /**< The number of commitments to that reference 
+    int global_rc; /** The number of commitments to that reference 
                     this channel (TODO see spec)*/
-    PICC_Mutex lock; /**< This channel lock to protect from concurrent 
+    PICC_Mutex lock; /** This channel lock to protect from concurrent 
                         accesses*/
     /**@}*/
 } PICC_Channel;
@@ -56,7 +56,7 @@ typedef struct _PICC_Knowns {
  */
 typedef struct _PICC_KnownsSet {
     /**@{*/
-    PICC_Knowns **knowns; /**< A pointer to an array of knowns. 
+    PICC_Knowns **knowns; /** A pointer to an array of knowns. 
                             Contains all the data */
     int length; /**< The size of the set */
     /**@}*/

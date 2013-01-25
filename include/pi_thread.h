@@ -48,7 +48,7 @@ typedef enum _PICC_StatusKind {
     PICC_STATUS_CALL, /**< A pi-thread that is actually running */
     PICC_STATUS_WAIT, /**< A waiting pi-thread */
     PICC_STATUS_ENDED, /**< An ended pi-thread */
-    PICC_STATUS_BLOCKED /**< A blocked pi-thread (a sleeping pi-thread 
+    PICC_STATUS_BLOCKED /** A blocked pi-thread (a sleeping pi-thread 
                         that can't be awaked) */
 } PICC_StatusKind;
 
@@ -59,25 +59,25 @@ typedef struct _PICC_PiThread {
     /**@{*/
     PICC_StatusKind status; /**< The pi-thread status */
     bool *enabled; /**< TODO see spec */
-    int enabled_length; /**< Length of enabeled choices at the next 
+    int enabled_length; /** Length of enabeled choices at the next 
                             step */
     struct _PICC_KnownsSet *knowns; /**< TODO see spec */
     struct _PICC_Value **env; /**< The local pi-thread variables */
     int env_length; /**< The number of variables in the environment */
-    struct _PICC_Commit *commit; /**< The last commitment of the 
+    struct _PICC_Commit *commit; /** The last commitment of the 
                                     pi-thread */
     struct _PICC_CommitList *commits; /** The commitments of this 
                                     pi-thread */
-    PICC_PiThreadProc *proc; /**< The pi-thread procedure to execute */
-    PICC_Label pc; /**< The label to the execution point of the 
+    PICC_PiThreadProc *proc; /** The pi-thread procedure to execute */
+    PICC_Label pc; /** The label to the execution point of the 
                         pi-thread procedure */
-    struct _PICC_Value *val; /**< The last transmited lalue over the 
+    struct _PICC_Value *val; /** The last transmited lalue over the 
                                 current channel */
-    struct _PICC_Clock *clock; /**< The pi-tjread clock. TODO see 
+    struct _PICC_Clock *clock; /** The pi-tjread clock. TODO see 
                                 spec */
-    int fuel; /**< Number of iterations of the pi-thread execution after 
+    int fuel; /** Number of iterations of the pi-thread execution after 
                 wich the garbage collector tries to free some space */
-    PICC_Mutex lock; /**< The lock of the pi-thread. TODO see spec */
+    PICC_Mutex lock; /** The lock of the pi-thread. TODO see spec */
     /**@}*/
 } PICC_PiThread;
 

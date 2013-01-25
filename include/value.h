@@ -32,7 +32,7 @@ typedef enum _PICC_ValueKind {
 typedef struct _PICC_Value {
     /**@{*/
     PICC_ValueKind kind; /**< The real type of the value */
-    PICC_Mutex lock; /**< A lock that may be used tu block the value for 
+    PICC_Mutex lock; /** A lock that may be used tu block the value for 
                         concurent accesses */
     /**@}*/
     /**
@@ -46,7 +46,7 @@ typedef struct _PICC_Value {
         double as_float; /**< The float of the value */
         char *as_string; /**< The string of the value */
         bool as_bool; /**< The boolean of the value */
-        struct _PICC_Channel *as_channel; /**< The channel of the value*/
+        struct _PICC_Channel *as_channel; /**< The channel of the value */
         /**@}*/
     } content;
 } PICC_Value;
@@ -70,9 +70,9 @@ typedef struct _PICC_Value PICC_AtomicInt;
  */
 typedef struct _PICC_Clock {
     /**@{*/
-    PICC_AtomicInt *val; /**< Contains the timestamp when the clock has 
-                            * been stopped. TODO a function that puts a 
-                            * timestamp in a clock */
+    PICC_AtomicInt *val; /** Contains the timestamp when the clock has 
+                           * been stopped. TODO a function that puts a 
+                           * timestamp in a clock */
     /**@{*/
 } PICC_Clock;
 

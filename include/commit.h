@@ -39,7 +39,7 @@ typedef enum _PICC_CommitType {
  */
 typedef struct _PICC_InCommit {
     /**@{*/
-    int refvar; /**< The reference to a variable in the pi-thread 
+    int refvar; /** The reference to a variable in the pi-thread 
                     referenced by this commit */
     /**@}*/
 } PICC_InCommit;
@@ -49,7 +49,7 @@ typedef struct _PICC_InCommit {
  */
 typedef struct _PICC_OutCommit {
     /**@{*/
-    PICC_EvalFunction *eval_func; /**< The function that evaluates the 
+    PICC_EvalFunction *eval_func; /** The function that evaluates the 
                                     * expression passed to the channel 
                                     * referenced by this commit */
     /**@}*/
@@ -61,9 +61,9 @@ typedef struct _PICC_OutCommit {
 typedef struct _PICC_Commit {
     /**@{*/
     PICC_CommitType type; /**< The type of the commit */
-    struct _PICC_PiThread *thread; /**< The pi-thread that has this 
+    struct _PICC_PiThread *thread; /** The pi-thread that has this 
                                     commit */
-    struct _PICC_Clock *clock; /**< The time when the commitment has 
+    struct _PICC_Clock *clock; /** The time when the commitment has 
                                 been made */
     struct _PICC_Value *clockval; /**< TODO see spec */
     int cont_pc; /**< TODO see spec */
@@ -87,7 +87,7 @@ typedef struct _PICC_Commit {
 typedef struct _PICC_CommitListElement {
     /**@{*/
     PICC_Commit *commit; /**< The refferenced commit*/
-    struct _PICC_CommitListElement *next; /**< A pointer to the next 
+    struct _PICC_CommitListElement *next; /** A pointer to the next 
                                             element or NULL if none */
     /**@}*/
 } PICC_CommitListElement;

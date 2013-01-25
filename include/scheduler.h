@@ -20,14 +20,14 @@
  */
 typedef struct _PICC_SchedPool {
     /**@{*/
-    struct _PICC_ReadyQueue *ready; /**< The queue that contains the 
+    struct _PICC_ReadyQueue *ready; /** The queue that contains the 
                                         pi-threads ready tuo run */
-    struct _PICC_WaitQueue *wait; /**< The queue that contains the 
+    struct _PICC_WaitQueue *wait; /** The queue that contains the 
                                     waiting or blocked pi-threads */
     PICC_Mutex lock; /**< The scheduler lock. TODO see spec */
-    PICC_Condition cond; /**< The scheduler condition. Used to 
+    PICC_Condition cond; /** The scheduler condition. Used to 
                             synchronise the running posix threads. */
-    int nb_slaves; /**< The number of running posix threads in the 
+    int nb_slaves; /** The number of running posix threads in the 
                         schedpool. */
     int nb_waiting_slaves; /**< The number of waiting posix threads. */
     bool running; /**< Specifies if the scheduler is actually running */
