@@ -5,6 +5,7 @@
  * This project is released under MIT License.
  *
  * @author Mickaël MENU
+ * @author Sergiu TIGANU
  */
 
 #ifndef PI_THREAD_H
