@@ -16,7 +16,7 @@
     PICC_acquire(&(commit->thread->clock->val->lock));
 
 #define RELEASE_CLOCK(commit) \
-    PICC_release(&(commit->thread->clock->val->lock), NULL);
+    PICC_release(&(commit->thread->clock->val->lock));
 
 #define INIT_COMMIT(commit, pt, ch, pc) \
     commit->thread = pt; \

@@ -18,7 +18,7 @@
     PICC_acquire(&(c->lock));
 
 #define RELEASE_CHANNEL(c) \
-    PICC_release(&(c->lock), NULL);
+    PICC_release(&(c->lock));
 
 /**
  * Creates a channel which contains 10 commitments.

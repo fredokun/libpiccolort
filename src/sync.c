@@ -44,12 +44,11 @@ void PICC_acquire(PICC_Mutex *mutex)
  * Unlocks the given mutex, fail if the mutex is already unlocked.
  *
  * @param mutex Mutex to unlock
- * @param error Error stack
  */
-void PICC_release(PICC_Mutex *mutex, PICC_Error *error)
+void PICC_release(PICC_Mutex *mutex)
 {
     if (pthread_mutex_trylock(mutex) == 0) {
-        NEW_ERROR(error, ERR_MUTEX_ALREADY_UNLOCKED);
+        CRASH_NEW_ERROR(ERR_MUTEX_ALREADY_UNLOCKED);
     } else {
         pthread_mutex_unlock(mutex);
     }
