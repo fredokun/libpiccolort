@@ -152,6 +152,30 @@ PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks, PICC_Error *error)
 }
 
 /**
+ * Switches an element of a KnowsSet from the FORGET state to the
+ * UNKNOWN state.
+ *
+ * @param ks Knows set
+ * @param ch Channel to switch state
+ * @param error Error stack
+ */
+void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch, PICC_Error *error)
+{
+    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+}
+
+/**
+ * Switches all KNOWN state elements of a KnowsSet to FORGET state.
+ *
+ * @param ks Knows set
+ * @param error Error stack
+ */
+void PICC_knowns_set_forget_all(PICC_KnownsSet *ks, PICC_Error *error)
+{
+    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+}
+
+/**
  * Adds a channel to a knowns set.
  *
  * Looks for a channel in a PICC_KnownsSet
