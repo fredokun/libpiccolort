@@ -104,7 +104,7 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
         else
         {
             INIT_COMMIT(commit, pt, ch, cont_pc);
-            PICC_MALLOC(commit->content.out, PICC_OutCommit, sub_error);
+            PICC_MALLOC(commit->content.out, PICC_OutCommit, &sub_error);
             commit->content.out->eval_func = eval;
             commit->type = PICC_OUT_COMMIT;
 
@@ -141,18 +141,19 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
 void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int refvar, PICC_Label cont_pc)
 {
         ALLOC_ERROR(sub_error);
+        PICC_Commit *commit = PICC_create_commitment(&sub_error);
         if (HAS_ERROR(sub_error)) {
             ADD_ERROR(&sub_error, sub_error, ERR_REGISTER_IN_COMMIT);
         } else {
             INIT_COMMIT(commit, pt, ch, cont_pc);
-            PICC_MALLOC(commit->content.in, PICC_InCommit, error);
+            PICC_MALLOC(commit->content.in, PICC_InCommit, &sub_error);
             commit->content.in->refvar = refvar;
             commit->type = PICC_IN_COMMIT;
 
             ALLOC_ERROR(add_error);
             PICC_commit_list_add(pt->commits, commit, &add_error);
             if (HAS_ERROR(add_error)) {
-                ADD_ERROR(&error, add_error, ERR_REGISTER_IN_COMMIT);
+                ADD_ERROR(&sub_error, add_error, ERR_REGISTER_IN_COMMIT);
                 free(commit);
             }
         }
