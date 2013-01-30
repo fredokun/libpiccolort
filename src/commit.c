@@ -78,8 +78,7 @@ PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PIC
 /**
  * Registers an output commit with given PiThread and channel.
  *
- *
- * @pre pt != null && ch != null && eval != null &&  cont_pc != null
+ * @pre pt != null && ch != null && eval != null &&  cont_pc >= 0 
  *
  * @post pt->commits->size(PICC_register_output_commitment(pt)) = pt->commits->size(pt) + 1
  * @post pt->commits->tail = commit
@@ -97,38 +96,33 @@ PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PIC
  */
 void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_EvalFunction *eval, PICC_Label cont_pc)
 {
-    ALLOC_ERROR(error);
-    PICC_ALLOC(out, PICC_OutCommit, &error) {
-        out->eval_func = eval;
         ALLOC_ERROR(sub_error);
         PICC_Commit *commit = PICC_create_commitment(&sub_error);
         if (HAS_ERROR(sub_error)) {
-            ADD_ERROR(&error, sub_error, ERR_REGISTER_OUT_COMMIT);
-            free(out);
-        } else {
+            ADD_ERROR(&sub_error, sub_error, ERR_REGISTER_OUT_COMMIT);
+        }
+        else
+        {
             INIT_COMMIT(commit, pt, ch, cont_pc);
-            commit->content.out = out;
+            PICC_MALLOC(commit->content.out, PICC_OutCommit, &sub_error);
+            commit->content.out->eval_func = eval;
             commit->type = PICC_OUT_COMMIT;
 
             ALLOC_ERROR(add_error);
             PICC_commit_list_add(pt->commits, commit, &add_error);
             if (HAS_ERROR(add_error)) {
-                ADD_ERROR(&error, add_error, ERR_REGISTER_IN_COMMIT);
+                ADD_ERROR(&sub_error, add_error, ERR_REGISTER_IN_COMMIT);
                 free(commit);
-                free(out);
             }
         }
-    }
-
-    if (HAS_ERROR(&error));
-        CRASH(&error);
+        if (HAS_ERROR(sub_error))
+            CRASH(&sub_error);
 }
-
 /**
  * Registers an input commit with given PiThread and channel.
  *
  *
- * @pre pt != null && ch != null && cont_pc != null
+ * @pre pt != null && ch != null && cont_pc >= 0 
  *
  * @post pt->commits->size(PICC_register_input_commitment(pt)) = pt->commits->size(pt) + 1
  * @post pt->commits->tail = commit
@@ -146,31 +140,26 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
  */
 void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int refvar, PICC_Label cont_pc)
 {
-    ALLOC_ERROR(error);
-    PICC_ALLOC(in, PICC_InCommit, &error) {
-        in->refvar = refvar;
         ALLOC_ERROR(sub_error);
         PICC_Commit *commit = PICC_create_commitment(&sub_error);
         if (HAS_ERROR(sub_error)) {
-            ADD_ERROR(&error, sub_error, ERR_REGISTER_IN_COMMIT);
-            free(in);
+            ADD_ERROR(&sub_error, sub_error, ERR_REGISTER_IN_COMMIT);
         } else {
             INIT_COMMIT(commit, pt, ch, cont_pc);
-            commit->content.in = in;
+            PICC_MALLOC(commit->content.in, PICC_InCommit, &sub_error);
+            commit->content.in->refvar = refvar;
             commit->type = PICC_IN_COMMIT;
 
             ALLOC_ERROR(add_error);
             PICC_commit_list_add(pt->commits, commit, &add_error);
             if (HAS_ERROR(add_error)) {
-                ADD_ERROR(&error, add_error, ERR_REGISTER_IN_COMMIT);
+                ADD_ERROR(&sub_error, add_error, ERR_REGISTER_IN_COMMIT);
                 free(commit);
-                free(in);
             }
         }
-    }
-
-    if (HAS_ERROR(error))
-        CRASH(&error);
+    
+    if (HAS_ERROR(sub_error))
+        CRASH(&sub_error);
 }
 
 /**
@@ -257,7 +246,7 @@ PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
 {
     PICC_Commit *fetched = NULL;
     ALLOC_ERROR(alloc_error);
-    PICC_ALLOC(current, PICC_InCommit, &alloc_error) {
+    PICC_ALLOC(current, PICC_Commit, &alloc_error) {
         current = PICC_commit_list_fetch(ch->incommits);
         while (current != NULL) {
             if (PICC_is_valid_commit(current)) {
@@ -288,7 +277,7 @@ PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
 {
     PICC_Commit *fetched = NULL;
     ALLOC_ERROR(alloc_error);
-    PICC_ALLOC(current, PICC_OutCommit, &alloc_error)
+    PICC_ALLOC(current, PICC_Commit, &alloc_error)
     {
         current = PICC_commit_list_fetch(ch->outcommits);
         while (current != NULL) {
