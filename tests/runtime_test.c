@@ -81,15 +81,15 @@ bool check_register_outcommits(PICC_Error* error)
     ASSERT(eval != NULL);
     ASSERT(cont_pc >= 0);
 
-    PICC_register_output_commitment(pt, ch, eval, cont_pc, error);
+    PICC_register_output_commitment(pt, ch, eval, cont_pc);
 
     //post
     ASSERT(pt->commits->size == (size + 1));
-    ASSERT(pt->commits->head->type == PICC_OUT_COMMIT);
-    ASSERT(pt->commits->head->content->out->eval_func == eval);
-    ASSERT(pt->commits->head->thread == pt);
-    ASSERT(pt->commits->head->channel == ch);
-    ASSERT(pt->commits->head->cont_pc == cont_pc);
+    ASSERT(pt->commits->head->commit->type == PICC_OUT_COMMIT);
+    ASSERT(pt->commits->head->commit->content.out->eval_func == eval);
+    ASSERT(pt->commits->head->commit->thread == pt);
+    ASSERT(pt->commits->head->commit->channel == ch);
+    ASSERT(pt->commits->head->commit->cont_pc == cont_pc);
 
     return true;
 }

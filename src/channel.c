@@ -9,7 +9,7 @@
  * @author Joel HING
  * @author Mickaël MENU
  */
-
+#include <stdio.h>
 #include <channel.h>
 #include <tools.h>
 #include <error.h>

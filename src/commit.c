@@ -246,7 +246,7 @@ PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
 {
     PICC_Commit *fetched = NULL;
     ALLOC_ERROR(alloc_error);
-    PICC_ALLOC(current, PICC_InCommit, &alloc_error) {
+    PICC_ALLOC(current, PICC_Commit, &alloc_error) {
         current = PICC_commit_list_fetch(ch->incommits);
         while (current != NULL) {
             if (PICC_is_valid_commit(current)) {
@@ -277,7 +277,7 @@ PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
 {
     PICC_Commit *fetched = NULL;
     ALLOC_ERROR(alloc_error);
-    PICC_ALLOC(current, PICC_OutCommit, &alloc_error)
+    PICC_ALLOC(current, PICC_Commit, &alloc_error)
     {
         current = PICC_commit_list_fetch(ch->outcommits);
         while (current != NULL) {
