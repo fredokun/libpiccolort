@@ -74,5 +74,6 @@ extern PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks, PICC_Error *er
 extern void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch, PICC_Error *error);
 extern void PICC_knowns_set_forget_all(PICC_KnownsSet *ks, PICC_Error *error);
 extern bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch, PICC_Error *error);
+extern void PICC_release_all_channels(PICC_Channel **chans, int nb_chans);
 
 #endif
