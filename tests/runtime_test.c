@@ -45,6 +45,8 @@ bool check_pithread(PICC_Error *error)
  * PICC_CommitList *PICC_create_commit_list(); \n
  * PICC_CommitListElement *PICC_create_commit_list_element();
  *
+ * @inv plop
+ *
  * @return boolean true if it works else false
  */
 bool check_commits(PICC_Error *error)
