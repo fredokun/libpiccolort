@@ -36,7 +36,7 @@ typedef struct _PICC_Value {
                         concurent accesses */
     /**@}*/
     /**
-     * @name The possible types a value can have.
+     * The possible types a value can have.
      * Only the value for the type that corresponds to the @param kind
      * matters.
      */
