@@ -84,7 +84,7 @@ typedef struct _PICC_Commit {
     struct _PICC_Channel *channel; /**< The channel of this commitment */
     /**@}*/
     /**
-     * @name The specific pârt of the commitments. One of the pointers
+     * The specific pârt of the commitments. One of the pointers
      * below should always be NULL.
      */
     union {
