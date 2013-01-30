@@ -45,10 +45,9 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, PICC_Erro
  * @param commit Commitment
  * @return Whether the PiThread can be awaken with given commit
  */
-enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit, PICC_Error *error)
+enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
 {
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
-    return false;
+    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
 }
 
 /**
@@ -57,9 +56,9 @@ enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit, P
  * @param sched Scheduler
  * @param pt PiThread to be awaken
  */
-void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Error *error)
+void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt)
 {
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
 }
 
 /**
@@ -67,7 +66,5 @@ void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Error *error)
  */
 void PICC_low_level_yield()
 {
-    ALLOC_ERROR(error);
-    NEW_ERROR(&error, ERR_NOT_IMPLEMENTED);
-    CRASH(&error);
+    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
 }

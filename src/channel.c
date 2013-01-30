@@ -18,7 +18,7 @@
     PICC_acquire(&(c->lock));
 
 #define RELEASE_CHANNEL(c) \
-    PICC_release(&(c->lock), NULL);
+    PICC_release(&(c->lock));
 
 /**
  * Creates a channel which contains 10 commitments.
@@ -93,7 +93,7 @@ PICC_KnownsSet *PICC_create_knowns_set(int length, PICC_Error *error)
  *
  * @param Channel to update
  */
-void PICC_channel_incr_ref_count(PICC_Channel *channel , PICC_Error *error)
+void PICC_channel_incr_ref_count(PICC_Channel *channel)
 {
     LOCK_CHANNEL(channel);
     channel->global_rc++;
@@ -105,14 +105,17 @@ void PICC_channel_incr_ref_count(PICC_Channel *channel , PICC_Error *error)
  *
  * @param Channel to update
  */
-void PICC_channel_dec_ref_count(PICC_Channel *channel , PICC_Error *error)
+void PICC_channel_dec_ref_count(PICC_Channel *channel)
 {
     LOCK_CHANNEL(channel);
     channel->global_rc--;
     RELEASE_CHANNEL(channel);
 
     if (channel->global_rc == 0) {
-        PICC_reclaim_channel(channel, error);
+        ALLOC_ERROR(reclaim_error);
+        PICC_reclaim_channel(channel, &reclaim_error);
+        if (HAS_ERROR(reclaim_error))
+            CRASH(&reclaim_error);
     }
 }
 
@@ -130,12 +133,11 @@ void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
  * Returns a subset of all KNOWN-STATE in a knows set.
  *
  * @param ks Knowns set
- * @param error Error stack
  * @return Subset of all known state in the given set
  */
-PICC_KnownsSet *PICC_knowns_set_knows(PICC_KnownsSet *ks, PICC_Error *error)
+PICC_KnownsSet *PICC_knowns_set_knows(PICC_KnownsSet *ks)
 {
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
     return NULL;
 }
 
@@ -143,12 +145,11 @@ PICC_KnownsSet *PICC_knowns_set_knows(PICC_KnownsSet *ks, PICC_Error *error)
  * Returns a subset of all FORGET-STATE in a knowns set.
  *
  * @param ks Knowns set
- * @param error Error stack
  * @return Subset of all forget state in the given set.
  */
-PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks, PICC_Error *error)
+PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks)
 {
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
     return NULL;
 }
 
@@ -158,22 +159,20 @@ PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks, PICC_Error *error)
  *
  * @param ks Knows set
  * @param ch Channel to switch state
- * @param error Error stack
  */
-void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch, PICC_Error *error)
+void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch)
 {
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
 }
 
 /**
  * Switches all KNOWN state elements of a KnowsSet to FORGET state.
  *
  * @param ks Knows set
- * @param error Error stack
  */
-void PICC_knowns_set_forget_all(PICC_KnownsSet *ks, PICC_Error *error)
+void PICC_knowns_set_forget_all(PICC_KnownsSet *ks)
 {
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
 }
 
 /**
@@ -186,12 +185,11 @@ void PICC_knowns_set_forget_all(PICC_KnownsSet *ks, PICC_Error *error)
  *
  * @param ks Knowns set
  * @param ch Channel to add
- * @param error Error stack
  * @return Whether the channel has been added
  */
-bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch, PICC_Error *error)
+bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch)
 {
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
     return false;
 }
 
@@ -203,7 +201,5 @@ bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch, PICC_Error *erro
  */
 void PICC_release_all_channels(PICC_Channel **chans, int nb_chans)
 {
-    ALLOC_ERROR(error);
-    NEW_ERROR(&error, ERR_NOT_IMPLEMENTED);
-    CRASH(&error);
+    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
 }

@@ -66,14 +66,14 @@ extern PICC_Channel *PICC_create_channel(PICC_Error *error);
 extern PICC_Channel *PICC_create_channel_cn(int commit_size, PICC_Error *error);
 extern PICC_Knowns *PICC_create_knowns(PICC_Error *error);
 extern PICC_KnownsSet *PICC_create_knowns_set(int length, PICC_Error *error);
-extern void PICC_channel_incr_ref_count(PICC_Channel *ch, PICC_Error *error);
-extern void PICC_channel_dec_ref_count(PICC_Channel *ch, PICC_Error *error);
+extern void PICC_channel_incr_ref_count(PICC_Channel *ch);
+extern void PICC_channel_dec_ref_count(PICC_Channel *ch);
 extern void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error);
-extern PICC_KnownsSet *PICC_knowns_set_knows(PICC_KnownsSet *ks, PICC_Error *error);
-extern PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks, PICC_Error *error);
-extern void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch, PICC_Error *error);
-extern void PICC_knowns_set_forget_all(PICC_KnownsSet *ks, PICC_Error *error);
-extern bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch, PICC_Error *error);
+extern PICC_KnownsSet *PICC_knowns_set_knows(PICC_KnownsSet *ks);
+extern PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks);
+extern void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch);
+extern void PICC_knowns_set_forget_all(PICC_KnownsSet *ks);
+extern bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch);
 extern void PICC_release_all_channels(PICC_Channel **chans, int nb_chans);
 
 #endif

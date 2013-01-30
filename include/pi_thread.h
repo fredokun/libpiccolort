@@ -84,8 +84,8 @@ typedef struct _PICC_PiThread {
 } PICC_PiThread;
 
 extern PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, PICC_Error *error);
-extern enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, struct _PICC_Commit *commit, PICC_Error *error);
-extern void PICC_awake(struct _PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Error *error);
+extern enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, struct _PICC_Commit *commit);
+extern void PICC_awake(struct _PICC_SchedPool *sched, PICC_PiThread *pt);
 extern void PICC_low_level_yield();
 
 #endif
