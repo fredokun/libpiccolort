@@ -12,10 +12,10 @@
 #include <queue.h>
 
 #define LOCK_QUEUE(q) \
-    PICC_acquire(q->lock);
+    PICC_acquire(&(q->lock));
 
 #define RELEASE_QUEUE(q) \
-    PICC_release(q->lock, NULL);
+    PICC_release(&(q->lock), NULL);
 
 // used for wait queue zones
 const static int ACTIVE = 1;

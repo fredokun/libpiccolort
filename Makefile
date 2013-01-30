@@ -6,7 +6,7 @@
 # @author Mickaël MENU
 
 CC=gcc
-CFLAGS=-Wall -std=c99 -fnested-functions -I\include
+CFLAGS=-Wall -std=c99 -I\include
 OFLAGS= -lpthread
 NAME=run_tests
 BIN=bin

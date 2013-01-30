@@ -32,14 +32,14 @@ typedef enum _PICC_ValueKind {
 typedef struct _PICC_Value {
     /**@{*/
     PICC_ValueKind kind; /**< The real type of the value */
-    PICC_Mutex lock; /** A lock that may be used tu block the value for 
+    PICC_Mutex lock; /** A lock that may be used tu block the value for
                         concurent accesses */
     /**@}*/
     /**
-     * @name The possible types a value can have. 
-     * Only the value for the type that corresponds to the @param kind 
+     * @name The possible types a value can have.
+     * Only the value for the type that corresponds to the @param kind
      * matters.
-     */ 
+     */
     union {
         /**@{*/
         int as_int; /**< The integer of the value */
@@ -53,14 +53,14 @@ typedef struct _PICC_Value {
 
 /**
  * An atomic boolean is a PICC_Value that has PICC_BOOL_VAL in kind.
- * To acquire and release an atomic boolean, on it's lock of use the 
+ * To acquire and release an atomic boolean, on it's lock of use the
  * PICC_acquire and PICC_release functions that are defined in sync.h
  */
 typedef struct _PICC_Value PICC_AtomicBoolean;
 
 /**
  * An atomic integer is a PICC_Value that has PICC_INT_VAL in kind.
- * To acquire and release an atomic integer, on it's lock of use the 
+ * To acquire and release an atomic integer, on it's lock of use the
  * PICC_acquire and PICC_release functions that are defined in sync.h
  */
 typedef struct _PICC_Value PICC_AtomicInt;
@@ -70,8 +70,8 @@ typedef struct _PICC_Value PICC_AtomicInt;
  */
 typedef struct _PICC_Clock {
     /**@{*/
-    PICC_AtomicInt *val; /** Contains the timestamp when the clock has 
-                           * been stopped. TODO a function that puts a 
+    PICC_AtomicInt *val; /** Contains the timestamp when the clock has
+                           * been stopped. TODO a function that puts a
                            * timestamp in a clock */
     /**@{*/
 } PICC_Clock;
