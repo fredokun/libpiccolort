@@ -23,8 +23,8 @@
  */
 typedef struct _PICC_Channel {
     /**@{*/
-    struct _PICC_Commit* incommits; /**< The input commits list */
-    struct _PICC_Commit* outcommits; /**< The output commits list */
+    struct _PICC_CommitList* incommits; /**< The input commits list */
+    struct _PICC_CommitList* outcommits; /**< The output commits list */
     int global_rc; /** The number of commitments to that reference 
                     this channel (TODO see spec)*/
     PICC_Mutex lock; /** This channel lock to protect from concurrent 
@@ -72,5 +72,8 @@ extern void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error);
 extern PICC_KnownsSet *PICC_knowns_set_knows(PICC_KnownsSet *ks, PICC_Error *error);
 extern PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks, PICC_Error *error);
 extern bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch, PICC_Error *error);
+
+extern void PICC_free_channel(PICC_Channel *channel);
+extern void PICC_test_channels();
 
 #endif

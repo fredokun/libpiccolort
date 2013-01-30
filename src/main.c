@@ -20,6 +20,8 @@
 int main()
 {
     PICC_test_generic_sets();
+    printf("run tests channel\n");
+    PICC_test_channels();
 
     return 0;
 }
