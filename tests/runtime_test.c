@@ -61,25 +61,37 @@ bool check_create_commitments(PICC_Error* error)
 
 bool check_register_outcommits(PICC_Error* error)
 {
-    PICC_Commit *c;
     PICC_PiThread* pt;
     PICC_Channel *ch;
     PICC_EvalFunction *eval;
     PICC_Label cont_pc;
-
-    ALLOC_ERROR(create_error);
-    c = PICC_create_commitment(&create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-        return false;
-    }
+    int size;
 
     //check pithread, channel first
     pt = PICC_create_pithread(1, 1, error);
     ch = PICC_create_channel(error);
+    size = pt->commits->size;
     PICC_Value* func(PICC_PiThread* a) { printf("my eval func !\n"); return NULL; };
     eval = func;
+    cont_pc = 10;
     
+    //pre
+    ASSERT(pt != NULL);
+    ASSERT(ch != NULL);
+    ASSERT(eval != NULL);
+    ASSERT(cont_pc >= 0);
+
+    PICC_register_output_commitment(pt, ch, eval, cont_pc, error);
+
+    //post
+    ASSERT(pt->commits->size == (size + 1));
+    ASSERT(pt->commits->head->type == PICC_OUT_COMMIT);
+    ASSERT(pt->commits->head->content->out->eval_func == eval);
+    ASSERT(pt->commits->head->thread == pt);
+    ASSERT(pt->commits->head->channel == ch);
+    ASSERT(pt->commits->head->cont_pc == cont_pc);
+
+    return true;
 }
 
 /**
