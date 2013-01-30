@@ -48,6 +48,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, PICC_Erro
 enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
 {
     CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
+    return PICC_STATUS_ENDED;
 }
 
 /**
