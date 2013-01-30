@@ -83,6 +83,16 @@ typedef struct _PICC_Error {
 #define PRINT_ERROR(error) \
     PICC_print_error(error, __FILE__, __FUNCTION__)
 
+#define CRASH_NEW_ERROR(id) \
+    ALLOC_ERROR(error); \
+    NEW_ERROR(&error, id); \
+    CRASH(&error);
+
+#define PRINT_NEW_ERROR(id) \
+    ALLOC_ERROR(error); \
+    NEW_ERROR(&error, id); \
+    PRINT_ERROR(&error);
+
 // underlying error functions
 extern void PICC_init_error(PICC_Error *error, PICC_ErrorId id, const char *file, int line);
 extern void PICC_add_error(PICC_Error *error, PICC_Error prev_error, PICC_ErrorId id, const char *file, int line);
