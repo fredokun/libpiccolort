@@ -42,11 +42,11 @@ bool check_pithread(PICC_Error *error)
 /**
 * Test : Create Commitments
 *
-* @return boolean true if it works else false 
+* @return boolean true if it works else false
 *
 */
 bool check_create_commitments(PICC_Error* error)
-{	
+{
     ALLOC_ERROR(create_error);
     PICC_Commit* c = PICC_create_commitment(&create_error);
     if (HAS_ERROR(create_error)) {
@@ -57,6 +57,8 @@ bool check_create_commitments(PICC_Error* error)
         NEW_ERROR(error, ERR_NULLPOINTER_COMMIT);
         return false;
     }
+
+    return true;
 }
 
 bool check_register_outcommits(PICC_Error* error)
@@ -74,7 +76,7 @@ bool check_register_outcommits(PICC_Error* error)
     PICC_Value* func(PICC_PiThread* a) { printf("my eval func !\n"); return NULL; };
     eval = func;
     cont_pc = 10;
-    
+
     //pre
     ASSERT(pt != NULL);
     ASSERT(ch != NULL);
