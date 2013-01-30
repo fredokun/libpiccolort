@@ -1,0 +1,43 @@
+\hypertarget{struct__PICC__Channel}{\section{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel Struct Reference}
+\label{struct__PICC__Channel}\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel@{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel}}
+}
+
+
+{\ttfamily \#include $<$channel.\-h$>$}
+
+\subsection*{Data Fields}
+{\bf }\par
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct__PICC__Commit}{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit} $\ast$ \hyperlink{struct__PICC__Channel_a7dbd850bbc98db0da80c381652d62f68}{incommits}
+\item 
+struct \hyperlink{struct__PICC__Commit}{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit} $\ast$ \hyperlink{struct__PICC__Channel_a75755c8cce2c82d51eac3ac9749f0418}{outcommits}
+\item 
+int \hyperlink{struct__PICC__Channel_a2a19db7029a1bf3b7d28e74bac691b09}{global\-\_\-rc}
+\item 
+\hyperlink{sync_8h_a600a20a1dd394c06182a81d72e3357f4}{P\-I\-C\-C\-\_\-\-Mutex} \hyperlink{struct__PICC__Channel_a3d02581ff833cb6224c88d4657fb2c50}{lock}
+\end{DoxyCompactItemize}
+
+
+
+\subsection{Detailed Description}
+The type of the pi-\/thread channels 
+
+\subsection{Field Documentation}
+\hypertarget{struct__PICC__Channel_a2a19db7029a1bf3b7d28e74bac691b09}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel@{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel}!global\-\_\-rc@{global\-\_\-rc}}
+\index{global\-\_\-rc@{global\-\_\-rc}!_PICC_Channel@{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel}}
+\subsubsection[{global\-\_\-rc}]{\setlength{\rightskip}{0pt plus 5cm}int \-\_\-\-P\-I\-C\-C\-\_\-\-Channel\-::global\-\_\-rc}}\label{struct__PICC__Channel_a2a19db7029a1bf3b7d28e74bac691b09}
+\hypertarget{struct__PICC__Channel_a7dbd850bbc98db0da80c381652d62f68}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel@{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel}!incommits@{incommits}}
+\index{incommits@{incommits}!_PICC_Channel@{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel}}
+\subsubsection[{incommits}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Commit}$\ast$ \-\_\-\-P\-I\-C\-C\-\_\-\-Channel\-::incommits}}\label{struct__PICC__Channel_a7dbd850bbc98db0da80c381652d62f68}
+The input commits list \hypertarget{struct__PICC__Channel_a3d02581ff833cb6224c88d4657fb2c50}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel@{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel}!lock@{lock}}
+\index{lock@{lock}!_PICC_Channel@{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel}}
+\subsubsection[{lock}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Mutex} \-\_\-\-P\-I\-C\-C\-\_\-\-Channel\-::lock}}\label{struct__PICC__Channel_a3d02581ff833cb6224c88d4657fb2c50}
+The number of commitments to that reference this channel (T\-O\-D\-O see spec) \hypertarget{struct__PICC__Channel_a75755c8cce2c82d51eac3ac9749f0418}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel@{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel}!outcommits@{outcommits}}
+\index{outcommits@{outcommits}!_PICC_Channel@{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel}}
+\subsubsection[{outcommits}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Commit}$\ast$ \-\_\-\-P\-I\-C\-C\-\_\-\-Channel\-::outcommits}}\label{struct__PICC__Channel_a75755c8cce2c82d51eac3ac9749f0418}
+The output commits list 
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{channel_8h}{channel.\-h}\end{DoxyCompactItemize}

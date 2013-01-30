@@ -1,0 +1,91 @@
+\hypertarget{pi__thread_8c}{\section{src/pi\-\_\-thread.c File Reference}
+\label{pi__thread_8c}\index{src/pi\-\_\-thread.\-c@{src/pi\-\_\-thread.\-c}}
+}
+{\ttfamily \#include $<$pi\-\_\-thread.\-h$>$}\\*
+{\ttfamily \#include $<$tools.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$ \hyperlink{pi__thread_8c_a7ed685715854b374bd64a6928d6f0262}{P\-I\-C\-C\-\_\-create\-\_\-pithread} (int env\-\_\-length, int knowns\-\_\-length, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+bool \hyperlink{pi__thread_8c_a478323b5995a4c2a142527b1f61066de}{P\-I\-C\-C\-\_\-can\-\_\-awake} (\hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt, \hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$commit, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+void \hyperlink{pi__thread_8c_ad2342dbb3159b31f4afb1370b4b6d77c}{P\-I\-C\-C\-\_\-awake} (\hyperlink{scheduler_8h_a53817fd01b91a5a89175368b546dd8b9}{P\-I\-C\-C\-\_\-\-Sched\-Pool} $\ast$sched, \hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Pi-\/\-Threads
+
+This project is released under M\-I\-T License.
+
+\begin{DoxyAuthor}{Author}
+Mickaël M\-E\-N\-U 
+
+Maxence W\-O 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\hypertarget{pi__thread_8c_ad2342dbb3159b31f4afb1370b4b6d77c}{\index{pi\-\_\-thread.\-c@{pi\-\_\-thread.\-c}!P\-I\-C\-C\-\_\-awake@{P\-I\-C\-C\-\_\-awake}}
+\index{P\-I\-C\-C\-\_\-awake@{P\-I\-C\-C\-\_\-awake}!pi_thread.c@{pi\-\_\-thread.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-awake}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-awake (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Sched\-Pool} $\ast$}]{sched, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{pi__thread_8c_ad2342dbb3159b31f4afb1370b4b6d77c}
+Awakes a Pi\-Thread in the given scheduler.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sched} & Scheduler \\
+\hline
+{\em pt} & Pi\-Thread to be awaken \\
+\hline
+\end{DoxyParams}
+\hypertarget{pi__thread_8c_a478323b5995a4c2a142527b1f61066de}{\index{pi\-\_\-thread.\-c@{pi\-\_\-thread.\-c}!P\-I\-C\-C\-\_\-can\-\_\-awake@{P\-I\-C\-C\-\_\-can\-\_\-awake}}
+\index{P\-I\-C\-C\-\_\-can\-\_\-awake@{P\-I\-C\-C\-\_\-can\-\_\-awake}!pi_thread.c@{pi\-\_\-thread.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-can\-\_\-awake}]{\setlength{\rightskip}{0pt plus 5cm}bool P\-I\-C\-C\-\_\-can\-\_\-awake (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Commit} $\ast$}]{commit, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{pi__thread_8c_a478323b5995a4c2a142527b1f61066de}
+Returns whether a Pi\-Thread can be awaken with the given commit.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pt} & Pi\-Thread to check \\
+\hline
+{\em commit} & Commitment \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Whether the Pi\-Thread can be awaken with given commit 
+\end{DoxyReturn}
+\hypertarget{pi__thread_8c_a7ed685715854b374bd64a6928d6f0262}{\index{pi\-\_\-thread.\-c@{pi\-\_\-thread.\-c}!P\-I\-C\-C\-\_\-create\-\_\-pithread@{P\-I\-C\-C\-\_\-create\-\_\-pithread}}
+\index{P\-I\-C\-C\-\_\-create\-\_\-pithread@{P\-I\-C\-C\-\_\-create\-\_\-pithread}!pi_thread.c@{pi\-\_\-thread.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-create\-\_\-pithread}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread}$\ast$ P\-I\-C\-C\-\_\-create\-\_\-pithread (
+\begin{DoxyParamCaption}
+\item[{int}]{env\-\_\-length, }
+\item[{int}]{knowns\-\_\-length, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{pi__thread_8c_a7ed685715854b374bd64a6928d6f0262}
+Creates a new Pi\-Thread with given environment and knowns set length.
+
+
+\begin{DoxyParams}{Parameters}
+{\em env\-\_\-length} & Size of the environment \\
+\hline
+{\em knowns\-\_\-length} & Size of the knowns set \\
+\hline
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Created Pi\-Thread 
+\end{DoxyReturn}

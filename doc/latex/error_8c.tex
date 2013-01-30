@@ -1,0 +1,196 @@
+\hypertarget{error_8c}{\section{src/error.c File Reference}
+\label{error_8c}\index{src/error.\-c@{src/error.\-c}}
+}
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$string.\-h$>$}\\*
+{\ttfamily \#include $<$error.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{error_8c_a64a7ece2791d326b77b8e6bf4db30278}{P\-I\-C\-C\-\_\-init\-\_\-error} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error, \hyperlink{errors_8h_a41a7f2f3cd887e60e0ce75701178e6a9}{P\-I\-C\-C\-\_\-\-Error\-Id} id, const char $\ast$file, int line)
+\item 
+void \hyperlink{error_8c_abe44aaf997ec3c5c43ab902607a88b30}{P\-I\-C\-C\-\_\-add\-\_\-error} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} prev\-\_\-error, \hyperlink{errors_8h_a41a7f2f3cd887e60e0ce75701178e6a9}{P\-I\-C\-C\-\_\-\-Error\-Id} id, const char $\ast$file, int line)
+\item 
+\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$ \hyperlink{error_8c_a02ef0a36631d1aba6ad6609e94205f94}{P\-I\-C\-C\-\_\-copy\-\_\-error} (const \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} error)
+\item 
+void \hyperlink{error_8c_a51ed14520354a1a21395c75d9a87431e}{P\-I\-C\-C\-\_\-crash} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error, const char $\ast$file, const char $\ast$fct)
+\item 
+void \hyperlink{error_8c_a36182df99b874e1933ab960f505e41c1}{P\-I\-C\-C\-\_\-print\-\_\-error} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error, const char $\ast$file, const char $\ast$fct)
+\item 
+void \hyperlink{error_8c_a6b726977db771e50fcea7e017b3685a0}{P\-I\-C\-C\-\_\-forward\-\_\-error} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} prev\-\_\-error)
+\item 
+const char $\ast$ \hyperlink{error_8c_a04e065ee7ae9d0e1b98518f750da393b}{P\-I\-C\-C\-\_\-get\-\_\-error\-\_\-message} (\hyperlink{errors_8h_a41a7f2f3cd887e60e0ce75701178e6a9}{P\-I\-C\-C\-\_\-\-Error\-Id} id)
+\item 
+void \hyperlink{error_8c_ab6296da4ab259a07468ec699bf788948}{P\-I\-C\-C\-\_\-free\-\_\-error} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Provides several functions to handle errors.
+
+This project is released under M\-I\-T License.
+
+\begin{DoxyAuthor}{Author}
+Mickaël M\-E\-N\-U 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\hypertarget{error_8c_abe44aaf997ec3c5c43ab902607a88b30}{\index{error.\-c@{error.\-c}!P\-I\-C\-C\-\_\-add\-\_\-error@{P\-I\-C\-C\-\_\-add\-\_\-error}}
+\index{P\-I\-C\-C\-\_\-add\-\_\-error@{P\-I\-C\-C\-\_\-add\-\_\-error}!error.c@{error.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-add\-\_\-error}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-add\-\_\-error (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error}}]{prev\-\_\-error, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error\-Id}}]{id, }
+\item[{const char $\ast$}]{file, }
+\item[{int}]{line}
+\end{DoxyParamCaption}
+)}}\label{error_8c_abe44aaf997ec3c5c43ab902607a88b30}
+Adds a new error to the error stack by appending the previous error to the new one.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & New error to be returned by the caller. \\
+\hline
+{\em prev\-\_\-error} & Previous error occured. \\
+\hline
+{\em file} & File where the error occured. \\
+\hline
+{\em line} & Line in $<$file$>$ where the error occured. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+New error linked to previous error. 
+\end{DoxyReturn}
+\hypertarget{error_8c_a02ef0a36631d1aba6ad6609e94205f94}{\index{error.\-c@{error.\-c}!P\-I\-C\-C\-\_\-copy\-\_\-error@{P\-I\-C\-C\-\_\-copy\-\_\-error}}
+\index{P\-I\-C\-C\-\_\-copy\-\_\-error@{P\-I\-C\-C\-\_\-copy\-\_\-error}!error.c@{error.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-copy\-\_\-error}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Error}$\ast$ P\-I\-C\-C\-\_\-copy\-\_\-error (
+\begin{DoxyParamCaption}
+\item[{const {\bf P\-I\-C\-C\-\_\-\-Error}}]{error}
+\end{DoxyParamCaption}
+)}}\label{error_8c_a02ef0a36631d1aba6ad6609e94205f94}
+Copies a given error to a new allocated memory location.
+
+This is used to ensure the previous error in an error stack are not automatically freed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Error to be copied. \\
+\hline
+{\em Copy} & of $<$error$>$. \\
+\hline
+\end{DoxyParams}
+\hypertarget{error_8c_a51ed14520354a1a21395c75d9a87431e}{\index{error.\-c@{error.\-c}!P\-I\-C\-C\-\_\-crash@{P\-I\-C\-C\-\_\-crash}}
+\index{P\-I\-C\-C\-\_\-crash@{P\-I\-C\-C\-\_\-crash}!error.c@{error.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-crash}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-crash (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error, }
+\item[{const char $\ast$}]{file, }
+\item[{const char $\ast$}]{fct}
+\end{DoxyParamCaption}
+)}}\label{error_8c_a51ed14520354a1a21395c75d9a87431e}
+Prints the given error stack on the standard error output and quits the program with failure return code.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Error stack \\
+\hline
+{\em file} & File where the crash occured (for D\-E\-B\-U\-G) \\
+\hline
+{\em fct} & Function where the crash occured (for D\-E\-B\-U\-G) \\
+\hline
+\end{DoxyParams}
+\hypertarget{error_8c_a6b726977db771e50fcea7e017b3685a0}{\index{error.\-c@{error.\-c}!P\-I\-C\-C\-\_\-forward\-\_\-error@{P\-I\-C\-C\-\_\-forward\-\_\-error}}
+\index{P\-I\-C\-C\-\_\-forward\-\_\-error@{P\-I\-C\-C\-\_\-forward\-\_\-error}!error.c@{error.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-forward\-\_\-error}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-forward\-\_\-error (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error}}]{prev\-\_\-error}
+\end{DoxyParamCaption}
+)}}\label{error_8c_a6b726977db771e50fcea7e017b3685a0}
+Forwards an error by copying all the value of the previous error in the given error.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Current error. \\
+\hline
+{\em prev\-\_\-error} & Previous error. \\
+\hline
+\end{DoxyParams}
+\hypertarget{error_8c_ab6296da4ab259a07468ec699bf788948}{\index{error.\-c@{error.\-c}!P\-I\-C\-C\-\_\-free\-\_\-error@{P\-I\-C\-C\-\_\-free\-\_\-error}}
+\index{P\-I\-C\-C\-\_\-free\-\_\-error@{P\-I\-C\-C\-\_\-free\-\_\-error}!error.c@{error.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-free\-\_\-error}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-free\-\_\-error (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{error_8c_ab6296da4ab259a07468ec699bf788948}
+Frees the memory used by an error stack.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Error stack. \\
+\hline
+\end{DoxyParams}
+\hypertarget{error_8c_a04e065ee7ae9d0e1b98518f750da393b}{\index{error.\-c@{error.\-c}!P\-I\-C\-C\-\_\-get\-\_\-error\-\_\-message@{P\-I\-C\-C\-\_\-get\-\_\-error\-\_\-message}}
+\index{P\-I\-C\-C\-\_\-get\-\_\-error\-\_\-message@{P\-I\-C\-C\-\_\-get\-\_\-error\-\_\-message}!error.c@{error.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-get\-\_\-error\-\_\-message}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ P\-I\-C\-C\-\_\-get\-\_\-error\-\_\-message (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error\-Id}}]{id}
+\end{DoxyParamCaption}
+)}}\label{error_8c_a04e065ee7ae9d0e1b98518f750da393b}
+Returns the error message corresponding to the given error I\-D.
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & Error identifier \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Error message 
+\end{DoxyReturn}
+\hypertarget{error_8c_a64a7ece2791d326b77b8e6bf4db30278}{\index{error.\-c@{error.\-c}!P\-I\-C\-C\-\_\-init\-\_\-error@{P\-I\-C\-C\-\_\-init\-\_\-error}}
+\index{P\-I\-C\-C\-\_\-init\-\_\-error@{P\-I\-C\-C\-\_\-init\-\_\-error}!error.c@{error.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-init\-\_\-error}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-init\-\_\-error (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error\-Id}}]{id, }
+\item[{const char $\ast$}]{file, }
+\item[{int}]{line}
+\end{DoxyParamCaption}
+)}}\label{error_8c_a64a7ece2791d326b77b8e6bf4db30278}
+Initializes a new error with a given error I\-D, file and line.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & New error to be returned by the caller. \\
+\hline
+{\em file} & File where the error occured. \\
+\hline
+{\em line} & Line in $<$file$>$ where the error occured. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Initialized error. 
+\end{DoxyReturn}
+\hypertarget{error_8c_a36182df99b874e1933ab960f505e41c1}{\index{error.\-c@{error.\-c}!P\-I\-C\-C\-\_\-print\-\_\-error@{P\-I\-C\-C\-\_\-print\-\_\-error}}
+\index{P\-I\-C\-C\-\_\-print\-\_\-error@{P\-I\-C\-C\-\_\-print\-\_\-error}!error.c@{error.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-print\-\_\-error}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-print\-\_\-error (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error, }
+\item[{const char $\ast$}]{file, }
+\item[{const char $\ast$}]{fct}
+\end{DoxyParamCaption}
+)}}\label{error_8c_a36182df99b874e1933ab960f505e41c1}
+Prints the given error stack on the standard error output. The sub-\/errors are freed after being printed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Error stack \\
+\hline
+{\em file} & File where the print occured (for D\-E\-B\-U\-G) \\
+\hline
+{\em fct} & Function where the print occured (for D\-E\-B\-U\-G) \\
+\hline
+\end{DoxyParams}

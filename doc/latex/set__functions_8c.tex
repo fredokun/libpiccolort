@@ -1,0 +1,277 @@
+\hypertarget{set__functions_8c}{\section{src/set\-\_\-functions.c File Reference}
+\label{set__functions_8c}\index{src/set\-\_\-functions.\-c@{src/set\-\_\-functions.\-c}}
+}
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$set.\-h$>$}\\*
+{\ttfamily \#include $<$tools.\-h$>$}\\*
+{\ttfamily \#include $<$errors.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{set__functions_8c_a695051775e95f125b50fdba3ed3c7a28}{P\-I\-C\-C\-\_\-set\-\_\-add\-\_\-commit} (\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s, \hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$elem)
+\item 
+void \hyperlink{set__functions_8c_adb848c373193458a6ad9f7a86d2b75c4}{P\-I\-C\-C\-\_\-set\-\_\-add\-\_\-knowns} (\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s, \hyperlink{channel_8h_a87609417467916d98a7505871adc1760}{P\-I\-C\-C\-\_\-\-Knowns} $\ast$elem)
+\item 
+bool \hyperlink{set__functions_8c_a3a9c0db3d0fc21f5482a6e6aea4c5b2a}{P\-I\-C\-C\-\_\-cmp\-\_\-commit} (\hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$c, \hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$c2, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$err)
+\item 
+bool \hyperlink{set__functions_8c_a21141afc3dbd9203cf5216e55f33e797}{P\-I\-C\-C\-\_\-cmp\-\_\-knowns} (\hyperlink{channel_8h_a87609417467916d98a7505871adc1760}{P\-I\-C\-C\-\_\-\-Knowns} $\ast$k, \hyperlink{channel_8h_a87609417467916d98a7505871adc1760}{P\-I\-C\-C\-\_\-\-Knowns} $\ast$k2, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$err)
+\item 
+bool \hyperlink{set__functions_8c_a8cf7e82e4b4936a003b319580f5a7f97}{P\-I\-C\-C\-\_\-set\-\_\-mem\-\_\-commit} (\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s, \hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$c, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$err)
+\item 
+bool \hyperlink{set__functions_8c_a47587551e3364040db00dac221119228}{P\-I\-C\-C\-\_\-set\-\_\-mem\-\_\-knowns} (\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s, \hyperlink{channel_8h_a87609417467916d98a7505871adc1760}{P\-I\-C\-C\-\_\-\-Knowns} $\ast$k, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$err)
+\item 
+void \hyperlink{set__functions_8c_a9eda90814fc47b06ea064f5f4888397e}{P\-I\-C\-C\-\_\-set\-\_\-map\-\_\-commit} (\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s, void($\ast$func)(\hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$))
+\item 
+void \hyperlink{set__functions_8c_abbfdff735cafff198df5cdf7d5bd1d10}{P\-I\-C\-C\-\_\-set\-\_\-map\-\_\-knowns} (\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s, void($\ast$func)(\hyperlink{channel_8h_a87609417467916d98a7505871adc1760}{P\-I\-C\-C\-\_\-\-Knowns} $\ast$))
+\item 
+\hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$ \hyperlink{set__functions_8c_a3072da7512978ccf76f282e369f09c12}{P\-I\-C\-C\-\_\-clone\-\_\-commit} (\hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$c)
+\item 
+\hyperlink{channel_8h_a87609417467916d98a7505871adc1760}{P\-I\-C\-C\-\_\-\-Knowns} $\ast$ \hyperlink{set__functions_8c_a114b5fb7733d94337b7d82e48ac2e65b}{P\-I\-C\-C\-\_\-clone\-\_\-knowns} (\hyperlink{channel_8h_a87609417467916d98a7505871adc1760}{P\-I\-C\-C\-\_\-\-Knowns} $\ast$k)
+\item 
+\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$ \hyperlink{set__functions_8c_aab936dfdc7e0afd1ea5a878a09d8ea53}{P\-I\-C\-C\-\_\-set\-\_\-inter\-\_\-commit} (\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s1, \hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s2)
+\item 
+\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$ \hyperlink{set__functions_8c_a682229c9bfadb90ba2501ad422ef3fcd}{P\-I\-C\-C\-\_\-set\-\_\-inter\-\_\-knowns} (\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s1, \hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s2)
+\item 
+\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$ \hyperlink{set__functions_8c_aa64887c7ba0042a511f9fe9b59758054}{P\-I\-C\-C\-\_\-set\-\_\-inter} (\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s1, \hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s2)
+\item 
+void \hyperlink{set__functions_8c_a3bebea5cbf1a8cb0bb67b26ceaaa4f6b}{P\-I\-C\-C\-\_\-set\-\_\-iter\-\_\-commit} (\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s, void($\ast$func)(\hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$arg))
+\item 
+void \hyperlink{set__functions_8c_a3a154537242c6a14e84d4ba8fc63433a}{P\-I\-C\-C\-\_\-set\-\_\-iter\-\_\-knowns} (\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s, void($\ast$func)(\hyperlink{channel_8h_a87609417467916d98a7505871adc1760}{P\-I\-C\-C\-\_\-\-Knowns} $\ast$arg))
+\item 
+void \hyperlink{set__functions_8c_ad5a3e5f808b9ab8a238726859efd00a0}{P\-I\-C\-C\-\_\-set\-\_\-iter} (\hyperlink{set_8h_ae67a797cb398fa3d8bd8539cc2d55415}{P\-I\-C\-C\-\_\-\-Set} $\ast$s, void($\ast$func)(void $\ast$))
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Provides several functions to commit and knowns sets.
+
+This project is released under M\-I\-T License.
+
+\begin{DoxyAuthor}{Author}
+Maxence W\-O 
+\end{DoxyAuthor}
+
+
+\subsection{Function Documentation}
+\hypertarget{set__functions_8c_a3072da7512978ccf76f282e369f09c12}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-clone\-\_\-commit@{P\-I\-C\-C\-\_\-clone\-\_\-commit}}
+\index{P\-I\-C\-C\-\_\-clone\-\_\-commit@{P\-I\-C\-C\-\_\-clone\-\_\-commit}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-clone\-\_\-commit}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Commit}$\ast$ P\-I\-C\-C\-\_\-clone\-\_\-commit (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Commit} $\ast$}]{c}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_a3072da7512978ccf76f282e369f09c12}
+\hypertarget{set__functions_8c_a114b5fb7733d94337b7d82e48ac2e65b}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-clone\-\_\-knowns@{P\-I\-C\-C\-\_\-clone\-\_\-knowns}}
+\index{P\-I\-C\-C\-\_\-clone\-\_\-knowns@{P\-I\-C\-C\-\_\-clone\-\_\-knowns}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-clone\-\_\-knowns}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Knowns}$\ast$ P\-I\-C\-C\-\_\-clone\-\_\-knowns (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Knowns} $\ast$}]{k}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_a114b5fb7733d94337b7d82e48ac2e65b}
+\hypertarget{set__functions_8c_a3a9c0db3d0fc21f5482a6e6aea4c5b2a}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-cmp\-\_\-commit@{P\-I\-C\-C\-\_\-cmp\-\_\-commit}}
+\index{P\-I\-C\-C\-\_\-cmp\-\_\-commit@{P\-I\-C\-C\-\_\-cmp\-\_\-commit}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-cmp\-\_\-commit}]{\setlength{\rightskip}{0pt plus 5cm}bool P\-I\-C\-C\-\_\-cmp\-\_\-commit (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Commit} $\ast$}]{c, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Commit} $\ast$}]{c2, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{err}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_a3a9c0db3d0fc21f5482a6e6aea4c5b2a}
+Compare 2 commits
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & Commit \\
+\hline
+{\em c2} & Commit \\
+\hline
+{\em err} & Error \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+res true if commits are the same else false 
+\end{DoxyReturn}
+\hypertarget{set__functions_8c_a21141afc3dbd9203cf5216e55f33e797}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-cmp\-\_\-knowns@{P\-I\-C\-C\-\_\-cmp\-\_\-knowns}}
+\index{P\-I\-C\-C\-\_\-cmp\-\_\-knowns@{P\-I\-C\-C\-\_\-cmp\-\_\-knowns}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-cmp\-\_\-knowns}]{\setlength{\rightskip}{0pt plus 5cm}bool P\-I\-C\-C\-\_\-cmp\-\_\-knowns (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Knowns} $\ast$}]{k, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Knowns} $\ast$}]{k2, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{err}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_a21141afc3dbd9203cf5216e55f33e797}
+Compare 2 knowns
+
+
+\begin{DoxyParams}{Parameters}
+{\em k} & Knowns \\
+\hline
+{\em k2} & Knowns \\
+\hline
+{\em err} & Error \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+res true if knowns are the same else false 
+\end{DoxyReturn}
+\hypertarget{set__functions_8c_a695051775e95f125b50fdba3ed3c7a28}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-set\-\_\-add\-\_\-commit@{P\-I\-C\-C\-\_\-set\-\_\-add\-\_\-commit}}
+\index{P\-I\-C\-C\-\_\-set\-\_\-add\-\_\-commit@{P\-I\-C\-C\-\_\-set\-\_\-add\-\_\-commit}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-set\-\_\-add\-\_\-commit}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-set\-\_\-add\-\_\-commit (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Commit} $\ast$}]{elem}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_a695051775e95f125b50fdba3ed3c7a28}
+Add a commit to a set
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Set \\
+\hline
+{\em elem} & Commit \\
+\hline
+\end{DoxyParams}
+\hypertarget{set__functions_8c_adb848c373193458a6ad9f7a86d2b75c4}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-set\-\_\-add\-\_\-knowns@{P\-I\-C\-C\-\_\-set\-\_\-add\-\_\-knowns}}
+\index{P\-I\-C\-C\-\_\-set\-\_\-add\-\_\-knowns@{P\-I\-C\-C\-\_\-set\-\_\-add\-\_\-knowns}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-set\-\_\-add\-\_\-knowns}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-set\-\_\-add\-\_\-knowns (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Knowns} $\ast$}]{elem}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_adb848c373193458a6ad9f7a86d2b75c4}
+Add a knowns to a set
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Set \\
+\hline
+{\em elem} & Knowns \\
+\hline
+\end{DoxyParams}
+\hypertarget{set__functions_8c_aa64887c7ba0042a511f9fe9b59758054}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-set\-\_\-inter@{P\-I\-C\-C\-\_\-set\-\_\-inter}}
+\index{P\-I\-C\-C\-\_\-set\-\_\-inter@{P\-I\-C\-C\-\_\-set\-\_\-inter}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-set\-\_\-inter}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Set}$\ast$ P\-I\-C\-C\-\_\-set\-\_\-inter (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s1, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s2}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_aa64887c7ba0042a511f9fe9b59758054}
+\hypertarget{set__functions_8c_aab936dfdc7e0afd1ea5a878a09d8ea53}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-set\-\_\-inter\-\_\-commit@{P\-I\-C\-C\-\_\-set\-\_\-inter\-\_\-commit}}
+\index{P\-I\-C\-C\-\_\-set\-\_\-inter\-\_\-commit@{P\-I\-C\-C\-\_\-set\-\_\-inter\-\_\-commit}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-set\-\_\-inter\-\_\-commit}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Set}$\ast$ P\-I\-C\-C\-\_\-set\-\_\-inter\-\_\-commit (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s1, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s2}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_aab936dfdc7e0afd1ea5a878a09d8ea53}
+\hypertarget{set__functions_8c_a682229c9bfadb90ba2501ad422ef3fcd}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-set\-\_\-inter\-\_\-knowns@{P\-I\-C\-C\-\_\-set\-\_\-inter\-\_\-knowns}}
+\index{P\-I\-C\-C\-\_\-set\-\_\-inter\-\_\-knowns@{P\-I\-C\-C\-\_\-set\-\_\-inter\-\_\-knowns}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-set\-\_\-inter\-\_\-knowns}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Set}$\ast$ P\-I\-C\-C\-\_\-set\-\_\-inter\-\_\-knowns (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s1, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s2}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_a682229c9bfadb90ba2501ad422ef3fcd}
+\hypertarget{set__functions_8c_ad5a3e5f808b9ab8a238726859efd00a0}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-set\-\_\-iter@{P\-I\-C\-C\-\_\-set\-\_\-iter}}
+\index{P\-I\-C\-C\-\_\-set\-\_\-iter@{P\-I\-C\-C\-\_\-set\-\_\-iter}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-set\-\_\-iter}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-set\-\_\-iter (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s, }
+\item[{void($\ast$)(void $\ast$)}]{func}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_ad5a3e5f808b9ab8a238726859efd00a0}
+\hypertarget{set__functions_8c_a3bebea5cbf1a8cb0bb67b26ceaaa4f6b}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-set\-\_\-iter\-\_\-commit@{P\-I\-C\-C\-\_\-set\-\_\-iter\-\_\-commit}}
+\index{P\-I\-C\-C\-\_\-set\-\_\-iter\-\_\-commit@{P\-I\-C\-C\-\_\-set\-\_\-iter\-\_\-commit}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-set\-\_\-iter\-\_\-commit}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-set\-\_\-iter\-\_\-commit (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s, }
+\item[{void($\ast$)({\bf P\-I\-C\-C\-\_\-\-Commit} $\ast$arg)}]{func}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_a3bebea5cbf1a8cb0bb67b26ceaaa4f6b}
+\hypertarget{set__functions_8c_a3a154537242c6a14e84d4ba8fc63433a}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-set\-\_\-iter\-\_\-knowns@{P\-I\-C\-C\-\_\-set\-\_\-iter\-\_\-knowns}}
+\index{P\-I\-C\-C\-\_\-set\-\_\-iter\-\_\-knowns@{P\-I\-C\-C\-\_\-set\-\_\-iter\-\_\-knowns}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-set\-\_\-iter\-\_\-knowns}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-set\-\_\-iter\-\_\-knowns (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s, }
+\item[{void($\ast$)({\bf P\-I\-C\-C\-\_\-\-Knowns} $\ast$arg)}]{func}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_a3a154537242c6a14e84d4ba8fc63433a}
+\hypertarget{set__functions_8c_a9eda90814fc47b06ea064f5f4888397e}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-set\-\_\-map\-\_\-commit@{P\-I\-C\-C\-\_\-set\-\_\-map\-\_\-commit}}
+\index{P\-I\-C\-C\-\_\-set\-\_\-map\-\_\-commit@{P\-I\-C\-C\-\_\-set\-\_\-map\-\_\-commit}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-set\-\_\-map\-\_\-commit}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-set\-\_\-map\-\_\-commit (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s, }
+\item[{void($\ast$)({\bf P\-I\-C\-C\-\_\-\-Commit} $\ast$)}]{func}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_a9eda90814fc47b06ea064f5f4888397e}
+Apply a fonction to all elements of a set
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Set \\
+\hline
+{\em func} & Function that takes a commit parameter \\
+\hline
+\end{DoxyParams}
+\hypertarget{set__functions_8c_abbfdff735cafff198df5cdf7d5bd1d10}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-set\-\_\-map\-\_\-knowns@{P\-I\-C\-C\-\_\-set\-\_\-map\-\_\-knowns}}
+\index{P\-I\-C\-C\-\_\-set\-\_\-map\-\_\-knowns@{P\-I\-C\-C\-\_\-set\-\_\-map\-\_\-knowns}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-set\-\_\-map\-\_\-knowns}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-set\-\_\-map\-\_\-knowns (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s, }
+\item[{void($\ast$)({\bf P\-I\-C\-C\-\_\-\-Knowns} $\ast$)}]{func}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_abbfdff735cafff198df5cdf7d5bd1d10}
+Apply a fonction to all elements of a set
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Set \\
+\hline
+{\em func} & Function that takes a knowns parameter \\
+\hline
+\end{DoxyParams}
+\hypertarget{set__functions_8c_a8cf7e82e4b4936a003b319580f5a7f97}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-set\-\_\-mem\-\_\-commit@{P\-I\-C\-C\-\_\-set\-\_\-mem\-\_\-commit}}
+\index{P\-I\-C\-C\-\_\-set\-\_\-mem\-\_\-commit@{P\-I\-C\-C\-\_\-set\-\_\-mem\-\_\-commit}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-set\-\_\-mem\-\_\-commit}]{\setlength{\rightskip}{0pt plus 5cm}bool P\-I\-C\-C\-\_\-set\-\_\-mem\-\_\-commit (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Commit} $\ast$}]{c, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{err}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_a8cf7e82e4b4936a003b319580f5a7f97}
+Search if a commit is in a set
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Set \\
+\hline
+{\em c} & Commit \\
+\hline
+{\em err} & Error \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+res true if c is in s 
+\end{DoxyReturn}
+\hypertarget{set__functions_8c_a47587551e3364040db00dac221119228}{\index{set\-\_\-functions.\-c@{set\-\_\-functions.\-c}!P\-I\-C\-C\-\_\-set\-\_\-mem\-\_\-knowns@{P\-I\-C\-C\-\_\-set\-\_\-mem\-\_\-knowns}}
+\index{P\-I\-C\-C\-\_\-set\-\_\-mem\-\_\-knowns@{P\-I\-C\-C\-\_\-set\-\_\-mem\-\_\-knowns}!set_functions.c@{set\-\_\-functions.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-set\-\_\-mem\-\_\-knowns}]{\setlength{\rightskip}{0pt plus 5cm}bool P\-I\-C\-C\-\_\-set\-\_\-mem\-\_\-knowns (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Set} $\ast$}]{s, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Knowns} $\ast$}]{k, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{err}
+\end{DoxyParamCaption}
+)}}\label{set__functions_8c_a47587551e3364040db00dac221119228}
+Search if a knowns is in a set
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & Set \\
+\hline
+{\em k} & knowns \\
+\hline
+{\em err} & Error \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+res true if k is in s 
+\end{DoxyReturn}

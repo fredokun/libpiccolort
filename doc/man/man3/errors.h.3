@@ -1,0 +1,113 @@
+.TH "include/errors.h" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+include/errors.h \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBPICC_NB_ERRORS\fP   500"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef enum \fB_PICC_ErrorId\fP \fBPICC_ErrorId\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fB_PICC_ErrorId\fP { \fBERR_DEADLOCK\fP, \fBERR_ALLOC_QUEUE_CELL\fP, \fBERR_READY_QUEUE_PUSH\fP, \fBERR_READY_QUEUE_ADD\fP, \fBERR_WAIT_QUEUE_PUSH\fP, \fBERR_WAIT_QUEUE_ADD\fP, \fBERR_WAIT_QUEUE_PUSH_OLD\fP, \fBERR_NOT_IMPLEMENTED\fP, \fBERR_OUT_OF_MEMORY\fP, \fBERR_COMMIT_CREATE\fP, \fBERR_ADD_COMMIT_TO_LIST\fP, \fBERR_REGISTER_OUT_COMMIT\fP, \fBERR_REGISTER_IN_COMMIT\fP, \fBERR_THREAD_CREATE\fP, \fBERR_PTHREAD_CREATE\fP, \fBERR_SCHED_POOL_CREATE\fP, \fBERR_CLOCK_CREATE\fP, \fBERR_MUTEX_ALREADY_UNLOCKED\fP, \fBERR_NULLPOINTER_PITHREAD\fP, \fBERR_NULLPOINTER_COMMIT\fP, \fBERR_NULLPOINTER_COMMITLISTELEM\fP, \fBERR_NULLPOINTER_COMMITLIST\fP, \fBERR_INVALID_COMMIT\fP, \fBERR_INVALID_VALUE\fP, \fBERR_INVALID_TYPE\fP }"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+List of errors that can occur in the runtime\&.
+.PP
+This project is released under MIT License\&.
+.PP
+ 
+.PP
+\fBAuthor:\fP
+.RS 4
+Mickaël MENU 
+.RE
+.PP
+
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define PICC_NB_ERRORS   500"
+Number of errors defined\&. 
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef enum \fB_PICC_ErrorId\fP  \fBPICC_ErrorId\fP"
+List of all errors defined\&. 
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fB_PICC_ErrorId\fP"
+List of all errors defined\&. 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIERR_DEADLOCK \fP\fP
+.TP
+\fB\fIERR_ALLOC_QUEUE_CELL \fP\fP
+.TP
+\fB\fIERR_READY_QUEUE_PUSH \fP\fP
+.TP
+\fB\fIERR_READY_QUEUE_ADD \fP\fP
+.TP
+\fB\fIERR_WAIT_QUEUE_PUSH \fP\fP
+.TP
+\fB\fIERR_WAIT_QUEUE_ADD \fP\fP
+.TP
+\fB\fIERR_WAIT_QUEUE_PUSH_OLD \fP\fP
+.TP
+\fB\fIERR_NOT_IMPLEMENTED \fP\fP
+.TP
+\fB\fIERR_OUT_OF_MEMORY \fP\fP
+No more memory available 
+.TP
+\fB\fIERR_COMMIT_CREATE \fP\fP
+.TP
+\fB\fIERR_ADD_COMMIT_TO_LIST \fP\fP
+.TP
+\fB\fIERR_REGISTER_OUT_COMMIT \fP\fP
+.TP
+\fB\fIERR_REGISTER_IN_COMMIT \fP\fP
+.TP
+\fB\fIERR_THREAD_CREATE \fP\fP
+Unable to create a new posix thread 
+.TP
+\fB\fIERR_PTHREAD_CREATE \fP\fP
+.TP
+\fB\fIERR_SCHED_POOL_CREATE \fP\fP
+.TP
+\fB\fIERR_CLOCK_CREATE \fP\fP
+.TP
+\fB\fIERR_MUTEX_ALREADY_UNLOCKED \fP\fP
+.TP
+\fB\fIERR_NULLPOINTER_PITHREAD \fP\fP
+.TP
+\fB\fIERR_NULLPOINTER_COMMIT \fP\fP
+.TP
+\fB\fIERR_NULLPOINTER_COMMITLISTELEM \fP\fP
+.TP
+\fB\fIERR_NULLPOINTER_COMMITLIST \fP\fP
+.TP
+\fB\fIERR_INVALID_COMMIT \fP\fP
+.TP
+\fB\fIERR_INVALID_VALUE \fP\fP
+.TP
+\fB\fIERR_INVALID_TYPE \fP\fP
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for PiThread from the source code\&.

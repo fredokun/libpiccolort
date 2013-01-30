@@ -1,0 +1,162 @@
+.TH "include/pi_thread.h" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+include/pi_thread.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdbool\&.h>\fP
+.br
+\fC#include <scheduler\&.h>\fP
+.br
+\fC#include <channel\&.h>\fP
+.br
+\fC#include <commit\&.h>\fP
+.br
+\fC#include <value\&.h>\fP
+.br
+\fC#include <sync\&.h>\fP
+.br
+\fC#include <error\&.h>\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fB_PICC_PiThread\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef int \fBPICC_Label\fP"
+.br
+.ti -1c
+.RI "typedef void( \fBPICC_PiThreadProc\fP )(struct \fB_PICC_SchedPool\fP *, struct \fB_PICC_PiThread\fP *)"
+.br
+.ti -1c
+.RI "typedef enum \fB_PICC_StatusKind\fP \fBPICC_StatusKind\fP"
+.br
+.ti -1c
+.RI "typedef struct \fB_PICC_PiThread\fP \fBPICC_PiThread\fP"
+.br
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fB_PICC_StatusKind\fP { \fBPICC_STATUS_RUN\fP, \fBPICC_STATUS_CALL\fP, \fBPICC_STATUS_WAIT\fP, \fBPICC_STATUS_ENDED\fP, \fBPICC_STATUS_BLOCKED\fP }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPICC_PiThread\fP * \fBPICC_create_pithread\fP (int env_length, int knowns_length, \fBPICC_Error\fP *error)"
+.br
+.ti -1c
+.RI "bool \fBPICC_can_awake\fP (\fBPICC_PiThread\fP *pt, struct \fB_PICC_Commit\fP *commit, \fBPICC_Error\fP *error)"
+.br
+.ti -1c
+.RI "void \fBPICC_awake\fP (struct \fB_PICC_SchedPool\fP *sched, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Pi-Threads
+.PP
+This project is released under MIT License\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Mickaël MENU 
+.PP
+Sergiu TIGANU 
+.RE
+.PP
+
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef int \fBPICC_Label\fP"
+The label type\&. Used by the pi-threads to point to a place where to start it's procedure\&. 
+.SS "typedef struct \fB_PICC_PiThread\fP  \fBPICC_PiThread\fP"
+The PiThread data type 
+.SS "typedef void( PICC_PiThreadProc)(struct \fB_PICC_SchedPool\fP *, struct \fB_PICC_PiThread\fP *)"
+The procedure type that a pi-thread executes\&. May use a couple of labels to show where it shoud start\&. 
+.SS "typedef enum \fB_PICC_StatusKind\fP  \fBPICC_StatusKind\fP"
+The status of a pi-thread 
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fB_PICC_StatusKind\fP"
+The status of a pi-thread 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIPICC_STATUS_RUN \fP\fP
+A pi-thread that is ready to run 
+.TP
+\fB\fIPICC_STATUS_CALL \fP\fP
+A pi-thread that is actually running 
+.TP
+\fB\fIPICC_STATUS_WAIT \fP\fP
+A waiting pi-thread 
+.TP
+\fB\fIPICC_STATUS_ENDED \fP\fP
+An ended pi-thread 
+.TP
+\fB\fIPICC_STATUS_BLOCKED \fP\fP
+A blocked pi-thread (a sleeping pi-thread that can't be awaked) 
+.SH "Function Documentation"
+.PP 
+.SS "void PICC_awake (\fBPICC_SchedPool\fP *sched, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+Awakes a PiThread in the given scheduler\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsched\fP Scheduler 
+.br
+\fIpt\fP PiThread to be awaken 
+.RE
+.PP
+
+.SS "bool PICC_can_awake (\fBPICC_PiThread\fP *pt, \fBPICC_Commit\fP *commit, \fBPICC_Error\fP *error)"
+Returns whether a PiThread can be awaken with the given commit\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpt\fP PiThread to check 
+.br
+\fIcommit\fP Commitment 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Whether the PiThread can be awaken with given commit 
+.RE
+.PP
+
+.SS "\fBPICC_PiThread\fP* PICC_create_pithread (intenv_length, intknowns_length, \fBPICC_Error\fP *error)"
+Creates a new PiThread with given environment and knowns set length\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIenv_length\fP Size of the environment 
+.br
+\fIknowns_length\fP Size of the knowns set 
+.br
+\fIerror\fP Error stack 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Created PiThread 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for PiThread from the source code\&.

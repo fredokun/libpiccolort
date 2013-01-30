@@ -1,0 +1,294 @@
+\hypertarget{channel_8h}{\section{include/channel.h File Reference}
+\label{channel_8h}\index{include/channel.\-h@{include/channel.\-h}}
+}
+{\ttfamily \#include $<$stdbool.\-h$>$}\\*
+{\ttfamily \#include $<$commit.\-h$>$}\\*
+{\ttfamily \#include $<$sync.\-h$>$}\\*
+{\ttfamily \#include $<$error.\-h$>$}\\*
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct__PICC__Channel}{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel}
+\item 
+struct \hyperlink{struct__PICC__Knowns}{\-\_\-\-P\-I\-C\-C\-\_\-\-Knowns}
+\item 
+struct \hyperlink{struct__PICC__KnownsSet}{\-\_\-\-P\-I\-C\-C\-\_\-\-Knowns\-Set}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{struct__PICC__Channel}{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel} \hyperlink{channel_8h_a0a70def8883f1abb8e7246b3a4c9dffb}{P\-I\-C\-C\-\_\-\-Channel}
+\item 
+typedef enum \hyperlink{channel_8h_a4bb8c149d9b96e68c12c3ff0c4f10e95}{\-\_\-\-P\-I\-C\-C\-\_\-\-Knows\-State} \hyperlink{channel_8h_af0a907754143ea0a7261dccc8a9fa2db}{P\-I\-C\-C\-\_\-\-Knowns\-State}
+\item 
+typedef struct \hyperlink{struct__PICC__Knowns}{\-\_\-\-P\-I\-C\-C\-\_\-\-Knowns} \hyperlink{channel_8h_a87609417467916d98a7505871adc1760}{P\-I\-C\-C\-\_\-\-Knowns}
+\item 
+typedef struct \hyperlink{struct__PICC__KnownsSet}{\-\_\-\-P\-I\-C\-C\-\_\-\-Knowns\-Set} \hyperlink{channel_8h_ab705fb8d376f852fb1af337ac749c2e3}{P\-I\-C\-C\-\_\-\-Knowns\-Set}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{channel_8h_a4bb8c149d9b96e68c12c3ff0c4f10e95}{\-\_\-\-P\-I\-C\-C\-\_\-\-Knows\-State} \{ \hyperlink{channel_8h_a4bb8c149d9b96e68c12c3ff0c4f10e95a86efa494928aa63827d568c77bd3fd96}{P\-I\-C\-C\-\_\-\-U\-N\-K\-N\-O\-W\-N}, 
+\hyperlink{channel_8h_a4bb8c149d9b96e68c12c3ff0c4f10e95a2135520eca7f6793de9ba878dbbd46c6}{P\-I\-C\-C\-\_\-\-K\-N\-O\-W\-N}, 
+\hyperlink{channel_8h_a4bb8c149d9b96e68c12c3ff0c4f10e95ac71fb1d0d59040e4288e968d0e1159a5}{P\-I\-C\-C\-\_\-\-F\-O\-R\-G\-E\-T}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{channel_8h_a0a70def8883f1abb8e7246b3a4c9dffb}{P\-I\-C\-C\-\_\-\-Channel} $\ast$ \hyperlink{channel_8h_ac6607a30fa1063c40a16c99eece1e54c}{P\-I\-C\-C\-\_\-create\-\_\-channel} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+\hyperlink{channel_8h_a0a70def8883f1abb8e7246b3a4c9dffb}{P\-I\-C\-C\-\_\-\-Channel} $\ast$ \hyperlink{channel_8h_a34ef7a647bbe6c9d81f7f76edb5931da}{P\-I\-C\-C\-\_\-create\-\_\-channel\-\_\-cn} (int commit\-\_\-size, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+\hyperlink{channel_8h_a87609417467916d98a7505871adc1760}{P\-I\-C\-C\-\_\-\-Knowns} $\ast$ \hyperlink{channel_8h_ab4695da5b9909d70ece6acf9b7393d53}{P\-I\-C\-C\-\_\-create\-\_\-knowns} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+\hyperlink{channel_8h_ab705fb8d376f852fb1af337ac749c2e3}{P\-I\-C\-C\-\_\-\-Knowns\-Set} $\ast$ \hyperlink{channel_8h_a7dbf43e2a8d14b2fa22ffcac602baa70}{P\-I\-C\-C\-\_\-create\-\_\-knowns\-\_\-set} (int length, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+void \hyperlink{channel_8h_a4398aef9cd7ffd6883813dbab8eccb59}{P\-I\-C\-C\-\_\-channel\-\_\-incr\-\_\-ref\-\_\-count} (\hyperlink{channel_8h_a0a70def8883f1abb8e7246b3a4c9dffb}{P\-I\-C\-C\-\_\-\-Channel} $\ast$ch, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+void \hyperlink{channel_8h_afa27a3afddffae16eeeb42475f1c949b}{P\-I\-C\-C\-\_\-channel\-\_\-dec\-\_\-ref\-\_\-count} (\hyperlink{channel_8h_a0a70def8883f1abb8e7246b3a4c9dffb}{P\-I\-C\-C\-\_\-\-Channel} $\ast$ch, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+void \hyperlink{channel_8h_a873aa501ffdedc2f345326b0ae025ec1}{P\-I\-C\-C\-\_\-reclaim\-\_\-channel} (\hyperlink{channel_8h_a0a70def8883f1abb8e7246b3a4c9dffb}{P\-I\-C\-C\-\_\-\-Channel} $\ast$channel, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+\hyperlink{channel_8h_ab705fb8d376f852fb1af337ac749c2e3}{P\-I\-C\-C\-\_\-\-Knowns\-Set} $\ast$ \hyperlink{channel_8h_a0914e82fe0abbb54c3d234743abe64e1}{P\-I\-C\-C\-\_\-knowns\-\_\-set\-\_\-knows} (\hyperlink{channel_8h_ab705fb8d376f852fb1af337ac749c2e3}{P\-I\-C\-C\-\_\-\-Knowns\-Set} $\ast$ks, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+\hyperlink{channel_8h_ab705fb8d376f852fb1af337ac749c2e3}{P\-I\-C\-C\-\_\-\-Knowns\-Set} $\ast$ \hyperlink{channel_8h_a82b5edf5813764c16e5fd91de842d0d7}{P\-I\-C\-C\-\_\-knowns\-\_\-set\-\_\-forget} (\hyperlink{channel_8h_ab705fb8d376f852fb1af337ac749c2e3}{P\-I\-C\-C\-\_\-\-Knowns\-Set} $\ast$ks, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+bool \hyperlink{channel_8h_a8dfc016b9a6e38200a8556da494c9538}{P\-I\-C\-C\-\_\-knowns\-\_\-register} (\hyperlink{channel_8h_ab705fb8d376f852fb1af337ac749c2e3}{P\-I\-C\-C\-\_\-\-Knowns\-Set} $\ast$ks, \hyperlink{channel_8h_a0a70def8883f1abb8e7246b3a4c9dffb}{P\-I\-C\-C\-\_\-\-Channel} $\ast$ch, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Channels.
+
+This project is released under M\-I\-T License.
+
+\begin{DoxyAuthor}{Author}
+Mickaël M\-E\-N\-U 
+
+Maxence W\-O 
+
+Dany S\-I\-R\-I\-P\-H\-O\-L 
+
+Joel H\-I\-N\-G 
+\end{DoxyAuthor}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{channel_8h_a0a70def8883f1abb8e7246b3a4c9dffb}{\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-\-Channel@{P\-I\-C\-C\-\_\-\-Channel}}
+\index{P\-I\-C\-C\-\_\-\-Channel@{P\-I\-C\-C\-\_\-\-Channel}!channel.h@{channel.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Channel}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Channel}  {\bf P\-I\-C\-C\-\_\-\-Channel}}}\label{channel_8h_a0a70def8883f1abb8e7246b3a4c9dffb}
+The type of the pi-\/thread channels \hypertarget{channel_8h_a87609417467916d98a7505871adc1760}{\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-\-Knowns@{P\-I\-C\-C\-\_\-\-Knowns}}
+\index{P\-I\-C\-C\-\_\-\-Knowns@{P\-I\-C\-C\-\_\-\-Knowns}!channel.h@{channel.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Knowns}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Knowns}  {\bf P\-I\-C\-C\-\_\-\-Knowns}}}\label{channel_8h_a87609417467916d98a7505871adc1760}
+The type of a channel with a known state \hypertarget{channel_8h_ab705fb8d376f852fb1af337ac749c2e3}{\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-\-Knowns\-Set@{P\-I\-C\-C\-\_\-\-Knowns\-Set}}
+\index{P\-I\-C\-C\-\_\-\-Knowns\-Set@{P\-I\-C\-C\-\_\-\-Knowns\-Set}!channel.h@{channel.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Knowns\-Set}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Knowns\-Set}  {\bf P\-I\-C\-C\-\_\-\-Knowns\-Set}}}\label{channel_8h_ab705fb8d376f852fb1af337ac749c2e3}
+The set of known channels \hypertarget{channel_8h_af0a907754143ea0a7261dccc8a9fa2db}{\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-\-Knowns\-State@{P\-I\-C\-C\-\_\-\-Knowns\-State}}
+\index{P\-I\-C\-C\-\_\-\-Knowns\-State@{P\-I\-C\-C\-\_\-\-Knowns\-State}!channel.h@{channel.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Knowns\-State}]{\setlength{\rightskip}{0pt plus 5cm}typedef enum {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Knows\-State}  {\bf P\-I\-C\-C\-\_\-\-Knowns\-State}}}\label{channel_8h_af0a907754143ea0a7261dccc8a9fa2db}
+The known state of a channel 
+
+\subsection{Enumeration Type Documentation}
+\hypertarget{channel_8h_a4bb8c149d9b96e68c12c3ff0c4f10e95}{\index{channel.\-h@{channel.\-h}!\-\_\-\-P\-I\-C\-C\-\_\-\-Knows\-State@{\-\_\-\-P\-I\-C\-C\-\_\-\-Knows\-State}}
+\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Knows\-State@{\-\_\-\-P\-I\-C\-C\-\_\-\-Knows\-State}!channel.h@{channel.\-h}}
+\subsubsection[{\-\_\-\-P\-I\-C\-C\-\_\-\-Knows\-State}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Knows\-State}}}\label{channel_8h_a4bb8c149d9b96e68c12c3ff0c4f10e95}
+The known state of a channel \begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{P\-I\-C\-C\-\_\-\-U\-N\-K\-N\-O\-W\-N@{P\-I\-C\-C\-\_\-\-U\-N\-K\-N\-O\-W\-N}!channel.\-h@{channel.\-h}}\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-\-U\-N\-K\-N\-O\-W\-N@{P\-I\-C\-C\-\_\-\-U\-N\-K\-N\-O\-W\-N}}\item[{\em 
+\hypertarget{channel_8h_a4bb8c149d9b96e68c12c3ff0c4f10e95a86efa494928aa63827d568c77bd3fd96}{P\-I\-C\-C\-\_\-\-U\-N\-K\-N\-O\-W\-N}\label{channel_8h_a4bb8c149d9b96e68c12c3ff0c4f10e95a86efa494928aa63827d568c77bd3fd96}
+}]T\-O\-D\-O see spec \index{P\-I\-C\-C\-\_\-\-K\-N\-O\-W\-N@{P\-I\-C\-C\-\_\-\-K\-N\-O\-W\-N}!channel.\-h@{channel.\-h}}\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-\-K\-N\-O\-W\-N@{P\-I\-C\-C\-\_\-\-K\-N\-O\-W\-N}}\item[{\em 
+\hypertarget{channel_8h_a4bb8c149d9b96e68c12c3ff0c4f10e95a2135520eca7f6793de9ba878dbbd46c6}{P\-I\-C\-C\-\_\-\-K\-N\-O\-W\-N}\label{channel_8h_a4bb8c149d9b96e68c12c3ff0c4f10e95a2135520eca7f6793de9ba878dbbd46c6}
+}]T\-O\-D\-O see spec \index{P\-I\-C\-C\-\_\-\-F\-O\-R\-G\-E\-T@{P\-I\-C\-C\-\_\-\-F\-O\-R\-G\-E\-T}!channel.\-h@{channel.\-h}}\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-\-F\-O\-R\-G\-E\-T@{P\-I\-C\-C\-\_\-\-F\-O\-R\-G\-E\-T}}\item[{\em 
+\hypertarget{channel_8h_a4bb8c149d9b96e68c12c3ff0c4f10e95ac71fb1d0d59040e4288e968d0e1159a5}{P\-I\-C\-C\-\_\-\-F\-O\-R\-G\-E\-T}\label{channel_8h_a4bb8c149d9b96e68c12c3ff0c4f10e95ac71fb1d0d59040e4288e968d0e1159a5}
+}]T\-O\-D\-O see spec \end{description}
+\end{Desc}
+
+
+\subsection{Function Documentation}
+\hypertarget{channel_8h_afa27a3afddffae16eeeb42475f1c949b}{\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-channel\-\_\-dec\-\_\-ref\-\_\-count@{P\-I\-C\-C\-\_\-channel\-\_\-dec\-\_\-ref\-\_\-count}}
+\index{P\-I\-C\-C\-\_\-channel\-\_\-dec\-\_\-ref\-\_\-count@{P\-I\-C\-C\-\_\-channel\-\_\-dec\-\_\-ref\-\_\-count}!channel.h@{channel.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-channel\-\_\-dec\-\_\-ref\-\_\-count}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-channel\-\_\-dec\-\_\-ref\-\_\-count (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Channel} $\ast$}]{channel, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{channel_8h_afa27a3afddffae16eeeb42475f1c949b}
+Decrements the global reference count of a channel.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Channel} & to update \\
+\hline
+\end{DoxyParams}
+\hypertarget{channel_8h_a4398aef9cd7ffd6883813dbab8eccb59}{\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-channel\-\_\-incr\-\_\-ref\-\_\-count@{P\-I\-C\-C\-\_\-channel\-\_\-incr\-\_\-ref\-\_\-count}}
+\index{P\-I\-C\-C\-\_\-channel\-\_\-incr\-\_\-ref\-\_\-count@{P\-I\-C\-C\-\_\-channel\-\_\-incr\-\_\-ref\-\_\-count}!channel.h@{channel.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-channel\-\_\-incr\-\_\-ref\-\_\-count}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-channel\-\_\-incr\-\_\-ref\-\_\-count (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Channel} $\ast$}]{channel, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{channel_8h_a4398aef9cd7ffd6883813dbab8eccb59}
+Increments the global reference count of a channel.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Channel} & to update \\
+\hline
+\end{DoxyParams}
+\hypertarget{channel_8h_ac6607a30fa1063c40a16c99eece1e54c}{\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-create\-\_\-channel@{P\-I\-C\-C\-\_\-create\-\_\-channel}}
+\index{P\-I\-C\-C\-\_\-create\-\_\-channel@{P\-I\-C\-C\-\_\-create\-\_\-channel}!channel.h@{channel.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-create\-\_\-channel}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Channel}$\ast$ P\-I\-C\-C\-\_\-create\-\_\-channel (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{channel_8h_ac6607a30fa1063c40a16c99eece1e54c}
+Creates a channel which contains 10 commitments.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Created channel 
+\end{DoxyReturn}
+\hypertarget{channel_8h_a34ef7a647bbe6c9d81f7f76edb5931da}{\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-create\-\_\-channel\-\_\-cn@{P\-I\-C\-C\-\_\-create\-\_\-channel\-\_\-cn}}
+\index{P\-I\-C\-C\-\_\-create\-\_\-channel\-\_\-cn@{P\-I\-C\-C\-\_\-create\-\_\-channel\-\_\-cn}!channel.h@{channel.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-create\-\_\-channel\-\_\-cn}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Channel}$\ast$ P\-I\-C\-C\-\_\-create\-\_\-channel\-\_\-cn (
+\begin{DoxyParamCaption}
+\item[{int}]{commit\-\_\-size, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{channel_8h_a34ef7a647bbe6c9d81f7f76edb5931da}
+Creates a channel which contains $<$commit\-\_\-size$>$ commitments.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Created channel 
+\end{DoxyReturn}
+\hypertarget{channel_8h_ab4695da5b9909d70ece6acf9b7393d53}{\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-create\-\_\-knowns@{P\-I\-C\-C\-\_\-create\-\_\-knowns}}
+\index{P\-I\-C\-C\-\_\-create\-\_\-knowns@{P\-I\-C\-C\-\_\-create\-\_\-knowns}!channel.h@{channel.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-create\-\_\-knowns}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Knowns}$\ast$ P\-I\-C\-C\-\_\-create\-\_\-knowns (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{channel_8h_ab4695da5b9909d70ece6acf9b7393d53}
+Creates a new Knowns structure.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Created knowns structure 
+\end{DoxyReturn}
+\hypertarget{channel_8h_a7dbf43e2a8d14b2fa22ffcac602baa70}{\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-create\-\_\-knowns\-\_\-set@{P\-I\-C\-C\-\_\-create\-\_\-knowns\-\_\-set}}
+\index{P\-I\-C\-C\-\_\-create\-\_\-knowns\-\_\-set@{P\-I\-C\-C\-\_\-create\-\_\-knowns\-\_\-set}!channel.h@{channel.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-create\-\_\-knowns\-\_\-set}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Knowns\-Set}$\ast$ P\-I\-C\-C\-\_\-create\-\_\-knowns\-\_\-set (
+\begin{DoxyParamCaption}
+\item[{int}]{length, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{channel_8h_a7dbf43e2a8d14b2fa22ffcac602baa70}
+Creates a new Knowns set.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Created knowns set 
+\end{DoxyReturn}
+\hypertarget{channel_8h_a8dfc016b9a6e38200a8556da494c9538}{\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-knowns\-\_\-register@{P\-I\-C\-C\-\_\-knowns\-\_\-register}}
+\index{P\-I\-C\-C\-\_\-knowns\-\_\-register@{P\-I\-C\-C\-\_\-knowns\-\_\-register}!channel.h@{channel.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-knowns\-\_\-register}]{\setlength{\rightskip}{0pt plus 5cm}bool P\-I\-C\-C\-\_\-knowns\-\_\-register (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Knowns\-Set} $\ast$}]{ks, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Channel} $\ast$}]{ch, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{channel_8h_a8dfc016b9a6e38200a8556da494c9538}
+Adds a channel to a knowns set.
+
+Looks for a channel in a P\-I\-C\-C\-\_\-\-Knowns\-Set
+\begin{DoxyItemize}
+\item if the channel is in the P\-I\-C\-C\-\_\-\-Knowns\-Set in K\-N\-O\-W\-N-\/\-S\-T\-A\-T\-E, it returns false
+\item if the channel is in the P\-I\-C\-C\-\_\-\-Knowns\-Set in F\-O\-R\-G\-E\-T-\/\-S\-T\-A\-T\-E, it switches it to K\-N\-O\-W\-N then returns false
+\item else it add the channel in the P\-I\-C\-C\-\_\-\-Knowns\-Set (K\-N\-O\-W\-S-\/\-S\-T\-A\-T\-E) then returns true
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em ks} & Knowns set \\
+\hline
+{\em ch} & Channel to add \\
+\hline
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Whether the channel has been added 
+\end{DoxyReturn}
+\hypertarget{channel_8h_a82b5edf5813764c16e5fd91de842d0d7}{\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-knowns\-\_\-set\-\_\-forget@{P\-I\-C\-C\-\_\-knowns\-\_\-set\-\_\-forget}}
+\index{P\-I\-C\-C\-\_\-knowns\-\_\-set\-\_\-forget@{P\-I\-C\-C\-\_\-knowns\-\_\-set\-\_\-forget}!channel.h@{channel.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-knowns\-\_\-set\-\_\-forget}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Knowns\-Set}$\ast$ P\-I\-C\-C\-\_\-knowns\-\_\-set\-\_\-forget (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Knowns\-Set} $\ast$}]{ks, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{channel_8h_a82b5edf5813764c16e5fd91de842d0d7}
+Returns a subset of all F\-O\-R\-G\-E\-T-\/\-S\-T\-A\-T\-E in a knowns set.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ks} & Knowns set \\
+\hline
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Subset of all forget state in the given set. 
+\end{DoxyReturn}
+\hypertarget{channel_8h_a0914e82fe0abbb54c3d234743abe64e1}{\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-knowns\-\_\-set\-\_\-knows@{P\-I\-C\-C\-\_\-knowns\-\_\-set\-\_\-knows}}
+\index{P\-I\-C\-C\-\_\-knowns\-\_\-set\-\_\-knows@{P\-I\-C\-C\-\_\-knowns\-\_\-set\-\_\-knows}!channel.h@{channel.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-knowns\-\_\-set\-\_\-knows}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Knowns\-Set}$\ast$ P\-I\-C\-C\-\_\-knowns\-\_\-set\-\_\-knows (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Knowns\-Set} $\ast$}]{ks, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{channel_8h_a0914e82fe0abbb54c3d234743abe64e1}
+Returns a subset of all K\-N\-O\-W\-N-\/\-S\-T\-A\-T\-E in a knows set.
+
+
+\begin{DoxyParams}{Parameters}
+{\em ks} & Knowns set \\
+\hline
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Subset of all known state in the given set 
+\end{DoxyReturn}
+\hypertarget{channel_8h_a873aa501ffdedc2f345326b0ae025ec1}{\index{channel.\-h@{channel.\-h}!P\-I\-C\-C\-\_\-reclaim\-\_\-channel@{P\-I\-C\-C\-\_\-reclaim\-\_\-channel}}
+\index{P\-I\-C\-C\-\_\-reclaim\-\_\-channel@{P\-I\-C\-C\-\_\-reclaim\-\_\-channel}!channel.h@{channel.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-reclaim\-\_\-channel}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-reclaim\-\_\-channel (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Channel} $\ast$}]{channel, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{channel_8h_a873aa501ffdedc2f345326b0ae025ec1}
+Reclaims the given channel.
+
+
+\begin{DoxyParams}{Parameters}
+{\em channel} & Channel to reclaim \\
+\hline
+\end{DoxyParams}
