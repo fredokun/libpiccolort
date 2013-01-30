@@ -127,7 +127,7 @@ extern void PICC_register_input_commitment(struct _PICC_PiThread *p, struct _PIC
 extern bool PICC_is_valid_commit(PICC_Commit *commit);
 extern bool PICC_commit_list_is_empty(PICC_CommitList *clist);
 extern void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *c, PICC_Error *error);
-extern PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist);
-extern PICC_Commit *PICC_fetch_commitment(struct _PICC_Channel *ch, PICC_Error *error);
+extern PICC_Commit *PICC_fetch_input_commitment(struct _PICC_Channel *ch);
+extern PICC_Commit *PICC_fetch_output_commitment(struct _PICC_Channel *ch);
 
 #endif

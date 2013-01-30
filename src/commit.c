@@ -79,7 +79,7 @@ PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PIC
  * Registers an output commit with given PiThread and channel.
  *
  *
- * @pre pt != null && ch != null && eval != null &&  cont_pc != null 
+ * @pre pt != null && ch != null && eval != null &&  cont_pc != null
  *
  * @post pt->commits->size(PICC_register_output_commitment(pt)) = pt->commits->size(pt) + 1
  * @post pt->commits->tail = commit
@@ -125,7 +125,7 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
  * Registers an input commit with given PiThread and channel.
  *
  *
- * @pre pt != null && ch != null && cont_pc != null 
+ * @pre pt != null && ch != null && cont_pc != null
  *
  * @post pt->commits->size(PICC_register_input_commitment(pt)) = pt->commits->size(pt) + 1
  * @post pt->commits->tail = commit
@@ -237,7 +237,7 @@ PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
 }
 
 /**
- * Fetches he first element of the input commitList from a channel.
+ * Fetches the first element of the input commitList from a channel.
  *
  * @pre ch != null
  *
@@ -247,18 +247,24 @@ PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
  * @param ch Channel to fetch the commit from
  * @return Fetched commit
  */
-PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch, PICC_Error *error)
+PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
 {
-    PICC_ALLOC(current, PICC_InCommit, error) {
+    PICC_Commit *fetched = NULL;
+    ALLOC_ERROR(alloc_error);
+    PICC_ALLOC(current, PICC_InCommit, &alloc_error) {
         current = PICC_commit_list_fetch(ch->incommits);
-        while(current != NULL){
-            if(PICC_is_valid_commit(current)){
+        while (current != NULL) {
+            if (PICC_is_valid_commit(current)) {
                 return current;
             }
     	    current = PICC_commit_list_fetch(ch->incommits);
         }
-        return NULL;
     }
+
+    if (HAS_ERROR(alloc_error))
+        CRASH(&alloc_error);
+
+    return fetched;
 }
 
 /**
@@ -272,17 +278,24 @@ PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch, PICC_Error *error)
  * @param ch Channel to fetch the commit from
  * @return Fetched commit
  */
-PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch, PICC_Error *error)
+PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
 {
-    PICC_ALLOC(current, PICC_OutCommit, error)
+    PICC_Commit *fetched = NULL;
+    ALLOC_ERROR(alloc_error);
+    PICC_ALLOC(current, PICC_OutCommit, &alloc_error)
     {
         current = PICC_commit_list_fetch(ch->outcommits);
-        while(current != NULL){
-            if(PICC_is_valid_commit(current)){
-                return current;
+        while (current != NULL) {
+            if (PICC_is_valid_commit(current)) {
+                fetched = current;
+                break;
             }
             current = PICC_commit_list_fetch(ch->outcommits);
         }
-        return NULL;
     }
+
+    if (HAS_ERROR(alloc_error))
+        CRASH(&alloc_error);
+
+    return fetched;
 }

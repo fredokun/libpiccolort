@@ -93,7 +93,7 @@ PICC_KnownsSet *PICC_create_knowns_set(int length, PICC_Error *error)
  *
  * @param Channel to update
  */
-void PICC_channel_incr_ref_count(PICC_Channel *channel , PICC_Error *error)
+void PICC_channel_incr_ref_count(PICC_Channel *channel)
 {
     LOCK_CHANNEL(channel);
     channel->global_rc++;
@@ -105,14 +105,17 @@ void PICC_channel_incr_ref_count(PICC_Channel *channel , PICC_Error *error)
  *
  * @param Channel to update
  */
-void PICC_channel_dec_ref_count(PICC_Channel *channel , PICC_Error *error)
+void PICC_channel_dec_ref_count(PICC_Channel *channel)
 {
     LOCK_CHANNEL(channel);
     channel->global_rc--;
     RELEASE_CHANNEL(channel);
 
     if (channel->global_rc == 0) {
-        PICC_reclaim_channel(channel, error);
+        ALLOC_ERROR(reclaim_error);
+        PICC_reclaim_channel(channel, &reclaim_error);
+        if (HAS_ERROR(reclaim_error))
+            CRASH(&reclaim_error);
     }
 }
 
@@ -203,5 +206,5 @@ bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch, PICC_Error *erro
  */
 void PICC_release_all_channels(PICC_Channel **chans, int nb_chans)
 {
-    CRASH_NEW_ERROR(ERR, ERR_NOT_IMPLEMENTED);
+    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
 }
