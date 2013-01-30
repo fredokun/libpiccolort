@@ -12,6 +12,7 @@
 
 #include <channel.h>
 #include <tools.h>
+#include <error.h>
 
 #define LOCK_CHANNEL(c) \
     PICC_acquire(&(c->lock));
@@ -192,4 +193,17 @@ bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch, PICC_Error *erro
 {
     NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
     return false;
+}
+
+/**
+ * Releases all the given channels.
+ *
+ * @param chans Set of channels to release
+ * @param nb_chans
+ */
+void PICC_release_all_channels(PICC_Channel **chans, int nb_chans)
+{
+    ALLOC_ERROR(error);
+    NEW_ERROR(&error, ERR_NOT_IMPLEMENTED);
+    CRASH(&error);
 }

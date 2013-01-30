@@ -61,3 +61,13 @@ void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Error *error)
 {
     NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
 }
+
+/**
+ * ??????????????
+ */
+void PICC_low_level_yield()
+{
+    ALLOC_ERROR(error);
+    NEW_ERROR(&error, ERR_NOT_IMPLEMENTED);
+    CRASH(&error);
+}
