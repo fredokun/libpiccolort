@@ -1,0 +1,62 @@
+.TH "src/entry.c" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/entry.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <stdbool\&.h>\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <pthread\&.h>\fP
+.br
+\fC#include <runtime\&.h>\fP
+.br
+\fC#include <entry\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBPICC_main\fP (int nb_core_threads, \fBPICC_PiThreadProc\fP entrypoint)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+File that contains the entry point of the runtime library
+.PP
+This project is released under MIT License\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Sergiu Tiganu 
+.PP
+Maxence WO 
+.PP
+Dany Siriphol 
+.PP
+Mickaël MENU 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "void PICC_main (intnb_core_threads, \fBPICC_PiThreadProc\fPentrypoint)"
+The entry point of the Runtime library\&. Initialises the real running threads and starts the scheduler
+.PP
+\fBParameters:\fP
+.RS 4
+\fInb_core_threads\fP the maximum number of core threads that can rum at the same time 
+.br
+\fIentrypoint\fP the entry procedure the for the first thread 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for PiThread from the source code\&.

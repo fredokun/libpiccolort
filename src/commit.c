@@ -6,6 +6,7 @@
  *
  * @author Mickaël MENU
  * @author Maxence WO
+ * @author Joel HING
  */
 
 #include <commit.h>

@@ -1,0 +1,291 @@
+\hypertarget{queue_8h}{\section{include/queue.h File Reference}
+\label{queue_8h}\index{include/queue.\-h@{include/queue.\-h}}
+}
+{\ttfamily \#include $<$pi\-\_\-thread.\-h$>$}\\*
+{\ttfamily \#include $<$sync.\-h$>$}\\*
+{\ttfamily \#include $<$error.\-h$>$}\\*
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct__PICC__QueueCell}{\-\_\-\-P\-I\-C\-C\-\_\-\-Queue\-Cell}
+\item 
+struct \hyperlink{struct__PICC__Queue}{\-\_\-\-P\-I\-C\-C\-\_\-\-Queue}
+\item 
+struct \hyperlink{struct__PICC__ReadyQueue}{\-\_\-\-P\-I\-C\-C\-\_\-\-Ready\-Queue}
+\item 
+struct \hyperlink{struct__PICC__WaitQueue}{\-\_\-\-P\-I\-C\-C\-\_\-\-Wait\-Queue}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{struct__PICC__QueueCell}{\-\_\-\-P\-I\-C\-C\-\_\-\-Queue\-Cell} \hyperlink{queue_8h_a04742445225861b107e4ee16cfb5c71b}{P\-I\-C\-C\-\_\-\-Queue\-Cell}
+\item 
+typedef struct \hyperlink{struct__PICC__Queue}{\-\_\-\-P\-I\-C\-C\-\_\-\-Queue} \hyperlink{queue_8h_ae5dce037e07e8fe39960a37b09cd626d}{P\-I\-C\-C\-\_\-\-Queue}
+\item 
+typedef struct \hyperlink{struct__PICC__ReadyQueue}{\-\_\-\-P\-I\-C\-C\-\_\-\-Ready\-Queue} \hyperlink{queue_8h_a7bcffcbcc0c50c45191cf298d0a4668f}{P\-I\-C\-C\-\_\-\-Ready\-Queue}
+\item 
+typedef struct \hyperlink{struct__PICC__WaitQueue}{\-\_\-\-P\-I\-C\-C\-\_\-\-Wait\-Queue} \hyperlink{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}{P\-I\-C\-C\-\_\-\-Wait\-Queue}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{queue_8h_a7bcffcbcc0c50c45191cf298d0a4668f}{P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$ \hyperlink{queue_8h_a456adc65dd622092ed923ab1ba3e1201}{P\-I\-C\-C\-\_\-create\-\_\-ready\-\_\-queue} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+void \hyperlink{queue_8h_a9433fc82c228c25e6afd0659f675fde1}{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push} (\hyperlink{queue_8h_a7bcffcbcc0c50c45191cf298d0a4668f}{P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$rq, struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+void \hyperlink{queue_8h_ab20f8bfd7e84d34c7b7a27c0c3a70c80}{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add} (\hyperlink{queue_8h_a7bcffcbcc0c50c45191cf298d0a4668f}{P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$rq, struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$ \hyperlink{queue_8h_afc2c9b9822e6da4b01902a1e3008076f}{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-pop} (\hyperlink{queue_8h_a7bcffcbcc0c50c45191cf298d0a4668f}{P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$rq)
+\item 
+int \hyperlink{queue_8h_a1833611510de88c528f63b63040af1c5}{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-size} (\hyperlink{queue_8h_a7bcffcbcc0c50c45191cf298d0a4668f}{P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$rq)
+\item 
+\hyperlink{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}{P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$ \hyperlink{queue_8h_abbb1aba2fd7b9007abeed23ae18dd781}{P\-I\-C\-C\-\_\-create\-\_\-wait\-\_\-queue} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+void \hyperlink{queue_8h_a0cc425f900a6caeaf3d21d3fe7b6c659}{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push} (\hyperlink{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}{P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$wq, struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$ \hyperlink{queue_8h_a9e797c500d625d1582ab3180d7a8e854}{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-fetch} (\hyperlink{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}{P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$wq, struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt)
+\item 
+void \hyperlink{queue_8h_a77295a06ea12430b60ba6748ede984c9}{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push\-\_\-old} (\hyperlink{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}{P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$wq, struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$ \hyperlink{queue_8h_aa734166b93eaf35e301b56e76f71ecfe}{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-pop\-\_\-old} (\hyperlink{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}{P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$wq)
+\item 
+int \hyperlink{queue_8h_a7a1ee2121e8f3d6760ad160da353a484}{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-size} (\hyperlink{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}{P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$wq)
+\item 
+int \hyperlink{queue_8h_a864f28a60962bc4fe533c77e7f11aa09}{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-max\-\_\-active} (\hyperlink{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}{P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$wq)
+\item 
+void \hyperlink{queue_8h_a2a7b3970f7b3b4f376a22b40e7ab7eb0}{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-max\-\_\-active\-\_\-reset} (\hyperlink{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}{P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$wq)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Concurrent ready and wait queues implementation
+
+This project is released under M\-I\-T License.
+
+\begin{DoxyAuthor}{Author}
+Mickaël M\-E\-N\-U 
+\end{DoxyAuthor}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{queue_8h_ae5dce037e07e8fe39960a37b09cd626d}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-\-Queue@{P\-I\-C\-C\-\_\-\-Queue}}
+\index{P\-I\-C\-C\-\_\-\-Queue@{P\-I\-C\-C\-\_\-\-Queue}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Queue}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Queue}  {\bf P\-I\-C\-C\-\_\-\-Queue}}}\label{queue_8h_ae5dce037e07e8fe39960a37b09cd626d}
+The standard Pi\-Thread queue type \hypertarget{queue_8h_a04742445225861b107e4ee16cfb5c71b}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-\-Queue\-Cell@{P\-I\-C\-C\-\_\-\-Queue\-Cell}}
+\index{P\-I\-C\-C\-\_\-\-Queue\-Cell@{P\-I\-C\-C\-\_\-\-Queue\-Cell}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Queue\-Cell}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Queue\-Cell}  {\bf P\-I\-C\-C\-\_\-\-Queue\-Cell}}}\label{queue_8h_a04742445225861b107e4ee16cfb5c71b}
+The standard Pi\-Thread queue cell type \hypertarget{queue_8h_a7bcffcbcc0c50c45191cf298d0a4668f}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-\-Ready\-Queue@{P\-I\-C\-C\-\_\-\-Ready\-Queue}}
+\index{P\-I\-C\-C\-\_\-\-Ready\-Queue@{P\-I\-C\-C\-\_\-\-Ready\-Queue}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Ready\-Queue}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Ready\-Queue}  {\bf P\-I\-C\-C\-\_\-\-Ready\-Queue}}}\label{queue_8h_a7bcffcbcc0c50c45191cf298d0a4668f}
+The ready Pi\-Thread queue type \hypertarget{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-\-Wait\-Queue@{P\-I\-C\-C\-\_\-\-Wait\-Queue}}
+\index{P\-I\-C\-C\-\_\-\-Wait\-Queue@{P\-I\-C\-C\-\_\-\-Wait\-Queue}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Wait\-Queue}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Wait\-Queue}  {\bf P\-I\-C\-C\-\_\-\-Wait\-Queue}}}\label{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}
+The wait Pi\-Thread queue type 
+
+\subsection{Function Documentation}
+\hypertarget{queue_8h_a456adc65dd622092ed923ab1ba3e1201}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-create\-\_\-ready\-\_\-queue@{P\-I\-C\-C\-\_\-create\-\_\-ready\-\_\-queue}}
+\index{P\-I\-C\-C\-\_\-create\-\_\-ready\-\_\-queue@{P\-I\-C\-C\-\_\-create\-\_\-ready\-\_\-queue}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-create\-\_\-ready\-\_\-queue}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Ready\-Queue}$\ast$ P\-I\-C\-C\-\_\-create\-\_\-ready\-\_\-queue (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{queue_8h_a456adc65dd622092ed923ab1ba3e1201}
+Creates a new empty ready queue.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}
+\hypertarget{queue_8h_abbb1aba2fd7b9007abeed23ae18dd781}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-create\-\_\-wait\-\_\-queue@{P\-I\-C\-C\-\_\-create\-\_\-wait\-\_\-queue}}
+\index{P\-I\-C\-C\-\_\-create\-\_\-wait\-\_\-queue@{P\-I\-C\-C\-\_\-create\-\_\-wait\-\_\-queue}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-create\-\_\-wait\-\_\-queue}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Wait\-Queue}$\ast$ P\-I\-C\-C\-\_\-create\-\_\-wait\-\_\-queue (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{queue_8h_abbb1aba2fd7b9007abeed23ae18dd781}
+Creates a new empty wait queue.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}
+\hypertarget{queue_8h_ab20f8bfd7e84d34c7b7a27c0c3a70c80}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add@{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add}}
+\index{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add@{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$}]{rq, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{queue_8h_ab20f8bfd7e84d34c7b7a27c0c3a70c80}
+Adds a Pi\-Thread at the end of the given ready queue.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rq} & Ready queue \\
+\hline
+{\em pt} & Pi\-Thread \\
+\hline
+\end{DoxyParams}
+\hypertarget{queue_8h_afc2c9b9822e6da4b01902a1e3008076f}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-pop@{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-pop}}
+\index{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-pop@{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-pop}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-pop}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread}$\ast$ P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-pop (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$}]{rq}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [read]}}}\label{queue_8h_afc2c9b9822e6da4b01902a1e3008076f}
+Pops a Pi\-Thread from the given ready queue.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rq} & Ready queue \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Popped Pi\-Thread 
+\end{DoxyReturn}
+\hypertarget{queue_8h_a9433fc82c228c25e6afd0659f675fde1}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push@{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push}}
+\index{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push@{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$}]{rq, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{queue_8h_a9433fc82c228c25e6afd0659f675fde1}
+Pushes a Pi\-Thread on the given ready queue.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rq} & Ready queue \\
+\hline
+{\em pt} & Pi\-Thread \\
+\hline
+\end{DoxyParams}
+\hypertarget{queue_8h_a1833611510de88c528f63b63040af1c5}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-size@{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-size}}
+\index{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-size@{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-size}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-size}]{\setlength{\rightskip}{0pt plus 5cm}int P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-size (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$}]{rq}
+\end{DoxyParamCaption}
+)}}\label{queue_8h_a1833611510de88c528f63b63040af1c5}
+Returns the size of the given ready queue.
+
+\begin{DoxyReturn}{Returns}
+Size of the ready queue 
+\end{DoxyReturn}
+\hypertarget{queue_8h_a9e797c500d625d1582ab3180d7a8e854}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-fetch@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-fetch}}
+\index{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-fetch@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-fetch}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-fetch}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread}$\ast$ P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-fetch (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$}]{wq, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [read]}}}\label{queue_8h_a9e797c500d625d1582ab3180d7a8e854}
+Gets a given Pi\-Thread from the wait queue.
+
+
+\begin{DoxyParams}{Parameters}
+{\em wq} & Wait queue \\
+\hline
+{\em pt} & Pi\-Thread \\
+\hline
+\end{DoxyParams}
+\hypertarget{queue_8h_a864f28a60962bc4fe533c77e7f11aa09}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-max\-\_\-active@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-max\-\_\-active}}
+\index{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-max\-\_\-active@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-max\-\_\-active}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-max\-\_\-active}]{\setlength{\rightskip}{0pt plus 5cm}int P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-max\-\_\-active (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$}]{wq}
+\end{DoxyParamCaption}
+)}}\label{queue_8h_a864f28a60962bc4fe533c77e7f11aa09}
+Returns the size of the active wait queue.
+
+
+\begin{DoxyParams}{Parameters}
+{\em wq} & Wait queue \\
+\hline
+\end{DoxyParams}
+\hypertarget{queue_8h_a2a7b3970f7b3b4f376a22b40e7ab7eb0}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-max\-\_\-active\-\_\-reset@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-max\-\_\-active\-\_\-reset}}
+\index{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-max\-\_\-active\-\_\-reset@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-max\-\_\-active\-\_\-reset}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-max\-\_\-active\-\_\-reset}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-max\-\_\-active\-\_\-reset (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$}]{wq}
+\end{DoxyParamCaption}
+)}}\label{queue_8h_a2a7b3970f7b3b4f376a22b40e7ab7eb0}
+Resets the active wait queue by pushing its cells in the old wait queue.
+
+
+\begin{DoxyParams}{Parameters}
+{\em wq} & Wait queue \\
+\hline
+\end{DoxyParams}
+\hypertarget{queue_8h_aa734166b93eaf35e301b56e76f71ecfe}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-pop\-\_\-old@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-pop\-\_\-old}}
+\index{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-pop\-\_\-old@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-pop\-\_\-old}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-pop\-\_\-old}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread}$\ast$ P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-pop\-\_\-old (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$}]{wq}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [read]}}}\label{queue_8h_aa734166b93eaf35e301b56e76f71ecfe}
+Pops a Pi\-Thread from the old wait queue.
+
+W\-A\-R\-N\-I\-N\-G\-: W\-H\-Y T\-H\-E P\-O\-P I\-S T\-A\-K\-I\-N\-G T\-H\-E E\-N\-D O\-F T\-H\-E Q\-U\-E\-U\-E A\-N\-D N\-O\-T T\-H\-E H\-E\-A\-D ?
+
+
+\begin{DoxyParams}{Parameters}
+{\em wq} & Wait queue \\
+\hline
+\end{DoxyParams}
+\hypertarget{queue_8h_a0cc425f900a6caeaf3d21d3fe7b6c659}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push}}
+\index{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$}]{wq, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{queue_8h_a0cc425f900a6caeaf3d21d3fe7b6c659}
+Pushes a Pi\-Thread on the given wait queue.
+
+
+\begin{DoxyParams}{Parameters}
+{\em wq} & Wait queue \\
+\hline
+{\em pt} & Pi\-Thread \\
+\hline
+\end{DoxyParams}
+\hypertarget{queue_8h_a77295a06ea12430b60ba6748ede984c9}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push\-\_\-old@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push\-\_\-old}}
+\index{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push\-\_\-old@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push\-\_\-old}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push\-\_\-old}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push\-\_\-old (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$}]{wq, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{queue_8h_a77295a06ea12430b60ba6748ede984c9}
+Pushes a Pi\-Thread in the old wait queue.
+
+
+\begin{DoxyParams}{Parameters}
+{\em wq} & Wait queue \\
+\hline
+{\em pt} & Pi\-Thread \\
+\hline
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}
+\hypertarget{queue_8h_a7a1ee2121e8f3d6760ad160da353a484}{\index{queue.\-h@{queue.\-h}!P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-size@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-size}}
+\index{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-size@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-size}!queue.h@{queue.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-size}]{\setlength{\rightskip}{0pt plus 5cm}int P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-size (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$}]{wq}
+\end{DoxyParamCaption}
+)}}\label{queue_8h_a7a1ee2121e8f3d6760ad160da353a484}
+Returns the size of the active + old wait queues.
+
+
+\begin{DoxyParams}{Parameters}
+{\em wq} & Wait queue \\
+\hline
+\end{DoxyParams}

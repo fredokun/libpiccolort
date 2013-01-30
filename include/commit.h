@@ -55,6 +55,7 @@ typedef struct _PICC_InCommit {
 
 /**
  * The output commitment specific part
+ * @inv eval_func != null
  */
 typedef struct _PICC_OutCommit {
     /**@{*/
@@ -66,6 +67,9 @@ typedef struct _PICC_OutCommit {
 
 /**
  * The commitment common part
+ * @inv type != null && thread != null && clock != null && clockval  != null && channel  != null && content  != null
+ * @inv cont_pc > 0
+ * 
  */
 typedef struct _PICC_Commit {
     /**@{*/

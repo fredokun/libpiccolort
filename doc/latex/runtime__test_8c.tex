@@ -1,0 +1,49 @@
+\hypertarget{runtime__test_8c}{\section{tests/runtime\-\_\-test.c File Reference}
+\label{runtime__test_8c}\index{tests/runtime\-\_\-test.\-c@{tests/runtime\-\_\-test.\-c}}
+}
+{\ttfamily \#include $<$stdio.\-h$>$}\\*
+{\ttfamily \#include $<$stdlib.\-h$>$}\\*
+{\ttfamily \#include $<$stdbool.\-h$>$}\\*
+{\ttfamily \#include $<$pthread.\-h$>$}\\*
+{\ttfamily \#include $<$pi\-\_\-thread.\-h$>$}\\*
+{\ttfamily \#include $<$runtime.\-h$>$}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{runtime__test_8c_a09778f56a4e5739bd16273f058067c4d}{check\-\_\-pithread} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+bool \hyperlink{runtime__test_8c_a285f5b6a70e1fdb34f6bacdbf92e23c3}{check\-\_\-commits} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{runtime__test_8c_a285f5b6a70e1fdb34f6bacdbf92e23c3}{\index{runtime\-\_\-test.\-c@{runtime\-\_\-test.\-c}!check\-\_\-commits@{check\-\_\-commits}}
+\index{check\-\_\-commits@{check\-\_\-commits}!runtime_test.c@{runtime\-\_\-test.\-c}}
+\subsubsection[{check\-\_\-commits}]{\setlength{\rightskip}{0pt plus 5cm}bool check\-\_\-commits (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{runtime__test_8c_a285f5b6a70e1fdb34f6bacdbf92e23c3}
+Test \-: Commitments \par
+ P\-I\-C\-C\-\_\-\-Commit $\ast$\-P\-I\-C\-C\-\_\-create\-\_\-commitment(); \par
+ P\-I\-C\-C\-\_\-\-Commit\-List $\ast$\-P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list(); \par
+ P\-I\-C\-C\-\_\-\-Commit\-List\-Element $\ast$\-P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list\-\_\-element();
+
+plop
+
+\begin{DoxyReturn}{Returns}
+boolean true if it works else false 
+\end{DoxyReturn}
+\hypertarget{runtime__test_8c_a09778f56a4e5739bd16273f058067c4d}{\index{runtime\-\_\-test.\-c@{runtime\-\_\-test.\-c}!check\-\_\-pithread@{check\-\_\-pithread}}
+\index{check\-\_\-pithread@{check\-\_\-pithread}!runtime_test.c@{runtime\-\_\-test.\-c}}
+\subsubsection[{check\-\_\-pithread}]{\setlength{\rightskip}{0pt plus 5cm}bool check\-\_\-pithread (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{runtime__test_8c_a09778f56a4e5739bd16273f058067c4d}
+Test \-: P\-I\-C\-C\-\_\-create\-\_\-pithread \par
+ P\-I\-C\-C\-\_\-\-Pi\-Thread $\ast$\-P\-I\-C\-C\-\_\-create\-\_\-pithread();
+
+\begin{DoxyReturn}{Returns}
+boolean true if it works else false 
+\end{DoxyReturn}

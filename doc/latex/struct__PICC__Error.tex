@@ -1,0 +1,43 @@
+\hypertarget{struct__PICC__Error}{\section{\-\_\-\-P\-I\-C\-C\-\_\-\-Error Struct Reference}
+\label{struct__PICC__Error}\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Error@{\-\_\-\-P\-I\-C\-C\-\_\-\-Error}}
+}
+
+
+{\ttfamily \#include $<$error.\-h$>$}
+
+\subsection*{Data Fields}
+{\bf }\par
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{errors_8h_a9c1e47db6d7c91cf096eaecd0eb79b64}{\-\_\-\-P\-I\-C\-C\-\_\-\-Error\-Id} \hyperlink{struct__PICC__Error_a35acbe51828a7168e5173904bd734c88}{id}
+\item 
+char $\ast$ \hyperlink{struct__PICC__Error_a01b9647a32f60a82c99b3b332387c7e4}{file}
+\item 
+int \hyperlink{struct__PICC__Error_ac2f7d3e5215d6835458fabe4c08cdaf5}{line}
+\item 
+struct \hyperlink{struct__PICC__Error}{\-\_\-\-P\-I\-C\-C\-\_\-\-Error} $\ast$ \hyperlink{struct__PICC__Error_a6a8e88acb1b847cdf6984c1600d2cef6}{prev}
+\end{DoxyCompactItemize}
+
+
+
+\subsection{Detailed Description}
+An error stack. 
+
+\subsection{Field Documentation}
+\hypertarget{struct__PICC__Error_a01b9647a32f60a82c99b3b332387c7e4}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Error@{\-\_\-\-P\-I\-C\-C\-\_\-\-Error}!file@{file}}
+\index{file@{file}!_PICC_Error@{\-\_\-\-P\-I\-C\-C\-\_\-\-Error}}
+\subsubsection[{file}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ \-\_\-\-P\-I\-C\-C\-\_\-\-Error\-::file}}\label{struct__PICC__Error_a01b9647a32f60a82c99b3b332387c7e4}
+File where the error occured. \hypertarget{struct__PICC__Error_a35acbe51828a7168e5173904bd734c88}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Error@{\-\_\-\-P\-I\-C\-C\-\_\-\-Error}!id@{id}}
+\index{id@{id}!_PICC_Error@{\-\_\-\-P\-I\-C\-C\-\_\-\-Error}}
+\subsubsection[{id}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Error\-Id} \-\_\-\-P\-I\-C\-C\-\_\-\-Error\-::id}}\label{struct__PICC__Error_a35acbe51828a7168e5173904bd734c88}
+I\-D of the error (0 if the error didn't occured). \hypertarget{struct__PICC__Error_ac2f7d3e5215d6835458fabe4c08cdaf5}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Error@{\-\_\-\-P\-I\-C\-C\-\_\-\-Error}!line@{line}}
+\index{line@{line}!_PICC_Error@{\-\_\-\-P\-I\-C\-C\-\_\-\-Error}}
+\subsubsection[{line}]{\setlength{\rightskip}{0pt plus 5cm}int \-\_\-\-P\-I\-C\-C\-\_\-\-Error\-::line}}\label{struct__PICC__Error_ac2f7d3e5215d6835458fabe4c08cdaf5}
+Line in $<$file$>$ where the error occured. \hypertarget{struct__PICC__Error_a6a8e88acb1b847cdf6984c1600d2cef6}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Error@{\-\_\-\-P\-I\-C\-C\-\_\-\-Error}!prev@{prev}}
+\index{prev@{prev}!_PICC_Error@{\-\_\-\-P\-I\-C\-C\-\_\-\-Error}}
+\subsubsection[{prev}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Error}$\ast$ \-\_\-\-P\-I\-C\-C\-\_\-\-Error\-::prev}}\label{struct__PICC__Error_a6a8e88acb1b847cdf6984c1600d2cef6}
+Link to the previous error (N\-U\-L\-L if this is the first). 
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{error_8h}{error.\-h}\end{DoxyCompactItemize}
