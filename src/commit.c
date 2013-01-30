@@ -94,16 +94,16 @@ PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PIC
  * @param ch Channel used to create the commit
  * @param eval Evaluation function
  * @param cont_pc Programm counter
- * @param error Error stack
  */
-void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_EvalFunction *eval, PICC_Label cont_pc, PICC_Error *error)
+void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_EvalFunction *eval, PICC_Label cont_pc)
 {
-    PICC_ALLOC(out, PICC_OutCommit, error) {
+    ALLOC_ERROR(error);
+    PICC_ALLOC(out, PICC_OutCommit, &error) {
         out->eval_func = eval;
         ALLOC_ERROR(sub_error);
         PICC_Commit *commit = PICC_create_commitment(&sub_error);
         if (HAS_ERROR(sub_error)) {
-            ADD_ERROR(error, sub_error, ERR_REGISTER_OUT_COMMIT);
+            ADD_ERROR(&error, sub_error, ERR_REGISTER_OUT_COMMIT);
             free(out);
         } else {
             INIT_COMMIT(commit, pt, ch, cont_pc);
@@ -113,12 +113,15 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
             ALLOC_ERROR(add_error);
             PICC_commit_list_add(pt->commits, commit, &add_error);
             if (HAS_ERROR(add_error)) {
-                ADD_ERROR(error, add_error, ERR_REGISTER_IN_COMMIT);
+                ADD_ERROR(&error, add_error, ERR_REGISTER_IN_COMMIT);
                 free(commit);
                 free(out);
             }
         }
     }
+
+    if (HAS_ERROR(&error));
+        CRASH(&error);
 }
 
 /**
@@ -140,16 +143,16 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
  * @param ch Channel used to create the commit
  * @param refvar Index of the var used to create the input commit
  * @param cont_pc Program counter
- * @param error Error stack
  */
-void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int refvar, PICC_Label cont_pc, PICC_Error *error)
+void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int refvar, PICC_Label cont_pc)
 {
-    PICC_ALLOC(in, PICC_InCommit, error) {
+    ALLOC_ERROR(error);
+    PICC_ALLOC(in, PICC_InCommit, &error) {
         in->refvar = refvar;
         ALLOC_ERROR(sub_error);
         PICC_Commit *commit = PICC_create_commitment(&sub_error);
         if (HAS_ERROR(sub_error)) {
-            ADD_ERROR(error, sub_error, ERR_REGISTER_IN_COMMIT);
+            ADD_ERROR(&error, sub_error, ERR_REGISTER_IN_COMMIT);
             free(in);
         } else {
             INIT_COMMIT(commit, pt, ch, cont_pc);
@@ -159,12 +162,15 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
             ALLOC_ERROR(add_error);
             PICC_commit_list_add(pt->commits, commit, &add_error);
             if (HAS_ERROR(add_error)) {
-                ADD_ERROR(error, add_error, ERR_REGISTER_IN_COMMIT);
+                ADD_ERROR(&error, add_error, ERR_REGISTER_IN_COMMIT);
                 free(commit);
                 free(in);
             }
         }
     }
+
+    if (HAS_ERROR(error))
+        CRASH(&error);
 }
 
 /**

@@ -121,8 +121,8 @@ extern PICC_Commit *PICC_create_commitment(PICC_Error *error);
 extern PICC_CommitList *PICC_create_commit_list(PICC_Error *error);
 extern PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PICC_Error *error);
 
-extern void PICC_register_ouput_commitment(struct _PICC_PiThread *p, struct _PICC_Channel *ch, PICC_EvalFunction *eval, PICC_Label cont_pc, PICC_Error *error);
-extern void PICC_register_input_commitment(struct _PICC_PiThread *p, struct _PICC_Channel *ch, int refvar, PICC_Label cont_pc, PICC_Error *error);
+extern void PICC_register_ouput_commitment(struct _PICC_PiThread *p, struct _PICC_Channel *ch, PICC_EvalFunction *eval, PICC_Label cont_pc);
+extern void PICC_register_input_commitment(struct _PICC_PiThread *p, struct _PICC_Channel *ch, int refvar, PICC_Label cont_pc);
 
 extern bool PICC_is_valid_commit(PICC_Commit *commit);
 extern bool PICC_commit_list_is_empty(PICC_CommitList *clist);
