@@ -12,6 +12,7 @@
 #define COMMIT_H
 
 #include <pi_thread.h>
+#include <symbols.h>
 #include <channel.h>
 #include <value.h>
 #include <error.h>
@@ -69,7 +70,7 @@ typedef struct _PICC_OutCommit {
  * The commitment common part
  * @inv type != null && thread != null && clock != null && clockval  != null && channel  != null && content  != null
  * @inv cont_pc > 0
- * 
+ *
  */
 typedef struct _PICC_Commit {
     /**@{*/
@@ -79,7 +80,7 @@ typedef struct _PICC_Commit {
     struct _PICC_Clock *clock; /** The time when the commitment has
                                 been made */
     struct _PICC_Value *clockval; /**< TODO see spec */
-    int cont_pc; /**< TODO see spec */
+    PICC_Label cont_pc; /**< TODO see spec */
     struct _PICC_Channel *channel; /**< The channel of this commitment */
     /**@}*/
     /**
@@ -124,6 +125,7 @@ extern void PICC_register_ouput_commitment(struct _PICC_PiThread *p, struct _PIC
 extern void PICC_register_input_commitment(struct _PICC_PiThread *p, struct _PICC_Channel *ch, int refvar, PICC_Label cont_pc, PICC_Error *error);
 
 extern bool PICC_is_valid_commit(PICC_Commit *commit);
+extern bool PICC_commit_list_is_empty(PICC_CommitList *clist);
 extern void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *c, PICC_Error *error);
 extern PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist);
 extern PICC_Commit *PICC_fetch_commitment(struct _PICC_Channel *ch, PICC_Error *error);

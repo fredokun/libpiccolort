@@ -180,6 +180,18 @@ void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Erro
 }
 
 /**
+ * Returns whether a commit list is empty.
+ *
+ * @param clist Commit list to check
+ * @return Whether the commit list is empty.
+ */
+bool PICC_commit_list_is_empty(PICC_CommitList *clist)
+{
+    ASSERT(clist != NULL);
+    return clist->size == 0;
+}
+
+/**
  * ????????????????????
  *
  * @param clist ???????
