@@ -14,6 +14,8 @@
 #include <tools.h>
 #include <error.h>
 
+#define DEFAULT_CHANNEL_SIZE 10
+
 #define LOCK_CHANNEL(c) \
     PICC_acquire(&(c->lock));
 
@@ -28,7 +30,7 @@
  */
 PICC_Channel *PICC_create_channel(PICC_Error *error)
 {
-    return PICC_create_channel_cn(10, error);
+    return PICC_create_channel_cn(DEFAULT_CHANNEL_SIZE, error);
 }
 
 /**
@@ -41,8 +43,10 @@ PICC_Channel *PICC_create_channel_cn(int commit_size, PICC_Error *error)
 {
     PICC_ALLOC(channel, PICC_Channel, error) {
         channel->global_rc = 1;
-        channel->incommits = malloc(sizeof(PICC_Commit) * commit_size);
-        channel->outcommits = malloc(sizeof(PICC_Commit) * commit_size);
+        channel->incommits = malloc(sizeof(PICC_CommitList));
+        channel->incommits->size = commit_size;
+        channel->outcommits = malloc(sizeof(PICC_CommitList));
+        channel->outcommits->size = commit_size;
         if (channel->incommits == NULL || channel->outcommits == NULL) {
             NEW_ERROR(error, ERR_OUT_OF_MEMORY);
             free(channel);
@@ -126,7 +130,10 @@ void PICC_channel_dec_ref_count(PICC_Channel *channel)
  */
 void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
 {
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    printf("reclaimed channel \n");
+    free(channel->incommits);
+    free(channel->outcommits);
+    free(channel);
 }
 
 /**
