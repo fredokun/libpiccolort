@@ -25,9 +25,9 @@ typedef struct _PICC_Channel {
     /**@{*/
     struct _PICC_Commit* incommits; /**< The input commits list */
     struct _PICC_Commit* outcommits; /**< The output commits list */
-    int global_rc; /** The number of commitments to that reference 
+    int global_rc; /** The number of commitments to that reference
                     this channel (TODO see spec)*/
-    PICC_Mutex lock; /** This channel lock to protect from concurrent 
+    PICC_Mutex lock; /** This channel lock to protect from concurrent
                         accesses*/
     /**@}*/
 } PICC_Channel;
@@ -56,7 +56,7 @@ typedef struct _PICC_Knowns {
  */
 typedef struct _PICC_KnownsSet {
     /**@{*/
-    PICC_Knowns **knowns; /** A pointer to an array of knowns. 
+    PICC_Knowns **knowns; /** A pointer to an array of knowns.
                             Contains all the data */
     int length; /**< The size of the set */
     /**@}*/
@@ -71,6 +71,8 @@ extern void PICC_channel_dec_ref_count(PICC_Channel *ch, PICC_Error *error);
 extern void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error);
 extern PICC_KnownsSet *PICC_knowns_set_knows(PICC_KnownsSet *ks, PICC_Error *error);
 extern PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks, PICC_Error *error);
+extern void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch, PICC_Error *error);
+extern void PICC_knowns_set_forget_all(PICC_KnownsSet *ks, PICC_Error *error);
 extern bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch, PICC_Error *error);
 
 #endif

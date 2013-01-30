@@ -45,7 +45,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, PICC_Erro
  * @param commit Commitment
  * @return Whether the PiThread can be awaken with given commit
  */
-bool PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit, PICC_Error *error)
+enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit, PICC_Error *error)
 {
     NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
     return false;
