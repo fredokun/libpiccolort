@@ -201,5 +201,7 @@ bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch)
  */
 void PICC_release_all_channels(PICC_Channel **chans, int nb_chans)
 {
-    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
+    int i;
+    for (i = 0; i < nb_chans; i++)
+        RELEASE_CHANNEL(chans[i]);
 }
