@@ -14,10 +14,10 @@
 #include <tools.h>
 
 #define LOCK_CHANNEL(c) \
-    PICC_acquire(c->lock);
+    PICC_acquire(&(c->lock));
 
 #define RELEASE_CHANNEL(c) \
-    PICC_release(c->lock, NULL);
+    PICC_release(&(c->lock), NULL);
 
 /**
  * Creates a channel which contains 10 commitments.

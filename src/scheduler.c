@@ -12,13 +12,13 @@
 #include <tools.h>
 
 #define LOCK_SCHED_POOL(sp) \
-    PICC_acquire(sp->lock);
+    PICC_acquire(&(sp->lock));
 
 #define RELEASE_SCHED_POOL(sp) \
-    PICC_release(sp->lock, NULL);
+    PICC_release(&(sp->lock), NULL);
 
 #define WAIT_SCHED_POOL(sp) \
-    PICC_cond_wait(sp->cond, sp->lock);
+    PICC_cond_wait(&(sp->cond), &(sp->lock));
 
 /**
  * Creates a new scheduler.
