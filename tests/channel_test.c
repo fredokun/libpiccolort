@@ -49,9 +49,9 @@ bool test_global_reference(PICC_Error *error)
 {
     PICC_Channel* channel = PICC_create_channel(error);
 
-    PICC_channel_incr_ref_count(channel,error);
-    PICC_channel_incr_ref_count(channel,error);
-    PICC_channel_incr_ref_count(channel,error);
+    PICC_channel_incr_ref_count(channel);
+    PICC_channel_incr_ref_count(channel);
+    PICC_channel_incr_ref_count(channel);
 
     if(channel->global_rc != 4)
     {
@@ -59,8 +59,8 @@ bool test_global_reference(PICC_Error *error)
         return false;
     }
 
-    PICC_channel_dec_ref_count(channel,error);
-    PICC_channel_dec_ref_count(channel,error);
+    PICC_channel_dec_ref_count(channel);
+    PICC_channel_dec_ref_count(channel);
 
     if(channel->global_rc != 2)
     {
@@ -68,7 +68,7 @@ bool test_global_reference(PICC_Error *error)
         return false;
     }
 
-    PICC_channel_dec_ref_count(channel,error);
+    PICC_channel_dec_ref_count(channel);
 
     if(channel->global_rc != 1)
     {
@@ -76,7 +76,7 @@ bool test_global_reference(PICC_Error *error)
         return false;
     }
 
-    PICC_channel_dec_ref_count(channel,error);
+    PICC_channel_dec_ref_count(channel);
 
     if(channel->global_rc != 0)
     {
@@ -89,7 +89,7 @@ bool test_global_reference(PICC_Error *error)
 
 bool test_channel_send(PICC_Error *error)
 {
-    PICC_Channel* channel = PICC_create_channel(error);
+  //  PICC_Channel* channel = PICC_create_channel(error);
     return true;
 }
 

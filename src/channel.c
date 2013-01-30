@@ -130,7 +130,6 @@ void PICC_channel_dec_ref_count(PICC_Channel *channel)
  */
 void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
 {
-    printf("reclaimed channel \n");
     free(channel->incommits);
     free(channel->outcommits);
     free(channel);
