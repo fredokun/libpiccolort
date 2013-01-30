@@ -1,0 +1,96 @@
+.TH "_PICC_Value" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+_PICC_Value \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <value\&.h>\fP
+.SS "Data Fields"
+
+.PP
+.RI "\fB\fP"
+.br
+
+.in +1c
+.in +1c
+.ti -1c
+.RI "\fBPICC_ValueKind\fP \fBkind\fP"
+.br
+.ti -1c
+.RI "\fBPICC_Mutex\fP \fBlock\fP"
+.br
+.in -1c
+.in -1c
+.PP
+.RI "\fBThe possible types a value can have\&.\fP"
+.br
+
+.in +1c
+.in -1c
+.PP
+.RI "\fBThe possible types a value can have\&.\fP"
+.br
+A lock that may be used tu block the value for concurent accesses
+.PP
+Only the value for the type that corresponds to the
+.PP
+\fBParameters:\fP
+.RS 4
+\fIkind\fP matters\&. 
+.RE
+.PP
+
+.PP
+.in +1c
+.in +1c
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   int \fBas_int\fP"
+.br
+.ti -1c
+.RI "   double \fBas_float\fP"
+.br
+.ti -1c
+.RI "   char * \fBas_string\fP"
+.br
+.ti -1c
+.RI "   bool \fBas_bool\fP"
+.br
+.ti -1c
+.RI "   struct \fB_PICC_Channel\fP * \fBas_channel\fP"
+.br
+.ti -1c
+.RI "} \fBcontent\fP"
+.br
+.in -1c
+.in -1c
+.SH "Detailed Description"
+.PP 
+A type to represent an arbitrary value 
+.SH "Field Documentation"
+.PP 
+.SS "bool _PICC_Value::as_bool"
+The boolean of the value 
+.SS "struct \fB_PICC_Channel\fP* _PICC_Value::as_channel"
+The channel of the value 
+.SS "double _PICC_Value::as_float"
+The float of the value 
+.SS "int _PICC_Value::as_int"
+The integer of the value 
+.SS "char* _PICC_Value::as_string"
+The string of the value 
+.SS "union { \&.\&.\&. }   _PICC_Value::content"
+
+.SS "\fBPICC_ValueKind\fP _PICC_Value::kind"
+The real type of the value 
+.SS "\fBPICC_Mutex\fP _PICC_Value::lock"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for PiThread from the source code\&.

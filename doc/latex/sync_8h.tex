@@ -1,0 +1,123 @@
+\hypertarget{sync_8h}{\section{include/sync.h File Reference}
+\label{sync_8h}\index{include/sync.\-h@{include/sync.\-h}}
+}
+{\ttfamily \#include $<$pthread.\-h$>$}\\*
+{\ttfamily \#include $<$error.\-h$>$}\\*
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef pthread\-\_\-mutex\-\_\-t \hyperlink{sync_8h_a600a20a1dd394c06182a81d72e3357f4}{P\-I\-C\-C\-\_\-\-Mutex}
+\item 
+typedef pthread\-\_\-cond\-\_\-t \hyperlink{sync_8h_af4e0a3af8bd3e7ee2a2281fc6817b32d}{P\-I\-C\-C\-\_\-\-Condition}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{sync_8h_ab92fab128349063a1d799fa6c0b83f3c}{P\-I\-C\-C\-\_\-init\-\_\-mutex} (\hyperlink{sync_8h_a600a20a1dd394c06182a81d72e3357f4}{P\-I\-C\-C\-\_\-\-Mutex} mutex)
+\item 
+void \hyperlink{sync_8h_a2ee7991f2566e7caa033d65a6d919656}{P\-I\-C\-C\-\_\-init\-\_\-condition} (\hyperlink{sync_8h_af4e0a3af8bd3e7ee2a2281fc6817b32d}{P\-I\-C\-C\-\_\-\-Condition} cond)
+\item 
+void \hyperlink{sync_8h_ad533486752c5f9d3dd499a06288f31ab}{P\-I\-C\-C\-\_\-acquire} (\hyperlink{sync_8h_a600a20a1dd394c06182a81d72e3357f4}{P\-I\-C\-C\-\_\-\-Mutex} mutex)
+\item 
+void \hyperlink{sync_8h_a0a6cdd715fc6aba7327880215401fa71}{P\-I\-C\-C\-\_\-release} (\hyperlink{sync_8h_a600a20a1dd394c06182a81d72e3357f4}{P\-I\-C\-C\-\_\-\-Mutex} mutex, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+void \hyperlink{sync_8h_afc97dc4dafa74e0e3c2a47bc16b03927}{P\-I\-C\-C\-\_\-cond\-\_\-wait} (\hyperlink{sync_8h_af4e0a3af8bd3e7ee2a2281fc6817b32d}{P\-I\-C\-C\-\_\-\-Condition} cond, \hyperlink{sync_8h_a600a20a1dd394c06182a81d72e3357f4}{P\-I\-C\-C\-\_\-\-Mutex} lock)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Synchronisation facilities.
+
+This project is released under M\-I\-T License.
+
+\begin{DoxyAuthor}{Author}
+Mickaël M\-E\-N\-U 
+\end{DoxyAuthor}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{sync_8h_af4e0a3af8bd3e7ee2a2281fc6817b32d}{\index{sync.\-h@{sync.\-h}!P\-I\-C\-C\-\_\-\-Condition@{P\-I\-C\-C\-\_\-\-Condition}}
+\index{P\-I\-C\-C\-\_\-\-Condition@{P\-I\-C\-C\-\_\-\-Condition}!sync.h@{sync.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Condition}]{\setlength{\rightskip}{0pt plus 5cm}typedef pthread\-\_\-cond\-\_\-t {\bf P\-I\-C\-C\-\_\-\-Condition}}}\label{sync_8h_af4e0a3af8bd3e7ee2a2281fc6817b32d}
+\hypertarget{sync_8h_a600a20a1dd394c06182a81d72e3357f4}{\index{sync.\-h@{sync.\-h}!P\-I\-C\-C\-\_\-\-Mutex@{P\-I\-C\-C\-\_\-\-Mutex}}
+\index{P\-I\-C\-C\-\_\-\-Mutex@{P\-I\-C\-C\-\_\-\-Mutex}!sync.h@{sync.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Mutex}]{\setlength{\rightskip}{0pt plus 5cm}typedef pthread\-\_\-mutex\-\_\-t {\bf P\-I\-C\-C\-\_\-\-Mutex}}}\label{sync_8h_a600a20a1dd394c06182a81d72e3357f4}
+
+
+\subsection{Function Documentation}
+\hypertarget{sync_8h_ad533486752c5f9d3dd499a06288f31ab}{\index{sync.\-h@{sync.\-h}!P\-I\-C\-C\-\_\-acquire@{P\-I\-C\-C\-\_\-acquire}}
+\index{P\-I\-C\-C\-\_\-acquire@{P\-I\-C\-C\-\_\-acquire}!sync.h@{sync.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-acquire}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-acquire (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Mutex}}]{mutex}
+\end{DoxyParamCaption}
+)}}\label{sync_8h_ad533486752c5f9d3dd499a06288f31ab}
+Locks the given mutex.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mutex} & Mutex to lock. \\
+\hline
+\end{DoxyParams}
+\hypertarget{sync_8h_afc97dc4dafa74e0e3c2a47bc16b03927}{\index{sync.\-h@{sync.\-h}!P\-I\-C\-C\-\_\-cond\-\_\-wait@{P\-I\-C\-C\-\_\-cond\-\_\-wait}}
+\index{P\-I\-C\-C\-\_\-cond\-\_\-wait@{P\-I\-C\-C\-\_\-cond\-\_\-wait}!sync.h@{sync.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-cond\-\_\-wait}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-cond\-\_\-wait (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Condition}}]{cond, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Mutex}}]{lock}
+\end{DoxyParamCaption}
+)}}\label{sync_8h_afc97dc4dafa74e0e3c2a47bc16b03927}
+Waits for the condition over the given mutex.
+
+
+\begin{DoxyParams}{Parameters}
+{\em cond} & Mutex condition \\
+\hline
+{\em mutex} & Mutex \\
+\hline
+\end{DoxyParams}
+\hypertarget{sync_8h_a2ee7991f2566e7caa033d65a6d919656}{\index{sync.\-h@{sync.\-h}!P\-I\-C\-C\-\_\-init\-\_\-condition@{P\-I\-C\-C\-\_\-init\-\_\-condition}}
+\index{P\-I\-C\-C\-\_\-init\-\_\-condition@{P\-I\-C\-C\-\_\-init\-\_\-condition}!sync.h@{sync.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-init\-\_\-condition}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-init\-\_\-condition (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Condition}}]{cond}
+\end{DoxyParamCaption}
+)}}\label{sync_8h_a2ee7991f2566e7caa033d65a6d919656}
+Initializes the given condition.
+
+
+\begin{DoxyParams}{Parameters}
+{\em cond} & Condition to initialize \\
+\hline
+\end{DoxyParams}
+\hypertarget{sync_8h_ab92fab128349063a1d799fa6c0b83f3c}{\index{sync.\-h@{sync.\-h}!P\-I\-C\-C\-\_\-init\-\_\-mutex@{P\-I\-C\-C\-\_\-init\-\_\-mutex}}
+\index{P\-I\-C\-C\-\_\-init\-\_\-mutex@{P\-I\-C\-C\-\_\-init\-\_\-mutex}!sync.h@{sync.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-init\-\_\-mutex}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-init\-\_\-mutex (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Mutex}}]{mutex}
+\end{DoxyParamCaption}
+)}}\label{sync_8h_ab92fab128349063a1d799fa6c0b83f3c}
+Initializes the given mutex.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mutex} & Mutex to initialize \\
+\hline
+\end{DoxyParams}
+\hypertarget{sync_8h_a0a6cdd715fc6aba7327880215401fa71}{\index{sync.\-h@{sync.\-h}!P\-I\-C\-C\-\_\-release@{P\-I\-C\-C\-\_\-release}}
+\index{P\-I\-C\-C\-\_\-release@{P\-I\-C\-C\-\_\-release}!sync.h@{sync.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-release}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-release (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Mutex}}]{mutex, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{sync_8h_a0a6cdd715fc6aba7327880215401fa71}
+Unlocks the given mutex, fail if the mutex is already unlocked.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mutex} & Mutex to unlock \\
+\hline
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}

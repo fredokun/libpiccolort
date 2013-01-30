@@ -1,0 +1,48 @@
+.TH "_PICC_Set" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+_PICC_Set \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <set\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "\fBPICC_SetType\fP \fBset_type\fP"
+.br
+.ti -1c
+.RI "int \fBsize\fP"
+.br
+.ti -1c
+.RI "union {"
+.br
+.ti -1c
+.RI "   \fBPICC_CommitL\fP * \fBcommit\fP"
+.br
+.ti -1c
+.RI "   \fBPICC_KnownsList\fP * \fBknowns\fP"
+.br
+.ti -1c
+.RI "} \fBelement\fP"
+.br
+.in -1c
+.SH "Field Documentation"
+.PP 
+.SS "\fBPICC_CommitL\fP* _PICC_Set::commit"
+
+.SS "union { \&.\&.\&. }   _PICC_Set::element"
+
+.SS "\fBPICC_KnownsList\fP* _PICC_Set::knowns"
+
+.SS "\fBPICC_SetType\fP _PICC_Set::set_type"
+
+.SS "int _PICC_Set::size"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for PiThread from the source code\&.

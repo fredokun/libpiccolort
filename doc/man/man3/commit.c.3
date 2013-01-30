@@ -1,0 +1,220 @@
+.TH "src/commit.c" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/commit.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <commit\&.h>\fP
+.br
+\fC#include <tools\&.h>\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBLOCK_CLOCK\fP(commit)   \fBPICC_acquire\fP(commit->thread->clock->val->lock);"
+.br
+.ti -1c
+.RI "#define \fBRELEASE_CLOCK\fP(commit)   \fBPICC_release\fP(commit->thread->clock->val->lock, NULL);"
+.br
+.ti -1c
+.RI "#define \fBINIT_COMMIT\fP(commit, pt, ch, pc)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPICC_Commit\fP * \fBPICC_create_commitment\fP (\fBPICC_Error\fP *error)"
+.br
+.ti -1c
+.RI "\fBPICC_CommitList\fP * \fBPICC_create_commit_list\fP (\fBPICC_Error\fP *error)"
+.br
+.ti -1c
+.RI "\fBPICC_CommitListElement\fP * \fBPICC_create_commit_list_element\fP (\fBPICC_Commit\fP *commit, \fBPICC_Error\fP *error)"
+.br
+.ti -1c
+.RI "void \fBPICC_register_output_commitment\fP (\fBPICC_PiThread\fP *pt, \fBPICC_Channel\fP *ch, \fBPICC_EvalFunction\fP *eval, \fBPICC_Label\fP cont_pc, \fBPICC_Error\fP *error)"
+.br
+.ti -1c
+.RI "void \fBPICC_register_input_commitment\fP (\fBPICC_PiThread\fP *pt, \fBPICC_Channel\fP *ch, int refvar, int cont_pc, \fBPICC_Error\fP *error)"
+.br
+.ti -1c
+.RI "bool \fBPICC_is_valid_commit\fP (\fBPICC_Commit\fP *commit)"
+.br
+.ti -1c
+.RI "void \fBPICC_commit_list_add\fP (\fBPICC_CommitList\fP *clist, \fBPICC_Commit\fP *commit, \fBPICC_Error\fP *error)"
+.br
+.ti -1c
+.RI "\fBPICC_Commit\fP * \fBPICC_commit_list_fetch\fP (\fBPICC_CommitList\fP *clist)"
+.br
+.ti -1c
+.RI "\fBPICC_Commit\fP * \fBPICC_fetch_commitment\fP (\fBPICC_Channel\fP *ch, \fBPICC_Error\fP *error)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Commits\&.
+.PP
+This project is released under MIT License\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Mickaël MENU 
+.PP
+Maxence WO 
+.RE
+.PP
+
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define INIT_COMMIT(commit, pt, ch, pc)"
+\fBValue:\fP
+.PP
+.nf
+commit->thread = pt; \
+    commit->cont_pc = pc; \
+    commit->clock = pt->clock; \
+    commit->clockval = pt->clock->val; \
+    commit->channel = ch;
+.fi
+.SS "#define LOCK_CLOCK(commit)   \fBPICC_acquire\fP(commit->thread->clock->val->lock);"
+
+.SS "#define RELEASE_CLOCK(commit)   \fBPICC_release\fP(commit->thread->clock->val->lock, NULL);"
+
+.SH "Function Documentation"
+.PP 
+.SS "void PICC_commit_list_add (\fBPICC_CommitList\fP *clist, \fBPICC_Commit\fP *commit, \fBPICC_Error\fP *error)"
+Adds the given element at the end of the commit list\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIclist\fP Commit list 
+.br
+\fIcommit\fP Commit to add 
+.br
+\fIerror\fP Error stack 
+.RE
+.PP
+
+.SS "\fBPICC_Commit\fP* PICC_commit_list_fetch (\fBPICC_CommitList\fP *clist)"
+????????????????????
+.PP
+\fBParameters:\fP
+.RS 4
+\fIclist\fP ??????? 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+???????????? 
+.RE
+.PP
+
+.SS "\fBPICC_CommitList\fP* PICC_create_commit_list (\fBPICC_Error\fP *error)"
+Creates a new commit list\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIerror\fP Error stack 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Created commit list 
+.RE
+.PP
+
+.SS "\fBPICC_CommitListElement\fP* PICC_create_commit_list_element (\fBPICC_Commit\fP *commit, \fBPICC_Error\fP *error)"
+Creates a new element of commit list\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcommit\fP Commit associated 
+.br
+\fIerror\fP Error stack 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Created commit list element 
+.RE
+.PP
+
+.SS "\fBPICC_Commit\fP* PICC_create_commitment (\fBPICC_Error\fP *error)"
+Creates and returns a commitment\&.
+.PP
+\fBReturns:\fP
+.RS 4
+Created commitment 
+.RE
+.PP
+
+.SS "\fBPICC_Commit\fP* PICC_fetch_commitment (\fBPICC_Channel\fP *ch, \fBPICC_Error\fP *error)"
+Fetches a commit from a channel\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIch\fP Channel to fetch the commit from 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Fetched commit 
+.RE
+.PP
+
+.SS "bool PICC_is_valid_commit (\fBPICC_Commit\fP *commit)"
+Verifies if the given commit is valid\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcommit\fP Commit to validate 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Whether the commit is valid 
+.RE
+.PP
+
+.SS "void PICC_register_input_commitment (\fBPICC_PiThread\fP *pt, \fBPICC_Channel\fP *ch, intrefvar, intcont_pc, \fBPICC_Error\fP *error)"
+Registers an input commit with given PiThread and channel\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpt\fP PiThread associated with the commit 
+.br
+\fIch\fP Channel used to create the commit 
+.br
+\fIrefvar\fP Index of the var used to create the input commit 
+.br
+\fIcont_pc\fP Program counter 
+.br
+\fIerror\fP Error stack 
+.RE
+.PP
+
+.SS "void PICC_register_output_commitment (\fBPICC_PiThread\fP *pt, \fBPICC_Channel\fP *ch, \fBPICC_EvalFunction\fP *eval, \fBPICC_Label\fPcont_pc, \fBPICC_Error\fP *error)"
+Registers an output commit with given PiThread and channel\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpt\fP PiThread associated with the commit 
+.br
+\fIch\fP Channel used to create the commit 
+.br
+\fIeval\fP Evaluation function 
+.br
+\fIcont_pc\fP Programm counter 
+.br
+\fIerror\fP Error stack 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for PiThread from the source code\&.

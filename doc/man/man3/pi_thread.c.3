@@ -1,0 +1,90 @@
+.TH "src/pi_thread.c" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/pi_thread.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <pi_thread\&.h>\fP
+.br
+\fC#include <tools\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPICC_PiThread\fP * \fBPICC_create_pithread\fP (int env_length, int knowns_length, \fBPICC_Error\fP *error)"
+.br
+.ti -1c
+.RI "bool \fBPICC_can_awake\fP (\fBPICC_PiThread\fP *pt, \fBPICC_Commit\fP *commit, \fBPICC_Error\fP *error)"
+.br
+.ti -1c
+.RI "void \fBPICC_awake\fP (\fBPICC_SchedPool\fP *sched, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Pi-Threads
+.PP
+This project is released under MIT License\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Mickaël MENU 
+.PP
+Maxence WO 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "void PICC_awake (\fBPICC_SchedPool\fP *sched, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+Awakes a PiThread in the given scheduler\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsched\fP Scheduler 
+.br
+\fIpt\fP PiThread to be awaken 
+.RE
+.PP
+
+.SS "bool PICC_can_awake (\fBPICC_PiThread\fP *pt, \fBPICC_Commit\fP *commit, \fBPICC_Error\fP *error)"
+Returns whether a PiThread can be awaken with the given commit\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpt\fP PiThread to check 
+.br
+\fIcommit\fP Commitment 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Whether the PiThread can be awaken with given commit 
+.RE
+.PP
+
+.SS "\fBPICC_PiThread\fP* PICC_create_pithread (intenv_length, intknowns_length, \fBPICC_Error\fP *error)"
+Creates a new PiThread with given environment and knowns set length\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIenv_length\fP Size of the environment 
+.br
+\fIknowns_length\fP Size of the knowns set 
+.br
+\fIerror\fP Error stack 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Created PiThread 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for PiThread from the source code\&.

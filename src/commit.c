@@ -6,16 +6,17 @@
  *
  * @author Mickaël MENU
  * @author Maxence WO
+ * @author Joel HING
  */
 
 #include <commit.h>
 #include <tools.h>
 
 #define LOCK_CLOCK(commit) \
-    PICC_acquire(commit->thread->clock->val->lock);
+    PICC_acquire(&(commit->thread->clock->val->lock));
 
 #define RELEASE_CLOCK(commit) \
-    PICC_release(commit->thread->clock->val->lock, NULL);
+    PICC_release(&(commit->thread->clock->val->lock));
 
 #define INIT_COMMIT(commit, pt, ch, pc) \
     commit->thread = pt; \
@@ -26,6 +27,8 @@
 
 /**
  * Creates and returns a commitment.
+ *
+ * @post commit != null
  *
  * @return Created commitment
  */
@@ -75,20 +78,32 @@ PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PIC
 /**
  * Registers an output commit with given PiThread and channel.
  *
+ *
+ * @pre pt != null && ch != null && eval != null &&  cont_pc != null
+ *
+ * @post pt->commits->size(PICC_register_output_commitment(pt)) = pt->commits->size(pt) + 1
+ * @post pt->commits->tail = commit
+ * @post commit->type = PICC_OUT_COMMIT
+ * @post commit->content.out = out
+ * @post commit->thread = pt
+ * @post commit->channel = ch
+ * @post commit->cont_pc = cont_pc
+ * @post out->eval_func = eval
+ *
  * @param pt PiThread associated with the commit
  * @param ch Channel used to create the commit
  * @param eval Evaluation function
  * @param cont_pc Programm counter
- * @param error Error stack
  */
-void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_EvalFunction *eval, PICC_Label cont_pc, PICC_Error *error)
+void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_EvalFunction *eval, PICC_Label cont_pc)
 {
-    PICC_ALLOC(out, PICC_OutCommit, error) {
+    ALLOC_ERROR(error);
+    PICC_ALLOC(out, PICC_OutCommit, &error) {
         out->eval_func = eval;
         ALLOC_ERROR(sub_error);
         PICC_Commit *commit = PICC_create_commitment(&sub_error);
         if (HAS_ERROR(sub_error)) {
-            ADD_ERROR(error, sub_error, ERR_REGISTER_OUT_COMMIT);
+            ADD_ERROR(&error, sub_error, ERR_REGISTER_OUT_COMMIT);
             free(out);
         } else {
             INIT_COMMIT(commit, pt, ch, cont_pc);
@@ -98,31 +113,46 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
             ALLOC_ERROR(add_error);
             PICC_commit_list_add(pt->commits, commit, &add_error);
             if (HAS_ERROR(add_error)) {
-                ADD_ERROR(error, add_error, ERR_REGISTER_IN_COMMIT);
+                ADD_ERROR(&error, add_error, ERR_REGISTER_IN_COMMIT);
                 free(commit);
                 free(out);
             }
         }
     }
+
+    if (HAS_ERROR(&error));
+        CRASH(&error);
 }
 
 /**
  * Registers an input commit with given PiThread and channel.
  *
+ *
+ * @pre pt != null && ch != null && cont_pc != null
+ *
+ * @post pt->commits->size(PICC_register_input_commitment(pt)) = pt->commits->size(pt) + 1
+ * @post pt->commits->tail = commit
+ * @post commit->type = PICC_IN_COMMIT
+ * @post commit->content.in = in
+ * @post commit->thread = pt
+ * @post commit->channel = ch
+ * @post commit->cont_pc = cont_pc
+ * @post in->refvar = refvar
+ *
  * @param pt PiThread associated with the commit
  * @param ch Channel used to create the commit
  * @param refvar Index of the var used to create the input commit
  * @param cont_pc Program counter
- * @param error Error stack
  */
-void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int refvar, int cont_pc, PICC_Error *error)
+void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int refvar, PICC_Label cont_pc)
 {
-    PICC_ALLOC(in, PICC_InCommit, error) {
+    ALLOC_ERROR(error);
+    PICC_ALLOC(in, PICC_InCommit, &error) {
         in->refvar = refvar;
         ALLOC_ERROR(sub_error);
         PICC_Commit *commit = PICC_create_commitment(&sub_error);
         if (HAS_ERROR(sub_error)) {
-            ADD_ERROR(error, sub_error, ERR_REGISTER_IN_COMMIT);
+            ADD_ERROR(&error, sub_error, ERR_REGISTER_IN_COMMIT);
             free(in);
         } else {
             INIT_COMMIT(commit, pt, ch, cont_pc);
@@ -132,16 +162,23 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
             ALLOC_ERROR(add_error);
             PICC_commit_list_add(pt->commits, commit, &add_error);
             if (HAS_ERROR(add_error)) {
-                ADD_ERROR(error, add_error, ERR_REGISTER_IN_COMMIT);
+                ADD_ERROR(&error, add_error, ERR_REGISTER_IN_COMMIT);
                 free(commit);
                 free(in);
             }
         }
     }
+
+    if (HAS_ERROR(error))
+        CRASH(&error);
 }
 
 /**
  * Verifies if the given commit is valid.
+ *
+ * @pre commit != null
+ *
+ * @post  if (commit->clock == commit->thread->clock && commit->clockval == commit->thread->clock->val) valid = true else valid = false
  *
  * @param commit Commit to validate
  * @return Whether the commit is valid
@@ -179,10 +216,22 @@ void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Erro
 }
 
 /**
- * ????????????????????
+ * Returns whether a commit list is empty.
  *
- * @param clist ???????
- * @return ????????????
+ * @param clist Commit list to check
+ * @return Whether the commit list is empty.
+ */
+bool PICC_commit_list_is_empty(PICC_CommitList *clist)
+{
+    ASSERT(clist != NULL);
+    return clist->size == 0;
+}
+
+/**
+ * Fetch the first element of the commit list.
+ *
+ * @param clist Commit list
+ * @return first element of the commit list
  */
 PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
 {
@@ -194,13 +243,65 @@ PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
 }
 
 /**
- * Fetches a commit from a channel.
+ * Fetches the first element of the input commitList from a channel.
+ *
+ * @pre ch != null
+ *
+ * @post if(c->incommits->size > 0 && PICC_is_valid_commit(PICC_commit_list_fetch(c->incommits))) PICC_fetch_input_commitment(c) =  PICC_commit_list_fetch(c->incommits)
+ * @post if(c->incommits->size = 0 || !(PICC_is_valid_commit(PICC_commit_list_fetch(c->incommits)))) PICC_fetch_input_commitment(c) = null
  *
  * @param ch Channel to fetch the commit from
  * @return Fetched commit
  */
-PICC_Commit *PICC_fetch_commitment(PICC_Channel *ch, PICC_Error *error)
+PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
 {
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
-    return NULL;
+    PICC_Commit *fetched = NULL;
+    ALLOC_ERROR(alloc_error);
+    PICC_ALLOC(current, PICC_InCommit, &alloc_error) {
+        current = PICC_commit_list_fetch(ch->incommits);
+        while (current != NULL) {
+            if (PICC_is_valid_commit(current)) {
+                return current;
+            }
+    	    current = PICC_commit_list_fetch(ch->incommits);
+        }
+    }
+
+    if (HAS_ERROR(alloc_error))
+        CRASH(&alloc_error);
+
+    return fetched;
+}
+
+/**
+ * Fetches he first element of the output commitList from a channel
+ *
+ * @pre ch != null
+ *
+ * @post if(c->outcommits->size > 0 && PICC_is_valid_commit(PICC_commit_list_fetch(c->outcommits))) PICC_fetch_output_commitment(c) =  PICC_commit_list_fetch(c->outcommits)
+ * @post if(c->outcommits->size = 0 || !(PICC_is_valid_commit(PICC_commit_list_fetch(c->outcommits)))) PICC_fetch_output_commitment(c) = null
+ *
+ * @param ch Channel to fetch the commit from
+ * @return Fetched commit
+ */
+PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
+{
+    PICC_Commit *fetched = NULL;
+    ALLOC_ERROR(alloc_error);
+    PICC_ALLOC(current, PICC_OutCommit, &alloc_error)
+    {
+        current = PICC_commit_list_fetch(ch->outcommits);
+        while (current != NULL) {
+            if (PICC_is_valid_commit(current)) {
+                fetched = current;
+                break;
+            }
+            current = PICC_commit_list_fetch(ch->outcommits);
+        }
+    }
+
+    if (HAS_ERROR(alloc_error))
+        CRASH(&alloc_error);
+
+    return fetched;
 }

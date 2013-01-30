@@ -40,14 +40,56 @@ bool check_pithread(PICC_Error *error)
 }
 
 /**
+* Test : Create Commitments
+*
+* @return boolean true if it works else false 
+*
+*/
+bool check_create_commitments(PICC_Error* error)
+{	
+    ALLOC_ERROR(create_error);
+    PICC_Commit* c = PICC_create_commitment(&create_error);
+    if (HAS_ERROR(create_error)) {
+        FORWARD_ERROR(error, create_error);
+        return false;
+
+    } else if (c == NULL) {
+        NEW_ERROR(error, ERR_NULLPOINTER_COMMIT);
+        return false;
+    }
+}
+
+bool check_register_outcommits(PICC_Error* error)
+{
+    PICC_Commit *c;
+    PICC_PiThread* pt;
+    PICC_Channel *ch;
+    PICC_EvalFunction *eval;
+    PICC_Label cont_pc;
+
+    ALLOC_ERROR(create_error);
+    c = PICC_create_commitment(&create_error);
+    if (HAS_ERROR(create_error)) {
+        FORWARD_ERROR(error, create_error);
+        return false;
+    }
+
+    //check pithread, channel first
+    pt = PICC_create_pithread(1, 1, error);
+    ch = PICC_create_channel(error);
+    PICC_Value* func(PICC_PiThread* a) { printf("my eval func !\n"); return NULL; };
+    eval = func;
+    
+}
+
+/**
  * Test : Commitments \n
- * PICC_Commit  *PICC_create_commitment(); \n
  * PICC_CommitList *PICC_create_commit_list(); \n
  * PICC_CommitListElement *PICC_create_commit_list_element();
  *
  * @return boolean true if it works else false
  */
-bool check_commits(PICC_Error *error)
+bool check_commitlists(PICC_Error *error)
 {
     PICC_Commit *c, *c2, *c3;
     PICC_CommitListElement *clistelem;
@@ -57,10 +99,6 @@ bool check_commits(PICC_Error *error)
     c = PICC_create_commitment(&create_error);
     if (HAS_ERROR(create_error)) {
         FORWARD_ERROR(error, create_error);
-        return false;
-
-    } else if (c == NULL) {
-        NEW_ERROR(error, ERR_NULLPOINTER_COMMIT);
         return false;
     }
 
@@ -152,43 +190,3 @@ bool check_commits(PICC_Error *error)
     return true;
 }
 
-/*
-int  PICC_can_awake(PICC_PiThread p, PICC_Commit c);
-void PICC_awake(PICC_SchedPool sched, PICC_PiThread p);
-
-
-PICC_SchedPool PICC_create_sched_pool();
-PICC_Channel  *PICC_create_channel();
-
-PICC_Clock    PICC_create_clock();
-
-void PICC_sched_pool_slave(PICC_SchedPool schedpool, PICC_Error* error);
-void PICC_sched_pool_master(PICC_SchedPool schedpool, int std_gc_fuel, int quick_gc_fuel, int active_factor);
-
-void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint);
-
-void PICC_register_ouput_commitment(PICC_PiThread p, PICC_Channel ch, PICC_EvalFunction f, int cont_pc);
-void PICC_register_input_commitment(PICC_PiThread p, PICC_Channel ch, int x, int cont_pc);
-bool PICC_is_valid_commit(PICC_Commit commit);
-
-void PICC_channel_incr_ref_count(PICC_Channel ch);
-void PICC_channel_dec_ref_count(PICC_Channel ch);
-
-void       PICC_commit_list_add(PICC_Commit* clist, PICC_Commit c);
-PICC_Commit PICC_commit_list_fetch(PICC_Commit* clist);
-
-
-PICC_KnownsSet PICC_knows_set_knows(PICC_Knowns* ks);
-PICC_KnownsSet PICC_knows_set_forget(PICC_Knowns* ks);
-bool          PICC_knows_register(PICC_KnownsSet ks, PICC_Channel ch);
-
-void PICC_acquire_int(PICC_AtomicInt int_val);
-void PICC_release_int(PICC_AtomicInt int_val);
-void PICC_acquire_bool(PICC_AtomicBoolean bool_val);
-void PICC_release_bool(PICC_AtomicBoolean bool_val);
-
-PICC_Commit PICC_fetch_commitment(PICC_Channel ch);
-
-PICC_Clock PICC_create_clock();
-
-*/

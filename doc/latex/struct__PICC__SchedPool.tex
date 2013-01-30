@@ -1,0 +1,58 @@
+\hypertarget{struct__PICC__SchedPool}{\section{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool Struct Reference}
+\label{struct__PICC__SchedPool}\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}}
+}
+
+
+{\ttfamily \#include $<$scheduler.\-h$>$}
+
+\subsection*{Data Fields}
+{\bf }\par
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct__PICC__ReadyQueue}{\-\_\-\-P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$ \hyperlink{struct__PICC__SchedPool_ac631e8875659f9413be6c744a4612c3a}{ready}
+\item 
+struct \hyperlink{struct__PICC__WaitQueue}{\-\_\-\-P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$ \hyperlink{struct__PICC__SchedPool_aecc100746299a575ead9e5e43bede174}{wait}
+\item 
+\hyperlink{sync_8h_a600a20a1dd394c06182a81d72e3357f4}{P\-I\-C\-C\-\_\-\-Mutex} \hyperlink{struct__PICC__SchedPool_ab322b207c03204dfc4b2afd5a19e32cf}{lock}
+\item 
+\hyperlink{sync_8h_af4e0a3af8bd3e7ee2a2281fc6817b32d}{P\-I\-C\-C\-\_\-\-Condition} \hyperlink{struct__PICC__SchedPool_ad146af14a9d5b8c490ae0a5579d59da1}{cond}
+\item 
+int \hyperlink{struct__PICC__SchedPool_a911d4f57e6a2cefd736d4cfd3a94b435}{nb\-\_\-slaves}
+\item 
+int \hyperlink{struct__PICC__SchedPool_ae78e0ed1fcc5953008c184b02840f3b7}{nb\-\_\-waiting\-\_\-slaves}
+\item 
+bool \hyperlink{struct__PICC__SchedPool_ae86d4523d59cb922e141d536d7f9efd5}{running}
+\end{DoxyCompactItemize}
+
+
+
+\subsection{Detailed Description}
+This type contains all the scheduler data 
+
+\subsection{Field Documentation}
+\hypertarget{struct__PICC__SchedPool_ad146af14a9d5b8c490ae0a5579d59da1}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}!cond@{cond}}
+\index{cond@{cond}!_PICC_SchedPool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}}
+\subsubsection[{cond}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Condition} \-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool\-::cond}}\label{struct__PICC__SchedPool_ad146af14a9d5b8c490ae0a5579d59da1}
+\hypertarget{struct__PICC__SchedPool_ab322b207c03204dfc4b2afd5a19e32cf}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}!lock@{lock}}
+\index{lock@{lock}!_PICC_SchedPool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}}
+\subsubsection[{lock}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Mutex} \-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool\-::lock}}\label{struct__PICC__SchedPool_ab322b207c03204dfc4b2afd5a19e32cf}
+The queue that contains the waiting or blocked pi-\/threads The scheduler lock. T\-O\-D\-O see spec \hypertarget{struct__PICC__SchedPool_a911d4f57e6a2cefd736d4cfd3a94b435}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}!nb\-\_\-slaves@{nb\-\_\-slaves}}
+\index{nb\-\_\-slaves@{nb\-\_\-slaves}!_PICC_SchedPool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}}
+\subsubsection[{nb\-\_\-slaves}]{\setlength{\rightskip}{0pt plus 5cm}int \-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool\-::nb\-\_\-slaves}}\label{struct__PICC__SchedPool_a911d4f57e6a2cefd736d4cfd3a94b435}
+The scheduler condition. Used to synchronise the running posix threads. \hypertarget{struct__PICC__SchedPool_ae78e0ed1fcc5953008c184b02840f3b7}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}!nb\-\_\-waiting\-\_\-slaves@{nb\-\_\-waiting\-\_\-slaves}}
+\index{nb\-\_\-waiting\-\_\-slaves@{nb\-\_\-waiting\-\_\-slaves}!_PICC_SchedPool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}}
+\subsubsection[{nb\-\_\-waiting\-\_\-slaves}]{\setlength{\rightskip}{0pt plus 5cm}int \-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool\-::nb\-\_\-waiting\-\_\-slaves}}\label{struct__PICC__SchedPool_ae78e0ed1fcc5953008c184b02840f3b7}
+The number of running posix threads in the schedpool. The number of waiting posix threads. \hypertarget{struct__PICC__SchedPool_ac631e8875659f9413be6c744a4612c3a}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}!ready@{ready}}
+\index{ready@{ready}!_PICC_SchedPool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}}
+\subsubsection[{ready}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Ready\-Queue}$\ast$ \-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool\-::ready}}\label{struct__PICC__SchedPool_ac631e8875659f9413be6c744a4612c3a}
+\hypertarget{struct__PICC__SchedPool_ae86d4523d59cb922e141d536d7f9efd5}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}!running@{running}}
+\index{running@{running}!_PICC_SchedPool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}}
+\subsubsection[{running}]{\setlength{\rightskip}{0pt plus 5cm}bool \-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool\-::running}}\label{struct__PICC__SchedPool_ae86d4523d59cb922e141d536d7f9efd5}
+Specifies if the scheduler is actually running \hypertarget{struct__PICC__SchedPool_aecc100746299a575ead9e5e43bede174}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}!wait@{wait}}
+\index{wait@{wait}!_PICC_SchedPool@{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}}
+\subsubsection[{wait}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Wait\-Queue}$\ast$ \-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool\-::wait}}\label{struct__PICC__SchedPool_aecc100746299a575ead9e5e43bede174}
+The queue that contains the pi-\/threads ready tuo run 
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{scheduler_8h}{scheduler.\-h}\end{DoxyCompactItemize}

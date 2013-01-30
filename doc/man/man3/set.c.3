@@ -1,0 +1,135 @@
+.TH "src/set.c" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+src/set.c \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include <set\&.h>\fP
+.br
+\fC#include <tools\&.h>\fP
+.br
+\fC#include <errors\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPICC_Set\fP * \fBPICC_set_make\fP (\fBPICC_SetType\fP type)"
+.br
+.ti -1c
+.RI "void \fBPICC_set_add\fP (\fBPICC_Set\fP *s, \fBPICC_SetElement\fP *elem, \fBPICC_Error\fP *err)"
+.br
+.ti -1c
+.RI "bool \fBPICC_set_mem\fP (\fBPICC_Set\fP *s, \fBPICC_SetElement\fP *elem, \fBPICC_Error\fP *err)"
+.br
+.ti -1c
+.RI "bool \fBPICC_set_is_empty\fP (\fBPICC_Set\fP *s)"
+.br
+.ti -1c
+.RI "void \fBPICC_set_map\fP (\fBPICC_Set\fP *s, void(*func)(void *))"
+.br
+.ti -1c
+.RI "void \fBPICC_set_destroy\fP (\fBPICC_Set\fP *s)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Provides several functions to generic sets\&.
+.PP
+This project is released under MIT License\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Maxence WO 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "void PICC_set_add (\fBPICC_Set\fP *s, \fBPICC_SetElement\fP *elem, \fBPICC_Error\fP *err)"
+Add an element to a set
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP Set 
+.br
+\fIelem\fP SetElement 
+.br
+\fIerr\fP Error 
+.RE
+.PP
+
+.SS "void PICC_set_destroy (\fBPICC_Set\fP *s)"
+Free a Set
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP Set to free 
+.RE
+.PP
+
+.SS "bool PICC_set_is_empty (\fBPICC_Set\fP *s)"
+Check if a set is empty
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP Set 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+bool true if the set is empty else false 
+.RE
+.PP
+
+.SS "\fBPICC_Set\fP* PICC_set_make (\fBPICC_SetType\fPtype)"
+Initialize a set
+.PP
+\fBParameters:\fP
+.RS 4
+\fItype\fP SetType 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+s return an initialized set 
+.RE
+.PP
+
+.SS "void PICC_set_map (\fBPICC_Set\fP *s, void(*)(void *)func)"
+Apply a fonction to all elements of a set
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP Set 
+.br
+\fIfunc\fP Function that takes a commit or a knowns as parameter 
+.RE
+.PP
+
+.SS "bool PICC_set_mem (\fBPICC_Set\fP *s, \fBPICC_SetElement\fP *elem, \fBPICC_Error\fP *err)"
+Check if an element is in a set
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP Set 
+.br
+\fIelem\fP SetElement 
+.br
+\fIerr\fP Error 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+bool true if an element is in a set 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for PiThread from the source code\&.

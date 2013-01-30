@@ -1,0 +1,135 @@
+\hypertarget{scheduler_8h}{\section{include/scheduler.h File Reference}
+\label{scheduler_8h}\index{include/scheduler.\-h@{include/scheduler.\-h}}
+}
+{\ttfamily \#include $<$queue.\-h$>$}\\*
+{\ttfamily \#include $<$sync.\-h$>$}\\*
+{\ttfamily \#include $<$error.\-h$>$}\\*
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct__PICC__SchedPool}{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}
+\item 
+struct \hyperlink{struct__PICC__Args}{\-\_\-\-P\-I\-C\-C\-\_\-\-Args}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{struct__PICC__SchedPool}{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool} \hyperlink{scheduler_8h_a53817fd01b91a5a89175368b546dd8b9}{P\-I\-C\-C\-\_\-\-Sched\-Pool}
+\item 
+typedef struct \hyperlink{struct__PICC__Args}{\-\_\-\-P\-I\-C\-C\-\_\-\-Args} \hyperlink{scheduler_8h_a9776ada5a4c755d2c256d1ab6b51a69e}{P\-I\-C\-C\-\_\-\-Args}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{scheduler_8h_a53817fd01b91a5a89175368b546dd8b9}{P\-I\-C\-C\-\_\-\-Sched\-Pool} $\ast$ \hyperlink{scheduler_8h_a6012c26a20062a6c15f7481ac848b742}{P\-I\-C\-C\-\_\-create\-\_\-sched\-\_\-pool} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+\hyperlink{scheduler_8h_a9776ada5a4c755d2c256d1ab6b51a69e}{P\-I\-C\-C\-\_\-\-Args} $\ast$ \hyperlink{scheduler_8h_a201bdc0e00d38464e8f1758c427127f5}{P\-I\-C\-C\-\_\-create\-\_\-args} (\hyperlink{scheduler_8h_a53817fd01b91a5a89175368b546dd8b9}{P\-I\-C\-C\-\_\-\-Sched\-Pool} $\ast$sp, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$err, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+void \hyperlink{scheduler_8h_ae5718d519ba66cc24c7334dbba5fb075}{P\-I\-C\-C\-\_\-sched\-\_\-pool\-\_\-slave} (\hyperlink{scheduler_8h_a9776ada5a4c755d2c256d1ab6b51a69e}{P\-I\-C\-C\-\_\-\-Args} $\ast$args)
+\item 
+void \hyperlink{scheduler_8h_af07fa6847a5b2c85349c478b4b511eda}{P\-I\-C\-C\-\_\-sched\-\_\-pool\-\_\-master} (\hyperlink{scheduler_8h_a53817fd01b91a5a89175368b546dd8b9}{P\-I\-C\-C\-\_\-\-Sched\-Pool} $\ast$sp, int std\-\_\-gc\-\_\-fuel, int quick\-\_\-gc\-\_\-fuel, int active\-\_\-factor, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Schedulers.
+
+This project is released under M\-I\-T License.
+
+\begin{DoxyAuthor}{Author}
+Mickaël M\-E\-N\-U 
+
+Maxence W\-O 
+\end{DoxyAuthor}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{scheduler_8h_a9776ada5a4c755d2c256d1ab6b51a69e}{\index{scheduler.\-h@{scheduler.\-h}!P\-I\-C\-C\-\_\-\-Args@{P\-I\-C\-C\-\_\-\-Args}}
+\index{P\-I\-C\-C\-\_\-\-Args@{P\-I\-C\-C\-\_\-\-Args}!scheduler.h@{scheduler.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Args}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Args}  {\bf P\-I\-C\-C\-\_\-\-Args}}}\label{scheduler_8h_a9776ada5a4c755d2c256d1ab6b51a69e}
+The args taken by the slave scheduler function during the posix thead creation in the main entry point. \hypertarget{scheduler_8h_a53817fd01b91a5a89175368b546dd8b9}{\index{scheduler.\-h@{scheduler.\-h}!P\-I\-C\-C\-\_\-\-Sched\-Pool@{P\-I\-C\-C\-\_\-\-Sched\-Pool}}
+\index{P\-I\-C\-C\-\_\-\-Sched\-Pool@{P\-I\-C\-C\-\_\-\-Sched\-Pool}!scheduler.h@{scheduler.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Sched\-Pool}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool}  {\bf P\-I\-C\-C\-\_\-\-Sched\-Pool}}}\label{scheduler_8h_a53817fd01b91a5a89175368b546dd8b9}
+This type contains all the scheduler data 
+
+\subsection{Function Documentation}
+\hypertarget{scheduler_8h_a201bdc0e00d38464e8f1758c427127f5}{\index{scheduler.\-h@{scheduler.\-h}!P\-I\-C\-C\-\_\-create\-\_\-args@{P\-I\-C\-C\-\_\-create\-\_\-args}}
+\index{P\-I\-C\-C\-\_\-create\-\_\-args@{P\-I\-C\-C\-\_\-create\-\_\-args}!scheduler.h@{scheduler.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-create\-\_\-args}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Args}$\ast$ P\-I\-C\-C\-\_\-create\-\_\-args (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Sched\-Pool} $\ast$}]{sp, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{err, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{scheduler_8h_a201bdc0e00d38464e8f1758c427127f5}
+Creates a new set of arguments to passe to a scheduler.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sp} & Scheduler pool \\
+\hline
+{\em err} & Scheduler error stack \\
+\hline
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Created set of arguments 
+\end{DoxyReturn}
+\hypertarget{scheduler_8h_a6012c26a20062a6c15f7481ac848b742}{\index{scheduler.\-h@{scheduler.\-h}!P\-I\-C\-C\-\_\-create\-\_\-sched\-\_\-pool@{P\-I\-C\-C\-\_\-create\-\_\-sched\-\_\-pool}}
+\index{P\-I\-C\-C\-\_\-create\-\_\-sched\-\_\-pool@{P\-I\-C\-C\-\_\-create\-\_\-sched\-\_\-pool}!scheduler.h@{scheduler.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-create\-\_\-sched\-\_\-pool}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Sched\-Pool}$\ast$ P\-I\-C\-C\-\_\-create\-\_\-sched\-\_\-pool (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{scheduler_8h_a6012c26a20062a6c15f7481ac848b742}
+Creates a new scheduler.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Created scheduler 
+\end{DoxyReturn}
+\hypertarget{scheduler_8h_af07fa6847a5b2c85349c478b4b511eda}{\index{scheduler.\-h@{scheduler.\-h}!P\-I\-C\-C\-\_\-sched\-\_\-pool\-\_\-master@{P\-I\-C\-C\-\_\-sched\-\_\-pool\-\_\-master}}
+\index{P\-I\-C\-C\-\_\-sched\-\_\-pool\-\_\-master@{P\-I\-C\-C\-\_\-sched\-\_\-pool\-\_\-master}!scheduler.h@{scheduler.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-sched\-\_\-pool\-\_\-master}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-sched\-\_\-pool\-\_\-master (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Sched\-Pool} $\ast$}]{sp, }
+\item[{int}]{std\-\_\-gc\-\_\-fuel, }
+\item[{int}]{quick\-\_\-gc\-\_\-fuel, }
+\item[{int}]{active\-\_\-factor, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{scheduler_8h_af07fa6847a5b2c85349c478b4b511eda}
+????????????????????
+
+
+\begin{DoxyParams}{Parameters}
+{\em sp} & ???????????????? \\
+\hline
+{\em std\-\_\-gc\-\_\-fuel} & ??????????????? \\
+\hline
+{\em quick\-\_\-gc\-\_\-fuel} & ????????????? \\
+\hline
+{\em active\-\_\-factor} & ????????????? \\
+\hline
+{\em error} & Error stack \\
+\hline
+\end{DoxyParams}
+\hypertarget{scheduler_8h_ae5718d519ba66cc24c7334dbba5fb075}{\index{scheduler.\-h@{scheduler.\-h}!P\-I\-C\-C\-\_\-sched\-\_\-pool\-\_\-slave@{P\-I\-C\-C\-\_\-sched\-\_\-pool\-\_\-slave}}
+\index{P\-I\-C\-C\-\_\-sched\-\_\-pool\-\_\-slave@{P\-I\-C\-C\-\_\-sched\-\_\-pool\-\_\-slave}!scheduler.h@{scheduler.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-sched\-\_\-pool\-\_\-slave}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-sched\-\_\-pool\-\_\-slave (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Args} $\ast$}]{args}
+\end{DoxyParamCaption}
+)}}\label{scheduler_8h_ae5718d519ba66cc24c7334dbba5fb075}
+Handles the behavior of a scheduler pool.
+
+
+\begin{DoxyParams}{Parameters}
+{\em args} & Arguments containing the scheduler pool and the error stack \\
+\hline
+\end{DoxyParams}

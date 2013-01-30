@@ -1,4 +1,4 @@
-      /**
+/**
  * @file entry.c
  * File that contains the entry point of the runtime library
  *

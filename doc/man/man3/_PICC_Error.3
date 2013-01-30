@@ -1,0 +1,49 @@
+.TH "_PICC_Error" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+_PICC_Error \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <error\&.h>\fP
+.SS "Data Fields"
+
+.PP
+.RI "\fB\fP"
+.br
+
+.in +1c
+.in +1c
+.ti -1c
+.RI "enum \fB_PICC_ErrorId\fP \fBid\fP"
+.br
+.ti -1c
+.RI "char * \fBfile\fP"
+.br
+.ti -1c
+.RI "int \fBline\fP"
+.br
+.ti -1c
+.RI "struct \fB_PICC_Error\fP * \fBprev\fP"
+.br
+.in -1c
+.in -1c
+.SH "Detailed Description"
+.PP 
+An error stack\&. 
+.SH "Field Documentation"
+.PP 
+.SS "char* _PICC_Error::file"
+File where the error occured\&. 
+.SS "enum \fB_PICC_ErrorId\fP _PICC_Error::id"
+ID of the error (0 if the error didn't occured)\&. 
+.SS "int _PICC_Error::line"
+Line in <file> where the error occured\&. 
+.SS "struct \fB_PICC_Error\fP* _PICC_Error::prev"
+Link to the previous error (NULL if this is the first)\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for PiThread from the source code\&.
