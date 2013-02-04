@@ -25,11 +25,8 @@
 bool check_pithread(PICC_Error *error)
 {
 
-    ALLOC_ERROR(create_error);
-    PICC_PiThread *p = PICC_create_pithread(1, 1, &create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-    } else if (p == NULL) {
+    PICC_PiThread *p = PICC_create_pithread(1, 1);
+    if (p == NULL) {
         NEW_ERROR(error,ERR_NULLPOINTER_PITHREAD);
     } else {
         free(p);
@@ -70,7 +67,7 @@ bool check_register_outcommits(PICC_Error* error)
     int size;
 
     //check pithread, channel first
-    pt = PICC_create_pithread(1, 1, error);
+    pt = PICC_create_pithread(1, 1);
     ch = PICC_create_channel(error);
     size = pt->commits->size;
     PICC_Value* func(PICC_PiThread* a) { printf("my eval func !\n"); return NULL; };

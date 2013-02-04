@@ -16,13 +16,12 @@
  *
  * @param env_length Size of the environment
  * @param knowns_length Size of the knowns set
- * @param error Error stack
  * @return Created PiThread
  */
-PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, PICC_Error *error)
+PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
 {
     // TO BE COMPLETED...
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
     return NULL;
 
     // PICC_ALLOC(thread, PICC_PiThread, error) {

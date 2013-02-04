@@ -80,12 +80,10 @@ void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint)
     //     }
     // }
 
-    PICC_PiThread *init_thread = PICC_create_pithread(1, 1, &error);
-    if (HAS_ERROR(error)) CRASH(&error);
+    PICC_PiThread *init_thread = PICC_create_pithread(1, 1);
     init_thread->proc = entrypoint;
 
-    PICC_ready_queue_push(sched_pool->ready, init_thread, &error);
-    if (HAS_ERROR(error)) CRASH(&error);
+    PICC_ready_queue_push(sched_pool->ready, init_thread);
 
     PICC_sched_pool_master(sched_pool, 2, 2, 2, &error);
     if (HAS_ERROR(error)) CRASH(&error);

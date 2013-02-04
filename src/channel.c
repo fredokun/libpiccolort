@@ -25,34 +25,37 @@
 /**
  * Creates a channel which contains 10 commitments.
  *
- * @param error Error stack
  * @return Created channel
  */
-PICC_Channel *PICC_create_channel(PICC_Error *error)
+PICC_Channel *PICC_create_channel()
 {
-    return PICC_create_channel_cn(DEFAULT_CHANNEL_SIZE, error);
+    return PICC_create_channel_cn(DEFAULT_CHANNEL_SIZE);
 }
 
 /**
  * Creates a channel which contains <commit_size> commitments.
  *
- * @param error Error stack
  * @return Created channel
  */
-PICC_Channel *PICC_create_channel_cn(int commit_size, PICC_Error *error)
+PICC_Channel *PICC_create_channel_cn(int commit_size)
 {
-    PICC_ALLOC(channel, PICC_Channel, error) {
+    ALLOC_ERROR(error);
+    PICC_ALLOC(channel, PICC_Channel, &error) {
         channel->global_rc = 1;
         channel->incommits = malloc(sizeof(PICC_CommitList));
         channel->incommits->size = commit_size;
         channel->outcommits = malloc(sizeof(PICC_CommitList));
         channel->outcommits->size = commit_size;
         if (channel->incommits == NULL || channel->outcommits == NULL) {
-            NEW_ERROR(error, ERR_OUT_OF_MEMORY);
+            NEW_ERROR(&error, ERR_OUT_OF_MEMORY);
             free(channel);
             channel = NULL;
         }
     }
+
+    if (HAS_ERROR(&error))
+        CRASH(&error);
+
     return channel;
 }
 

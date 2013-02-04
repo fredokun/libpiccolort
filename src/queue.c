@@ -65,19 +65,19 @@ PICC_ReadyQueue *PICC_create_ready_queue(PICC_Error *error)
  * @param rq Ready queue
  * @param pt PiThread
  */
-void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt, PICC_Error *error)
+void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt)
 {
     ASSERT(rq != NULL);
     ASSERT(pt != NULL);
 
     LOCK_QUEUE(rq);
-
+    ALLOC_ERROR(error);
     // create queue cell
     ALLOC_ERROR(cell_error);
     PICC_QueueCell *cell = PICC_create_queue_cell(&cell_error);
 
     if (HAS_ERROR(cell_error)) {
-        ADD_ERROR(error, cell_error, ERR_READY_QUEUE_PUSH);
+        ADD_ERROR(&error, cell_error, ERR_READY_QUEUE_PUSH);
     } else {
         cell->thread = pt;
         if (rq->q.size == 0) {
@@ -91,6 +91,9 @@ void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt, PICC_Error *e
 
         rq->q.size++;
     }
+
+    if (HAS_ERROR(&error))
+        CRASH(&error);
 
     RELEASE_QUEUE(rq);
 }

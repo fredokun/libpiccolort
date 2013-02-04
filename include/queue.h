@@ -64,7 +64,7 @@ typedef struct _PICC_WaitQueue {
 } PICC_WaitQueue;
 
 extern PICC_ReadyQueue *PICC_create_ready_queue(PICC_Error *error);
-extern void PICC_ready_queue_push(PICC_ReadyQueue *rq, struct _PICC_PiThread *pt, PICC_Error *error);
+extern void PICC_ready_queue_push(PICC_ReadyQueue *rq, struct _PICC_PiThread *pt);
 extern void PICC_ready_queue_add(PICC_ReadyQueue *rq, struct _PICC_PiThread *pt);
 extern struct _PICC_PiThread *PICC_ready_queue_pop(PICC_ReadyQueue *rq);
 extern int PICC_ready_queue_size(PICC_ReadyQueue *rq);

@@ -23,15 +23,15 @@
  * @return boolean true if it works else false
  */
 bool test_create_channel(PICC_Error *error)
-{ 
+{
     PICC_Channel* channel = PICC_create_channel(error);
-    PICC_Channel* channel2 = PICC_create_channel_cn(50,error);
+    PICC_Channel* channel2 = PICC_create_channel_cn(50);
     if (channel == NULL) {
         NEW_ERROR(error,ERR_NULLPOINTER_CHANNEL);
     }
     else if (channel2 == NULL) {
         NEW_ERROR(error,ERR_NULLPOINTER_CHANNEL);
-    } 
+    }
     else if(channel->global_rc != 1 && channel2->global_rc != 1 )
     {
         NEW_ERROR(error,ERR_CHANNEL_GLOBAL_RC);
@@ -41,7 +41,7 @@ bool test_create_channel(PICC_Error *error)
         PICC_reclaim_channel(channel2,error);
         return true;
     }
-    
+
     return false;
 }
 
