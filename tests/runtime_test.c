@@ -1,5 +1,5 @@
 /**
- * @file runtime.c
+ * @file runtime_tests.c
  * File that contains all the necesseray tests to check the behavior of all functions of runtime.c
  *
  * This project is released under MIT License.
@@ -13,6 +13,7 @@
 #include <pthread.h>
 #include <pi_thread.h>
 #include <runtime.h>
+#include <runtime_tests.h>
 
 //int PICC_GC2(PICC_SchedPool schedpool);
 
@@ -78,7 +79,7 @@ bool check_register_outcommits(PICC_Error* error)
     ASSERT(pt != NULL);
     ASSERT(ch != NULL);
     ASSERT(eval != NULL);
-    ASSERT(cont_pc >= 0);
+   ASSERT(cont_pc >= 0);
 
     PICC_register_output_commitment(pt, ch, eval, cont_pc);
 
@@ -86,6 +87,40 @@ bool check_register_outcommits(PICC_Error* error)
     ASSERT(pt->commits->size == (size + 1));
     ASSERT(pt->commits->head->commit->type == PICC_OUT_COMMIT);
     ASSERT(pt->commits->head->commit->content.out->eval_func == eval);
+    ASSERT(pt->commits->head->commit->thread == pt);
+    ASSERT(pt->commits->head->commit->channel == ch);
+    ASSERT(pt->commits->head->commit->cont_pc == cont_pc);
+
+    return true;
+}
+
+bool check_register_incommits(PICC_Error* error)
+{
+    int refvar;
+    PICC_PiThread* pt;
+    PICC_Channel *ch;
+    PICC_Label cont_pc;
+    int size;
+
+    //check pithread, channel first
+    pt = PICC_create_pithread(1, 1);
+    ch = PICC_create_channel(error);
+    size = pt->commits->size;
+    refvar = 42;
+    cont_pc = 10;
+
+    //pre
+    ASSERT(pt != NULL);
+    ASSERT(ch != NULL);
+    ASSERT(cont_pc >= 0);
+    ASSERT(refvar == 1);
+
+    PICC_register_input_commitment(pt, ch, refvar, cont_pc);
+
+    //post
+    ASSERT(pt->commits->size == (size + 1));
+    ASSERT(pt->commits->head->commit->type == PICC_IN_COMMIT);
+    ASSERT(pt->commits->head->commit->content.in->refvar == refvar);
     ASSERT(pt->commits->head->commit->thread == pt);
     ASSERT(pt->commits->head->commit->channel == ch);
     ASSERT(pt->commits->head->commit->cont_pc == cont_pc);

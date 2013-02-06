@@ -7,7 +7,7 @@
  * @author Maxence WO
  * @author Mickaël MENU
  */
-
+/*
 #include <stdio.h>
 #include <stdlib.h>
 #include <pi_thread.h>
@@ -16,6 +16,8 @@
 
 int main()
 {
+    // Maxence : Maybe obsolete with CPS, need to be verified :
+
     // First pass
     // + check_pithread (create)
     // + check_commit (commit/commitlist/commitlistelement) (create)
@@ -29,5 +31,14 @@ int main()
     // + check_schedpool
     // + check_schedslave/master
 
+    PICC_Error* error;
+
+    check_pithread(error);
+    //check_create_channels(error);
+    check_create_commitments(error);
+    check_register_outcommits(error);
+    check_register_incommits(error);
+    check_commitslists(error);
+
     return 0;
-}
+}*/

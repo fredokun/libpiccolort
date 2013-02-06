@@ -62,6 +62,6 @@
 #define PICC_FREE_SET(s) \
     PICC_set_destroy(s);
 
-
+extern void debug(const char* s);
 
 #endif
