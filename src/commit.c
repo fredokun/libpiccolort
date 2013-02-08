@@ -84,6 +84,12 @@ PICC_CommitList *PICC_create_commit_list(PICC_Error *error)
 
 /**
  * Creates a new  element of commit list.
+ * 
+ * @pre commit != NULL
+ * 
+ * @post clist_elem != NULL
+ * @post clist_elem->commit = commit
+ * @post clist_elem->next = NULL
  *
  * @param commit Commit associated
  * @param error Error stack
@@ -91,10 +97,31 @@ PICC_CommitList *PICC_create_commit_list(PICC_Error *error)
  */
 PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PICC_Error *error)
 {
+	#ifdef CONTRACT
+        // inv
+		PICC_Commit_inv(commit);
+
+        // pre
+        ASSERT(commit != NULL);
+
+    #endif
+	
     PICC_ALLOC(clist_elem, PICC_CommitListElement, error) {
         clist_elem->commit = commit;
         clist_elem->next = NULL;
     }
+    
+    #ifdef CONTRACT        
+        // inv
+		PICC_Commit_inv(commit);
+		
+        //post
+        ASSERT(clist_elem != NULL);
+        ASSERT(clist_elem->commit == commit);
+        ASSERT(clist_elem->next == NULL);
+        
+    #endif
+    
     return clist_elem;
 }
 
