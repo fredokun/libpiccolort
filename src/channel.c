@@ -14,13 +14,6 @@
 #include <tools.h>
 #include <error.h>
 
-#define DEFAULT_CHANNEL_SIZE 10
-
-#define LOCK_CHANNEL(c) \
-    PICC_acquire(&(c->lock));
-
-#define RELEASE_CHANNEL(c) \
-    PICC_release(&(c->lock));
 
 /**
  * Creates a channel which contains 10 commitments.
@@ -29,7 +22,7 @@
  */
 PICC_Channel *PICC_create_channel()
 {
-    return PICC_create_channel_cn(DEFAULT_CHANNEL_SIZE);
+    return PICC_create_channel_cn(DEFAULT_CHANNEL_COMMIT_SIZE ,DEFAULT_CHANNEL_COMMIT_SIZE );
 }
 
 /**
@@ -37,24 +30,29 @@ PICC_Channel *PICC_create_channel()
  *
  * @return Created channel
  */
-PICC_Channel *PICC_create_channel_cn(int commit_size)
+PICC_Channel *PICC_create_channel_cn(int incommit_size,int outcommit_size)
 {
     ALLOC_ERROR(error);
     PICC_ALLOC(channel, PICC_Channel, &error) {
         channel->global_rc = 1;
         channel->incommits = malloc(sizeof(PICC_CommitList));
-        channel->incommits->size = commit_size;
+        channel->incommits->size = incommit_size;
         channel->outcommits = malloc(sizeof(PICC_CommitList));
-        channel->outcommits->size = commit_size;
+        channel->outcommits->size = outcommit_size;
         if (channel->incommits == NULL || channel->outcommits == NULL) {
             NEW_ERROR(&error, ERR_OUT_OF_MEMORY);
             free(channel);
             channel = NULL;
         }
     }
-
-    if (HAS_ERROR(&error))
+    if (HAS_ERROR(error))
+    {
         CRASH(&error);
+    }
+    /*
+    ASSERT(channel != NULL );
+    ASSERT(channel->global_rc != 1);
+    */
 
     return channel;
 }
@@ -138,16 +136,43 @@ void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
     free(channel);
 }
 
+PICC_KnownsSet *PICC_knowns_set_search(PICC_KnownsSet *ks, PICC_KnownsState state)
+{
+    int count=0;
+    int i;
+    PICC_Knowns *known;
+    for( i = 0 ; i < ks->length ; i++)
+    {
+        known = ks->knowns[i];
+        if( known->state == state )
+        {
+            count ++;
+        }
+    }
+    PICC_KnownsSet *result = PICC_create_knowns_set(count, NULL);
+    count = 0;
+
+    for( i = 0 ; i < ks->length ; i++)
+    {
+        known = ks->knowns[i];
+        if( known->state == state )
+        {
+            result->knowns[count] = known;
+            count++;
+        }
+    }
+    return result;
+}
+
 /**
  * Returns a subset of all KNOWN-STATE in a knows set.
  *
  * @param ks Knowns set
- * @return Subset of all known state in the given set
+ * @return Subset of all known channel in the given set
  */
 PICC_KnownsSet *PICC_knowns_set_knows(PICC_KnownsSet *ks)
 {
-    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
-    return NULL;
+    return PICC_knowns_set_search(ks, PICC_KNOWN);
 }
 
 /**
@@ -158,8 +183,7 @@ PICC_KnownsSet *PICC_knowns_set_knows(PICC_KnownsSet *ks)
  */
 PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks)
 {
-    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
-    return NULL;
+    return PICC_knowns_set_search(ks, PICC_FORGET);
 }
 
 /**
@@ -171,7 +195,7 @@ PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks)
  */
 void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch)
 {
-    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
+    return PICC_knowns_set_search(ks, PICC_UNKNOWN);
 }
 
 /**
@@ -181,7 +205,13 @@ void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch)
  */
 void PICC_knowns_set_forget_all(PICC_KnownsSet *ks)
 {
-    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
+   int i;
+   PICC_Knowns *known;
+   for( i = 0 ; i < ks->length ; i++)
+   {
+       known = ks->knowns[i];
+       known->state == PICC_FORGET;
+   }
 }
 
 /**
@@ -198,8 +228,25 @@ void PICC_knowns_set_forget_all(PICC_KnownsSet *ks)
  */
 bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch)
 {
-    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
-    return false;
+    int i;
+    PICC_Knowns *known;
+    for( i = 0 ; i < ks->length ; i++)
+    {
+        known = ks->knowns[i];
+        if(known->channel == ch)
+        {
+            if(known->state == PICC_KNOWN)
+            {
+                return false;
+            }
+            else if(known->state == PICC_FORGET)
+            {
+                known->state = PICC_KNOWN;
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 /**

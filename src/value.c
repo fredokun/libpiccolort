@@ -26,6 +26,14 @@ PICC_Value *PICC_create_value(PICC_ValueKind type, PICC_Error *error)
     return value;
 }
 
+PICC_Value *PICC_create_value_int(int i, PICC_Error *error)
+{
+    PICC_Value* value = PICC_create_value(PICC_INT_VAL,error);
+    value->content.as_int = i;
+    return value;
+}
+
+
 /**
  * Creates an atomic boolean.
  *

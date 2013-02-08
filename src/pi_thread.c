@@ -20,21 +20,18 @@
  */
 PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
 {
-    // TO BE COMPLETED...
-    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
-    return NULL;
+    ALLOC_ERROR(error);
+     PICC_ALLOC(thread, PICC_PiThread, &error) {
+      ALLOC_ERROR(sub_error);
+      thread->knowns = PICC_create_knowns_set(knowns_length, &sub_error);
+      if (HAS_ERROR(sub_error)) {
+          ADD_ERROR(&error, sub_error, ERR_THREAD_CREATE);
+      } else {
+          thread->fuel = PICC_FUEL_INIT;
+      }
+     }
 
-    // PICC_ALLOC(thread, PICC_PiThread, error) {
-    //  ALLOC_ERROR(sub_error);
-    //  thread->knowns = PICC_create_knowns_set(knowns_length, &sub_error);
-    //  if (HAS_ERROR(sub_error)) {
-    //      ADD_ERROR(error, sub_error, ERR_THREAD_CREATE);
-    //  } else {
-    //      thread->fuel = PICC_FUEL_INIT;
-    //  }
-    // }
-
- //    return new_thread;
+    return thread;
 }
 
 /**

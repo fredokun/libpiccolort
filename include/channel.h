@@ -18,6 +18,17 @@
 #include <sync.h>
 #include <error.h>
 
+#define DEFAULT_CHANNEL_COMMIT_SIZE 10
+
+
+#define LOCK_CHANNEL(c) \
+    PICC_acquire(&(c->lock));
+
+#define RELEASE_CHANNEL(c) \
+    PICC_release(&(c->lock));
+
+
+
 /**
  * The type of the pi-thread channels
  */
@@ -64,7 +75,7 @@ typedef struct _PICC_KnownsSet {
 } PICC_KnownsSet;
 
 extern PICC_Channel *PICC_create_channel();
-extern PICC_Channel *PICC_create_channel_cn(int commit_size);
+extern PICC_Channel *PICC_create_channel_cn(int incommit_size,int outcommit_size);
 extern PICC_Knowns *PICC_create_knowns(PICC_Error *error);
 extern PICC_KnownsSet *PICC_create_knowns_set(int length, PICC_Error *error);
 extern void PICC_channel_incr_ref_count(PICC_Channel *ch);
@@ -78,6 +89,7 @@ extern bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch);
 extern void PICC_release_all_channels(PICC_Channel **chans, int nb_chans);
 
 extern void PICC_free_channel(PICC_Channel *channel);
-extern void PICC_test_channels();
+
+extern void PICC_all_channel_test();
 
 #endif
