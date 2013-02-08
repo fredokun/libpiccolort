@@ -607,7 +607,7 @@ PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
 
 
 /**
- * Checks commit invariant.
+ * @brief Checks commit invariant.
  *
  * @inv thread != null && clock != null && clockval  != null && channel  != null && content  != null
  * @inv cont_pc > 0
