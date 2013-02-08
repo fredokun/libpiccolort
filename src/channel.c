@@ -373,7 +373,7 @@ PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks)
  */
 void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch)
 {
-    
+
     #ifdef CONTRACT
         
         //inv
@@ -404,6 +404,7 @@ void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch)
 
     #endif
 
+
 }
 
 /**
@@ -417,6 +418,7 @@ void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch)
  */
 void PICC_knowns_set_forget_all(PICC_KnownsSet *ks)
 {
+
 
     #ifdef CONTRACT
         
@@ -450,6 +452,7 @@ void PICC_knowns_set_forget_all(PICC_KnownsSet *ks)
         }
 
     #endif
+
 }
 
 /**

@@ -6,6 +6,7 @@
  *
  * @author Mickaël MENU
  * @author Maxence WO
+ * @author Joël HING
  */
 
 #ifndef COMMIT_H
@@ -82,7 +83,7 @@ typedef struct _PICC_Commit {
     struct _PICC_Channel *channel; /**< The channel of this commitment */
     /**@}*/
     /**
-     * The specific pârt of the commitments. One of the pointers
+     * The specific part of the commitments. One of the pointers
      * below should always be NULL.
      */
     union {
@@ -98,7 +99,7 @@ typedef struct _PICC_Commit {
  */
 typedef struct _PICC_CommitListElement {
     /**@{*/
-    PICC_Commit *commit; /**< The refferenced commit*/
+    PICC_Commit *commit; /**< The referenced commit*/
     struct _PICC_CommitListElement *next; /** A pointer to the next
                                             element or NULL if none */
     /**@}*/
@@ -131,5 +132,8 @@ extern PICC_Commit *PICC_fetch_output_commitment(struct _PICC_Channel *ch);
 extern void PICC_Commit_inv(PICC_Commit *commit);
 extern void PICC_CommitListElement_inv(PICC_CommitListElement *elem);
 extern void PICC_CommitList_inv(PICC_CommitList *list);
+extern void PICC_Refvar_inv(int refvar);
+extern void PICC_EvalFunction_inv(PICC_EvalFunction eval);
+extern void PICC_Label_inv(PICC_Label cont_pc);
 
 #endif

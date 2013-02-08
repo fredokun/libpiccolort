@@ -421,3 +421,74 @@ void PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq)
 
     RELEASE_QUEUE(wq);
 }
+
+// Queue structure invariants //////////////////////////////////////////////////
+
+/**
+ * Checks queue invariant.
+ *
+ * @inv size >= 0
+ * @inv size == SUM(head => tail)
+ * @inv tail.next == null
+ * @inv if (size == 0) then (head == tail == NULL)
+ * @inv if (size == 1) then (head == tail)
+ * @inv if (size > 0) then (head != NULL and tail != NULL)
+ */
+void PICC_Queue_inv(PICC_Queue *queue)
+{
+    ASSERT(queue->size >= 0);
+
+    int size = 0;
+    PICC_QueueCell *cell = queue->head;
+    while (cell != NULL) {
+        size++;
+        cell = cell->next;
+    }
+    ASSERT(size == queue->size);
+
+    ASSERT(queue->tail->next == NULL);
+
+    if (queue->size == 0) {
+        ASSERT(queue->head == NULL);
+        ASSERT(queue->tail == NULL);
+    } else if (queue->size == 1) {
+        ASSERT(queue->head == queue->tail);
+    }
+
+    if (queue->size > 0) {
+        ASSERT(queue->head != NULL);
+        ASSERT(queue->tail != NULL);
+    }
+}
+
+/**
+ * Checks queue cell invariant.
+ *
+ * @inv cell != null
+ */
+void PICC_QueueCell_inv(PICC_QueueCell *cell)
+{
+    ASSERT(cell != NULL);
+}
+
+/**
+ * Checks ready queue invariant.
+ *
+ * @inv check_inv(q)
+ */
+void PICC_ReadyQueue_inv(PICC_ReadyQueue *queue)
+{
+    PICC_Queue_inv(&queue->q);
+}
+
+/**
+ * Checks wait queue invariant.
+ *
+ * @inv check_inv(active)
+ * @inv check_inv(old)
+ */
+void PICC_WaitQueue_inv(PICC_WaitQueue *queue)
+{
+    PICC_Queue_inv(&queue->active);
+    PICC_Queue_inv(&queue->old);
+}
