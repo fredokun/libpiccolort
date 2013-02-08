@@ -60,6 +60,25 @@ src/commit.c \-
 .ti -1c
 .RI "\fBPICC_Commit\fP * \fBPICC_fetch_output_commitment\fP (\fBPICC_Channel\fP *ch)"
 .br
+.ti -1c
+.RI "void \fBPICC_Commit_inv\fP (\fBPICC_Commit\fP *commit)"
+.br
+.RI "\fIChecks commit invariant\&. \fP"
+.ti -1c
+.RI "void \fBPICC_CommitListElement_inv\fP (\fBPICC_CommitListElement\fP *elem)"
+.br
+.ti -1c
+.RI "void \fBPICC_CommitList_inv\fP (\fBPICC_CommitList\fP *list)"
+.br
+.ti -1c
+.RI "void \fBPICC_Refvar_inv\fP (int refvar)"
+.br
+.ti -1c
+.RI "void \fBPICC_EvalFunction_inv\fP (\fBPICC_EvalFunction\fP eval)"
+.br
+.ti -1c
+.RI "void \fBPICC_Label_inv\fP (\fBPICC_Label\fP cont_pc)"
+.br
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -95,8 +114,47 @@ commit->thread = pt; \
 
 .SH "Function Documentation"
 .PP 
+.SS "void PICC_Commit_inv (\fBPICC_Commit\fP *commit)"
+
+.PP
+Checks commit invariant\&. \fBInvariant:\fP
+.RS 4
+thread != null && clock != null && clockval != null && channel != null && content != null 
+.RE
+.PP
+\fBInvariant:\fP
+.RS 4
+cont_pc > 0 
+.RE
+.PP
+
 .SS "void PICC_commit_list_add (\fBPICC_CommitList\fP *clist, \fBPICC_Commit\fP *commit, \fBPICC_Error\fP *error)"
 Adds the given element at the end of the commit list\&.
+.PP
+\fBPrecondition:\fP
+.RS 4
+clist != NULL 
+.RE
+.PP
+\fBPrecondition:\fP
+.RS 4
+commit != NULL
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+clist->size = clist_at_pre->size + 1 
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+clist->tail->commit = commit 
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+clist->tail->next = NULL
+.RE
 .PP
 \fBParameters:\fP
 .RS 4
@@ -110,6 +168,31 @@ Adds the given element at the end of the commit list\&.
 
 .SS "\fBPICC_Commit\fP* PICC_commit_list_fetch (\fBPICC_CommitList\fP *clist)"
 Fetch the first element of the commit list\&.
+.PP
+\fBPrecondition:\fP
+.RS 4
+clist != NULL 
+.RE
+.PP
+\fBPrecondition:\fP
+.RS 4
+clist->size > 0
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+fetched = clist_at_pre->head->commit 
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+clist->size = clist_at_pre->size - 1 
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+clist->head = clist_at_pre->head->next
+.RE
 .PP
 \fBParameters:\fP
 .RS 4
@@ -125,6 +208,16 @@ first element of the commit list
 .SS "bool PICC_commit_list_is_empty (\fBPICC_CommitList\fP *clist)"
 Returns whether a commit list is empty\&.
 .PP
+\fBPrecondition:\fP
+.RS 4
+clist != NULL
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+if clist->size = 0 , res = true else res = false
+.RE
+.PP
 \fBParameters:\fP
 .RS 4
 \fIclist\fP Commit list to check 
@@ -136,8 +229,56 @@ Whether the commit list is empty\&.
 .RE
 .PP
 
+.SS "void PICC_CommitList_inv (\fBPICC_CommitList\fP *list)"
+Checks commit list invariant\&.
+.PP
+\fBInvariant:\fP
+.RS 4
+if list->size = 0, list->head = NULL && list->tail = NULL 
+.RE
+.PP
+\fBInvariant:\fP
+.RS 4
+if list->size = 1, list->head = list->tail 
+.RE
+.PP
+\fBInvariant:\fP
+.RS 4
+if list->size > 1, list->head != list->tail 
+.RE
+.PP
+
+.SS "void PICC_CommitListElement_inv (\fBPICC_CommitListElement\fP *elem)"
+Checks commit list element invariant\&.
+.PP
+\fBInvariant:\fP
+.RS 4
+elem->commit != NULL 
+.RE
+.PP
+
 .SS "\fBPICC_CommitList\fP* PICC_create_commit_list (\fBPICC_Error\fP *error)"
 Creates a new commit list\&.
+.PP
+\fBPostcondition:\fP
+.RS 4
+clist != NULL 
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+clist->head = NULL 
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+clist->tail = NULL 
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+clist->size = 0
+.RE
 .PP
 \fBParameters:\fP
 .RS 4
@@ -152,6 +293,26 @@ Created commit list
 
 .SS "\fBPICC_CommitListElement\fP* PICC_create_commit_list_element (\fBPICC_Commit\fP *commit, \fBPICC_Error\fP *error)"
 Creates a new element of commit list\&.
+.PP
+\fBPrecondition:\fP
+.RS 4
+commit != NULL
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+clist_elem != NULL 
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+clist_elem->commit = commit 
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+clist_elem->next = NULL
+.RE
 .PP
 \fBParameters:\fP
 .RS 4
@@ -180,6 +341,15 @@ Created commitment
 .RE
 .PP
 
+.SS "void PICC_EvalFunction_inv (\fBPICC_EvalFunction\fPeval)"
+Checks evalFunction invariant\&.
+.PP
+\fBInvariant:\fP
+.RS 4
+eval != NULL 
+.RE
+.PP
+
 .SS "\fBPICC_Commit\fP* PICC_fetch_input_commitment (\fBPICC_Channel\fP *ch)"
 Fetches the first element of the input commitList from a channel\&.
 .PP
@@ -191,7 +361,10 @@ ch != null
 \fBPostcondition:\fP
 .RS 4
 if(c->incommits->size > 0 && PICC_is_valid_commit(PICC_commit_list_fetch(c->incommits))) PICC_fetch_input_commitment(c) = PICC_commit_list_fetch(c->incommits) 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 if(c->incommits->size = 0 || !(PICC_is_valid_commit(PICC_commit_list_fetch(c->incommits)))) PICC_fetch_input_commitment(c) = null
 .RE
 .PP
@@ -217,7 +390,10 @@ ch != null
 \fBPostcondition:\fP
 .RS 4
 if(c->outcommits->size > 0 && PICC_is_valid_commit(PICC_commit_list_fetch(c->outcommits))) PICC_fetch_output_commitment(c) = PICC_commit_list_fetch(c->outcommits) 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 if(c->outcommits->size = 0 || !(PICC_is_valid_commit(PICC_commit_list_fetch(c->outcommits)))) PICC_fetch_output_commitment(c) = null
 .RE
 .PP
@@ -256,6 +432,24 @@ Whether the commit is valid
 .RE
 .PP
 
+.SS "void PICC_Label_inv (\fBPICC_Label\fPcont_pc)"
+Checks Label invariant\&.
+.PP
+\fBInvariant:\fP
+.RS 4
+cont_pc > -1 
+.RE
+.PP
+
+.SS "void PICC_Refvar_inv (intrefvar)"
+Checks refvar invariant\&.
+.PP
+\fBInvariant:\fP
+.RS 4
+refvar > 0 
+.RE
+.PP
+
 .SS "void PICC_register_input_commitment (\fBPICC_PiThread\fP *pt, \fBPICC_Channel\fP *ch, intrefvar, \fBPICC_Label\fPcont_pc)"
 Registers an input commit with given PiThread and channel\&.
 .PP
@@ -267,19 +461,40 @@ pt != null && ch != null && cont_pc >= 0
 \fBPostcondition:\fP
 .RS 4
 pt->commits->size(PICC_register_input_commitment(pt)) = pt->commits->size(pt) + 1 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 pt->commits->tail = commit 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 commit->type = PICC_IN_COMMIT 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 commit->content\&.in = in 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 commit->thread = pt 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 commit->channel = ch 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 commit->cont_pc = cont_pc 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 in->refvar = refvar
 .RE
 .PP
@@ -305,20 +520,41 @@ pt != null && ch != null && eval != null && cont_pc >= 0
 .PP
 \fBPostcondition:\fP
 .RS 4
-pt->commits->size(PICC_register_output_commitment(pt)) = pt->commits->size(pt) + 1 
+pt->commits->size = pt->commits->size_at_pre + 1 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 pt->commits->tail = commit 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 commit->type = PICC_OUT_COMMIT 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 commit->content\&.out = out 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 commit->thread = pt 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 commit->channel = ch 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 commit->cont_pc = cont_pc 
+.RE
 .PP
+\fBPostcondition:\fP
+.RS 4
 out->eval_func = eval
 .RE
 .PP

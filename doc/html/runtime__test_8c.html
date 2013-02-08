@@ -85,8 +85,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="summary">
-<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">runtime_test.c File Reference</div>  </div>
 </div><!--header-->
@@ -94,118 +92,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><code>#include &lt;stdio.h&gt;</code><br/>
 <code>#include &lt;stdlib.h&gt;</code><br/>
 <code>#include &lt;stdbool.h&gt;</code><br/>
-<code>#include &lt;pthread.h&gt;</code><br/>
-<code>#include &lt;<a class="el" href="pi__thread_8h_source.html">pi_thread.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="runtime_8h_source.html">runtime.h</a>&gt;</code><br/>
-<code>#include &lt;<a class="el" href="runtime__tests_8h_source.html">runtime_tests.h</a>&gt;</code><br/>
-</div><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a09778f56a4e5739bd16273f058067c4d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="runtime__test_8c.html#a09778f56a4e5739bd16273f058067c4d">check_pithread</a> (<a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:a09778f56a4e5739bd16273f058067c4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e40a1d298bd7400b0048da0f76108c0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="runtime__test_8c.html#a2e40a1d298bd7400b0048da0f76108c0">check_create_commitments</a> (<a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:a2e40a1d298bd7400b0048da0f76108c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e2b965ee9c107372ebdce98671eaaff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="runtime__test_8c.html#a0e2b965ee9c107372ebdce98671eaaff">check_register_outcommits</a> (<a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:a0e2b965ee9c107372ebdce98671eaaff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a950212beb10d5e1cdc79222e64d11bd9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="runtime__test_8c.html#a950212beb10d5e1cdc79222e64d11bd9">check_register_incommits</a> (<a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:a950212beb10d5e1cdc79222e64d11bd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ffc5362996c96ac6d138927f069993c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="runtime__test_8c.html#a7ffc5362996c96ac6d138927f069993c">check_commitlists</a> (<a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:a7ffc5362996c96ac6d138927f069993c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a7ffc5362996c96ac6d138927f069993c"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool check_commitlists </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Test : Commitments <br/>
- PICC_CommitList *PICC_create_commit_list(); <br/>
- PICC_CommitListElement *PICC_create_commit_list_element();</p>
-<dl class="section return"><dt>Returns</dt><dd>boolean true if it works else false </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a2e40a1d298bd7400b0048da0f76108c0"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool check_create_commitments </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Test : Create Commitments</p>
-<dl class="section return"><dt>Returns</dt><dd>boolean true if it works else false </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a09778f56a4e5739bd16273f058067c4d"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool check_pithread </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Test : PICC_create_pithread <br/>
- PICC_PiThread *PICC_create_pithread();</p>
-<dl class="section return"><dt>Returns</dt><dd>boolean true if it works else false </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a950212beb10d5e1cdc79222e64d11bd9"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool check_register_incommits </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a0e2b965ee9c107372ebdce98671eaaff"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool check_register_outcommits </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 8 2013 15:26:11 for PiThread by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 8 2013 17:47:47 for PiThread by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3
 </small></address>

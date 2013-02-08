@@ -36,6 +36,18 @@ bool \hyperlink{commit_8c_a2b9d94fd601547d2b324f40554b9ff55}{P\-I\-C\-C\-\_\-com
 \hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$ \hyperlink{commit_8c_ad7d0cd39eb2ec4c78c661243d75f49d8}{P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment} (\hyperlink{channel_8h_a0a70def8883f1abb8e7246b3a4c9dffb}{P\-I\-C\-C\-\_\-\-Channel} $\ast$ch)
 \item 
 \hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$ \hyperlink{commit_8c_ad837ebf71eacb624b85970117e4543b2}{P\-I\-C\-C\-\_\-fetch\-\_\-output\-\_\-commitment} (\hyperlink{channel_8h_a0a70def8883f1abb8e7246b3a4c9dffb}{P\-I\-C\-C\-\_\-\-Channel} $\ast$ch)
+\item 
+void \hyperlink{commit_8c_aefddfc7b660e9930c8d11913fdf28fd7}{P\-I\-C\-C\-\_\-\-Commit\-\_\-inv} (\hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$commit)
+\begin{DoxyCompactList}\small\item\em Checks commit invariant. \end{DoxyCompactList}\item 
+void \hyperlink{commit_8c_a72baafd7e48e7673f581f742833c6020}{P\-I\-C\-C\-\_\-\-Commit\-List\-Element\-\_\-inv} (\hyperlink{commit_8h_ab8090c3a82dc75b4dea9bb9015a95f71}{P\-I\-C\-C\-\_\-\-Commit\-List\-Element} $\ast$elem)
+\item 
+void \hyperlink{commit_8c_a036254baa30fbef3ff6cf9e55d89ab19}{P\-I\-C\-C\-\_\-\-Commit\-List\-\_\-inv} (\hyperlink{commit_8h_a37cd2f3bb38335c72e326d9ed4869c4f}{P\-I\-C\-C\-\_\-\-Commit\-List} $\ast$list)
+\item 
+void \hyperlink{commit_8c_a63eba6658845c2a9d2706783f43f957d}{P\-I\-C\-C\-\_\-\-Refvar\-\_\-inv} (int refvar)
+\item 
+void \hyperlink{commit_8c_a671243300bc0b6ff1225f2476f9830ff}{P\-I\-C\-C\-\_\-\-Eval\-Function\-\_\-inv} (\hyperlink{commit_8h_ad2bb1ba499a64c4eb87962523a3957ab}{P\-I\-C\-C\-\_\-\-Eval\-Function} eval)
+\item 
+void \hyperlink{commit_8c_a14735735dfbeef854b502cf6c34e601b}{P\-I\-C\-C\-\_\-\-Label\-\_\-inv} (\hyperlink{symbols_8h_ae23ad6ae115253385182f5a898d32c1e}{P\-I\-C\-C\-\_\-\-Label} cont\-\_\-pc)
 \end{DoxyCompactItemize}
 
 
@@ -89,6 +101,23 @@ commit->thread = pt; \(\backslash\)
 
 
 \subsection{Function Documentation}
+\hypertarget{commit_8c_aefddfc7b660e9930c8d11913fdf28fd7}{\index{commit.\-c@{commit.\-c}!P\-I\-C\-C\-\_\-\-Commit\-\_\-inv@{P\-I\-C\-C\-\_\-\-Commit\-\_\-inv}}
+\index{P\-I\-C\-C\-\_\-\-Commit\-\_\-inv@{P\-I\-C\-C\-\_\-\-Commit\-\_\-inv}!commit.c@{commit.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Commit\-\_\-inv}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-\-Commit\-\_\-inv (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Commit} $\ast$}]{commit}
+\end{DoxyParamCaption}
+)}}\label{commit_8c_aefddfc7b660e9930c8d11913fdf28fd7}
+
+
+Checks commit invariant. 
+
+\begin{DoxyParagraph}{Invariant\-:}
+thread != null \&\& clock != null \&\& clockval != null \&\& channel != null \&\& content != null 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Invariant\-:}
+cont\-\_\-pc $>$ 0 
+\end{DoxyParagraph}
 \hypertarget{commit_8c_a8c210081d1592ee22fb6537fdf3f0176}{\index{commit.\-c@{commit.\-c}!P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-add@{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-add}}
 \index{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-add@{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-add}!commit.c@{commit.\-c}}
 \subsubsection[{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-add}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-add (
@@ -100,6 +129,21 @@ commit->thread = pt; \(\backslash\)
 )}}\label{commit_8c_a8c210081d1592ee22fb6537fdf3f0176}
 Adds the given element at the end of the commit list.
 
+\begin{DoxyParagraph}{Precondition\-:}
+clist != N\-U\-L\-L 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Precondition\-:}
+commit != N\-U\-L\-L
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
+clist-\/$>$size = clist\-\_\-at\-\_\-pre-\/$>$size + 1 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
+clist-\/$>$tail-\/$>$commit = commit 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
+clist-\/$>$tail-\/$>$next = N\-U\-L\-L
+\end{DoxyParagraph}
 
 \begin{DoxyParams}{Parameters}
 {\em clist} & Commit list \\
@@ -118,6 +162,21 @@ Adds the given element at the end of the commit list.
 )}}\label{commit_8c_a57ba642a1ef551b5f78a194a86b20f76}
 Fetch the first element of the commit list.
 
+\begin{DoxyParagraph}{Precondition\-:}
+clist != N\-U\-L\-L 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Precondition\-:}
+clist-\/$>$size $>$ 0
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
+fetched = clist\-\_\-at\-\_\-pre-\/$>$head-\/$>$commit 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
+clist-\/$>$size = clist\-\_\-at\-\_\-pre-\/$>$size -\/ 1 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
+clist-\/$>$head = clist\-\_\-at\-\_\-pre-\/$>$head-\/$>$next
+\end{DoxyParagraph}
 
 \begin{DoxyParams}{Parameters}
 {\em clist} & Commit list \\
@@ -135,6 +194,12 @@ first element of the commit list
 )}}\label{commit_8c_a2b9d94fd601547d2b324f40554b9ff55}
 Returns whether a commit list is empty.
 
+\begin{DoxyParagraph}{Precondition\-:}
+clist != N\-U\-L\-L
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
+if clist-\/$>$size = 0 , res = true else res = false
+\end{DoxyParagraph}
 
 \begin{DoxyParams}{Parameters}
 {\em clist} & Commit list to check \\
@@ -143,6 +208,36 @@ Returns whether a commit list is empty.
 \begin{DoxyReturn}{Returns}
 Whether the commit list is empty. 
 \end{DoxyReturn}
+\hypertarget{commit_8c_a036254baa30fbef3ff6cf9e55d89ab19}{\index{commit.\-c@{commit.\-c}!P\-I\-C\-C\-\_\-\-Commit\-List\-\_\-inv@{P\-I\-C\-C\-\_\-\-Commit\-List\-\_\-inv}}
+\index{P\-I\-C\-C\-\_\-\-Commit\-List\-\_\-inv@{P\-I\-C\-C\-\_\-\-Commit\-List\-\_\-inv}!commit.c@{commit.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Commit\-List\-\_\-inv}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-\-Commit\-List\-\_\-inv (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Commit\-List} $\ast$}]{list}
+\end{DoxyParamCaption}
+)}}\label{commit_8c_a036254baa30fbef3ff6cf9e55d89ab19}
+Checks commit list invariant.
+
+\begin{DoxyParagraph}{Invariant\-:}
+if list-\/$>$size = 0, list-\/$>$head = N\-U\-L\-L \&\& list-\/$>$tail = N\-U\-L\-L 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Invariant\-:}
+if list-\/$>$size = 1, list-\/$>$head = list-\/$>$tail 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Invariant\-:}
+if list-\/$>$size $>$ 1, list-\/$>$head != list-\/$>$tail 
+\end{DoxyParagraph}
+\hypertarget{commit_8c_a72baafd7e48e7673f581f742833c6020}{\index{commit.\-c@{commit.\-c}!P\-I\-C\-C\-\_\-\-Commit\-List\-Element\-\_\-inv@{P\-I\-C\-C\-\_\-\-Commit\-List\-Element\-\_\-inv}}
+\index{P\-I\-C\-C\-\_\-\-Commit\-List\-Element\-\_\-inv@{P\-I\-C\-C\-\_\-\-Commit\-List\-Element\-\_\-inv}!commit.c@{commit.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Commit\-List\-Element\-\_\-inv}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-\-Commit\-List\-Element\-\_\-inv (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Commit\-List\-Element} $\ast$}]{elem}
+\end{DoxyParamCaption}
+)}}\label{commit_8c_a72baafd7e48e7673f581f742833c6020}
+Checks commit list element invariant.
+
+\begin{DoxyParagraph}{Invariant\-:}
+elem-\/$>$commit != N\-U\-L\-L 
+\end{DoxyParagraph}
 \hypertarget{commit_8c_a3332c9bf70cd5b9122377c29227b4f50}{\index{commit.\-c@{commit.\-c}!P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list@{P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list}}
 \index{P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list@{P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list}!commit.c@{commit.\-c}}
 \subsubsection[{P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Commit\-List}$\ast$ P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list (
@@ -152,6 +247,18 @@ Whether the commit list is empty.
 )}}\label{commit_8c_a3332c9bf70cd5b9122377c29227b4f50}
 Creates a new commit list.
 
+\begin{DoxyParagraph}{Postcondition\-:}
+clist != N\-U\-L\-L 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
+clist-\/$>$head = N\-U\-L\-L 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
+clist-\/$>$tail = N\-U\-L\-L 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
+clist-\/$>$size = 0
+\end{DoxyParagraph}
 
 \begin{DoxyParams}{Parameters}
 {\em error} & Error stack \\
@@ -170,6 +277,18 @@ Created commit list
 )}}\label{commit_8c_a1da34879d65783717f4d61fcb05c035d}
 Creates a new element of commit list.
 
+\begin{DoxyParagraph}{Precondition\-:}
+commit != N\-U\-L\-L
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
+clist\-\_\-elem != N\-U\-L\-L 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
+clist\-\_\-elem-\/$>$commit = commit 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
+clist\-\_\-elem-\/$>$next = N\-U\-L\-L
+\end{DoxyParagraph}
 
 \begin{DoxyParams}{Parameters}
 {\em commit} & Commit associated \\
@@ -189,12 +308,24 @@ Created commit list element
 )}}\label{commit_8c_adab666e9d693a5f655c1f137a610ef64}
 Creates and returns a commitment.
 
-\begin{DoxyPostcond}{Postcondition}
+\begin{DoxyParagraph}{Postcondition\-:}
 commit != null
-\end{DoxyPostcond}
+\end{DoxyParagraph}
 \begin{DoxyReturn}{Returns}
 Created commitment 
 \end{DoxyReturn}
+\hypertarget{commit_8c_a671243300bc0b6ff1225f2476f9830ff}{\index{commit.\-c@{commit.\-c}!P\-I\-C\-C\-\_\-\-Eval\-Function\-\_\-inv@{P\-I\-C\-C\-\_\-\-Eval\-Function\-\_\-inv}}
+\index{P\-I\-C\-C\-\_\-\-Eval\-Function\-\_\-inv@{P\-I\-C\-C\-\_\-\-Eval\-Function\-\_\-inv}!commit.c@{commit.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Eval\-Function\-\_\-inv}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-\-Eval\-Function\-\_\-inv (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Eval\-Function}}]{eval}
+\end{DoxyParamCaption}
+)}}\label{commit_8c_a671243300bc0b6ff1225f2476f9830ff}
+Checks eval\-Function invariant.
+
+\begin{DoxyParagraph}{Invariant\-:}
+eval != N\-U\-L\-L 
+\end{DoxyParagraph}
 \hypertarget{commit_8c_ad7d0cd39eb2ec4c78c661243d75f49d8}{\index{commit.\-c@{commit.\-c}!P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment@{P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment}}
 \index{P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment@{P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment}!commit.c@{commit.\-c}}
 \subsubsection[{P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Commit}$\ast$ P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment (
@@ -204,14 +335,15 @@ Created commitment
 )}}\label{commit_8c_ad7d0cd39eb2ec4c78c661243d75f49d8}
 Fetches the first element of the input commit\-List from a channel.
 
-\begin{DoxyPrecond}{Precondition}
+\begin{DoxyParagraph}{Precondition\-:}
 ch != null
-\end{DoxyPrecond}
-\begin{DoxyPostcond}{Postcondition}
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 if(c-\/$>$incommits-\/$>$size $>$ 0 \&\& P\-I\-C\-C\-\_\-is\-\_\-valid\-\_\-commit(P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch(c-\/$>$incommits))) P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment(c) = P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch(c-\/$>$incommits) 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 if(c-\/$>$incommits-\/$>$size = 0 $|$$|$ !(P\-I\-C\-C\-\_\-is\-\_\-valid\-\_\-commit(P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch(c-\/$>$incommits)))) P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment(c) = null
-\end{DoxyPostcond}
+\end{DoxyParagraph}
 
 \begin{DoxyParams}{Parameters}
 {\em ch} & Channel to fetch the commit from \\
@@ -229,14 +361,15 @@ Fetched commit
 )}}\label{commit_8c_ad837ebf71eacb624b85970117e4543b2}
 Fetches he first element of the output commit\-List from a channel
 
-\begin{DoxyPrecond}{Precondition}
+\begin{DoxyParagraph}{Precondition\-:}
 ch != null
-\end{DoxyPrecond}
-\begin{DoxyPostcond}{Postcondition}
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 if(c-\/$>$outcommits-\/$>$size $>$ 0 \&\& P\-I\-C\-C\-\_\-is\-\_\-valid\-\_\-commit(P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch(c-\/$>$outcommits))) P\-I\-C\-C\-\_\-fetch\-\_\-output\-\_\-commitment(c) = P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch(c-\/$>$outcommits) 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 if(c-\/$>$outcommits-\/$>$size = 0 $|$$|$ !(P\-I\-C\-C\-\_\-is\-\_\-valid\-\_\-commit(P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch(c-\/$>$outcommits)))) P\-I\-C\-C\-\_\-fetch\-\_\-output\-\_\-commitment(c) = null
-\end{DoxyPostcond}
+\end{DoxyParagraph}
 
 \begin{DoxyParams}{Parameters}
 {\em ch} & Channel to fetch the commit from \\
@@ -254,12 +387,12 @@ Fetched commit
 )}}\label{commit_8c_a788a62f62f706ba5515d34caff7b807f}
 Verifies if the given commit is valid.
 
-\begin{DoxyPrecond}{Precondition}
+\begin{DoxyParagraph}{Precondition\-:}
 commit != null
-\end{DoxyPrecond}
-\begin{DoxyPostcond}{Postcondition}
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 if (commit-\/$>$clock == commit-\/$>$thread-\/$>$clock \&\& commit-\/$>$clockval == commit-\/$>$thread-\/$>$clock-\/$>$val) valid = true else valid = false
-\end{DoxyPostcond}
+\end{DoxyParagraph}
 
 \begin{DoxyParams}{Parameters}
 {\em commit} & Commit to validate \\
@@ -268,6 +401,30 @@ if (commit-\/$>$clock == commit-\/$>$thread-\/$>$clock \&\& commit-\/$>$clockval
 \begin{DoxyReturn}{Returns}
 Whether the commit is valid 
 \end{DoxyReturn}
+\hypertarget{commit_8c_a14735735dfbeef854b502cf6c34e601b}{\index{commit.\-c@{commit.\-c}!P\-I\-C\-C\-\_\-\-Label\-\_\-inv@{P\-I\-C\-C\-\_\-\-Label\-\_\-inv}}
+\index{P\-I\-C\-C\-\_\-\-Label\-\_\-inv@{P\-I\-C\-C\-\_\-\-Label\-\_\-inv}!commit.c@{commit.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Label\-\_\-inv}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-\-Label\-\_\-inv (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Label}}]{cont\-\_\-pc}
+\end{DoxyParamCaption}
+)}}\label{commit_8c_a14735735dfbeef854b502cf6c34e601b}
+Checks Label invariant.
+
+\begin{DoxyParagraph}{Invariant\-:}
+cont\-\_\-pc $>$ -\/1 
+\end{DoxyParagraph}
+\hypertarget{commit_8c_a63eba6658845c2a9d2706783f43f957d}{\index{commit.\-c@{commit.\-c}!P\-I\-C\-C\-\_\-\-Refvar\-\_\-inv@{P\-I\-C\-C\-\_\-\-Refvar\-\_\-inv}}
+\index{P\-I\-C\-C\-\_\-\-Refvar\-\_\-inv@{P\-I\-C\-C\-\_\-\-Refvar\-\_\-inv}!commit.c@{commit.\-c}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Refvar\-\_\-inv}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-\-Refvar\-\_\-inv (
+\begin{DoxyParamCaption}
+\item[{int}]{refvar}
+\end{DoxyParamCaption}
+)}}\label{commit_8c_a63eba6658845c2a9d2706783f43f957d}
+Checks refvar invariant.
+
+\begin{DoxyParagraph}{Invariant\-:}
+refvar $>$ 0 
+\end{DoxyParagraph}
 \hypertarget{commit_8c_a2a8118d48f638115c8bde91c5c2e3570}{\index{commit.\-c@{commit.\-c}!P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment@{P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment}}
 \index{P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment@{P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment}!commit.c@{commit.\-c}}
 \subsubsection[{P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment (
@@ -280,26 +437,33 @@ Whether the commit is valid
 )}}\label{commit_8c_a2a8118d48f638115c8bde91c5c2e3570}
 Registers an input commit with given Pi\-Thread and channel.
 
-\begin{DoxyPrecond}{Precondition}
+\begin{DoxyParagraph}{Precondition\-:}
 pt != null \&\& ch != null \&\& cont\-\_\-pc $>$= 0
-\end{DoxyPrecond}
-\begin{DoxyPostcond}{Postcondition}
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 pt-\/$>$commits-\/$>$size(P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment(pt)) = pt-\/$>$commits-\/$>$size(pt) + 1 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 pt-\/$>$commits-\/$>$tail = commit 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 commit-\/$>$type = P\-I\-C\-C\-\_\-\-I\-N\-\_\-\-C\-O\-M\-M\-I\-T 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 commit-\/$>$content.\-in = in 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 commit-\/$>$thread = pt 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 commit-\/$>$channel = ch 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 commit-\/$>$cont\-\_\-pc = cont\-\_\-pc 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 in-\/$>$refvar = refvar
-\end{DoxyPostcond}
+\end{DoxyParagraph}
 
 \begin{DoxyParams}{Parameters}
 {\em pt} & Pi\-Thread associated with the commit \\
@@ -323,26 +487,33 @@ in-\/$>$refvar = refvar
 )}}\label{commit_8c_a147d57b52b5ac5ec52f1488a4df5684c}
 Registers an output commit with given Pi\-Thread and channel.
 
-\begin{DoxyPrecond}{Precondition}
+\begin{DoxyParagraph}{Precondition\-:}
 pt != null \&\& ch != null \&\& eval != null \&\& cont\-\_\-pc $>$= 0
-\end{DoxyPrecond}
-\begin{DoxyPostcond}{Postcondition}
-pt-\/$>$commits-\/$>$size(P\-I\-C\-C\-\_\-register\-\_\-output\-\_\-commitment(pt)) = pt-\/$>$commits-\/$>$size(pt) + 1 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
+pt-\/$>$commits-\/$>$size = pt-\/$>$commits-\/$>$size\-\_\-at\-\_\-pre + 1 
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 pt-\/$>$commits-\/$>$tail = commit 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 commit-\/$>$type = P\-I\-C\-C\-\_\-\-O\-U\-T\-\_\-\-C\-O\-M\-M\-I\-T 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 commit-\/$>$content.\-out = out 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 commit-\/$>$thread = pt 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 commit-\/$>$channel = ch 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 commit-\/$>$cont\-\_\-pc = cont\-\_\-pc 
-
+\end{DoxyParagraph}
+\begin{DoxyParagraph}{Postcondition\-:}
 out-\/$>$eval\-\_\-func = eval
-\end{DoxyPostcond}
+\end{DoxyParagraph}
 
 \begin{DoxyParams}{Parameters}
 {\em pt} & Pi\-Thread associated with the commit \\

@@ -15,19 +15,6 @@ src/channel.c \-
 \fC#include <error\&.h>\fP
 .br
 
-.SS "Macros"
-
-.in +1c
-.ti -1c
-.RI "#define \fBDEFAULT_CHANNEL_SIZE\fP   10"
-.br
-.ti -1c
-.RI "#define \fBLOCK_CHANNEL\fP(c)   \fBPICC_acquire\fP(&(c->lock));"
-.br
-.ti -1c
-.RI "#define \fBRELEASE_CHANNEL\fP(c)   \fBPICC_release\fP(&(c->lock));"
-.br
-.in -1c
 .SS "Functions"
 
 .in +1c
@@ -35,7 +22,7 @@ src/channel.c \-
 .RI "\fBPICC_Channel\fP * \fBPICC_create_channel\fP ()"
 .br
 .ti -1c
-.RI "\fBPICC_Channel\fP * \fBPICC_create_channel_cn\fP (int commit_size)"
+.RI "\fBPICC_Channel\fP * \fBPICC_create_channel_cn\fP (int incommit_size, int outcommit_size)"
 .br
 .ti -1c
 .RI "\fBPICC_Knowns\fP * \fBPICC_create_knowns\fP (\fBPICC_Error\fP *error)"
@@ -51,6 +38,9 @@ src/channel.c \-
 .br
 .ti -1c
 .RI "void \fBPICC_reclaim_channel\fP (\fBPICC_Channel\fP *channel, \fBPICC_Error\fP *error)"
+.br
+.ti -1c
+.RI "\fBPICC_KnownsSet\fP * \fBPICC_knowns_set_search\fP (\fBPICC_KnownsSet\fP *ks, \fBPICC_KnownsState\fP state)"
 .br
 .ti -1c
 .RI "\fBPICC_KnownsSet\fP * \fBPICC_knowns_set_knows\fP (\fBPICC_KnownsSet\fP *ks)"
@@ -89,14 +79,6 @@ Mickaël MENU
 .RE
 .PP
 
-.SH "Macro Definition Documentation"
-.PP 
-.SS "#define DEFAULT_CHANNEL_SIZE   10"
-
-.SS "#define LOCK_CHANNEL(c)   \fBPICC_acquire\fP(&(c->lock));"
-
-.SS "#define RELEASE_CHANNEL(c)   \fBPICC_release\fP(&(c->lock));"
-
 .SH "Function Documentation"
 .PP 
 .SS "void PICC_channel_dec_ref_count (\fBPICC_Channel\fP *channel)"
@@ -126,7 +108,7 @@ Created channel
 .RE
 .PP
 
-.SS "\fBPICC_Channel\fP* PICC_create_channel_cn (intcommit_size)"
+.SS "\fBPICC_Channel\fP* PICC_create_channel_cn (intincommit_size, intoutcommit_size)"
 Creates a channel which contains <commit_size> commitments\&.
 .PP
 \fBReturns:\fP
@@ -232,9 +214,11 @@ Returns a subset of all KNOWN-STATE in a knows set\&.
 .PP
 \fBReturns:\fP
 .RS 4
-Subset of all known state in the given set 
+Subset of all known channel in the given set 
 .RE
 .PP
+
+.SS "\fBPICC_KnownsSet\fP* PICC_knowns_set_search (\fBPICC_KnownsSet\fP *ks, \fBPICC_KnownsState\fPstate)"
 
 .SS "void PICC_reclaim_channel (\fBPICC_Channel\fP *channel, \fBPICC_Error\fP *error)"
 Reclaims the given channel\&.

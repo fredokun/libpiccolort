@@ -16,6 +16,9 @@ include/tools.h \-
 .RI "#define \fBPICC_MALLOC\fP(var, type, error)"
 .br
 .ti -1c
+.RI "#define \fBPICC_ALLOC_N\fP(var, type, size, error)"
+.br
+.ti -1c
 .RI "#define \fBPICC_FREE_MUTEX\fP(m)   pthread_mutex_destroy(&m);"
 .br
 .ti -1c
@@ -32,6 +35,9 @@ include/tools.h \-
 .br
 .ti -1c
 .RI "#define \fBPICC_FREE_SET\fP(s)   \fBPICC_set_destroy\fP(s);"
+.br
+.ti -1c
+.RI "#define \fBCONTRACT\fP   1"
 .br
 .in -1c
 .SS "Functions"
@@ -57,11 +63,22 @@ Maxence WO
 
 .SH "Macro Definition Documentation"
 .PP 
+.SS "#define CONTRACT   1"
+
 .SS "#define PICC_ALLOC(var, type, error)"
 \fBValue:\fP
 .PP
 .nf
 type *var = malloc(sizeof(type)); \
+    if (var == NULL) { \
+        NEW_ERROR(error, ERR_OUT_OF_MEMORY); \
+    } else
+.fi
+.SS "#define PICC_ALLOC_N(var, type, size, error)"
+\fBValue:\fP
+.PP
+.nf
+type *var = malloc(sizeof(type) * (size)); \
     if (var == NULL) { \
         NEW_ERROR(error, ERR_OUT_OF_MEMORY); \
     } else

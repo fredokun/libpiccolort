@@ -18,6 +18,9 @@ src/value.c \-
 .RI "\fBPICC_Value\fP * \fBPICC_create_value\fP (\fBPICC_ValueKind\fP type, \fBPICC_Error\fP *error)"
 .br
 .ti -1c
+.RI "\fBPICC_Value\fP * \fBPICC_create_value_int\fP (int i, \fBPICC_Error\fP *error)"
+.br
+.ti -1c
 .RI "\fBPICC_AtomicBoolean\fP * \fBPICC_create_atomic_boolean\fP (\fBPICC_Error\fP *error)"
 .br
 .ti -1c
@@ -98,6 +101,8 @@ Creates a new value of given type\&.
 Created value 
 .RE
 .PP
+
+.SS "\fBPICC_Value\fP* PICC_create_value_int (inti, \fBPICC_Error\fP *error)"
 
 .SH "Author"
 .PP 

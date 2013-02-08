@@ -28,6 +28,19 @@ include/channel.h \-
 .RI "struct \fB_PICC_KnownsSet\fP"
 .br
 .in -1c
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBDEFAULT_CHANNEL_COMMIT_SIZE\fP   10"
+.br
+.ti -1c
+.RI "#define \fBLOCK_CHANNEL\fP(c)   \fBPICC_acquire\fP(&(c->lock));"
+.br
+.ti -1c
+.RI "#define \fBRELEASE_CHANNEL\fP(c)   \fBPICC_release\fP(&(c->lock));"
+.br
+.in -1c
 .SS "Typedefs"
 
 .in +1c
@@ -58,7 +71,7 @@ include/channel.h \-
 .RI "\fBPICC_Channel\fP * \fBPICC_create_channel\fP ()"
 .br
 .ti -1c
-.RI "\fBPICC_Channel\fP * \fBPICC_create_channel_cn\fP (int commit_size)"
+.RI "\fBPICC_Channel\fP * \fBPICC_create_channel_cn\fP (int incommit_size, int outcommit_size)"
 .br
 .ti -1c
 .RI "\fBPICC_Knowns\fP * \fBPICC_create_knowns\fP (\fBPICC_Error\fP *error)"
@@ -97,7 +110,7 @@ include/channel.h \-
 .RI "void \fBPICC_free_channel\fP (\fBPICC_Channel\fP *channel)"
 .br
 .ti -1c
-.RI "void \fBPICC_test_channels\fP ()"
+.RI "void \fBPICC_all_channel_test\fP ()"
 .br
 .in -1c
 .SH "Detailed Description"
@@ -117,6 +130,14 @@ Dany SIRIPHOL
 Joel HING 
 .RE
 .PP
+
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define DEFAULT_CHANNEL_COMMIT_SIZE   10"
+
+.SS "#define LOCK_CHANNEL(c)   \fBPICC_acquire\fP(&(c->lock));"
+
+.SS "#define RELEASE_CHANNEL(c)   \fBPICC_release\fP(&(c->lock));"
 
 .SH "Typedef Documentation"
 .PP 
@@ -146,6 +167,8 @@ TODO see spec
 TODO see spec 
 .SH "Function Documentation"
 .PP 
+.SS "void PICC_all_channel_test ()"
+Launch all channel tests 
 .SS "void PICC_channel_dec_ref_count (\fBPICC_Channel\fP *channel)"
 Decrements the global reference count of a channel\&.
 .PP
@@ -173,7 +196,7 @@ Created channel
 .RE
 .PP
 
-.SS "\fBPICC_Channel\fP* PICC_create_channel_cn (intcommit_size)"
+.SS "\fBPICC_Channel\fP* PICC_create_channel_cn (intincommit_size, intoutcommit_size)"
 Creates a channel which contains <commit_size> commitments\&.
 .PP
 \fBReturns:\fP
@@ -281,7 +304,7 @@ Returns a subset of all KNOWN-STATE in a knows set\&.
 .PP
 \fBReturns:\fP
 .RS 4
-Subset of all known state in the given set 
+Subset of all known channel in the given set 
 .RE
 .PP
 
@@ -304,8 +327,6 @@ Releases all the given channels\&.
 \fInb_chans\fP 
 .RE
 .PP
-
-.SS "void PICC_test_channels ()"
 
 .SH "Author"
 .PP 
