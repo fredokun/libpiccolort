@@ -12,5 +12,4 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <runtime.h>
-#include <runtime_tests.h>
 
