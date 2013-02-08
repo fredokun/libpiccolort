@@ -446,7 +446,7 @@ void PICC_Queue_inv(PICC_Queue *queue)
     }
     ASSERT(size == queue->size);
 
-    ASSERT(tail->next == NULL);
+    ASSERT(queue->tail->next == NULL);
 
     if (queue->size == 0) {
         ASSERT(queue->head == NULL);
@@ -478,7 +478,7 @@ void PICC_QueueCell_inv(PICC_QueueCell *cell)
  */
 void PICC_ReadyQueue_inv(PICC_ReadyQueue *queue)
 {
-    PICC_Queue_inv(queue.q);
+    PICC_Queue_inv(&queue->q);
 }
 
 /**
@@ -489,6 +489,6 @@ void PICC_ReadyQueue_inv(PICC_ReadyQueue *queue)
  */
 void PICC_WaitQueue_inv(PICC_WaitQueue *queue)
 {
-    PICC_Queue_inv(queue.active);
-    PICC_Queue_inv(queue.old);
+    PICC_Queue_inv(&queue->active);
+    PICC_Queue_inv(&queue->old);
 }

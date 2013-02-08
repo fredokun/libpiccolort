@@ -107,8 +107,6 @@ typedef struct _PICC_CommitListElement {
 
 /**
  * The commit list type
- * @inv if size = 0, *head = NULL && *tail = NULL
- * @inv 
  */
 typedef struct _PICC_CommitList {
     /**@{*/
@@ -134,5 +132,8 @@ extern PICC_Commit *PICC_fetch_output_commitment(struct _PICC_Channel *ch);
 extern void PICC_Commit_inv(PICC_Commit *commit);
 extern void PICC_CommitListElement_inv(PICC_CommitListElement *elem);
 extern void PICC_CommitList_inv(PICC_CommitList *list);
+extern void PICC_Refvar_inv(int refvar);
+extern void PICC_EvalFunction_inv(PICC_EvalFunction eval);
+extern void PICC_Label_inv(PICC_Label cont_pc);
 
 #endif
