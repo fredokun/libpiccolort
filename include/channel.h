@@ -70,13 +70,13 @@ typedef struct _PICC_KnownsSet {
     /**@{*/
     PICC_Knowns **knowns; /** A pointer to an array of knowns.
                             Contains all the data */
-    int length; /**< The size of the set */
+    int size; /**< The size of the set */
     /**@}*/
 } PICC_KnownsSet;
 
 extern PICC_Channel *PICC_create_channel();
 extern PICC_Channel *PICC_create_channel_cn(int incommit_size,int outcommit_size);
-extern PICC_Knowns *PICC_create_knowns(PICC_Error *error);
+extern PICC_Knowns *PICC_create_knowns(PICC_Channel *channel, PICC_Error *error);
 extern PICC_KnownsSet *PICC_create_knowns_set(int length, PICC_Error *error);
 extern void PICC_channel_incr_ref_count(PICC_Channel *ch);
 extern void PICC_channel_dec_ref_count(PICC_Channel *ch);
@@ -89,6 +89,10 @@ extern bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch);
 extern void PICC_release_all_channels(PICC_Channel **chans, int nb_chans);
 
 extern void PICC_free_channel(PICC_Channel *channel);
+
+extern void PICC_Channel_inv(PICC_Channel *channel);
+extern void PICC_KnownsSet_inv(PICC_KnownsSet *set);
+extern void PICC_Knowns_inv(PICC_Knowns *knowns);
 
 extern void PICC_all_channel_test();
 
