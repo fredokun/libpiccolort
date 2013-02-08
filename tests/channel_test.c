@@ -106,8 +106,6 @@ bool test_knowsSet(PICC_Error *error)
     return true;
 }
 
-bool test_knowns
-
 PICC_Value *eval_int(PICC_Error *error)
 {
     PICC_Value *value = PICC_create_value_int(2,error);
