@@ -23,6 +23,12 @@
     if (var == NULL) { \
         NEW_ERROR(error, ERR_OUT_OF_MEMORY); \
     } else
+    
+#define PICC_ALLOC_N(var, type, size, error) \
+    type *var = malloc(sizeof(type) * (size)); \
+    if (var == NULL) { \
+        NEW_ERROR(error, ERR_OUT_OF_MEMORY); \
+    } else
 
 #define PICC_FREE_MUTEX(m) \
     pthread_mutex_destroy(&m);

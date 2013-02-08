@@ -195,7 +195,7 @@ PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks)
  */
 void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch)
 {
-    return PICC_knowns_set_search(ks, PICC_UNKNOWN);
+    PICC_knowns_set_search(ks, PICC_UNKNOWN);
 }
 
 /**
@@ -210,7 +210,7 @@ void PICC_knowns_set_forget_all(PICC_KnownsSet *ks)
    for( i = 0 ; i < ks->length ; i++)
    {
        known = ks->knowns[i];
-       known->state == PICC_FORGET;
+       known->state = PICC_FORGET;
    }
 }
 
