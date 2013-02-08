@@ -19,6 +19,11 @@ static const int PICC_FUEL_INIT = 358;
 static const int PICC_INVALID_PC = -1;
 
 /**
+ *  The maximum value a piThread clock may have 
+ */
+static const int PICC_CLOCK_MAX_INT = 1000;
+
+/**
  * The label type. Used by the pi-threads to point to a place where to
  * start it's procedure.
  */

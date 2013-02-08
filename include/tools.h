@@ -30,7 +30,7 @@
         NEW_ERROR(error, ERR_OUT_OF_MEMORY); \
     } else
     
-#define PICC_ALLOC_N_CRASH(var, type, size, error) \
+#define PICC_ALLOC_N_CRASH(var, type, size) \
     type *var = malloc(sizeof(type) * (size)); \
     if (var == NULL) { \
         CRASH_NEW_ERROR(ERR_OUT_OF_MEMORY); \

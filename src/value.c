@@ -64,6 +64,11 @@ PICC_AtomicInt *PICC_create_atomic_int(PICC_Error *error)
     return aint;
 }
 
+void PICC_reclaim_atomic_int(PICC_AtomicInt *aint)
+{
+    //PICC_FREE_VALUE(aint);
+}
+
 /**
  * Creates a new clock.
  *
@@ -83,3 +88,10 @@ PICC_Clock *PICC_create_clock(PICC_Error *error)
     }
     return clock;
 }
+
+void PICC_reclaim_clock(PICC_Clock *clock)
+{
+    PICC_reclaim_atomic_int(clock->val);
+    free(clock);
+}
+

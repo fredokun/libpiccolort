@@ -24,7 +24,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
         ALLOC_ERROR(sub_error);
         thread->knowns = PICC_create_knowns_set(knowns_length, &sub_error);
         if (HAS_ERROR(sub_error)) {
-            CRASH(&sub_error, ERR_THREAD_CREATE);
+            CRASH(&sub_error);
         } else {
             PICC_ALLOC_N_CRASH(env, PICC_Value, env_length) {
                 thread->clock = PICC_create_clock(&sub_error);
@@ -58,6 +58,22 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
  */
 enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
 {
+    if (!PICC_try_acquire(&(pt->lock))) {
+        return PICC_CANNOT_ACQUIRE;
+    }
+    if (commit->clock != pt->clock || commit->clockval != commit->clock->val) {
+        PICC_release(&(pt->lock));
+        return PICC_INVALID_COMMIT;
+    }
+    if (pt->clock->val == PICC_CLOCK_MAX_INT) {
+        PICC_reclaim_clock(pt->clock);
+        pt->clock = NULL;
+        ALLOC_ERROR(error);
+        pt->clock = PICC_create_clock(&error);
+        if (HAS_ERROR(error)) {
+            CRASH(&error);
+        }
+    }
     CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
     return PICC_STATUS_ENDED;
 }

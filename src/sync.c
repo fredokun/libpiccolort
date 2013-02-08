@@ -41,6 +41,18 @@ void PICC_acquire(PICC_Mutex *mutex)
 }
 
 /**
+ * Tries to lock the given mutex.
+ *
+ * @param mutex Mutex to try to lock
+ * 
+ * @return true if the lock was successfull, false otherwise
+ */
+bool PICC_try_acquire(PICC_Mutex *mutex)
+{
+    return pthread_mutex_trylock(mutex) == 0;
+}
+
+/**
  * Unlocks the given mutex, fail if the mutex is already unlocked.
  *
  * @param mutex Mutex to unlock
