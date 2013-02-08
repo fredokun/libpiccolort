@@ -20,28 +20,27 @@
  */
 PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
 {
-    ALLOC_ERROR(error);
-    PICC_ALLOC(thread, PICC_PiThread, &error) {
+    PICC_ALLOC_CRASH(thread, PICC_PiThread) {
         ALLOC_ERROR(sub_error);
         thread->knowns = PICC_create_knowns_set(knowns_length, &sub_error);
         if (HAS_ERROR(sub_error)) {
-            ADD_ERROR(&error, sub_error, ERR_THREAD_CREATE);
+            CRASH(&sub_error, ERR_THREAD_CREATE);
         } else {
-            PICC_ALLOC_N(env, PICC_Value, env_length, &sub_error) {
+            PICC_ALLOC_N_CRASH(env, PICC_Value, env_length) {
                 thread->clock = PICC_create_clock(&sub_error);
                 if (HAS_ERROR(sub_error)) {
-                    ADD_ERROR(&error, sub_error, ERR_THREAD_CREATE);
+                    CRASH(&sub_error);
                 } else {
                     thread->env = env;
                     thread->env_length = env_length;
                     thread->enabled = NULL;
-                    thread->enabled_length = 0;        
+                    thread->enabled_length = 0;
                     thread->commit = NULL;
                     thread->commits = NULL;
                     thread->proc = NULL;
                     thread->pc = PICC_DEFAULT_ENTRY_LABEL;
                     thread->fuel = PICC_FUEL_INIT;
-                    thread->val = NULL;                
+                    thread->val = NULL;
                     PICC_init_mutex(&(thread->lock));
                 }
             }
