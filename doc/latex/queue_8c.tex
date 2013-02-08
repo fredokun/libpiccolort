@@ -6,9 +6,9 @@
 \subsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
-\#define \hyperlink{queue_8c_aa98552a46dfc742e62155ecbb6464848}{L\-O\-C\-K\-\_\-\-Q\-U\-E\-U\-E}(q)~\hyperlink{sync_8c_ad533486752c5f9d3dd499a06288f31ab}{P\-I\-C\-C\-\_\-acquire}(q-\/$>$lock);
+\#define \hyperlink{queue_8c_aa98552a46dfc742e62155ecbb6464848}{L\-O\-C\-K\-\_\-\-Q\-U\-E\-U\-E}(q)~\hyperlink{sync_8c_aa27397e8ad870b7b7ae763a71009be13}{P\-I\-C\-C\-\_\-acquire}(\&(q-\/$>$lock));
 \item 
-\#define \hyperlink{queue_8c_af4dc912f84e42cf452efc6264d5e3dac}{R\-E\-L\-E\-A\-S\-E\-\_\-\-Q\-U\-E\-U\-E}(q)~\hyperlink{sync_8c_a0a6cdd715fc6aba7327880215401fa71}{P\-I\-C\-C\-\_\-release}(q-\/$>$lock, N\-U\-L\-L);
+\#define \hyperlink{queue_8c_af4dc912f84e42cf452efc6264d5e3dac}{R\-E\-L\-E\-A\-S\-E\-\_\-\-Q\-U\-E\-U\-E}(q)~\hyperlink{sync_8c_ad5a8707a554e73b819db9986b371aca0}{P\-I\-C\-C\-\_\-release}(\&(q-\/$>$lock));
 \end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
@@ -17,9 +17,9 @@
 \item 
 \hyperlink{queue_8h_a7bcffcbcc0c50c45191cf298d0a4668f}{P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$ \hyperlink{queue_8c_a456adc65dd622092ed923ab1ba3e1201}{P\-I\-C\-C\-\_\-create\-\_\-ready\-\_\-queue} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
 \item 
-void \hyperlink{queue_8c_adf821a0f453dd3c5ae96d592a41eb1ee}{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push} (\hyperlink{queue_8h_a7bcffcbcc0c50c45191cf298d0a4668f}{P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$rq, \hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+void \hyperlink{queue_8c_a3c2dbb18469ad4e77188667a7efc665a}{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push} (\hyperlink{queue_8h_a7bcffcbcc0c50c45191cf298d0a4668f}{P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$rq, \hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt)
 \item 
-void \hyperlink{queue_8c_a39963ef867240d118303d16b43fe5e0c}{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add} (\hyperlink{queue_8h_a7bcffcbcc0c50c45191cf298d0a4668f}{P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$rq, \hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+void \hyperlink{queue_8c_aff482298962355a461a2cd91d2288d30}{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add} (\hyperlink{queue_8h_a7bcffcbcc0c50c45191cf298d0a4668f}{P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$rq, \hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt)
 \item 
 \hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$ \hyperlink{queue_8c_a44763c6ccba6760027b2967a71dbf5e9}{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-pop} (\hyperlink{queue_8h_a7bcffcbcc0c50c45191cf298d0a4668f}{P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$rq)
 \item 
@@ -27,7 +27,7 @@ int \hyperlink{queue_8c_a1833611510de88c528f63b63040af1c5}{P\-I\-C\-C\-\_\-ready
 \item 
 \hyperlink{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}{P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$ \hyperlink{queue_8c_abbb1aba2fd7b9007abeed23ae18dd781}{P\-I\-C\-C\-\_\-create\-\_\-wait\-\_\-queue} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
 \item 
-void \hyperlink{queue_8c_a7c2435775e8bbccc6a1d66342bc71194}{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push} (\hyperlink{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}{P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$wq, \hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+void \hyperlink{queue_8c_aff54e61ffe4a99548d94fd620622d28f}{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push} (\hyperlink{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}{P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$wq, \hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt)
 \item 
 \hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$ \hyperlink{queue_8c_a49a28c90e6ec2701046c499d2d0ccd1a}{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-fetch} (\hyperlink{queue_8h_ae862ca00345516a650e81aa1ddc06fd0}{P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$wq, \hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt)
 \item 
@@ -62,14 +62,14 @@ Maxence W\-O
 \begin{DoxyParamCaption}
 \item[{}]{q}
 \end{DoxyParamCaption}
-)~{\bf P\-I\-C\-C\-\_\-acquire}(q-\/$>$lock);}}\label{queue_8c_aa98552a46dfc742e62155ecbb6464848}
+)~{\bf P\-I\-C\-C\-\_\-acquire}(\&(q-\/$>$lock));}}\label{queue_8c_aa98552a46dfc742e62155ecbb6464848}
 \hypertarget{queue_8c_af4dc912f84e42cf452efc6264d5e3dac}{\index{queue.\-c@{queue.\-c}!R\-E\-L\-E\-A\-S\-E\-\_\-\-Q\-U\-E\-U\-E@{R\-E\-L\-E\-A\-S\-E\-\_\-\-Q\-U\-E\-U\-E}}
 \index{R\-E\-L\-E\-A\-S\-E\-\_\-\-Q\-U\-E\-U\-E@{R\-E\-L\-E\-A\-S\-E\-\_\-\-Q\-U\-E\-U\-E}!queue.c@{queue.\-c}}
 \subsubsection[{R\-E\-L\-E\-A\-S\-E\-\_\-\-Q\-U\-E\-U\-E}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\-E\-L\-E\-A\-S\-E\-\_\-\-Q\-U\-E\-U\-E(
 \begin{DoxyParamCaption}
 \item[{}]{q}
 \end{DoxyParamCaption}
-)~{\bf P\-I\-C\-C\-\_\-release}(q-\/$>$lock, N\-U\-L\-L);}}\label{queue_8c_af4dc912f84e42cf452efc6264d5e3dac}
+)~{\bf P\-I\-C\-C\-\_\-release}(\&(q-\/$>$lock));}}\label{queue_8c_af4dc912f84e42cf452efc6264d5e3dac}
 
 
 \subsection{Function Documentation}
@@ -113,15 +113,14 @@ Creates a new empty wait queue.
 {\em error} & Error stack \\
 \hline
 \end{DoxyParams}
-\hypertarget{queue_8c_a39963ef867240d118303d16b43fe5e0c}{\index{queue.\-c@{queue.\-c}!P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add@{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add}}
+\hypertarget{queue_8c_aff482298962355a461a2cd91d2288d30}{\index{queue.\-c@{queue.\-c}!P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add@{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add}}
 \index{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add@{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add}!queue.c@{queue.\-c}}
 \subsubsection[{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-add (
 \begin{DoxyParamCaption}
 \item[{{\bf P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$}]{rq, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt}
 \end{DoxyParamCaption}
-)}}\label{queue_8c_a39963ef867240d118303d16b43fe5e0c}
+)}}\label{queue_8c_aff482298962355a461a2cd91d2288d30}
 Adds a Pi\-Thread at the end of the given ready queue.
 
 
@@ -148,15 +147,14 @@ Pops a Pi\-Thread from the given ready queue.
 \begin{DoxyReturn}{Returns}
 Popped Pi\-Thread 
 \end{DoxyReturn}
-\hypertarget{queue_8c_adf821a0f453dd3c5ae96d592a41eb1ee}{\index{queue.\-c@{queue.\-c}!P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push@{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push}}
+\hypertarget{queue_8c_a3c2dbb18469ad4e77188667a7efc665a}{\index{queue.\-c@{queue.\-c}!P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push@{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push}}
 \index{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push@{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push}!queue.c@{queue.\-c}}
 \subsubsection[{P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-ready\-\_\-queue\-\_\-push (
 \begin{DoxyParamCaption}
 \item[{{\bf P\-I\-C\-C\-\_\-\-Ready\-Queue} $\ast$}]{rq, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt}
 \end{DoxyParamCaption}
-)}}\label{queue_8c_adf821a0f453dd3c5ae96d592a41eb1ee}
+)}}\label{queue_8c_a3c2dbb18469ad4e77188667a7efc665a}
 Pushes a Pi\-Thread on the given ready queue.
 
 
@@ -239,15 +237,14 @@ W\-A\-R\-N\-I\-N\-G\-: W\-H\-Y T\-H\-E P\-O\-P I\-S T\-A\-K\-I\-N\-G T\-H\-E E\-
 {\em wq} & Wait queue \\
 \hline
 \end{DoxyParams}
-\hypertarget{queue_8c_a7c2435775e8bbccc6a1d66342bc71194}{\index{queue.\-c@{queue.\-c}!P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push}}
+\hypertarget{queue_8c_aff54e61ffe4a99548d94fd620622d28f}{\index{queue.\-c@{queue.\-c}!P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push}}
 \index{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push@{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push}!queue.c@{queue.\-c}}
 \subsubsection[{P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-wait\-\_\-queue\-\_\-push (
 \begin{DoxyParamCaption}
 \item[{{\bf P\-I\-C\-C\-\_\-\-Wait\-Queue} $\ast$}]{wq, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt}
 \end{DoxyParamCaption}
-)}}\label{queue_8c_a7c2435775e8bbccc6a1d66342bc71194}
+)}}\label{queue_8c_aff54e61ffe4a99548d94fd620622d28f}
 Pushes a Pi\-Thread on the given wait queue.
 
 

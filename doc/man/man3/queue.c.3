@@ -1,4 +1,4 @@
-.TH "src/queue.c" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.TH "src/queue.c" 3 "Fri Feb 8 2013" "PiThread" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,10 +15,10 @@ src/queue.c \-
 
 .in +1c
 .ti -1c
-.RI "#define \fBLOCK_QUEUE\fP(q)   \fBPICC_acquire\fP(q->lock);"
+.RI "#define \fBLOCK_QUEUE\fP(q)   \fBPICC_acquire\fP(&(q->lock));"
 .br
 .ti -1c
-.RI "#define \fBRELEASE_QUEUE\fP(q)   \fBPICC_release\fP(q->lock, NULL);"
+.RI "#define \fBRELEASE_QUEUE\fP(q)   \fBPICC_release\fP(&(q->lock));"
 .br
 .in -1c
 .SS "Functions"
@@ -31,10 +31,10 @@ src/queue.c \-
 .RI "\fBPICC_ReadyQueue\fP * \fBPICC_create_ready_queue\fP (\fBPICC_Error\fP *error)"
 .br
 .ti -1c
-.RI "void \fBPICC_ready_queue_push\fP (\fBPICC_ReadyQueue\fP *rq, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.RI "void \fBPICC_ready_queue_push\fP (\fBPICC_ReadyQueue\fP *rq, \fBPICC_PiThread\fP *pt)"
 .br
 .ti -1c
-.RI "void \fBPICC_ready_queue_add\fP (\fBPICC_ReadyQueue\fP *rq, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.RI "void \fBPICC_ready_queue_add\fP (\fBPICC_ReadyQueue\fP *rq, \fBPICC_PiThread\fP *pt)"
 .br
 .ti -1c
 .RI "\fBPICC_PiThread\fP * \fBPICC_ready_queue_pop\fP (\fBPICC_ReadyQueue\fP *rq)"
@@ -46,7 +46,7 @@ src/queue.c \-
 .RI "\fBPICC_WaitQueue\fP * \fBPICC_create_wait_queue\fP (\fBPICC_Error\fP *error)"
 .br
 .ti -1c
-.RI "void \fBPICC_wait_queue_push\fP (\fBPICC_WaitQueue\fP *wq, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.RI "void \fBPICC_wait_queue_push\fP (\fBPICC_WaitQueue\fP *wq, \fBPICC_PiThread\fP *pt)"
 .br
 .ti -1c
 .RI "\fBPICC_PiThread\fP * \fBPICC_wait_queue_fetch\fP (\fBPICC_WaitQueue\fP *wq, \fBPICC_PiThread\fP *pt)"
@@ -83,9 +83,9 @@ Maxence WO
 
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define LOCK_QUEUE(q)   \fBPICC_acquire\fP(q->lock);"
+.SS "#define LOCK_QUEUE(q)   \fBPICC_acquire\fP(&(q->lock));"
 
-.SS "#define RELEASE_QUEUE(q)   \fBPICC_release\fP(q->lock, NULL);"
+.SS "#define RELEASE_QUEUE(q)   \fBPICC_release\fP(&(q->lock));"
 
 .SH "Function Documentation"
 .PP 
@@ -116,7 +116,7 @@ Creates a new empty wait queue\&.
 .RE
 .PP
 
-.SS "void PICC_ready_queue_add (\fBPICC_ReadyQueue\fP *rq, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.SS "void PICC_ready_queue_add (\fBPICC_ReadyQueue\fP *rq, \fBPICC_PiThread\fP *pt)"
 Adds a PiThread at the end of the given ready queue\&.
 .PP
 \fBParameters:\fP
@@ -141,7 +141,7 @@ Popped PiThread
 .RE
 .PP
 
-.SS "void PICC_ready_queue_push (\fBPICC_ReadyQueue\fP *rq, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.SS "void PICC_ready_queue_push (\fBPICC_ReadyQueue\fP *rq, \fBPICC_PiThread\fP *pt)"
 Pushes a PiThread on the given ready queue\&.
 .PP
 \fBParameters:\fP
@@ -201,7 +201,7 @@ WARNING: WHY THE POP IS TAKING THE END OF THE QUEUE AND NOT THE HEAD ?
 .RE
 .PP
 
-.SS "void PICC_wait_queue_push (\fBPICC_WaitQueue\fP *wq, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.SS "void PICC_wait_queue_push (\fBPICC_WaitQueue\fP *wq, \fBPICC_PiThread\fP *pt)"
 Pushes a PiThread on the given wait queue\&.
 .PP
 \fBParameters:\fP

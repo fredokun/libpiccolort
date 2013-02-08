@@ -24,6 +24,7 @@
   <td style="padding-left: 0.5em;">
    <div id="projectname">PiThread
    </div>
+   <div id="projectbrief">A Stackless Runtime Environment for a Pi-calculus</div>
   </td>
  </tr>
  </tbody>
@@ -96,11 +97,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a114502be78de7a46f79de097c24fcbbf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scheduler_8c.html#a114502be78de7a46f79de097c24fcbbf">LOCK_SCHED_POOL</a>(sp)&#160;&#160;&#160;<a class="el" href="sync_8c.html#ad533486752c5f9d3dd499a06288f31ab">PICC_acquire</a>(sp-&gt;lock);</td></tr>
+<tr class="memitem:a114502be78de7a46f79de097c24fcbbf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scheduler_8c.html#a114502be78de7a46f79de097c24fcbbf">LOCK_SCHED_POOL</a>(sp)&#160;&#160;&#160;<a class="el" href="sync_8c.html#aa27397e8ad870b7b7ae763a71009be13">PICC_acquire</a>(&amp;(sp-&gt;lock));</td></tr>
 <tr class="separator:a114502be78de7a46f79de097c24fcbbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32cfe95d325ff82d0ab33bd7482816b6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scheduler_8c.html#a32cfe95d325ff82d0ab33bd7482816b6">RELEASE_SCHED_POOL</a>(sp)&#160;&#160;&#160;<a class="el" href="sync_8c.html#a0a6cdd715fc6aba7327880215401fa71">PICC_release</a>(sp-&gt;lock, NULL);</td></tr>
+<tr class="memitem:a32cfe95d325ff82d0ab33bd7482816b6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scheduler_8c.html#a32cfe95d325ff82d0ab33bd7482816b6">RELEASE_SCHED_POOL</a>(sp)&#160;&#160;&#160;<a class="el" href="sync_8c.html#ad5a8707a554e73b819db9986b371aca0">PICC_release</a>(&amp;(sp-&gt;lock));</td></tr>
 <tr class="separator:a32cfe95d325ff82d0ab33bd7482816b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77f0fdb4f9c1472c7361ad7b60d1cb20"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scheduler_8c.html#a77f0fdb4f9c1472c7361ad7b60d1cb20">WAIT_SCHED_POOL</a>(sp)&#160;&#160;&#160;<a class="el" href="sync_8c.html#afc97dc4dafa74e0e3c2a47bc16b03927">PICC_cond_wait</a>(sp-&gt;cond, sp-&gt;lock);</td></tr>
+<tr class="memitem:a77f0fdb4f9c1472c7361ad7b60d1cb20"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="scheduler_8c.html#a77f0fdb4f9c1472c7361ad7b60d1cb20">WAIT_SCHED_POOL</a>(sp)&#160;&#160;&#160;<a class="el" href="sync_8c.html#aaad4930f81e40868d898bd94105e60e2">PICC_cond_wait</a>(&amp;(sp-&gt;cond), &amp;(sp-&gt;lock));</td></tr>
 <tr class="separator:a77f0fdb4f9c1472c7361ad7b60d1cb20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -130,7 +131,7 @@ Mickaël MENU </dd></dl>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">sp</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="sync_8c.html#ad533486752c5f9d3dd499a06288f31ab">PICC_acquire</a>(sp-&gt;lock);</td>
+          <td>&#160;&#160;&#160;<a class="el" href="sync_8c.html#aa27397e8ad870b7b7ae763a71009be13">PICC_acquire</a>(&amp;(sp-&gt;lock));</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -146,7 +147,7 @@ Mickaël MENU </dd></dl>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">sp</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="sync_8c.html#a0a6cdd715fc6aba7327880215401fa71">PICC_release</a>(sp-&gt;lock, NULL);</td>
+          <td>&#160;&#160;&#160;<a class="el" href="sync_8c.html#ad5a8707a554e73b819db9986b371aca0">PICC_release</a>(&amp;(sp-&gt;lock));</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -162,7 +163,7 @@ Mickaël MENU </dd></dl>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">sp</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="sync_8c.html#afc97dc4dafa74e0e3c2a47bc16b03927">PICC_cond_wait</a>(sp-&gt;cond, sp-&gt;lock);</td>
+          <td>&#160;&#160;&#160;<a class="el" href="sync_8c.html#aaad4930f81e40868d898bd94105e60e2">PICC_cond_wait</a>(&amp;(sp-&gt;cond), &amp;(sp-&gt;lock));</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -317,7 +318,7 @@ Mickaël MENU </dd></dl>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 25 2013 14:42:42 for PiThread by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 8 2013 15:26:10 for PiThread by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3
 </small></address>

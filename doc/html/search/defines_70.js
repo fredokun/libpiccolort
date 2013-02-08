@@ -15,5 +15,6 @@ var searchData=
   ['picc_5fset_5fiter',['PICC_SET_ITER',['../set_8h.html#ae88aad41b6bdd753ad97e40d00e9d519',1,'set.h']]],
   ['picc_5fset_5fmap',['PICC_SET_MAP',['../set_8h.html#a045ebdfc980cfdb44f0f6fa32db3a1fb',1,'set.h']]],
   ['picc_5fset_5fmem',['PICC_SET_MEM',['../set_8h.html#aac7dde8a161b3dc7f8453adadfa5bd08',1,'set.h']]],
-  ['print_5ferror',['PRINT_ERROR',['../error_8h.html#ab4779f5c266b44230237e6c6eb367508',1,'error.h']]]
+  ['print_5ferror',['PRINT_ERROR',['../error_8h.html#ab4779f5c266b44230237e6c6eb367508',1,'error.h']]],
+  ['print_5fnew_5ferror',['PRINT_NEW_ERROR',['../error_8h.html#a13df6c0e6bc62ba9c317306129028729',1,'error.h']]]
 ];

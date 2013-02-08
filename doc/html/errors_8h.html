@@ -24,6 +24,7 @@
   <td style="padding-left: 0.5em;">
    <div id="projectname">PiThread
    </div>
+   <div id="projectbrief">A Stackless Runtime Environment for a Pi-calculus</div>
   </td>
  </tr>
  </tbody>
@@ -131,14 +132,16 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aa2491d8392e7452e4b01d450a3f9c4c4">ERR_CLOCK_CREATE</a>, 
 <a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a8cff09c1a45670695e072f504c06bdb0">ERR_MUTEX_ALREADY_UNLOCKED</a>, 
 <a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a7e53cf240a80073b57ae0cce6fee4b1d">ERR_NULLPOINTER_PITHREAD</a>, 
-<a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a4e483ce125583f726a0172ec2600f43c">ERR_NULLPOINTER_COMMIT</a>, 
+<a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a4dc084dfa12b310fe94e2d31c3295b09">ERR_NULLPOINTER_CHANNEL</a>, 
 <br/>
-&#160;&#160;<a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a49b18cd5b6062ac5a8ff607365e91a09">ERR_NULLPOINTER_COMMITLISTELEM</a>, 
+&#160;&#160;<a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a4e483ce125583f726a0172ec2600f43c">ERR_NULLPOINTER_COMMIT</a>, 
+<a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a49b18cd5b6062ac5a8ff607365e91a09">ERR_NULLPOINTER_COMMITLISTELEM</a>, 
 <a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a97fb80c3b3e6cc09ecb6f30bcd198d9d">ERR_NULLPOINTER_COMMITLIST</a>, 
-<a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a60ea803493c5f78fa70403974eb71391">ERR_INVALID_COMMIT</a>, 
-<a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aaf3dbe84c7c20836efec5bff373bb1ef">ERR_INVALID_VALUE</a>, 
+<a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a5d20e2be0977ab49b2795ef720059d82">ERR_CHANNEL_GLOBAL_RC</a>, 
 <br/>
-&#160;&#160;<a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ae00baeb1e4ac53698e23b4ca9db24ca1">ERR_INVALID_TYPE</a>
+&#160;&#160;<a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a60ea803493c5f78fa70403974eb71391">ERR_INVALID_COMMIT</a>, 
+<a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aaf3dbe84c7c20836efec5bff373bb1ef">ERR_INVALID_VALUE</a>, 
+<a class="el" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ae00baeb1e4ac53698e23b4ca9db24ca1">ERR_INVALID_TYPE</a>
 <br/>
  }</td></tr>
 <tr class="separator:a9c1e47db6d7c91cf096eaecd0eb79b64"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,7 +150,9 @@ Enumerations</h2></td></tr>
 <div class="textblock"><p>List of errors that can occur in the runtime.</p>
 <p>This project is released under MIT License.</p>
 <p> </p>
-<dl class="section author"><dt>Author</dt><dd>Mickaël MENU </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>Mickaël MENU </dd>
+<dd>
+Dany SIRIPHOL </dd></dl>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="aa3d70a6e7e623d625df94812449c2bb5"></a>
 <div class="memitem">
@@ -228,11 +233,15 @@ Enumerations</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a9c1e47db6d7c91cf096eaecd0eb79b64a7e53cf240a80073b57ae0cce6fee4b1d"></a>ERR_NULLPOINTER_PITHREAD</em>&nbsp;</td><td class="fielddoc">
 </td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a9c1e47db6d7c91cf096eaecd0eb79b64a4dc084dfa12b310fe94e2d31c3295b09"></a>ERR_NULLPOINTER_CHANNEL</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a9c1e47db6d7c91cf096eaecd0eb79b64a4e483ce125583f726a0172ec2600f43c"></a>ERR_NULLPOINTER_COMMIT</em>&nbsp;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a9c1e47db6d7c91cf096eaecd0eb79b64a49b18cd5b6062ac5a8ff607365e91a09"></a>ERR_NULLPOINTER_COMMITLISTELEM</em>&nbsp;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a9c1e47db6d7c91cf096eaecd0eb79b64a97fb80c3b3e6cc09ecb6f30bcd198d9d"></a>ERR_NULLPOINTER_COMMITLIST</em>&nbsp;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a9c1e47db6d7c91cf096eaecd0eb79b64a5d20e2be0977ab49b2795ef720059d82"></a>ERR_CHANNEL_GLOBAL_RC</em>&nbsp;</td><td class="fielddoc">
 </td></tr>
 <tr><td class="fieldname"><em><a class="anchor" id="a9c1e47db6d7c91cf096eaecd0eb79b64a60ea803493c5f78fa70403974eb71391"></a>ERR_INVALID_COMMIT</em>&nbsp;</td><td class="fielddoc">
 </td></tr>
@@ -247,7 +256,7 @@ Enumerations</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 25 2013 14:42:40 for PiThread by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 8 2013 15:26:07 for PiThread by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3
 </small></address>

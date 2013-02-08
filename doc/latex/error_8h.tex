@@ -27,6 +27,10 @@ struct \hyperlink{struct__PICC__Error}{\-\_\-\-P\-I\-C\-C\-\_\-\-Error}
 \#define \hyperlink{error_8h_a2577c3962ca381dd5bd9b19bf990282c}{C\-R\-A\-S\-H}(error)~\hyperlink{error_8c_a51ed14520354a1a21395c75d9a87431e}{P\-I\-C\-C\-\_\-crash}(error, \-\_\-\-\_\-\-F\-I\-L\-E\-\_\-\-\_\-, \-\_\-\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-)
 \item 
 \#define \hyperlink{error_8h_ab4779f5c266b44230237e6c6eb367508}{P\-R\-I\-N\-T\-\_\-\-E\-R\-R\-O\-R}(error)~\hyperlink{error_8c_a36182df99b874e1933ab960f505e41c1}{P\-I\-C\-C\-\_\-print\-\_\-error}(error, \-\_\-\-\_\-\-F\-I\-L\-E\-\_\-\-\_\-, \-\_\-\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-)
+\item 
+\#define \hyperlink{error_8h_aa7b7b36bed8738c8537858b668715929}{C\-R\-A\-S\-H\-\_\-\-N\-E\-W\-\_\-\-E\-R\-R\-O\-R}(id)
+\item 
+\#define \hyperlink{error_8h_a13df6c0e6bc62ba9c317306129028729}{P\-R\-I\-N\-T\-\_\-\-N\-E\-W\-\_\-\-E\-R\-R\-O\-R}(id)
 \end{DoxyCompactItemize}
 \subsection*{Typedefs}
 \begin{DoxyCompactItemize}
@@ -101,6 +105,19 @@ Mickaël M\-E\-N\-U
 \item[{}]{error}
 \end{DoxyParamCaption}
 )~{\bf P\-I\-C\-C\-\_\-crash}(error, \-\_\-\-\_\-\-F\-I\-L\-E\-\_\-\-\_\-, \-\_\-\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-)}}\label{error_8h_a2577c3962ca381dd5bd9b19bf990282c}
+\hypertarget{error_8h_aa7b7b36bed8738c8537858b668715929}{\index{error.\-h@{error.\-h}!C\-R\-A\-S\-H\-\_\-\-N\-E\-W\-\_\-\-E\-R\-R\-O\-R@{C\-R\-A\-S\-H\-\_\-\-N\-E\-W\-\_\-\-E\-R\-R\-O\-R}}
+\index{C\-R\-A\-S\-H\-\_\-\-N\-E\-W\-\_\-\-E\-R\-R\-O\-R@{C\-R\-A\-S\-H\-\_\-\-N\-E\-W\-\_\-\-E\-R\-R\-O\-R}!error.h@{error.\-h}}
+\subsubsection[{C\-R\-A\-S\-H\-\_\-\-N\-E\-W\-\_\-\-E\-R\-R\-O\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define C\-R\-A\-S\-H\-\_\-\-N\-E\-W\-\_\-\-E\-R\-R\-O\-R(
+\begin{DoxyParamCaption}
+\item[{}]{id}
+\end{DoxyParamCaption}
+)}}\label{error_8h_aa7b7b36bed8738c8537858b668715929}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+\hyperlink{error_8h_ac3b5003ad1104904243367e553b726d8}{ALLOC\_ERROR}(error); \(\backslash\)
+    NEW\_ERROR(&error, \textcolor{keywordtype}{id}); \(\backslash\)
+    CRASH(&error);
+\end{DoxyCode}
 \hypertarget{error_8h_aa8494821bf0f83f60c1d29675d6efd1d}{\index{error.\-h@{error.\-h}!F\-O\-R\-W\-A\-R\-D\-\_\-\-E\-R\-R\-O\-R@{F\-O\-R\-W\-A\-R\-D\-\_\-\-E\-R\-R\-O\-R}}
 \index{F\-O\-R\-W\-A\-R\-D\-\_\-\-E\-R\-R\-O\-R@{F\-O\-R\-W\-A\-R\-D\-\_\-\-E\-R\-R\-O\-R}!error.h@{error.\-h}}
 \subsubsection[{F\-O\-R\-W\-A\-R\-D\-\_\-\-E\-R\-R\-O\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define F\-O\-R\-W\-A\-R\-D\-\_\-\-E\-R\-R\-O\-R(
@@ -131,6 +148,19 @@ Mickaël M\-E\-N\-U
 \item[{}]{error}
 \end{DoxyParamCaption}
 )~{\bf P\-I\-C\-C\-\_\-print\-\_\-error}(error, \-\_\-\-\_\-\-F\-I\-L\-E\-\_\-\-\_\-, \-\_\-\-\_\-\-F\-U\-N\-C\-T\-I\-O\-N\-\_\-\-\_\-)}}\label{error_8h_ab4779f5c266b44230237e6c6eb367508}
+\hypertarget{error_8h_a13df6c0e6bc62ba9c317306129028729}{\index{error.\-h@{error.\-h}!P\-R\-I\-N\-T\-\_\-\-N\-E\-W\-\_\-\-E\-R\-R\-O\-R@{P\-R\-I\-N\-T\-\_\-\-N\-E\-W\-\_\-\-E\-R\-R\-O\-R}}
+\index{P\-R\-I\-N\-T\-\_\-\-N\-E\-W\-\_\-\-E\-R\-R\-O\-R@{P\-R\-I\-N\-T\-\_\-\-N\-E\-W\-\_\-\-E\-R\-R\-O\-R}!error.h@{error.\-h}}
+\subsubsection[{P\-R\-I\-N\-T\-\_\-\-N\-E\-W\-\_\-\-E\-R\-R\-O\-R}]{\setlength{\rightskip}{0pt plus 5cm}\#define P\-R\-I\-N\-T\-\_\-\-N\-E\-W\-\_\-\-E\-R\-R\-O\-R(
+\begin{DoxyParamCaption}
+\item[{}]{id}
+\end{DoxyParamCaption}
+)}}\label{error_8h_a13df6c0e6bc62ba9c317306129028729}
+{\bfseries Value\-:}
+\begin{DoxyCode}
+\hyperlink{error_8h_ac3b5003ad1104904243367e553b726d8}{ALLOC\_ERROR}(error); \(\backslash\)
+    NEW\_ERROR(&error, \textcolor{keywordtype}{id}); \(\backslash\)
+    PRINT\_ERROR(&error);
+\end{DoxyCode}
 
 
 \subsection{Typedef Documentation}

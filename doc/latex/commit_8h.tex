@@ -2,6 +2,7 @@
 \label{commit_8h}\index{include/commit.\-h@{include/commit.\-h}}
 }
 {\ttfamily \#include $<$pi\-\_\-thread.\-h$>$}\\*
+{\ttfamily \#include $<$symbols.\-h$>$}\\*
 {\ttfamily \#include $<$channel.\-h$>$}\\*
 {\ttfamily \#include $<$value.\-h$>$}\\*
 {\ttfamily \#include $<$error.\-h$>$}\\*
@@ -25,6 +26,8 @@ typedef struct \hyperlink{struct__PICC__Value}{\-\_\-\-P\-I\-C\-C\-\_\-\-Value} 
 \item 
 typedef enum \hyperlink{commit_8h_a5376f03680bdea1adab9e810d0e58a09}{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Type} \hyperlink{commit_8h_a2293a8e8b20ef3f60159b32fb2ac6d45}{P\-I\-C\-C\-\_\-\-Commit\-Type}
 \item 
+typedef enum \hyperlink{commit_8h_ae02c3ef906a0c629225851fce977eecd}{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Status} \hyperlink{commit_8h_a39658cf12e5d8e50b2f6ac4586bd3e80}{P\-I\-C\-C\-\_\-\-Commit\-Status}
+\item 
 typedef struct \hyperlink{struct__PICC__InCommit}{\-\_\-\-P\-I\-C\-C\-\_\-\-In\-Commit} \hyperlink{commit_8h_a0f71a22c7590232b08181e5cc63de548}{P\-I\-C\-C\-\_\-\-In\-Commit}
 \item 
 typedef struct \hyperlink{struct__PICC__OutCommit}{\-\_\-\-P\-I\-C\-C\-\_\-\-Out\-Commit} \hyperlink{commit_8h_aecc9149969ed6c8695575a3c520b5bf2}{P\-I\-C\-C\-\_\-\-Out\-Commit}
@@ -42,6 +45,11 @@ typedef struct \hyperlink{struct__PICC__CommitList}{\-\_\-\-P\-I\-C\-C\-\_\-\-Co
 enum \hyperlink{commit_8h_a5376f03680bdea1adab9e810d0e58a09}{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Type} \{ \hyperlink{commit_8h_a5376f03680bdea1adab9e810d0e58a09af92f950d2191ccfa795003012108452d}{P\-I\-C\-C\-\_\-\-I\-N\-\_\-\-C\-O\-M\-M\-I\-T}, 
 \hyperlink{commit_8h_a5376f03680bdea1adab9e810d0e58a09ac217bbefac1e6fb6b692d849eed73976}{P\-I\-C\-C\-\_\-\-O\-U\-T\-\_\-\-C\-O\-M\-M\-I\-T}
  \}
+\item 
+enum \hyperlink{commit_8h_ae02c3ef906a0c629225851fce977eecd}{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Status} \{ \hyperlink{commit_8h_ae02c3ef906a0c629225851fce977eecdabf9fe953edef176b50e6b6a303f3fbdd}{P\-I\-C\-C\-\_\-\-C\-A\-N\-N\-O\-T\-\_\-\-A\-C\-Q\-U\-I\-R\-E}, 
+\hyperlink{commit_8h_ae02c3ef906a0c629225851fce977eecdacec18e9547b46055c3ad336cb23d1248}{P\-I\-C\-C\-\_\-\-V\-A\-L\-I\-D\-\_\-\-C\-O\-M\-M\-I\-T}, 
+\hyperlink{commit_8h_ae02c3ef906a0c629225851fce977eecdabaae52b671b405e5b98049cfbdf78d30}{P\-I\-C\-C\-\_\-\-I\-N\-V\-A\-L\-I\-D\-\_\-\-C\-O\-M\-M\-I\-T}
+ \}
 \end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
@@ -52,17 +60,19 @@ enum \hyperlink{commit_8h_a5376f03680bdea1adab9e810d0e58a09}{\-\_\-\-P\-I\-C\-C\
 \item 
 \hyperlink{commit_8h_ab8090c3a82dc75b4dea9bb9015a95f71}{P\-I\-C\-C\-\_\-\-Commit\-List\-Element} $\ast$ \hyperlink{commit_8h_a1da34879d65783717f4d61fcb05c035d}{P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list\-\_\-element} (\hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$commit, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
 \item 
-void \hyperlink{commit_8h_aa038f8233023ccfcd796507414060ad0}{P\-I\-C\-C\-\_\-register\-\_\-ouput\-\_\-commitment} (struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$p, struct \hyperlink{struct__PICC__Channel}{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel} $\ast$ch, \hyperlink{commit_8h_ad2bb1ba499a64c4eb87962523a3957ab}{P\-I\-C\-C\-\_\-\-Eval\-Function} $\ast$eval, int cont\-\_\-pc, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+void \hyperlink{commit_8h_a2e7c0a735a7a85b3812e50378e4f7959}{P\-I\-C\-C\-\_\-register\-\_\-output\-\_\-commitment} (struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$p, struct \hyperlink{struct__PICC__Channel}{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel} $\ast$ch, \hyperlink{commit_8h_ad2bb1ba499a64c4eb87962523a3957ab}{P\-I\-C\-C\-\_\-\-Eval\-Function} $\ast$eval, \hyperlink{symbols_8h_ae23ad6ae115253385182f5a898d32c1e}{P\-I\-C\-C\-\_\-\-Label} cont\-\_\-pc)
 \item 
-void \hyperlink{commit_8h_a75027e7efb71dadd2be75bc79765b1ed}{P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment} (struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$p, struct \hyperlink{struct__PICC__Channel}{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel} $\ast$ch, int refvar, int cont\-\_\-pc, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+void \hyperlink{commit_8h_a9dcd149822fbf41b5204466edcc41352}{P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment} (struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$p, struct \hyperlink{struct__PICC__Channel}{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel} $\ast$ch, int refvar, \hyperlink{symbols_8h_ae23ad6ae115253385182f5a898d32c1e}{P\-I\-C\-C\-\_\-\-Label} cont\-\_\-pc)
 \item 
 bool \hyperlink{commit_8h_a788a62f62f706ba5515d34caff7b807f}{P\-I\-C\-C\-\_\-is\-\_\-valid\-\_\-commit} (\hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$commit)
 \item 
+bool \hyperlink{commit_8h_a2b9d94fd601547d2b324f40554b9ff55}{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-is\-\_\-empty} (\hyperlink{commit_8h_a37cd2f3bb38335c72e326d9ed4869c4f}{P\-I\-C\-C\-\_\-\-Commit\-List} $\ast$clist)
+\item 
 void \hyperlink{commit_8h_aba911bc83d3aa24c109c253519f7865e}{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-add} (\hyperlink{commit_8h_a37cd2f3bb38335c72e326d9ed4869c4f}{P\-I\-C\-C\-\_\-\-Commit\-List} $\ast$clist, \hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$c, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
 \item 
-\hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$ \hyperlink{commit_8h_a57ba642a1ef551b5f78a194a86b20f76}{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch} (\hyperlink{commit_8h_a37cd2f3bb38335c72e326d9ed4869c4f}{P\-I\-C\-C\-\_\-\-Commit\-List} $\ast$clist)
+\hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$ \hyperlink{commit_8h_a976ad3e206d80cf5fca06db5d43a7305}{P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment} (struct \hyperlink{struct__PICC__Channel}{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel} $\ast$ch)
 \item 
-\hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$ \hyperlink{commit_8h_a828292647094ed240754f0b01fcdde47}{P\-I\-C\-C\-\_\-fetch\-\_\-commitment} (struct \hyperlink{struct__PICC__Channel}{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel} $\ast$ch, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\hyperlink{commit_8h_a655097bbaf0e81713b6d9336948c211c}{P\-I\-C\-C\-\_\-\-Commit} $\ast$ \hyperlink{commit_8h_a432e19b6c07a565be9be57381fe31a3a}{P\-I\-C\-C\-\_\-fetch\-\_\-output\-\_\-commitment} (struct \hyperlink{struct__PICC__Channel}{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel} $\ast$ch)
 \end{DoxyCompactItemize}
 
 
@@ -82,13 +92,16 @@ Maxence W\-O
 \hypertarget{commit_8h_a655097bbaf0e81713b6d9336948c211c}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-\-Commit@{P\-I\-C\-C\-\_\-\-Commit}}
 \index{P\-I\-C\-C\-\_\-\-Commit@{P\-I\-C\-C\-\_\-\-Commit}!commit.h@{commit.\-h}}
 \subsubsection[{P\-I\-C\-C\-\_\-\-Commit}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Commit}  {\bf P\-I\-C\-C\-\_\-\-Commit}}}\label{commit_8h_a655097bbaf0e81713b6d9336948c211c}
-The commitment common part \hypertarget{commit_8h_a37cd2f3bb38335c72e326d9ed4869c4f}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-\-Commit\-List@{P\-I\-C\-C\-\_\-\-Commit\-List}}
+The commitment common part  type != null \&\& thread != null \&\& clock != null \&\& clockval != null \&\& channel != null \&\& content != null  cont\-\_\-pc $>$ 0 \hypertarget{commit_8h_a37cd2f3bb38335c72e326d9ed4869c4f}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-\-Commit\-List@{P\-I\-C\-C\-\_\-\-Commit\-List}}
 \index{P\-I\-C\-C\-\_\-\-Commit\-List@{P\-I\-C\-C\-\_\-\-Commit\-List}!commit.h@{commit.\-h}}
 \subsubsection[{P\-I\-C\-C\-\_\-\-Commit\-List}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-List}  {\bf P\-I\-C\-C\-\_\-\-Commit\-List}}}\label{commit_8h_a37cd2f3bb38335c72e326d9ed4869c4f}
-The commit list type \hypertarget{commit_8h_ab8090c3a82dc75b4dea9bb9015a95f71}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-\-Commit\-List\-Element@{P\-I\-C\-C\-\_\-\-Commit\-List\-Element}}
+The commit list type  if size = 0, $\ast$head = N\-U\-L\-L \&\& $\ast$tail = N\-U\-L\-L  \hypertarget{commit_8h_ab8090c3a82dc75b4dea9bb9015a95f71}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-\-Commit\-List\-Element@{P\-I\-C\-C\-\_\-\-Commit\-List\-Element}}
 \index{P\-I\-C\-C\-\_\-\-Commit\-List\-Element@{P\-I\-C\-C\-\_\-\-Commit\-List\-Element}!commit.h@{commit.\-h}}
 \subsubsection[{P\-I\-C\-C\-\_\-\-Commit\-List\-Element}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-List\-Element}  {\bf P\-I\-C\-C\-\_\-\-Commit\-List\-Element}}}\label{commit_8h_ab8090c3a82dc75b4dea9bb9015a95f71}
-The type of an element of a commit list \hypertarget{commit_8h_a2293a8e8b20ef3f60159b32fb2ac6d45}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-\-Commit\-Type@{P\-I\-C\-C\-\_\-\-Commit\-Type}}
+The type of an element of a commit list \hypertarget{commit_8h_a39658cf12e5d8e50b2f6ac4586bd3e80}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-\-Commit\-Status@{P\-I\-C\-C\-\_\-\-Commit\-Status}}
+\index{P\-I\-C\-C\-\_\-\-Commit\-Status@{P\-I\-C\-C\-\_\-\-Commit\-Status}!commit.h@{commit.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Commit\-Status}]{\setlength{\rightskip}{0pt plus 5cm}typedef enum {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Status}  {\bf P\-I\-C\-C\-\_\-\-Commit\-Status}}}\label{commit_8h_a39658cf12e5d8e50b2f6ac4586bd3e80}
+The status of the commitment \hypertarget{commit_8h_a2293a8e8b20ef3f60159b32fb2ac6d45}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-\-Commit\-Type@{P\-I\-C\-C\-\_\-\-Commit\-Type}}
 \index{P\-I\-C\-C\-\_\-\-Commit\-Type@{P\-I\-C\-C\-\_\-\-Commit\-Type}!commit.h@{commit.\-h}}
 \subsubsection[{P\-I\-C\-C\-\_\-\-Commit\-Type}]{\setlength{\rightskip}{0pt plus 5cm}typedef enum {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Type}  {\bf P\-I\-C\-C\-\_\-\-Commit\-Type}}}\label{commit_8h_a2293a8e8b20ef3f60159b32fb2ac6d45}
 The type of the commitment \hypertarget{commit_8h_ad2bb1ba499a64c4eb87962523a3957ab}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-\-Eval\-Function@{P\-I\-C\-C\-\_\-\-Eval\-Function}}
@@ -100,9 +113,23 @@ T\-O\-D\-O see spec \hypertarget{commit_8h_a0f71a22c7590232b08181e5cc63de548}{\i
 The input commitment specific part \hypertarget{commit_8h_aecc9149969ed6c8695575a3c520b5bf2}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-\-Out\-Commit@{P\-I\-C\-C\-\_\-\-Out\-Commit}}
 \index{P\-I\-C\-C\-\_\-\-Out\-Commit@{P\-I\-C\-C\-\_\-\-Out\-Commit}!commit.h@{commit.\-h}}
 \subsubsection[{P\-I\-C\-C\-\_\-\-Out\-Commit}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Out\-Commit}  {\bf P\-I\-C\-C\-\_\-\-Out\-Commit}}}\label{commit_8h_aecc9149969ed6c8695575a3c520b5bf2}
-The output commitment specific part 
+The output commitment specific part  eval\-\_\-func != null 
 
 \subsection{Enumeration Type Documentation}
+\hypertarget{commit_8h_ae02c3ef906a0c629225851fce977eecd}{\index{commit.\-h@{commit.\-h}!\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Status@{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Status}}
+\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Status@{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Status}!commit.h@{commit.\-h}}
+\subsubsection[{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Status}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Status}}}\label{commit_8h_ae02c3ef906a0c629225851fce977eecd}
+The status of the commitment \begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{P\-I\-C\-C\-\_\-\-C\-A\-N\-N\-O\-T\-\_\-\-A\-C\-Q\-U\-I\-R\-E@{P\-I\-C\-C\-\_\-\-C\-A\-N\-N\-O\-T\-\_\-\-A\-C\-Q\-U\-I\-R\-E}!commit.\-h@{commit.\-h}}\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-\-C\-A\-N\-N\-O\-T\-\_\-\-A\-C\-Q\-U\-I\-R\-E@{P\-I\-C\-C\-\_\-\-C\-A\-N\-N\-O\-T\-\_\-\-A\-C\-Q\-U\-I\-R\-E}}\item[{\em 
+\hypertarget{commit_8h_ae02c3ef906a0c629225851fce977eecdabf9fe953edef176b50e6b6a303f3fbdd}{P\-I\-C\-C\-\_\-\-C\-A\-N\-N\-O\-T\-\_\-\-A\-C\-Q\-U\-I\-R\-E}\label{commit_8h_ae02c3ef906a0c629225851fce977eecdabf9fe953edef176b50e6b6a303f3fbdd}
+}]\index{P\-I\-C\-C\-\_\-\-V\-A\-L\-I\-D\-\_\-\-C\-O\-M\-M\-I\-T@{P\-I\-C\-C\-\_\-\-V\-A\-L\-I\-D\-\_\-\-C\-O\-M\-M\-I\-T}!commit.\-h@{commit.\-h}}\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-\-V\-A\-L\-I\-D\-\_\-\-C\-O\-M\-M\-I\-T@{P\-I\-C\-C\-\_\-\-V\-A\-L\-I\-D\-\_\-\-C\-O\-M\-M\-I\-T}}\item[{\em 
+\hypertarget{commit_8h_ae02c3ef906a0c629225851fce977eecdacec18e9547b46055c3ad336cb23d1248}{P\-I\-C\-C\-\_\-\-V\-A\-L\-I\-D\-\_\-\-C\-O\-M\-M\-I\-T}\label{commit_8h_ae02c3ef906a0c629225851fce977eecdacec18e9547b46055c3ad336cb23d1248}
+}]\index{P\-I\-C\-C\-\_\-\-I\-N\-V\-A\-L\-I\-D\-\_\-\-C\-O\-M\-M\-I\-T@{P\-I\-C\-C\-\_\-\-I\-N\-V\-A\-L\-I\-D\-\_\-\-C\-O\-M\-M\-I\-T}!commit.\-h@{commit.\-h}}\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-\-I\-N\-V\-A\-L\-I\-D\-\_\-\-C\-O\-M\-M\-I\-T@{P\-I\-C\-C\-\_\-\-I\-N\-V\-A\-L\-I\-D\-\_\-\-C\-O\-M\-M\-I\-T}}\item[{\em 
+\hypertarget{commit_8h_ae02c3ef906a0c629225851fce977eecdabaae52b671b405e5b98049cfbdf78d30}{P\-I\-C\-C\-\_\-\-I\-N\-V\-A\-L\-I\-D\-\_\-\-C\-O\-M\-M\-I\-T}\label{commit_8h_ae02c3ef906a0c629225851fce977eecdabaae52b671b405e5b98049cfbdf78d30}
+}]\end{description}
+\end{Desc}
 \hypertarget{commit_8h_a5376f03680bdea1adab9e810d0e58a09}{\index{commit.\-h@{commit.\-h}!\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Type@{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Type}}
 \index{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Type@{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Type}!commit.h@{commit.\-h}}
 \subsubsection[{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Type}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Type}}}\label{commit_8h_a5376f03680bdea1adab9e810d0e58a09}
@@ -138,22 +165,22 @@ Adds the given element at the end of the commit list.
 {\em error} & Error stack \\
 \hline
 \end{DoxyParams}
-\hypertarget{commit_8h_a57ba642a1ef551b5f78a194a86b20f76}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch@{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch}}
-\index{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch@{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch}!commit.h@{commit.\-h}}
-\subsubsection[{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Commit}$\ast$ P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch (
+\hypertarget{commit_8h_a2b9d94fd601547d2b324f40554b9ff55}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-is\-\_\-empty@{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-is\-\_\-empty}}
+\index{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-is\-\_\-empty@{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-is\-\_\-empty}!commit.h@{commit.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-is\-\_\-empty}]{\setlength{\rightskip}{0pt plus 5cm}bool P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-is\-\_\-empty (
 \begin{DoxyParamCaption}
 \item[{{\bf P\-I\-C\-C\-\_\-\-Commit\-List} $\ast$}]{clist}
 \end{DoxyParamCaption}
-)}}\label{commit_8h_a57ba642a1ef551b5f78a194a86b20f76}
-????????????????????
+)}}\label{commit_8h_a2b9d94fd601547d2b324f40554b9ff55}
+Returns whether a commit list is empty.
 
 
 \begin{DoxyParams}{Parameters}
-{\em clist} & ??????? \\
+{\em clist} & Commit list to check \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-???????????? 
+Whether the commit list is empty. 
 \end{DoxyReturn}
 \hypertarget{commit_8h_a3332c9bf70cd5b9122377c29227b4f50}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list@{P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list}}
 \index{P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list@{P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list}!commit.h@{commit.\-h}}
@@ -201,19 +228,54 @@ Created commit list element
 )}}\label{commit_8h_adab666e9d693a5f655c1f137a610ef64}
 Creates and returns a commitment.
 
+\begin{DoxyPostcond}{Postcondition}
+commit != null
+\end{DoxyPostcond}
 \begin{DoxyReturn}{Returns}
 Created commitment 
 \end{DoxyReturn}
-\hypertarget{commit_8h_a828292647094ed240754f0b01fcdde47}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-fetch\-\_\-commitment@{P\-I\-C\-C\-\_\-fetch\-\_\-commitment}}
-\index{P\-I\-C\-C\-\_\-fetch\-\_\-commitment@{P\-I\-C\-C\-\_\-fetch\-\_\-commitment}!commit.h@{commit.\-h}}
-\subsubsection[{P\-I\-C\-C\-\_\-fetch\-\_\-commitment}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Commit}$\ast$ P\-I\-C\-C\-\_\-fetch\-\_\-commitment (
+\hypertarget{commit_8h_a976ad3e206d80cf5fca06db5d43a7305}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment@{P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment}}
+\index{P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment@{P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment}!commit.h@{commit.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Commit}$\ast$ P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment (
 \begin{DoxyParamCaption}
-\item[{{\bf P\-I\-C\-C\-\_\-\-Channel} $\ast$}]{ch, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Channel} $\ast$}]{ch}
 \end{DoxyParamCaption}
-)}}\label{commit_8h_a828292647094ed240754f0b01fcdde47}
-Fetches a commit from a channel.
+)}}\label{commit_8h_a976ad3e206d80cf5fca06db5d43a7305}
+Fetches the first element of the input commit\-List from a channel.
 
+\begin{DoxyPrecond}{Precondition}
+ch != null
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+if(c-\/$>$incommits-\/$>$size $>$ 0 \&\& P\-I\-C\-C\-\_\-is\-\_\-valid\-\_\-commit(P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch(c-\/$>$incommits))) P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment(c) = P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch(c-\/$>$incommits) 
+
+if(c-\/$>$incommits-\/$>$size = 0 $|$$|$ !(P\-I\-C\-C\-\_\-is\-\_\-valid\-\_\-commit(P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch(c-\/$>$incommits)))) P\-I\-C\-C\-\_\-fetch\-\_\-input\-\_\-commitment(c) = null
+\end{DoxyPostcond}
+
+\begin{DoxyParams}{Parameters}
+{\em ch} & Channel to fetch the commit from \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Fetched commit 
+\end{DoxyReturn}
+\hypertarget{commit_8h_a432e19b6c07a565be9be57381fe31a3a}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-fetch\-\_\-output\-\_\-commitment@{P\-I\-C\-C\-\_\-fetch\-\_\-output\-\_\-commitment}}
+\index{P\-I\-C\-C\-\_\-fetch\-\_\-output\-\_\-commitment@{P\-I\-C\-C\-\_\-fetch\-\_\-output\-\_\-commitment}!commit.h@{commit.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-fetch\-\_\-output\-\_\-commitment}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Commit}$\ast$ P\-I\-C\-C\-\_\-fetch\-\_\-output\-\_\-commitment (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Channel} $\ast$}]{ch}
+\end{DoxyParamCaption}
+)}}\label{commit_8h_a432e19b6c07a565be9be57381fe31a3a}
+Fetches he first element of the output commit\-List from a channel
+
+\begin{DoxyPrecond}{Precondition}
+ch != null
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+if(c-\/$>$outcommits-\/$>$size $>$ 0 \&\& P\-I\-C\-C\-\_\-is\-\_\-valid\-\_\-commit(P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch(c-\/$>$outcommits))) P\-I\-C\-C\-\_\-fetch\-\_\-output\-\_\-commitment(c) = P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch(c-\/$>$outcommits) 
+
+if(c-\/$>$outcommits-\/$>$size = 0 $|$$|$ !(P\-I\-C\-C\-\_\-is\-\_\-valid\-\_\-commit(P\-I\-C\-C\-\_\-commit\-\_\-list\-\_\-fetch(c-\/$>$outcommits)))) P\-I\-C\-C\-\_\-fetch\-\_\-output\-\_\-commitment(c) = null
+\end{DoxyPostcond}
 
 \begin{DoxyParams}{Parameters}
 {\em ch} & Channel to fetch the commit from \\
@@ -231,6 +293,12 @@ Fetched commit
 )}}\label{commit_8h_a788a62f62f706ba5515d34caff7b807f}
 Verifies if the given commit is valid.
 
+\begin{DoxyPrecond}{Precondition}
+commit != null
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+if (commit-\/$>$clock == commit-\/$>$thread-\/$>$clock \&\& commit-\/$>$clockval == commit-\/$>$thread-\/$>$clock-\/$>$val) valid = true else valid = false
+\end{DoxyPostcond}
 
 \begin{DoxyParams}{Parameters}
 {\em commit} & Commit to validate \\
@@ -239,19 +307,38 @@ Verifies if the given commit is valid.
 \begin{DoxyReturn}{Returns}
 Whether the commit is valid 
 \end{DoxyReturn}
-\hypertarget{commit_8h_a75027e7efb71dadd2be75bc79765b1ed}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment@{P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment}}
+\hypertarget{commit_8h_a9dcd149822fbf41b5204466edcc41352}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment@{P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment}}
 \index{P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment@{P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment}!commit.h@{commit.\-h}}
 \subsubsection[{P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment (
 \begin{DoxyParamCaption}
 \item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt, }
 \item[{{\bf P\-I\-C\-C\-\_\-\-Channel} $\ast$}]{ch, }
 \item[{int}]{refvar, }
-\item[{int}]{cont\-\_\-pc, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Label}}]{cont\-\_\-pc}
 \end{DoxyParamCaption}
-)}}\label{commit_8h_a75027e7efb71dadd2be75bc79765b1ed}
+)}}\label{commit_8h_a9dcd149822fbf41b5204466edcc41352}
 Registers an input commit with given Pi\-Thread and channel.
 
+\begin{DoxyPrecond}{Precondition}
+pt != null \&\& ch != null \&\& cont\-\_\-pc $>$= 0
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+pt-\/$>$commits-\/$>$size(P\-I\-C\-C\-\_\-register\-\_\-input\-\_\-commitment(pt)) = pt-\/$>$commits-\/$>$size(pt) + 1 
+
+pt-\/$>$commits-\/$>$tail = commit 
+
+commit-\/$>$type = P\-I\-C\-C\-\_\-\-I\-N\-\_\-\-C\-O\-M\-M\-I\-T 
+
+commit-\/$>$content.\-in = in 
+
+commit-\/$>$thread = pt 
+
+commit-\/$>$channel = ch 
+
+commit-\/$>$cont\-\_\-pc = cont\-\_\-pc 
+
+in-\/$>$refvar = refvar
+\end{DoxyPostcond}
 
 \begin{DoxyParams}{Parameters}
 {\em pt} & Pi\-Thread associated with the commit \\
@@ -262,17 +349,47 @@ Registers an input commit with given Pi\-Thread and channel.
 \hline
 {\em cont\-\_\-pc} & Program counter \\
 \hline
-{\em error} & Error stack \\
+\end{DoxyParams}
+\hypertarget{commit_8h_a2e7c0a735a7a85b3812e50378e4f7959}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-register\-\_\-output\-\_\-commitment@{P\-I\-C\-C\-\_\-register\-\_\-output\-\_\-commitment}}
+\index{P\-I\-C\-C\-\_\-register\-\_\-output\-\_\-commitment@{P\-I\-C\-C\-\_\-register\-\_\-output\-\_\-commitment}!commit.h@{commit.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-register\-\_\-output\-\_\-commitment}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-register\-\_\-output\-\_\-commitment (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Channel} $\ast$}]{ch, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Eval\-Function} $\ast$}]{eval, }
+\item[{{\bf P\-I\-C\-C\-\_\-\-Label}}]{cont\-\_\-pc}
+\end{DoxyParamCaption}
+)}}\label{commit_8h_a2e7c0a735a7a85b3812e50378e4f7959}
+Registers an output commit with given Pi\-Thread and channel.
+
+\begin{DoxyPrecond}{Precondition}
+pt != null \&\& ch != null \&\& eval != null \&\& cont\-\_\-pc $>$= 0
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+pt-\/$>$commits-\/$>$size(P\-I\-C\-C\-\_\-register\-\_\-output\-\_\-commitment(pt)) = pt-\/$>$commits-\/$>$size(pt) + 1 
+
+pt-\/$>$commits-\/$>$tail = commit 
+
+commit-\/$>$type = P\-I\-C\-C\-\_\-\-O\-U\-T\-\_\-\-C\-O\-M\-M\-I\-T 
+
+commit-\/$>$content.\-out = out 
+
+commit-\/$>$thread = pt 
+
+commit-\/$>$channel = ch 
+
+commit-\/$>$cont\-\_\-pc = cont\-\_\-pc 
+
+out-\/$>$eval\-\_\-func = eval
+\end{DoxyPostcond}
+
+\begin{DoxyParams}{Parameters}
+{\em pt} & Pi\-Thread associated with the commit \\
+\hline
+{\em ch} & Channel used to create the commit \\
+\hline
+{\em eval} & Evaluation function \\
+\hline
+{\em cont\-\_\-pc} & Programm counter \\
 \hline
 \end{DoxyParams}
-\hypertarget{commit_8h_aa038f8233023ccfcd796507414060ad0}{\index{commit.\-h@{commit.\-h}!P\-I\-C\-C\-\_\-register\-\_\-ouput\-\_\-commitment@{P\-I\-C\-C\-\_\-register\-\_\-ouput\-\_\-commitment}}
-\index{P\-I\-C\-C\-\_\-register\-\_\-ouput\-\_\-commitment@{P\-I\-C\-C\-\_\-register\-\_\-ouput\-\_\-commitment}!commit.h@{commit.\-h}}
-\subsubsection[{P\-I\-C\-C\-\_\-register\-\_\-ouput\-\_\-commitment}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-register\-\_\-ouput\-\_\-commitment (
-\begin{DoxyParamCaption}
-\item[{struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{p, }
-\item[{struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Channel} $\ast$}]{ch, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Eval\-Function} $\ast$}]{eval, }
-\item[{int}]{cont\-\_\-pc, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
-\end{DoxyParamCaption}
-)}}\label{commit_8h_aa038f8233023ccfcd796507414060ad0}

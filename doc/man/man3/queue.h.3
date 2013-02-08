@@ -1,4 +1,4 @@
-.TH "include/queue.h" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.TH "include/queue.h" 3 "Fri Feb 8 2013" "PiThread" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -52,10 +52,10 @@ include/queue.h \-
 .RI "\fBPICC_ReadyQueue\fP * \fBPICC_create_ready_queue\fP (\fBPICC_Error\fP *error)"
 .br
 .ti -1c
-.RI "void \fBPICC_ready_queue_push\fP (\fBPICC_ReadyQueue\fP *rq, struct \fB_PICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.RI "void \fBPICC_ready_queue_push\fP (\fBPICC_ReadyQueue\fP *rq, struct \fB_PICC_PiThread\fP *pt)"
 .br
 .ti -1c
-.RI "void \fBPICC_ready_queue_add\fP (\fBPICC_ReadyQueue\fP *rq, struct \fB_PICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.RI "void \fBPICC_ready_queue_add\fP (\fBPICC_ReadyQueue\fP *rq, struct \fB_PICC_PiThread\fP *pt)"
 .br
 .ti -1c
 .RI "struct \fB_PICC_PiThread\fP * \fBPICC_ready_queue_pop\fP (\fBPICC_ReadyQueue\fP *rq)"
@@ -67,7 +67,7 @@ include/queue.h \-
 .RI "\fBPICC_WaitQueue\fP * \fBPICC_create_wait_queue\fP (\fBPICC_Error\fP *error)"
 .br
 .ti -1c
-.RI "void \fBPICC_wait_queue_push\fP (\fBPICC_WaitQueue\fP *wq, struct \fB_PICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.RI "void \fBPICC_wait_queue_push\fP (\fBPICC_WaitQueue\fP *wq, struct \fB_PICC_PiThread\fP *pt)"
 .br
 .ti -1c
 .RI "struct \fB_PICC_PiThread\fP * \fBPICC_wait_queue_fetch\fP (\fBPICC_WaitQueue\fP *wq, struct \fB_PICC_PiThread\fP *pt)"
@@ -130,7 +130,7 @@ Creates a new empty wait queue\&.
 .RE
 .PP
 
-.SS "void PICC_ready_queue_add (\fBPICC_ReadyQueue\fP *rq, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.SS "void PICC_ready_queue_add (\fBPICC_ReadyQueue\fP *rq, \fBPICC_PiThread\fP *pt)"
 Adds a PiThread at the end of the given ready queue\&.
 .PP
 \fBParameters:\fP
@@ -155,7 +155,7 @@ Popped PiThread
 .RE
 .PP
 
-.SS "void PICC_ready_queue_push (\fBPICC_ReadyQueue\fP *rq, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.SS "void PICC_ready_queue_push (\fBPICC_ReadyQueue\fP *rq, \fBPICC_PiThread\fP *pt)"
 Pushes a PiThread on the given ready queue\&.
 .PP
 \fBParameters:\fP
@@ -215,7 +215,7 @@ WARNING: WHY THE POP IS TAKING THE END OF THE QUEUE AND NOT THE HEAD ?
 .RE
 .PP
 
-.SS "void PICC_wait_queue_push (\fBPICC_WaitQueue\fP *wq, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.SS "void PICC_wait_queue_push (\fBPICC_WaitQueue\fP *wq, \fBPICC_PiThread\fP *pt)"
 Pushes a PiThread on the given wait queue\&.
 .PP
 \fBParameters:\fP

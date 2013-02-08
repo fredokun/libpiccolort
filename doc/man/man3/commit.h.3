@@ -1,4 +1,4 @@
-.TH "include/commit.h" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.TH "include/commit.h" 3 "Fri Feb 8 2013" "PiThread" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,6 +7,8 @@ include/commit.h \-
 .br
 .PP
 \fC#include <pi_thread\&.h>\fP
+.br
+\fC#include <symbols\&.h>\fP
 .br
 \fC#include <channel\&.h>\fP
 .br
@@ -44,6 +46,9 @@ include/commit.h \-
 .RI "typedef enum \fB_PICC_CommitType\fP \fBPICC_CommitType\fP"
 .br
 .ti -1c
+.RI "typedef enum \fB_PICC_CommitStatus\fP \fBPICC_CommitStatus\fP"
+.br
+.ti -1c
 .RI "typedef struct \fB_PICC_InCommit\fP \fBPICC_InCommit\fP"
 .br
 .ti -1c
@@ -67,6 +72,9 @@ include/commit.h \-
 .ti -1c
 .RI "enum \fB_PICC_CommitType\fP { \fBPICC_IN_COMMIT\fP, \fBPICC_OUT_COMMIT\fP }"
 .br
+.ti -1c
+.RI "enum \fB_PICC_CommitStatus\fP { \fBPICC_CANNOT_ACQUIRE\fP, \fBPICC_VALID_COMMIT\fP, \fBPICC_INVALID_COMMIT\fP }"
+.br
 .in -1c
 .SS "Functions"
 
@@ -81,22 +89,25 @@ include/commit.h \-
 .RI "\fBPICC_CommitListElement\fP * \fBPICC_create_commit_list_element\fP (\fBPICC_Commit\fP *commit, \fBPICC_Error\fP *error)"
 .br
 .ti -1c
-.RI "void \fBPICC_register_ouput_commitment\fP (struct \fB_PICC_PiThread\fP *p, struct \fB_PICC_Channel\fP *ch, \fBPICC_EvalFunction\fP *eval, int cont_pc, \fBPICC_Error\fP *error)"
+.RI "void \fBPICC_register_output_commitment\fP (struct \fB_PICC_PiThread\fP *p, struct \fB_PICC_Channel\fP *ch, \fBPICC_EvalFunction\fP *eval, \fBPICC_Label\fP cont_pc)"
 .br
 .ti -1c
-.RI "void \fBPICC_register_input_commitment\fP (struct \fB_PICC_PiThread\fP *p, struct \fB_PICC_Channel\fP *ch, int refvar, int cont_pc, \fBPICC_Error\fP *error)"
+.RI "void \fBPICC_register_input_commitment\fP (struct \fB_PICC_PiThread\fP *p, struct \fB_PICC_Channel\fP *ch, int refvar, \fBPICC_Label\fP cont_pc)"
 .br
 .ti -1c
 .RI "bool \fBPICC_is_valid_commit\fP (\fBPICC_Commit\fP *commit)"
 .br
 .ti -1c
+.RI "bool \fBPICC_commit_list_is_empty\fP (\fBPICC_CommitList\fP *clist)"
+.br
+.ti -1c
 .RI "void \fBPICC_commit_list_add\fP (\fBPICC_CommitList\fP *clist, \fBPICC_Commit\fP *c, \fBPICC_Error\fP *error)"
 .br
 .ti -1c
-.RI "\fBPICC_Commit\fP * \fBPICC_commit_list_fetch\fP (\fBPICC_CommitList\fP *clist)"
+.RI "\fBPICC_Commit\fP * \fBPICC_fetch_input_commitment\fP (struct \fB_PICC_Channel\fP *ch)"
 .br
 .ti -1c
-.RI "\fBPICC_Commit\fP * \fBPICC_fetch_commitment\fP (struct \fB_PICC_Channel\fP *ch, \fBPICC_Error\fP *error)"
+.RI "\fBPICC_Commit\fP * \fBPICC_fetch_output_commitment\fP (struct \fB_PICC_Channel\fP *ch)"
 .br
 .in -1c
 .SH "Detailed Description"
@@ -116,11 +127,13 @@ Maxence WO
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef struct \fB_PICC_Commit\fP  \fBPICC_Commit\fP"
-The commitment common part 
+The commitment common part  type != null && thread != null && clock != null && clockval != null && channel != null && content != null  cont_pc > 0 
 .SS "typedef struct \fB_PICC_CommitList\fP  \fBPICC_CommitList\fP"
-The commit list type 
+The commit list type  if size = 0, *head = NULL && *tail = NULL  
 .SS "typedef struct \fB_PICC_CommitListElement\fP  \fBPICC_CommitListElement\fP"
 The type of an element of a commit list 
+.SS "typedef enum \fB_PICC_CommitStatus\fP  \fBPICC_CommitStatus\fP"
+The status of the commitment 
 .SS "typedef enum \fB_PICC_CommitType\fP  \fBPICC_CommitType\fP"
 The type of the commitment 
 .SS "typedef struct \fB_PICC_Value\fP*( PICC_EvalFunction)(struct \fB_PICC_PiThread\fP *)\fC [read]\fP"
@@ -128,9 +141,20 @@ TODO see spec
 .SS "typedef struct \fB_PICC_InCommit\fP  \fBPICC_InCommit\fP"
 The input commitment specific part 
 .SS "typedef struct \fB_PICC_OutCommit\fP  \fBPICC_OutCommit\fP"
-The output commitment specific part 
+The output commitment specific part  eval_func != null 
 .SH "Enumeration Type Documentation"
 .PP 
+.SS "enum \fB_PICC_CommitStatus\fP"
+The status of the commitment 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIPICC_CANNOT_ACQUIRE \fP\fP
+.TP
+\fB\fIPICC_VALID_COMMIT \fP\fP
+.TP
+\fB\fIPICC_INVALID_COMMIT \fP\fP
 .SS "enum \fB_PICC_CommitType\fP"
 The type of the commitment 
 .PP
@@ -157,17 +181,17 @@ Adds the given element at the end of the commit list\&.
 .RE
 .PP
 
-.SS "\fBPICC_Commit\fP* PICC_commit_list_fetch (\fBPICC_CommitList\fP *clist)"
-????????????????????
+.SS "bool PICC_commit_list_is_empty (\fBPICC_CommitList\fP *clist)"
+Returns whether a commit list is empty\&.
 .PP
 \fBParameters:\fP
 .RS 4
-\fIclist\fP ??????? 
+\fIclist\fP Commit list to check 
 .RE
 .PP
 \fBReturns:\fP
 .RS 4
-???????????? 
+Whether the commit list is empty\&. 
 .RE
 .PP
 
@@ -204,14 +228,57 @@ Created commit list element
 .SS "\fBPICC_Commit\fP* PICC_create_commitment (\fBPICC_Error\fP *error)"
 Creates and returns a commitment\&.
 .PP
+\fBPostcondition:\fP
+.RS 4
+commit != null
+.RE
+.PP
 \fBReturns:\fP
 .RS 4
 Created commitment 
 .RE
 .PP
 
-.SS "\fBPICC_Commit\fP* PICC_fetch_commitment (\fBPICC_Channel\fP *ch, \fBPICC_Error\fP *error)"
-Fetches a commit from a channel\&.
+.SS "\fBPICC_Commit\fP* PICC_fetch_input_commitment (\fBPICC_Channel\fP *ch)"
+Fetches the first element of the input commitList from a channel\&.
+.PP
+\fBPrecondition:\fP
+.RS 4
+ch != null
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+if(c->incommits->size > 0 && PICC_is_valid_commit(PICC_commit_list_fetch(c->incommits))) PICC_fetch_input_commitment(c) = PICC_commit_list_fetch(c->incommits) 
+.PP
+if(c->incommits->size = 0 || !(PICC_is_valid_commit(PICC_commit_list_fetch(c->incommits)))) PICC_fetch_input_commitment(c) = null
+.RE
+.PP
+\fBParameters:\fP
+.RS 4
+\fIch\fP Channel to fetch the commit from 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Fetched commit 
+.RE
+.PP
+
+.SS "\fBPICC_Commit\fP* PICC_fetch_output_commitment (\fBPICC_Channel\fP *ch)"
+Fetches he first element of the output commitList from a channel
+.PP
+\fBPrecondition:\fP
+.RS 4
+ch != null
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+if(c->outcommits->size > 0 && PICC_is_valid_commit(PICC_commit_list_fetch(c->outcommits))) PICC_fetch_output_commitment(c) = PICC_commit_list_fetch(c->outcommits) 
+.PP
+if(c->outcommits->size = 0 || !(PICC_is_valid_commit(PICC_commit_list_fetch(c->outcommits)))) PICC_fetch_output_commitment(c) = null
+.RE
 .PP
 \fBParameters:\fP
 .RS 4
@@ -227,6 +294,16 @@ Fetched commit
 .SS "bool PICC_is_valid_commit (\fBPICC_Commit\fP *commit)"
 Verifies if the given commit is valid\&.
 .PP
+\fBPrecondition:\fP
+.RS 4
+commit != null
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+if (commit->clock == commit->thread->clock && commit->clockval == commit->thread->clock->val) valid = true else valid = false
+.RE
+.PP
 \fBParameters:\fP
 .RS 4
 \fIcommit\fP Commit to validate 
@@ -238,8 +315,32 @@ Whether the commit is valid
 .RE
 .PP
 
-.SS "void PICC_register_input_commitment (\fBPICC_PiThread\fP *pt, \fBPICC_Channel\fP *ch, intrefvar, intcont_pc, \fBPICC_Error\fP *error)"
+.SS "void PICC_register_input_commitment (\fBPICC_PiThread\fP *pt, \fBPICC_Channel\fP *ch, intrefvar, \fBPICC_Label\fPcont_pc)"
 Registers an input commit with given PiThread and channel\&.
+.PP
+\fBPrecondition:\fP
+.RS 4
+pt != null && ch != null && cont_pc >= 0
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+pt->commits->size(PICC_register_input_commitment(pt)) = pt->commits->size(pt) + 1 
+.PP
+pt->commits->tail = commit 
+.PP
+commit->type = PICC_IN_COMMIT 
+.PP
+commit->content\&.in = in 
+.PP
+commit->thread = pt 
+.PP
+commit->channel = ch 
+.PP
+commit->cont_pc = cont_pc 
+.PP
+in->refvar = refvar
+.RE
 .PP
 \fBParameters:\fP
 .RS 4
@@ -250,12 +351,47 @@ Registers an input commit with given PiThread and channel\&.
 \fIrefvar\fP Index of the var used to create the input commit 
 .br
 \fIcont_pc\fP Program counter 
-.br
-\fIerror\fP Error stack 
 .RE
 .PP
 
-.SS "void PICC_register_ouput_commitment (struct \fB_PICC_PiThread\fP *p, struct \fB_PICC_Channel\fP *ch, \fBPICC_EvalFunction\fP *eval, intcont_pc, \fBPICC_Error\fP *error)"
+.SS "void PICC_register_output_commitment (\fBPICC_PiThread\fP *pt, \fBPICC_Channel\fP *ch, \fBPICC_EvalFunction\fP *eval, \fBPICC_Label\fPcont_pc)"
+Registers an output commit with given PiThread and channel\&.
+.PP
+\fBPrecondition:\fP
+.RS 4
+pt != null && ch != null && eval != null && cont_pc >= 0
+.RE
+.PP
+\fBPostcondition:\fP
+.RS 4
+pt->commits->size(PICC_register_output_commitment(pt)) = pt->commits->size(pt) + 1 
+.PP
+pt->commits->tail = commit 
+.PP
+commit->type = PICC_OUT_COMMIT 
+.PP
+commit->content\&.out = out 
+.PP
+commit->thread = pt 
+.PP
+commit->channel = ch 
+.PP
+commit->cont_pc = cont_pc 
+.PP
+out->eval_func = eval
+.RE
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpt\fP PiThread associated with the commit 
+.br
+\fIch\fP Channel used to create the commit 
+.br
+\fIeval\fP Evaluation function 
+.br
+\fIcont_pc\fP Programm counter 
+.RE
+.PP
 
 .SH "Author"
 .PP 

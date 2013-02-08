@@ -2,6 +2,7 @@
 \label{pi__thread_8h}\index{include/pi\-\_\-thread.\-h@{include/pi\-\_\-thread.\-h}}
 }
 {\ttfamily \#include $<$stdbool.\-h$>$}\\*
+{\ttfamily \#include $<$symbols.\-h$>$}\\*
 {\ttfamily \#include $<$scheduler.\-h$>$}\\*
 {\ttfamily \#include $<$channel.\-h$>$}\\*
 {\ttfamily \#include $<$commit.\-h$>$}\\*
@@ -16,11 +17,11 @@ struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread}
 \subsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-typedef int \hyperlink{pi__thread_8h_ae23ad6ae115253385182f5a898d32c1e}{P\-I\-C\-C\-\_\-\-Label}
-\item 
 typedef void( \hyperlink{pi__thread_8h_a0d65636a870782d26eb035fe3b841414}{P\-I\-C\-C\-\_\-\-Pi\-Thread\-Proc} )(struct \hyperlink{struct__PICC__SchedPool}{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool} $\ast$, struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$)
 \item 
 typedef enum \hyperlink{pi__thread_8h_aa9853ca57c550ff19db8117a12d12371}{\-\_\-\-P\-I\-C\-C\-\_\-\-Status\-Kind} \hyperlink{pi__thread_8h_ad84837e3a6881fa52eadad5f96b0444a}{P\-I\-C\-C\-\_\-\-Status\-Kind}
+\item 
+typedef enum \hyperlink{pi__thread_8h_a615f13dafc6d32dfbb1597f92c35d16f}{\-\_\-\-P\-I\-C\-C\-\_\-\-Try\-Result} \hyperlink{pi__thread_8h_a4ce87938a8657713d83a7be8bd93b30e}{P\-I\-C\-C\-\_\-\-Try\-Result}
 \item 
 typedef struct \hyperlink{struct__PICC__PiThread}{\-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread} \hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread}
 \end{DoxyCompactItemize}
@@ -35,15 +36,22 @@ enum \hyperlink{pi__thread_8h_aa9853ca57c550ff19db8117a12d12371}{\-\_\-\-P\-I\-C
 \\*
 \hyperlink{pi__thread_8h_aa9853ca57c550ff19db8117a12d12371a0cac85214a49fa5827abcaead4a2fa38}{P\-I\-C\-C\-\_\-\-S\-T\-A\-T\-U\-S\-\_\-\-B\-L\-O\-C\-K\-E\-D}
  \}
+\item 
+enum \hyperlink{pi__thread_8h_a615f13dafc6d32dfbb1597f92c35d16f}{\-\_\-\-P\-I\-C\-C\-\_\-\-Try\-Result} \{ \hyperlink{pi__thread_8h_a615f13dafc6d32dfbb1597f92c35d16fa416b05ecc2c4aa21d6e0acffdcc0150d}{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-E\-N\-A\-B\-L\-E\-D}, 
+\hyperlink{pi__thread_8h_a615f13dafc6d32dfbb1597f92c35d16fae4b6fa548ade1eaafbdbc43a42c73c1b}{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-D\-I\-S\-A\-B\-L\-E\-D}, 
+\hyperlink{pi__thread_8h_a615f13dafc6d32dfbb1597f92c35d16fa5293da6072ef013c9fbd2bbdd3e54615}{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-C\-O\-M\-M\-I\-T}
+ \}
 \end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-\hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$ \hyperlink{pi__thread_8h_a7ed685715854b374bd64a6928d6f0262}{P\-I\-C\-C\-\_\-create\-\_\-pithread} (int env\-\_\-length, int knowns\-\_\-length, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$ \hyperlink{pi__thread_8h_afe656d61b6fe0f556dbd0510ba7f0cca}{P\-I\-C\-C\-\_\-create\-\_\-pithread} (int env\-\_\-length, int knowns\-\_\-length)
 \item 
-bool \hyperlink{pi__thread_8h_afabccea7171cc53fe20063ac16b4038f}{P\-I\-C\-C\-\_\-can\-\_\-awake} (\hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt, struct \hyperlink{struct__PICC__Commit}{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit} $\ast$commit, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+enum \hyperlink{commit_8h_ae02c3ef906a0c629225851fce977eecd}{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Status} \hyperlink{pi__thread_8h_ad46bbeb7d4a83f2f1f6fb64e89530202}{P\-I\-C\-C\-\_\-can\-\_\-awake} (\hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt, struct \hyperlink{struct__PICC__Commit}{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit} $\ast$commit)
 \item 
-void \hyperlink{pi__thread_8h_ac2edf233a290cc60ba50785d16a1dfe0}{P\-I\-C\-C\-\_\-awake} (struct \hyperlink{struct__PICC__SchedPool}{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool} $\ast$sched, \hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt, \hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+void \hyperlink{pi__thread_8h_aa231acf6e13d522726f510152a83a8c4}{P\-I\-C\-C\-\_\-awake} (struct \hyperlink{struct__PICC__SchedPool}{\-\_\-\-P\-I\-C\-C\-\_\-\-Sched\-Pool} $\ast$sched, \hyperlink{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$pt)
+\item 
+void \hyperlink{pi__thread_8h_acd05154bc3a997b06650203fdca922f1}{P\-I\-C\-C\-\_\-low\-\_\-level\-\_\-yield} ()
 \end{DoxyCompactItemize}
 
 
@@ -60,10 +68,7 @@ Sergiu T\-I\-G\-A\-N\-U
 
 
 \subsection{Typedef Documentation}
-\hypertarget{pi__thread_8h_ae23ad6ae115253385182f5a898d32c1e}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-\-Label@{P\-I\-C\-C\-\_\-\-Label}}
-\index{P\-I\-C\-C\-\_\-\-Label@{P\-I\-C\-C\-\_\-\-Label}!pi_thread.h@{pi\-\_\-thread.\-h}}
-\subsubsection[{P\-I\-C\-C\-\_\-\-Label}]{\setlength{\rightskip}{0pt plus 5cm}typedef int {\bf P\-I\-C\-C\-\_\-\-Label}}}\label{pi__thread_8h_ae23ad6ae115253385182f5a898d32c1e}
-The label type. Used by the pi-\/threads to point to a place where to start it's procedure. \hypertarget{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-\-Pi\-Thread@{P\-I\-C\-C\-\_\-\-Pi\-Thread}}
+\hypertarget{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-\-Pi\-Thread@{P\-I\-C\-C\-\_\-\-Pi\-Thread}}
 \index{P\-I\-C\-C\-\_\-\-Pi\-Thread@{P\-I\-C\-C\-\_\-\-Pi\-Thread}!pi_thread.h@{pi\-\_\-thread.\-h}}
 \subsubsection[{P\-I\-C\-C\-\_\-\-Pi\-Thread}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Pi\-Thread}  {\bf P\-I\-C\-C\-\_\-\-Pi\-Thread}}}\label{pi__thread_8h_a27cd326b4bfd4bb50a635ff321faafc8}
 The Pi\-Thread data type \hypertarget{pi__thread_8h_a0d65636a870782d26eb035fe3b841414}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-\-Pi\-Thread\-Proc@{P\-I\-C\-C\-\_\-\-Pi\-Thread\-Proc}}
@@ -72,7 +77,10 @@ The Pi\-Thread data type \hypertarget{pi__thread_8h_a0d65636a870782d26eb035fe3b8
 The procedure type that a pi-\/thread executes. May use a couple of labels to show where it shoud start. \hypertarget{pi__thread_8h_ad84837e3a6881fa52eadad5f96b0444a}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-\-Status\-Kind@{P\-I\-C\-C\-\_\-\-Status\-Kind}}
 \index{P\-I\-C\-C\-\_\-\-Status\-Kind@{P\-I\-C\-C\-\_\-\-Status\-Kind}!pi_thread.h@{pi\-\_\-thread.\-h}}
 \subsubsection[{P\-I\-C\-C\-\_\-\-Status\-Kind}]{\setlength{\rightskip}{0pt plus 5cm}typedef enum {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Status\-Kind}  {\bf P\-I\-C\-C\-\_\-\-Status\-Kind}}}\label{pi__thread_8h_ad84837e3a6881fa52eadad5f96b0444a}
-The status of a pi-\/thread 
+The status of a pi-\/thread \hypertarget{pi__thread_8h_a4ce87938a8657713d83a7be8bd93b30e}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-\-Try\-Result@{P\-I\-C\-C\-\_\-\-Try\-Result}}
+\index{P\-I\-C\-C\-\_\-\-Try\-Result@{P\-I\-C\-C\-\_\-\-Try\-Result}!pi_thread.h@{pi\-\_\-thread.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-\-Try\-Result}]{\setlength{\rightskip}{0pt plus 5cm}typedef enum {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Try\-Result}  {\bf P\-I\-C\-C\-\_\-\-Try\-Result}}}\label{pi__thread_8h_a4ce87938a8657713d83a7be8bd93b30e}
+Try result. The result of trying to execute a thread statement 
 
 \subsection{Enumeration Type Documentation}
 \hypertarget{pi__thread_8h_aa9853ca57c550ff19db8117a12d12371}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!\-\_\-\-P\-I\-C\-C\-\_\-\-Status\-Kind@{\-\_\-\-P\-I\-C\-C\-\_\-\-Status\-Kind}}
@@ -93,18 +101,31 @@ The status of a pi-\/thread \begin{Desc}
 \hypertarget{pi__thread_8h_aa9853ca57c550ff19db8117a12d12371a0cac85214a49fa5827abcaead4a2fa38}{P\-I\-C\-C\-\_\-\-S\-T\-A\-T\-U\-S\-\_\-\-B\-L\-O\-C\-K\-E\-D}\label{pi__thread_8h_aa9853ca57c550ff19db8117a12d12371a0cac85214a49fa5827abcaead4a2fa38}
 }]A blocked pi-\/thread (a sleeping pi-\/thread that can't be awaked) \end{description}
 \end{Desc}
+\hypertarget{pi__thread_8h_a615f13dafc6d32dfbb1597f92c35d16f}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!\-\_\-\-P\-I\-C\-C\-\_\-\-Try\-Result@{\-\_\-\-P\-I\-C\-C\-\_\-\-Try\-Result}}
+\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Try\-Result@{\-\_\-\-P\-I\-C\-C\-\_\-\-Try\-Result}!pi_thread.h@{pi\-\_\-thread.\-h}}
+\subsubsection[{\-\_\-\-P\-I\-C\-C\-\_\-\-Try\-Result}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Try\-Result}}}\label{pi__thread_8h_a615f13dafc6d32dfbb1597f92c35d16f}
+Try result. The result of trying to execute a thread statement \begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-E\-N\-A\-B\-L\-E\-D@{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-E\-N\-A\-B\-L\-E\-D}!pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}}\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-E\-N\-A\-B\-L\-E\-D@{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-E\-N\-A\-B\-L\-E\-D}}\item[{\em 
+\hypertarget{pi__thread_8h_a615f13dafc6d32dfbb1597f92c35d16fa416b05ecc2c4aa21d6e0acffdcc0150d}{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-E\-N\-A\-B\-L\-E\-D}\label{pi__thread_8h_a615f13dafc6d32dfbb1597f92c35d16fa416b05ecc2c4aa21d6e0acffdcc0150d}
+}]The futher execution of the thred enabeled \index{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-D\-I\-S\-A\-B\-L\-E\-D@{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-D\-I\-S\-A\-B\-L\-E\-D}!pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}}\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-D\-I\-S\-A\-B\-L\-E\-D@{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-D\-I\-S\-A\-B\-L\-E\-D}}\item[{\em 
+\hypertarget{pi__thread_8h_a615f13dafc6d32dfbb1597f92c35d16fae4b6fa548ade1eaafbdbc43a42c73c1b}{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-D\-I\-S\-A\-B\-L\-E\-D}\label{pi__thread_8h_a615f13dafc6d32dfbb1597f92c35d16fae4b6fa548ade1eaafbdbc43a42c73c1b}
+}]The futher execution of the thred disabled \index{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-C\-O\-M\-M\-I\-T@{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-C\-O\-M\-M\-I\-T}!pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}}\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-C\-O\-M\-M\-I\-T@{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-C\-O\-M\-M\-I\-T}}\item[{\em 
+\hypertarget{pi__thread_8h_a615f13dafc6d32dfbb1597f92c35d16fa5293da6072ef013c9fbd2bbdd3e54615}{P\-I\-C\-C\-\_\-\-T\-R\-Y\-\_\-\-C\-O\-M\-M\-I\-T}\label{pi__thread_8h_a615f13dafc6d32dfbb1597f92c35d16fa5293da6072ef013c9fbd2bbdd3e54615}
+}]A commitment has been submited \end{description}
+\end{Desc}
 
 
 \subsection{Function Documentation}
-\hypertarget{pi__thread_8h_ac2edf233a290cc60ba50785d16a1dfe0}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-awake@{P\-I\-C\-C\-\_\-awake}}
+\hypertarget{pi__thread_8h_aa231acf6e13d522726f510152a83a8c4}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-awake@{P\-I\-C\-C\-\_\-awake}}
 \index{P\-I\-C\-C\-\_\-awake@{P\-I\-C\-C\-\_\-awake}!pi_thread.h@{pi\-\_\-thread.\-h}}
 \subsubsection[{P\-I\-C\-C\-\_\-awake}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-awake (
 \begin{DoxyParamCaption}
 \item[{{\bf P\-I\-C\-C\-\_\-\-Sched\-Pool} $\ast$}]{sched, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt}
 \end{DoxyParamCaption}
-)}}\label{pi__thread_8h_ac2edf233a290cc60ba50785d16a1dfe0}
+)}}\label{pi__thread_8h_aa231acf6e13d522726f510152a83a8c4}
 Awakes a Pi\-Thread in the given scheduler.
 
 
@@ -114,15 +135,14 @@ Awakes a Pi\-Thread in the given scheduler.
 {\em pt} & Pi\-Thread to be awaken \\
 \hline
 \end{DoxyParams}
-\hypertarget{pi__thread_8h_afabccea7171cc53fe20063ac16b4038f}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-can\-\_\-awake@{P\-I\-C\-C\-\_\-can\-\_\-awake}}
+\hypertarget{pi__thread_8h_ad46bbeb7d4a83f2f1f6fb64e89530202}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-can\-\_\-awake@{P\-I\-C\-C\-\_\-can\-\_\-awake}}
 \index{P\-I\-C\-C\-\_\-can\-\_\-awake@{P\-I\-C\-C\-\_\-can\-\_\-awake}!pi_thread.h@{pi\-\_\-thread.\-h}}
-\subsubsection[{P\-I\-C\-C\-\_\-can\-\_\-awake}]{\setlength{\rightskip}{0pt plus 5cm}bool P\-I\-C\-C\-\_\-can\-\_\-awake (
+\subsubsection[{P\-I\-C\-C\-\_\-can\-\_\-awake}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-Status} P\-I\-C\-C\-\_\-can\-\_\-awake (
 \begin{DoxyParamCaption}
 \item[{{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread} $\ast$}]{pt, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Commit} $\ast$}]{commit, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Commit} $\ast$}]{commit}
 \end{DoxyParamCaption}
-)}}\label{pi__thread_8h_afabccea7171cc53fe20063ac16b4038f}
+)}}\label{pi__thread_8h_ad46bbeb7d4a83f2f1f6fb64e89530202}
 Returns whether a Pi\-Thread can be awaken with the given commit.
 
 
@@ -135,15 +155,14 @@ Returns whether a Pi\-Thread can be awaken with the given commit.
 \begin{DoxyReturn}{Returns}
 Whether the Pi\-Thread can be awaken with given commit 
 \end{DoxyReturn}
-\hypertarget{pi__thread_8h_a7ed685715854b374bd64a6928d6f0262}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-create\-\_\-pithread@{P\-I\-C\-C\-\_\-create\-\_\-pithread}}
+\hypertarget{pi__thread_8h_afe656d61b6fe0f556dbd0510ba7f0cca}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-create\-\_\-pithread@{P\-I\-C\-C\-\_\-create\-\_\-pithread}}
 \index{P\-I\-C\-C\-\_\-create\-\_\-pithread@{P\-I\-C\-C\-\_\-create\-\_\-pithread}!pi_thread.h@{pi\-\_\-thread.\-h}}
 \subsubsection[{P\-I\-C\-C\-\_\-create\-\_\-pithread}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Pi\-Thread}$\ast$ P\-I\-C\-C\-\_\-create\-\_\-pithread (
 \begin{DoxyParamCaption}
 \item[{int}]{env\-\_\-length, }
-\item[{int}]{knowns\-\_\-length, }
-\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\item[{int}]{knowns\-\_\-length}
 \end{DoxyParamCaption}
-)}}\label{pi__thread_8h_a7ed685715854b374bd64a6928d6f0262}
+)}}\label{pi__thread_8h_afe656d61b6fe0f556dbd0510ba7f0cca}
 Creates a new Pi\-Thread with given environment and knowns set length.
 
 
@@ -152,9 +171,15 @@ Creates a new Pi\-Thread with given environment and knowns set length.
 \hline
 {\em knowns\-\_\-length} & Size of the knowns set \\
 \hline
-{\em error} & Error stack \\
-\hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 Created Pi\-Thread 
 \end{DoxyReturn}
+\hypertarget{pi__thread_8h_acd05154bc3a997b06650203fdca922f1}{\index{pi\-\_\-thread.\-h@{pi\-\_\-thread.\-h}!P\-I\-C\-C\-\_\-low\-\_\-level\-\_\-yield@{P\-I\-C\-C\-\_\-low\-\_\-level\-\_\-yield}}
+\index{P\-I\-C\-C\-\_\-low\-\_\-level\-\_\-yield@{P\-I\-C\-C\-\_\-low\-\_\-level\-\_\-yield}!pi_thread.h@{pi\-\_\-thread.\-h}}
+\subsubsection[{P\-I\-C\-C\-\_\-low\-\_\-level\-\_\-yield}]{\setlength{\rightskip}{0pt plus 5cm}void P\-I\-C\-C\-\_\-low\-\_\-level\-\_\-yield (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{pi__thread_8h_acd05154bc3a997b06650203fdca922f1}
+?????????????? 

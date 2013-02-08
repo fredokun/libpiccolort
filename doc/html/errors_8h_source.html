@@ -24,6 +24,7 @@
   <td style="padding-left: 0.5em;">
    <div id="projectname">PiThread
    </div>
+   <div id="projectbrief">A Stackless Runtime Environment for a Pi-calculus</div>
   </td>
  </tr>
  </tbody>
@@ -89,66 +90,69 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a href="errors_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#ifndef ERRORS_H</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ERRORS_H</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#ifndef TESTS</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// APPLICATION ERROR MESSAGES /////////////////////////////////////////////////</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="code" href="errors_8h.html#aa3d70a6e7e623d625df94812449c2bb5">   20</a></span>&#160;<span class="preprocessor">    #define PICC_NB_ERRORS 500</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00025"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64">   25</a></span>&#160;    <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64">_PICC_ErrorId</a> {</div>
-<div class="line"><a name="l00026"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64af0833fc7fa2b0f0319be6f9d07ef6b59">   26</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64af0833fc7fa2b0f0319be6f9d07ef6b59">ERR_DEADLOCK</a>,</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aa960419f3f3f31e975b8cdf1285526a8">   28</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aa960419f3f3f31e975b8cdf1285526a8">ERR_ALLOC_QUEUE_CELL</a>,</div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a824ea3293a7ee0765446d22e2fecbd88">   29</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a824ea3293a7ee0765446d22e2fecbd88">ERR_READY_QUEUE_PUSH</a>,</div>
-<div class="line"><a name="l00030"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a9945500a70cdc8b56c2f76d60efb57f6">   30</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a9945500a70cdc8b56c2f76d60efb57f6">ERR_READY_QUEUE_ADD</a>,</div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a883b6a5d01dccf3a7a58b77fce83d06c">   31</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a883b6a5d01dccf3a7a58b77fce83d06c">ERR_WAIT_QUEUE_PUSH</a>,</div>
-<div class="line"><a name="l00032"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a7aa9656725ffeb28044775f3eb1ee4b6">   32</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a7aa9656725ffeb28044775f3eb1ee4b6">ERR_WAIT_QUEUE_ADD</a>,</div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ab0172cbab9eb00a8e7dc902711b02505">   33</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ab0172cbab9eb00a8e7dc902711b02505">ERR_WAIT_QUEUE_PUSH_OLD</a>,</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a5bed3f42a08e195b307cf8622e913327">   35</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a5bed3f42a08e195b307cf8622e913327">ERR_NOT_IMPLEMENTED</a>,</div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a077f6961ef44934823d048c00b535cad">   36</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a077f6961ef44934823d048c00b535cad">ERR_OUT_OF_MEMORY</a>, </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a220b4a2991ba5ee62bbf522a92b79917">   37</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a220b4a2991ba5ee62bbf522a92b79917">ERR_COMMIT_CREATE</a>,</div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ae00350b4b1ad32cee338d0fd869ec41b">   38</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ae00350b4b1ad32cee338d0fd869ec41b">ERR_ADD_COMMIT_TO_LIST</a>,</div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ab75fcab08f691b8617e852c1523e72fb">   39</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ab75fcab08f691b8617e852c1523e72fb">ERR_REGISTER_OUT_COMMIT</a>,</div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a6220e35904a1849e35f3a8a2f621b9fc">   40</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a6220e35904a1849e35f3a8a2f621b9fc">ERR_REGISTER_IN_COMMIT</a>,</div>
-<div class="line"><a name="l00041"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ae5e92eea0c03911573a643c7282343f4">   41</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ae5e92eea0c03911573a643c7282343f4">ERR_THREAD_CREATE</a>, </div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64add6cb2bdda78c49baa32863c53ba8c56">   42</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64add6cb2bdda78c49baa32863c53ba8c56">ERR_PTHREAD_CREATE</a>,</div>
-<div class="line"><a name="l00043"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a7b307ab2ee3d0a650d20f1f81ddb4321">   43</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a7b307ab2ee3d0a650d20f1f81ddb4321">ERR_SCHED_POOL_CREATE</a>,</div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aa2491d8392e7452e4b01d450a3f9c4c4">   44</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aa2491d8392e7452e4b01d450a3f9c4c4">ERR_CLOCK_CREATE</a>,</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a8cff09c1a45670695e072f504c06bdb0">   46</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a8cff09c1a45670695e072f504c06bdb0">ERR_MUTEX_ALREADY_UNLOCKED</a>,</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a7e53cf240a80073b57ae0cce6fee4b1d">   48</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a7e53cf240a80073b57ae0cce6fee4b1d">ERR_NULLPOINTER_PITHREAD</a>,</div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a4e483ce125583f726a0172ec2600f43c">   49</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a4e483ce125583f726a0172ec2600f43c">ERR_NULLPOINTER_COMMIT</a>,</div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a49b18cd5b6062ac5a8ff607365e91a09">   50</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a49b18cd5b6062ac5a8ff607365e91a09">ERR_NULLPOINTER_COMMITLISTELEM</a>,</div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a97fb80c3b3e6cc09ecb6f30bcd198d9d">   51</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a97fb80c3b3e6cc09ecb6f30bcd198d9d">ERR_NULLPOINTER_COMMITLIST</a>,</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a60ea803493c5f78fa70403974eb71391">   53</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a60ea803493c5f78fa70403974eb71391">ERR_INVALID_COMMIT</a>,</div>
-<div class="line"><a name="l00054"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aaf3dbe84c7c20836efec5bff373bb1ef">   54</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aaf3dbe84c7c20836efec5bff373bb1ef">ERR_INVALID_VALUE</a>,</div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ae00baeb1e4ac53698e23b4ca9db24ca1">   55</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ae00baeb1e4ac53698e23b4ca9db24ca1">ERR_INVALID_TYPE</a>,</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#ifndef ERRORS_H</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define ERRORS_H</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#ifndef TESTS</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// APPLICATION ERROR MESSAGES /////////////////////////////////////////////////</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="code" href="errors_8h.html#aa3d70a6e7e623d625df94812449c2bb5">   21</a></span>&#160;<span class="preprocessor">    #define PICC_NB_ERRORS 500</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64">   26</a></span>&#160;    <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64">_PICC_ErrorId</a> {</div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64af0833fc7fa2b0f0319be6f9d07ef6b59">   27</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64af0833fc7fa2b0f0319be6f9d07ef6b59">ERR_DEADLOCK</a>,</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aa960419f3f3f31e975b8cdf1285526a8">   29</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aa960419f3f3f31e975b8cdf1285526a8">ERR_ALLOC_QUEUE_CELL</a>,</div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a824ea3293a7ee0765446d22e2fecbd88">   30</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a824ea3293a7ee0765446d22e2fecbd88">ERR_READY_QUEUE_PUSH</a>,</div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a9945500a70cdc8b56c2f76d60efb57f6">   31</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a9945500a70cdc8b56c2f76d60efb57f6">ERR_READY_QUEUE_ADD</a>,</div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a883b6a5d01dccf3a7a58b77fce83d06c">   32</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a883b6a5d01dccf3a7a58b77fce83d06c">ERR_WAIT_QUEUE_PUSH</a>,</div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a7aa9656725ffeb28044775f3eb1ee4b6">   33</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a7aa9656725ffeb28044775f3eb1ee4b6">ERR_WAIT_QUEUE_ADD</a>,</div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ab0172cbab9eb00a8e7dc902711b02505">   34</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ab0172cbab9eb00a8e7dc902711b02505">ERR_WAIT_QUEUE_PUSH_OLD</a>,</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a5bed3f42a08e195b307cf8622e913327">   36</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a5bed3f42a08e195b307cf8622e913327">ERR_NOT_IMPLEMENTED</a>,</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a077f6961ef44934823d048c00b535cad">   37</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a077f6961ef44934823d048c00b535cad">ERR_OUT_OF_MEMORY</a>, </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a220b4a2991ba5ee62bbf522a92b79917">   38</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a220b4a2991ba5ee62bbf522a92b79917">ERR_COMMIT_CREATE</a>,</div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ae00350b4b1ad32cee338d0fd869ec41b">   39</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ae00350b4b1ad32cee338d0fd869ec41b">ERR_ADD_COMMIT_TO_LIST</a>,</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ab75fcab08f691b8617e852c1523e72fb">   40</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ab75fcab08f691b8617e852c1523e72fb">ERR_REGISTER_OUT_COMMIT</a>,</div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a6220e35904a1849e35f3a8a2f621b9fc">   41</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a6220e35904a1849e35f3a8a2f621b9fc">ERR_REGISTER_IN_COMMIT</a>,</div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ae5e92eea0c03911573a643c7282343f4">   42</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ae5e92eea0c03911573a643c7282343f4">ERR_THREAD_CREATE</a>, </div>
+<div class="line"><a name="l00043"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64add6cb2bdda78c49baa32863c53ba8c56">   43</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64add6cb2bdda78c49baa32863c53ba8c56">ERR_PTHREAD_CREATE</a>,</div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a7b307ab2ee3d0a650d20f1f81ddb4321">   44</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a7b307ab2ee3d0a650d20f1f81ddb4321">ERR_SCHED_POOL_CREATE</a>,</div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aa2491d8392e7452e4b01d450a3f9c4c4">   45</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aa2491d8392e7452e4b01d450a3f9c4c4">ERR_CLOCK_CREATE</a>,</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a8cff09c1a45670695e072f504c06bdb0">   47</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a8cff09c1a45670695e072f504c06bdb0">ERR_MUTEX_ALREADY_UNLOCKED</a>,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a7e53cf240a80073b57ae0cce6fee4b1d">   49</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a7e53cf240a80073b57ae0cce6fee4b1d">ERR_NULLPOINTER_PITHREAD</a>,</div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a4dc084dfa12b310fe94e2d31c3295b09">   50</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a4dc084dfa12b310fe94e2d31c3295b09">ERR_NULLPOINTER_CHANNEL</a>,</div>
+<div class="line"><a name="l00051"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a4e483ce125583f726a0172ec2600f43c">   51</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a4e483ce125583f726a0172ec2600f43c">ERR_NULLPOINTER_COMMIT</a>,</div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a49b18cd5b6062ac5a8ff607365e91a09">   52</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a49b18cd5b6062ac5a8ff607365e91a09">ERR_NULLPOINTER_COMMITLISTELEM</a>,</div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a97fb80c3b3e6cc09ecb6f30bcd198d9d">   53</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a97fb80c3b3e6cc09ecb6f30bcd198d9d">ERR_NULLPOINTER_COMMITLIST</a>,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a5d20e2be0977ab49b2795ef720059d82">   55</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a5d20e2be0977ab49b2795ef720059d82">ERR_CHANNEL_GLOBAL_RC</a>,</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    } <a class="code" href="errors_8h.html#a41a7f2f3cd887e60e0ce75701178e6a9">PICC_ErrorId</a>;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">// TESTS ERROR MESSAGES ///////////////////////////////////////////////////////</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a60ea803493c5f78fa70403974eb71391">   57</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64a60ea803493c5f78fa70403974eb71391">ERR_INVALID_COMMIT</a>,</div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aaf3dbe84c7c20836efec5bff373bb1ef">   58</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64aaf3dbe84c7c20836efec5bff373bb1ef">ERR_INVALID_VALUE</a>,</div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ae00baeb1e4ac53698e23b4ca9db24ca1">   59</a></span>&#160;        <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64ae00baeb1e4ac53698e23b4ca9db24ca1">ERR_INVALID_TYPE</a>,</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    } <a class="code" href="errors_8h.html#a41a7f2f3cd887e60e0ce75701178e6a9">PICC_ErrorId</a>;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="preprocessor">    #define PICC_NB_ERRORS 500</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64">_PICC_ErrorId</a> {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        ERR_TEST1</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    } <a class="code" href="errors_8h.html#a41a7f2f3cd887e60e0ce75701178e6a9">PICC_ErrorId</a>;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">// TESTS ERROR MESSAGES ///////////////////////////////////////////////////////</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">    #define PICC_NB_ERRORS 500</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64">_PICC_ErrorId</a> {</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        ERR_TEST1</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    } <a class="code" href="errors_8h.html#a41a7f2f3cd887e60e0ce75701178e6a9">PICC_ErrorId</a>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 25 2013 14:42:39 for PiThread by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 8 2013 15:26:06 for PiThread by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3
 </small></address>

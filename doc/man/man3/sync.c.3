@@ -1,4 +1,4 @@
-.TH "src/sync.c" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.TH "src/sync.c" 3 "Fri Feb 8 2013" "PiThread" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,19 +13,19 @@ src/sync.c \-
 
 .in +1c
 .ti -1c
-.RI "void \fBPICC_init_mutex\fP (\fBPICC_Mutex\fP mutex)"
+.RI "void \fBPICC_init_mutex\fP (\fBPICC_Mutex\fP *mutex)"
 .br
 .ti -1c
-.RI "void \fBPICC_init_condition\fP (\fBPICC_Condition\fP cond)"
+.RI "void \fBPICC_init_condition\fP (\fBPICC_Condition\fP *cond)"
 .br
 .ti -1c
-.RI "void \fBPICC_acquire\fP (\fBPICC_Mutex\fP mutex)"
+.RI "void \fBPICC_acquire\fP (\fBPICC_Mutex\fP *mutex)"
 .br
 .ti -1c
-.RI "void \fBPICC_release\fP (\fBPICC_Mutex\fP mutex, \fBPICC_Error\fP *error)"
+.RI "void \fBPICC_release\fP (\fBPICC_Mutex\fP *mutex)"
 .br
 .ti -1c
-.RI "void \fBPICC_cond_wait\fP (\fBPICC_Condition\fP cond, \fBPICC_Mutex\fP lock)"
+.RI "void \fBPICC_cond_wait\fP (\fBPICC_Condition\fP *cond, \fBPICC_Mutex\fP *lock)"
 .br
 .in -1c
 .SH "Detailed Description"
@@ -44,7 +44,7 @@ Maxence WO
 
 .SH "Function Documentation"
 .PP 
-.SS "void PICC_acquire (\fBPICC_Mutex\fPmutex)"
+.SS "void PICC_acquire (\fBPICC_Mutex\fP *mutex)"
 Locks the given mutex\&.
 .PP
 \fBParameters:\fP
@@ -53,7 +53,7 @@ Locks the given mutex\&.
 .RE
 .PP
 
-.SS "void PICC_cond_wait (\fBPICC_Condition\fPcond, \fBPICC_Mutex\fPlock)"
+.SS "void PICC_cond_wait (\fBPICC_Condition\fP *cond, \fBPICC_Mutex\fP *lock)"
 Waits for the condition over the given mutex\&.
 .PP
 \fBParameters:\fP
@@ -64,7 +64,7 @@ Waits for the condition over the given mutex\&.
 .RE
 .PP
 
-.SS "void PICC_init_condition (\fBPICC_Condition\fPcond)"
+.SS "void PICC_init_condition (\fBPICC_Condition\fP *cond)"
 Initializes the given condition\&.
 .PP
 \fBParameters:\fP
@@ -73,7 +73,7 @@ Initializes the given condition\&.
 .RE
 .PP
 
-.SS "void PICC_init_mutex (\fBPICC_Mutex\fPmutex)"
+.SS "void PICC_init_mutex (\fBPICC_Mutex\fP *mutex)"
 Initializes the given mutex\&.
 .PP
 \fBParameters:\fP
@@ -82,14 +82,12 @@ Initializes the given mutex\&.
 .RE
 .PP
 
-.SS "void PICC_release (\fBPICC_Mutex\fPmutex, \fBPICC_Error\fP *error)"
+.SS "void PICC_release (\fBPICC_Mutex\fP *mutex)"
 Unlocks the given mutex, fail if the mutex is already unlocked\&.
 .PP
 \fBParameters:\fP
 .RS 4
 \fImutex\fP Mutex to unlock 
-.br
-\fIerror\fP Error stack 
 .RE
 .PP
 

@@ -1,4 +1,4 @@
-.TH "_PICC_Value" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.TH "_PICC_Value" 3 "Fri Feb 8 2013" "PiThread" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -10,41 +10,6 @@ _PICC_Value \-
 \fC#include <value\&.h>\fP
 .SS "Data Fields"
 
-.PP
-.RI "\fB\fP"
-.br
-
-.in +1c
-.in +1c
-.ti -1c
-.RI "\fBPICC_ValueKind\fP \fBkind\fP"
-.br
-.ti -1c
-.RI "\fBPICC_Mutex\fP \fBlock\fP"
-.br
-.in -1c
-.in -1c
-.PP
-.RI "\fBThe possible types a value can have\&.\fP"
-.br
-
-.in +1c
-.in -1c
-.PP
-.RI "\fBThe possible types a value can have\&.\fP"
-.br
-A lock that may be used tu block the value for concurent accesses
-.PP
-Only the value for the type that corresponds to the
-.PP
-\fBParameters:\fP
-.RS 4
-\fIkind\fP matters\&. 
-.RE
-.PP
-
-.PP
-.in +1c
 .in +1c
 .ti -1c
 .RI "union {"
@@ -68,6 +33,25 @@ Only the value for the type that corresponds to the
 .RI "} \fBcontent\fP"
 .br
 .in -1c
+.PP
+.RI "\fB\fP"
+.br
+
+.in +1c
+.in +1c
+.ti -1c
+.RI "\fBPICC_ValueKind\fP \fBkind\fP"
+.br
+.ti -1c
+.RI "\fBPICC_Mutex\fP \fBlock\fP"
+.br
+.in -1c
+.in -1c
+.PP
+.RI "\fB\fP"
+.br
+
+.in +1c
 .in -1c
 .SH "Detailed Description"
 .PP 

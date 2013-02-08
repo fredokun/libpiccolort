@@ -24,6 +24,7 @@
   <td style="padding-left: 0.5em;">
    <div id="projectname">PiThread
    </div>
+   <div id="projectbrief">A Stackless Runtime Environment for a Pi-calculus</div>
   </td>
  </tr>
  </tbody>
@@ -91,38 +92,48 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">channel.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;<a class="el" href="channel_8h_source.html">channel.h</a>&gt;</code><br/>
+<div class="textblock"><code>#include &lt;stdio.h&gt;</code><br/>
+<code>#include &lt;<a class="el" href="channel_8h_source.html">channel.h</a>&gt;</code><br/>
 <code>#include &lt;<a class="el" href="tools_8h_source.html">tools.h</a>&gt;</code><br/>
+<code>#include &lt;<a class="el" href="error_8h_source.html">error.h</a>&gt;</code><br/>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:ade120ac18f176dddff55ddb64af36027"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#ade120ac18f176dddff55ddb64af36027">LOCK_CHANNEL</a>(c)&#160;&#160;&#160;<a class="el" href="sync_8c.html#ad533486752c5f9d3dd499a06288f31ab">PICC_acquire</a>(c-&gt;lock);</td></tr>
+<tr class="memitem:a5a19b2fb8b6ddb997ed49b89d2bfeef3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#a5a19b2fb8b6ddb997ed49b89d2bfeef3">DEFAULT_CHANNEL_SIZE</a>&#160;&#160;&#160;10</td></tr>
+<tr class="separator:a5a19b2fb8b6ddb997ed49b89d2bfeef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade120ac18f176dddff55ddb64af36027"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#ade120ac18f176dddff55ddb64af36027">LOCK_CHANNEL</a>(c)&#160;&#160;&#160;<a class="el" href="sync_8c.html#aa27397e8ad870b7b7ae763a71009be13">PICC_acquire</a>(&amp;(c-&gt;lock));</td></tr>
 <tr class="separator:ade120ac18f176dddff55ddb64af36027"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff8dd5b9a61142b55d554342ce512f64"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#aff8dd5b9a61142b55d554342ce512f64">RELEASE_CHANNEL</a>(c)&#160;&#160;&#160;<a class="el" href="sync_8c.html#a0a6cdd715fc6aba7327880215401fa71">PICC_release</a>(c-&gt;lock, NULL);</td></tr>
+<tr class="memitem:aff8dd5b9a61142b55d554342ce512f64"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#aff8dd5b9a61142b55d554342ce512f64">RELEASE_CHANNEL</a>(c)&#160;&#160;&#160;<a class="el" href="sync_8c.html#ad5a8707a554e73b819db9986b371aca0">PICC_release</a>(&amp;(c-&gt;lock));</td></tr>
 <tr class="separator:aff8dd5b9a61142b55d554342ce512f64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ac6607a30fa1063c40a16c99eece1e54c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#ac6607a30fa1063c40a16c99eece1e54c">PICC_create_channel</a> (<a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:ac6607a30fa1063c40a16c99eece1e54c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34ef7a647bbe6c9d81f7f76edb5931da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#a34ef7a647bbe6c9d81f7f76edb5931da">PICC_create_channel_cn</a> (int commit_size, <a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:a34ef7a647bbe6c9d81f7f76edb5931da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f2a9889602e3c3eb90a11aaaa112b0f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#a8f2a9889602e3c3eb90a11aaaa112b0f">PICC_create_channel</a> ()</td></tr>
+<tr class="separator:a8f2a9889602e3c3eb90a11aaaa112b0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2ab3e2568fd3e3a8017db618b6b560c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#af2ab3e2568fd3e3a8017db618b6b560c">PICC_create_channel_cn</a> (int commit_size)</td></tr>
+<tr class="separator:af2ab3e2568fd3e3a8017db618b6b560c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4695da5b9909d70ece6acf9b7393d53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="channel_8h.html#a87609417467916d98a7505871adc1760">PICC_Knowns</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#ab4695da5b9909d70ece6acf9b7393d53">PICC_create_knowns</a> (<a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
 <tr class="separator:ab4695da5b9909d70ece6acf9b7393d53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7dbf43e2a8d14b2fa22ffcac602baa70"><td class="memItemLeft" align="right" valign="top"><a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#a7dbf43e2a8d14b2fa22ffcac602baa70">PICC_create_knowns_set</a> (int length, <a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
 <tr class="separator:a7dbf43e2a8d14b2fa22ffcac602baa70"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaed8342d9318af6e44423bfc5ea037d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#aaed8342d9318af6e44423bfc5ea037d1">PICC_channel_incr_ref_count</a> (<a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *channel, <a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:aaed8342d9318af6e44423bfc5ea037d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82356d13ea700750660c72bdff7c8d6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#a82356d13ea700750660c72bdff7c8d6b">PICC_channel_dec_ref_count</a> (<a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *channel, <a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:a82356d13ea700750660c72bdff7c8d6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01aeb91d16ed5400061036b6c903ca57"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#a01aeb91d16ed5400061036b6c903ca57">PICC_channel_incr_ref_count</a> (<a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *channel)</td></tr>
+<tr class="separator:a01aeb91d16ed5400061036b6c903ca57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfcf4332485f9fdd0b5ad7930b3fba68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#abfcf4332485f9fdd0b5ad7930b3fba68">PICC_channel_dec_ref_count</a> (<a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *channel)</td></tr>
+<tr class="separator:abfcf4332485f9fdd0b5ad7930b3fba68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a873aa501ffdedc2f345326b0ae025ec1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#a873aa501ffdedc2f345326b0ae025ec1">PICC_reclaim_channel</a> (<a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *channel, <a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
 <tr class="separator:a873aa501ffdedc2f345326b0ae025ec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0914e82fe0abbb54c3d234743abe64e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#a0914e82fe0abbb54c3d234743abe64e1">PICC_knowns_set_knows</a> (<a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *ks, <a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:a0914e82fe0abbb54c3d234743abe64e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82b5edf5813764c16e5fd91de842d0d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#a82b5edf5813764c16e5fd91de842d0d7">PICC_knowns_set_forget</a> (<a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *ks, <a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:a82b5edf5813764c16e5fd91de842d0d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8dfc016b9a6e38200a8556da494c9538"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#a8dfc016b9a6e38200a8556da494c9538">PICC_knowns_register</a> (<a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *ks, <a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *ch, <a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:a8dfc016b9a6e38200a8556da494c9538"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab35eff4439525486ad64351c2c87a0a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#ab35eff4439525486ad64351c2c87a0a8">PICC_knowns_set_knows</a> (<a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *ks)</td></tr>
+<tr class="separator:ab35eff4439525486ad64351c2c87a0a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70a9dbe7ca2d9ef511bae2a1e447406f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#a70a9dbe7ca2d9ef511bae2a1e447406f">PICC_knowns_set_forget</a> (<a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *ks)</td></tr>
+<tr class="separator:a70a9dbe7ca2d9ef511bae2a1e447406f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab42661dc6b6733cf08febe12fad6b2b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#ab42661dc6b6733cf08febe12fad6b2b8">PICC_knowns_set_forget_to_unknown</a> (<a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *ks, <a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *ch)</td></tr>
+<tr class="separator:ab42661dc6b6733cf08febe12fad6b2b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ad5e08be3b5f93e0691dfa812476d08"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#a4ad5e08be3b5f93e0691dfa812476d08">PICC_knowns_set_forget_all</a> (<a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *ks)</td></tr>
+<tr class="separator:a4ad5e08be3b5f93e0691dfa812476d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55fba06237a67542c9ce763699d5bafe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#a55fba06237a67542c9ce763699d5bafe">PICC_knowns_register</a> (<a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *ks, <a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *ch)</td></tr>
+<tr class="separator:a55fba06237a67542c9ce763699d5bafe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40f26f3ac0e12d7683392c4c5456c34e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="channel_8c.html#a40f26f3ac0e12d7683392c4c5456c34e">PICC_release_all_channels</a> (<a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> **chans, int nb_chans)</td></tr>
+<tr class="separator:a40f26f3ac0e12d7683392c4c5456c34e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Channels.</p>
@@ -135,6 +146,18 @@ Joel HING </dd>
 <dd>
 Mickaël MENU </dd></dl>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a class="anchor" id="a5a19b2fb8b6ddb997ed49b89d2bfeef3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DEFAULT_CHANNEL_SIZE&#160;&#160;&#160;10</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ade120ac18f176dddff55ddb64af36027"></a>
 <div class="memitem">
 <div class="memproto">
@@ -144,7 +167,7 @@ Mickaël MENU </dd></dl>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">c</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="sync_8c.html#ad533486752c5f9d3dd499a06288f31ab">PICC_acquire</a>(c-&gt;lock);</td>
+          <td>&#160;&#160;&#160;<a class="el" href="sync_8c.html#aa27397e8ad870b7b7ae763a71009be13">PICC_acquire</a>(&amp;(c-&gt;lock));</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -160,7 +183,7 @@ Mickaël MENU </dd></dl>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">c</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="sync_8c.html#a0a6cdd715fc6aba7327880215401fa71">PICC_release</a>(c-&gt;lock, NULL);</td>
+          <td>&#160;&#160;&#160;<a class="el" href="sync_8c.html#ad5a8707a554e73b819db9986b371aca0">PICC_release</a>(&amp;(c-&gt;lock));</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -168,7 +191,7 @@ Mickaël MENU </dd></dl>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a82356d13ea700750660c72bdff7c8d6b"></a>
+<a class="anchor" id="abfcf4332485f9fdd0b5ad7930b3fba68"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -176,18 +199,8 @@ Mickaël MENU </dd></dl>
           <td class="memname">void PICC_channel_dec_ref_count </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *&#160;</td>
-          <td class="paramname"><em>channel</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>channel</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -201,7 +214,7 @@ Mickaël MENU </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="aaed8342d9318af6e44423bfc5ea037d1"></a>
+<a class="anchor" id="a01aeb91d16ed5400061036b6c903ca57"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -209,18 +222,8 @@ Mickaël MENU </dd></dl>
           <td class="memname">void PICC_channel_incr_ref_count </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *&#160;</td>
-          <td class="paramname"><em>channel</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>channel</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -234,31 +237,24 @@ Mickaël MENU </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ac6607a30fa1063c40a16c99eece1e54c"></a>
+<a class="anchor" id="a8f2a9889602e3c3eb90a11aaaa112b0f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a>* PICC_create_channel </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Creates a channel which contains 10 commitments.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">error</td><td>Error stack </td></tr>
-  </table>
-  </dd>
-</dl>
 <dl class="section return"><dt>Returns</dt><dd>Created channel </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a34ef7a647bbe6c9d81f7f76edb5931da"></a>
+<a class="anchor" id="af2ab3e2568fd3e3a8017db618b6b560c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -266,28 +262,12 @@ Mickaël MENU </dd></dl>
           <td class="memname"><a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a>* PICC_create_channel_cn </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>commit_size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>commit_size</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Creates a channel which contains &lt;commit_size&gt; commitments.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">error</td><td>Error stack </td></tr>
-  </table>
-  </dd>
-</dl>
 <dl class="section return"><dt>Returns</dt><dd>Created channel </dd></dl>
 
 </div>
@@ -350,7 +330,7 @@ Mickaël MENU </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a8dfc016b9a6e38200a8556da494c9538"></a>
+<a class="anchor" id="a55fba06237a67542c9ce763699d5bafe"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -364,13 +344,7 @@ Mickaël MENU </dd></dl>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *&#160;</td>
-          <td class="paramname"><em>ch</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em>&#160;</td>
+          <td class="paramname"><em>ch</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -390,7 +364,6 @@ Mickaël MENU </dd></dl>
   <table class="params">
     <tr><td class="paramname">ks</td><td>Knowns set </td></tr>
     <tr><td class="paramname">ch</td><td>Channel to add </td></tr>
-    <tr><td class="paramname">error</td><td>Error stack </td></tr>
   </table>
   </dd>
 </dl>
@@ -398,7 +371,7 @@ Mickaël MENU </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a82b5edf5813764c16e5fd91de842d0d7"></a>
+<a class="anchor" id="a70a9dbe7ca2d9ef511bae2a1e447406f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -406,18 +379,8 @@ Mickaël MENU </dd></dl>
           <td class="memname"><a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a>* PICC_knowns_set_forget </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *&#160;</td>
-          <td class="paramname"><em>ks</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>ks</em></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -425,7 +388,6 @@ Mickaël MENU </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ks</td><td>Knowns set </td></tr>
-    <tr><td class="paramname">error</td><td>Error stack </td></tr>
   </table>
   </dd>
 </dl>
@@ -433,12 +395,35 @@ Mickaël MENU </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a0914e82fe0abbb54c3d234743abe64e1"></a>
+<a class="anchor" id="a4ad5e08be3b5f93e0691dfa812476d08"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a>* PICC_knowns_set_knows </td>
+          <td class="memname">void PICC_knowns_set_forget_all </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *&#160;</td>
+          <td class="paramname"><em>ks</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Switches all KNOWN state elements of a KnowsSet to FORGET state.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ks</td><td>Knows set </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ab42661dc6b6733cf08febe12fad6b2b8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PICC_knowns_set_forget_to_unknown </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *&#160;</td>
           <td class="paramname"><em>ks</em>, </td>
@@ -446,8 +431,8 @@ Mickaël MENU </dd></dl>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> *&#160;</td>
+          <td class="paramname"><em>ch</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -456,11 +441,34 @@ Mickaël MENU </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Switches an element of a KnowsSet from the FORGET state to the UNKNOWN state.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ks</td><td>Knows set </td></tr>
+    <tr><td class="paramname">ch</td><td>Channel to switch state </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ab35eff4439525486ad64351c2c87a0a8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a>* PICC_knowns_set_knows </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="channel_8h.html#ab705fb8d376f852fb1af337ac749c2e3">PICC_KnownsSet</a> *&#160;</td>
+          <td class="paramname"><em>ks</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 <p>Returns a subset of all KNOWN-STATE in a knows set.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ks</td><td>Knowns set </td></tr>
-    <tr><td class="paramname">error</td><td>Error stack </td></tr>
   </table>
   </dd>
 </dl>
@@ -501,10 +509,44 @@ Mickaël MENU </dd></dl>
 
 </div>
 </div>
+<a class="anchor" id="a40f26f3ac0e12d7683392c4c5456c34e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PICC_release_all_channels </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="channel_8h.html#a0a70def8883f1abb8e7246b3a4c9dffb">PICC_Channel</a> **&#160;</td>
+          <td class="paramname"><em>chans</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nb_chans</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Releases all the given channels.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">chans</td><td>Set of channels to release </td></tr>
+    <tr><td class="paramname">nb_chans</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 25 2013 14:42:41 for PiThread by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 8 2013 15:26:08 for PiThread by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3
 </small></address>

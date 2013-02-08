@@ -1,4 +1,4 @@
-.TH "include/pi_thread.h" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.TH "include/pi_thread.h" 3 "Fri Feb 8 2013" "PiThread" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -7,6 +7,8 @@ include/pi_thread.h \-
 .br
 .PP
 \fC#include <stdbool\&.h>\fP
+.br
+\fC#include <symbols\&.h>\fP
 .br
 \fC#include <scheduler\&.h>\fP
 .br
@@ -32,13 +34,13 @@ include/pi_thread.h \-
 
 .in +1c
 .ti -1c
-.RI "typedef int \fBPICC_Label\fP"
-.br
-.ti -1c
 .RI "typedef void( \fBPICC_PiThreadProc\fP )(struct \fB_PICC_SchedPool\fP *, struct \fB_PICC_PiThread\fP *)"
 .br
 .ti -1c
 .RI "typedef enum \fB_PICC_StatusKind\fP \fBPICC_StatusKind\fP"
+.br
+.ti -1c
+.RI "typedef enum \fB_PICC_TryResult\fP \fBPICC_TryResult\fP"
 .br
 .ti -1c
 .RI "typedef struct \fB_PICC_PiThread\fP \fBPICC_PiThread\fP"
@@ -50,18 +52,24 @@ include/pi_thread.h \-
 .ti -1c
 .RI "enum \fB_PICC_StatusKind\fP { \fBPICC_STATUS_RUN\fP, \fBPICC_STATUS_CALL\fP, \fBPICC_STATUS_WAIT\fP, \fBPICC_STATUS_ENDED\fP, \fBPICC_STATUS_BLOCKED\fP }"
 .br
+.ti -1c
+.RI "enum \fB_PICC_TryResult\fP { \fBPICC_TRY_ENABLED\fP, \fBPICC_TRY_DISABLED\fP, \fBPICC_TRY_COMMIT\fP }"
+.br
 .in -1c
 .SS "Functions"
 
 .in +1c
 .ti -1c
-.RI "\fBPICC_PiThread\fP * \fBPICC_create_pithread\fP (int env_length, int knowns_length, \fBPICC_Error\fP *error)"
+.RI "\fBPICC_PiThread\fP * \fBPICC_create_pithread\fP (int env_length, int knowns_length)"
 .br
 .ti -1c
-.RI "bool \fBPICC_can_awake\fP (\fBPICC_PiThread\fP *pt, struct \fB_PICC_Commit\fP *commit, \fBPICC_Error\fP *error)"
+.RI "enum \fB_PICC_CommitStatus\fP \fBPICC_can_awake\fP (\fBPICC_PiThread\fP *pt, struct \fB_PICC_Commit\fP *commit)"
 .br
 .ti -1c
-.RI "void \fBPICC_awake\fP (struct \fB_PICC_SchedPool\fP *sched, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.RI "void \fBPICC_awake\fP (struct \fB_PICC_SchedPool\fP *sched, \fBPICC_PiThread\fP *pt)"
+.br
+.ti -1c
+.RI "void \fBPICC_low_level_yield\fP ()"
 .br
 .in -1c
 .SH "Detailed Description"
@@ -80,14 +88,14 @@ Sergiu TIGANU
 
 .SH "Typedef Documentation"
 .PP 
-.SS "typedef int \fBPICC_Label\fP"
-The label type\&. Used by the pi-threads to point to a place where to start it's procedure\&. 
 .SS "typedef struct \fB_PICC_PiThread\fP  \fBPICC_PiThread\fP"
 The PiThread data type 
 .SS "typedef void( PICC_PiThreadProc)(struct \fB_PICC_SchedPool\fP *, struct \fB_PICC_PiThread\fP *)"
 The procedure type that a pi-thread executes\&. May use a couple of labels to show where it shoud start\&. 
 .SS "typedef enum \fB_PICC_StatusKind\fP  \fBPICC_StatusKind\fP"
 The status of a pi-thread 
+.SS "typedef enum \fB_PICC_TryResult\fP  \fBPICC_TryResult\fP"
+Try result\&. The result of trying to execute a thread statement 
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fB_PICC_StatusKind\fP"
@@ -110,9 +118,23 @@ An ended pi-thread
 .TP
 \fB\fIPICC_STATUS_BLOCKED \fP\fP
 A blocked pi-thread (a sleeping pi-thread that can't be awaked) 
+.SS "enum \fB_PICC_TryResult\fP"
+Try result\&. The result of trying to execute a thread statement 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIPICC_TRY_ENABLED \fP\fP
+The futher execution of the thred enabeled 
+.TP
+\fB\fIPICC_TRY_DISABLED \fP\fP
+The futher execution of the thred disabled 
+.TP
+\fB\fIPICC_TRY_COMMIT \fP\fP
+A commitment has been submited 
 .SH "Function Documentation"
 .PP 
-.SS "void PICC_awake (\fBPICC_SchedPool\fP *sched, \fBPICC_PiThread\fP *pt, \fBPICC_Error\fP *error)"
+.SS "void PICC_awake (\fBPICC_SchedPool\fP *sched, \fBPICC_PiThread\fP *pt)"
 Awakes a PiThread in the given scheduler\&.
 .PP
 \fBParameters:\fP
@@ -123,7 +145,7 @@ Awakes a PiThread in the given scheduler\&.
 .RE
 .PP
 
-.SS "bool PICC_can_awake (\fBPICC_PiThread\fP *pt, \fBPICC_Commit\fP *commit, \fBPICC_Error\fP *error)"
+.SS "enum \fB_PICC_CommitStatus\fP PICC_can_awake (\fBPICC_PiThread\fP *pt, \fBPICC_Commit\fP *commit)"
 Returns whether a PiThread can be awaken with the given commit\&.
 .PP
 \fBParameters:\fP
@@ -139,7 +161,7 @@ Whether the PiThread can be awaken with given commit
 .RE
 .PP
 
-.SS "\fBPICC_PiThread\fP* PICC_create_pithread (intenv_length, intknowns_length, \fBPICC_Error\fP *error)"
+.SS "\fBPICC_PiThread\fP* PICC_create_pithread (intenv_length, intknowns_length)"
 Creates a new PiThread with given environment and knowns set length\&.
 .PP
 \fBParameters:\fP
@@ -147,8 +169,6 @@ Creates a new PiThread with given environment and knowns set length\&.
 \fIenv_length\fP Size of the environment 
 .br
 \fIknowns_length\fP Size of the knowns set 
-.br
-\fIerror\fP Error stack 
 .RE
 .PP
 \fBReturns:\fP
@@ -157,6 +177,8 @@ Created PiThread
 .RE
 .PP
 
+.SS "void PICC_low_level_yield ()"
+?????????????? 
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for PiThread from the source code\&.

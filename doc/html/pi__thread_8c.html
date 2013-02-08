@@ -24,6 +24,7 @@
   <td style="padding-left: 0.5em;">
    <div id="projectname">PiThread
    </div>
+   <div id="projectbrief">A Stackless Runtime Environment for a Pi-calculus</div>
   </td>
  </tr>
  </tbody>
@@ -95,12 +96,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a7ed685715854b374bd64a6928d6f0262"><td class="memItemLeft" align="right" valign="top"><a class="el" href="pi__thread_8h.html#a27cd326b4bfd4bb50a635ff321faafc8">PICC_PiThread</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pi__thread_8c.html#a7ed685715854b374bd64a6928d6f0262">PICC_create_pithread</a> (int env_length, int knowns_length, <a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:a7ed685715854b374bd64a6928d6f0262"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a478323b5995a4c2a142527b1f61066de"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pi__thread_8c.html#a478323b5995a4c2a142527b1f61066de">PICC_can_awake</a> (<a class="el" href="pi__thread_8h.html#a27cd326b4bfd4bb50a635ff321faafc8">PICC_PiThread</a> *pt, <a class="el" href="commit_8h.html#a655097bbaf0e81713b6d9336948c211c">PICC_Commit</a> *commit, <a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:a478323b5995a4c2a142527b1f61066de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2342dbb3159b31f4afb1370b4b6d77c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pi__thread_8c.html#ad2342dbb3159b31f4afb1370b4b6d77c">PICC_awake</a> (<a class="el" href="scheduler_8h.html#a53817fd01b91a5a89175368b546dd8b9">PICC_SchedPool</a> *sched, <a class="el" href="pi__thread_8h.html#a27cd326b4bfd4bb50a635ff321faafc8">PICC_PiThread</a> *pt, <a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *error)</td></tr>
-<tr class="separator:ad2342dbb3159b31f4afb1370b4b6d77c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe656d61b6fe0f556dbd0510ba7f0cca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="pi__thread_8h.html#a27cd326b4bfd4bb50a635ff321faafc8">PICC_PiThread</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pi__thread_8c.html#afe656d61b6fe0f556dbd0510ba7f0cca">PICC_create_pithread</a> (int env_length, int knowns_length)</td></tr>
+<tr class="separator:afe656d61b6fe0f556dbd0510ba7f0cca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e7ef62403ce559cec8466c2c28ebd5a"><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="commit_8h.html#ae02c3ef906a0c629225851fce977eecd">_PICC_CommitStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pi__thread_8c.html#a7e7ef62403ce559cec8466c2c28ebd5a">PICC_can_awake</a> (<a class="el" href="pi__thread_8h.html#a27cd326b4bfd4bb50a635ff321faafc8">PICC_PiThread</a> *pt, <a class="el" href="commit_8h.html#a655097bbaf0e81713b6d9336948c211c">PICC_Commit</a> *commit)</td></tr>
+<tr class="separator:a7e7ef62403ce559cec8466c2c28ebd5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0871766eb662d91b5cf23f686dd2746"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pi__thread_8c.html#ac0871766eb662d91b5cf23f686dd2746">PICC_awake</a> (<a class="el" href="scheduler_8h.html#a53817fd01b91a5a89175368b546dd8b9">PICC_SchedPool</a> *sched, <a class="el" href="pi__thread_8h.html#a27cd326b4bfd4bb50a635ff321faafc8">PICC_PiThread</a> *pt)</td></tr>
+<tr class="separator:ac0871766eb662d91b5cf23f686dd2746"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd05154bc3a997b06650203fdca922f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pi__thread_8c.html#acd05154bc3a997b06650203fdca922f1">PICC_low_level_yield</a> ()</td></tr>
+<tr class="separator:acd05154bc3a997b06650203fdca922f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Pi-Threads</p>
@@ -109,7 +112,7 @@ Functions</h2></td></tr>
 <dd>
 Maxence WO </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ad2342dbb3159b31f4afb1370b4b6d77c"></a>
+<a class="anchor" id="ac0871766eb662d91b5cf23f686dd2746"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -123,13 +126,7 @@ Maxence WO </dd></dl>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="pi__thread_8h.html#a27cd326b4bfd4bb50a635ff321faafc8">PICC_PiThread</a> *&#160;</td>
-          <td class="paramname"><em>pt</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em>&#160;</td>
+          <td class="paramname"><em>pt</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -149,12 +146,12 @@ Maxence WO </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a478323b5995a4c2a142527b1f61066de"></a>
+<a class="anchor" id="a7e7ef62403ce559cec8466c2c28ebd5a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool PICC_can_awake </td>
+          <td class="memname">enum <a class="el" href="commit_8h.html#ae02c3ef906a0c629225851fce977eecd">_PICC_CommitStatus</a> PICC_can_awake </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="pi__thread_8h.html#a27cd326b4bfd4bb50a635ff321faafc8">PICC_PiThread</a> *&#160;</td>
           <td class="paramname"><em>pt</em>, </td>
@@ -163,13 +160,7 @@ Maxence WO </dd></dl>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="commit_8h.html#a655097bbaf0e81713b6d9336948c211c">PICC_Commit</a> *&#160;</td>
-          <td class="paramname"><em>commit</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em>&#160;</td>
+          <td class="paramname"><em>commit</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -190,7 +181,7 @@ Maxence WO </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a7ed685715854b374bd64a6928d6f0262"></a>
+<a class="anchor" id="afe656d61b6fe0f556dbd0510ba7f0cca"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -204,13 +195,7 @@ Maxence WO </dd></dl>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>knowns_length</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="error_8h.html#af89348b58191950b36702ace17a79c0b">PICC_Error</a> *&#160;</td>
-          <td class="paramname"><em>error</em>&#160;</td>
+          <td class="paramname"><em>knowns_length</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -224,7 +209,6 @@ Maxence WO </dd></dl>
   <table class="params">
     <tr><td class="paramname">env_length</td><td>Size of the environment </td></tr>
     <tr><td class="paramname">knowns_length</td><td>Size of the knowns set </td></tr>
-    <tr><td class="paramname">error</td><td>Error stack </td></tr>
   </table>
   </dd>
 </dl>
@@ -232,10 +216,26 @@ Maxence WO </dd></dl>
 
 </div>
 </div>
+<a class="anchor" id="acd05154bc3a997b06650203fdca922f1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void PICC_low_level_yield </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>?????????????? </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 25 2013 14:42:41 for PiThread by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 8 2013 15:26:09 for PiThread by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3
 </small></address>

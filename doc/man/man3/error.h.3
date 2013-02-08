@@ -1,4 +1,4 @@
-.TH "include/error.h" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.TH "include/error.h" 3 "Fri Feb 8 2013" "PiThread" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -46,6 +46,12 @@ include/error.h \-
 .br
 .ti -1c
 .RI "#define \fBPRINT_ERROR\fP(error)   \fBPICC_print_error\fP(error, __FILE__, __FUNCTION__)"
+.br
+.ti -1c
+.RI "#define \fBCRASH_NEW_ERROR\fP(id)"
+.br
+.ti -1c
+.RI "#define \fBPRINT_NEW_ERROR\fP(id)"
 .br
 .in -1c
 .SS "Typedefs"
@@ -113,6 +119,14 @@ Mickaël MENU
 
 .SS "#define CRASH(error)   \fBPICC_crash\fP(error, __FILE__, __FUNCTION__)"
 
+.SS "#define CRASH_NEW_ERROR(id)"
+\fBValue:\fP
+.PP
+.nf
+ALLOC_ERROR(error); \
+    NEW_ERROR(&error, id); \
+    CRASH(&error);
+.fi
 .SS "#define FORWARD_ERROR(error, prev)   \fBPICC_forward_error\fP(error, prev)"
 
 .SS "#define HAS_ERROR(error)   error\&.id > 0"
@@ -121,6 +135,14 @@ Mickaël MENU
 
 .SS "#define PRINT_ERROR(error)   \fBPICC_print_error\fP(error, __FILE__, __FUNCTION__)"
 
+.SS "#define PRINT_NEW_ERROR(id)"
+\fBValue:\fP
+.PP
+.nf
+ALLOC_ERROR(error); \
+    NEW_ERROR(&error, id); \
+    PRINT_ERROR(&error);
+.fi
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef struct \fB_PICC_Error\fP  \fBPICC_Error\fP"

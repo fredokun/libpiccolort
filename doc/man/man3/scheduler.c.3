@@ -1,4 +1,4 @@
-.TH "src/scheduler.c" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.TH "src/scheduler.c" 3 "Fri Feb 8 2013" "PiThread" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,13 +15,13 @@ src/scheduler.c \-
 
 .in +1c
 .ti -1c
-.RI "#define \fBLOCK_SCHED_POOL\fP(sp)   \fBPICC_acquire\fP(sp->lock);"
+.RI "#define \fBLOCK_SCHED_POOL\fP(sp)   \fBPICC_acquire\fP(&(sp->lock));"
 .br
 .ti -1c
-.RI "#define \fBRELEASE_SCHED_POOL\fP(sp)   \fBPICC_release\fP(sp->lock, NULL);"
+.RI "#define \fBRELEASE_SCHED_POOL\fP(sp)   \fBPICC_release\fP(&(sp->lock));"
 .br
 .ti -1c
-.RI "#define \fBWAIT_SCHED_POOL\fP(sp)   \fBPICC_cond_wait\fP(sp->cond, sp->lock);"
+.RI "#define \fBWAIT_SCHED_POOL\fP(sp)   \fBPICC_cond_wait\fP(&(sp->cond), &(sp->lock));"
 .br
 .in -1c
 .SS "Functions"
@@ -56,11 +56,11 @@ Mickaël MENU
 
 .SH "Macro Definition Documentation"
 .PP 
-.SS "#define LOCK_SCHED_POOL(sp)   \fBPICC_acquire\fP(sp->lock);"
+.SS "#define LOCK_SCHED_POOL(sp)   \fBPICC_acquire\fP(&(sp->lock));"
 
-.SS "#define RELEASE_SCHED_POOL(sp)   \fBPICC_release\fP(sp->lock, NULL);"
+.SS "#define RELEASE_SCHED_POOL(sp)   \fBPICC_release\fP(&(sp->lock));"
 
-.SS "#define WAIT_SCHED_POOL(sp)   \fBPICC_cond_wait\fP(sp->cond, sp->lock);"
+.SS "#define WAIT_SCHED_POOL(sp)   \fBPICC_cond_wait\fP(&(sp->cond), &(sp->lock));"
 
 .SH "Function Documentation"
 .PP 

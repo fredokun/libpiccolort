@@ -6,6 +6,7 @@
  *
  * @author Mickaël MENU
  * @author Maxence WO
+ * @author Joël HING
  */
 
 #ifndef COMMIT_H
@@ -82,7 +83,7 @@ typedef struct _PICC_Commit {
     struct _PICC_Channel *channel; /**< The channel of this commitment */
     /**@}*/
     /**
-     * The specific pârt of the commitments. One of the pointers
+     * The specific part of the commitments. One of the pointers
      * below should always be NULL.
      */
     union {
@@ -98,7 +99,7 @@ typedef struct _PICC_Commit {
  */
 typedef struct _PICC_CommitListElement {
     /**@{*/
-    PICC_Commit *commit; /**< The refferenced commit*/
+    PICC_Commit *commit; /**< The referenced commit*/
     struct _PICC_CommitListElement *next; /** A pointer to the next
                                             element or NULL if none */
     /**@}*/
@@ -106,6 +107,8 @@ typedef struct _PICC_CommitListElement {
 
 /**
  * The commit list type
+ * @inv if size = 0, *head = NULL && *tail = NULL
+ * @inv 
  */
 typedef struct _PICC_CommitList {
     /**@{*/
