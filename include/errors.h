@@ -5,6 +5,7 @@
  * This project is released under MIT License.
  *
  * @author Mickaël MENU
+ * @author Dany SIRIPHOL
  */
 
 #ifndef ERRORS_H
@@ -46,9 +47,12 @@
         ERR_MUTEX_ALREADY_UNLOCKED,
 
         ERR_NULLPOINTER_PITHREAD,
+        ERR_NULLPOINTER_CHANNEL,
         ERR_NULLPOINTER_COMMIT,
         ERR_NULLPOINTER_COMMITLISTELEM,
         ERR_NULLPOINTER_COMMITLIST,
+
+        ERR_CHANNEL_GLOBAL_RC,
 
         ERR_INVALID_COMMIT,
         ERR_INVALID_VALUE,

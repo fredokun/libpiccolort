@@ -69,5 +69,8 @@
     PICC_set_destroy(s);
 
 
+#define CONTRACT 1
+
+extern void debug(const char* s);
 
 #endif

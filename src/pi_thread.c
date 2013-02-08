@@ -16,21 +16,21 @@
  *
  * @param env_length Size of the environment
  * @param knowns_length Size of the knowns set
- * @param error Error stack
  * @return Created PiThread
  */
-PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, PICC_Error *error)
+PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
 {
-    PICC_ALLOC(thread, PICC_PiThread, error) {
+    ALLOC_ERROR(error);
+    PICC_ALLOC(thread, PICC_PiThread, &error) {
         ALLOC_ERROR(sub_error);
         thread->knowns = PICC_create_knowns_set(knowns_length, &sub_error);
         if (HAS_ERROR(sub_error)) {
-            ADD_ERROR(error, sub_error, ERR_THREAD_CREATE);
+            ADD_ERROR(&error, sub_error, ERR_THREAD_CREATE);
         } else {
             PICC_ALLOC_N(env, PICC_Value, env_length, &sub_error) {
                 thread->clock = PICC_create_clock(&sub_error);
                 if (HAS_ERROR(sub_error)) {
-                    ADD_ERROR(error, sub_error, ERR_THREAD_CREATE);
+                    ADD_ERROR(&error, sub_error, ERR_THREAD_CREATE);
                 } else {
                     thread->env = env;
                     thread->env_length = env_length;
@@ -57,10 +57,10 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, PICC_Erro
  * @param commit Commitment
  * @return Whether the PiThread can be awaken with given commit
  */
-enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit, PICC_Error *error)
+enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
 {
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
-    return false;
+    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
+    return PICC_STATUS_ENDED;
 }
 
 /**
@@ -69,9 +69,9 @@ enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit, P
  * @param sched Scheduler
  * @param pt PiThread to be awaken
  */
-void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Error *error)
+void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt)
 {
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
 }
 
 /**
@@ -79,7 +79,5 @@ void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Error *error)
  */
 void PICC_low_level_yield()
 {
-    ALLOC_ERROR(error);
-    NEW_ERROR(&error, ERR_NOT_IMPLEMENTED);
-    CRASH(&error);
+    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
 }

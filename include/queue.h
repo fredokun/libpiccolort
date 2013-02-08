@@ -19,9 +19,9 @@
  */
 typedef struct _PICC_QueueCell {
     /**@{*/
-    struct _PICC_PiThread *thread; /** The pi-thread contained in the 
+    struct _PICC_PiThread *thread; /** The pi-thread contained in the
                                         cell */
-    struct _PICC_QueueCell *next; /** A pointer to the next cell or 
+    struct _PICC_QueueCell *next; /** A pointer to the next cell or
                                         NULL if it does not exist */
     /**@}*/
 } PICC_QueueCell;
@@ -42,11 +42,11 @@ typedef struct _PICC_Queue {
  */
 typedef struct _PICC_ReadyQueue {
     /**@{*/
-    PICC_Queue q; /** The standard PiThread queue that contains all 
+    PICC_Queue q; /** The standard PiThread queue that contains all
                     the data */
-    PICC_Mutex lock; /** The mutex used to sinchronize the data with 
+    PICC_Mutex lock; /** The mutex used to sinchronize the data with
                         the other threads */
-    /**@}*/                    
+    /**@}*/
 } PICC_ReadyQueue;
 
 /**
@@ -54,23 +54,23 @@ typedef struct _PICC_ReadyQueue {
  */
 typedef struct _PICC_WaitQueue {
     /**@{*/
-    PICC_Queue active; /** The standard queue that contains the 
+    PICC_Queue active; /** The standard queue that contains the
                         PiThreads that are not waiting for a long time */
-    PICC_Queue old; /** The standard queue that contains the PiThreads 
+    PICC_Queue old; /** The standard queue that contains the PiThreads
                         that are waiting a lot of time */
-    PICC_Mutex lock; /** The mutex used to sinchronize the queues with 
+    PICC_Mutex lock; /** The mutex used to sinchronize the queues with
                         the other threads */
     /**@}*/
 } PICC_WaitQueue;
 
 extern PICC_ReadyQueue *PICC_create_ready_queue(PICC_Error *error);
-extern void PICC_ready_queue_push(PICC_ReadyQueue *rq, struct _PICC_PiThread *pt, PICC_Error *error);
-extern void PICC_ready_queue_add(PICC_ReadyQueue *rq, struct _PICC_PiThread *pt, PICC_Error *error);
+extern void PICC_ready_queue_push(PICC_ReadyQueue *rq, struct _PICC_PiThread *pt);
+extern void PICC_ready_queue_add(PICC_ReadyQueue *rq, struct _PICC_PiThread *pt);
 extern struct _PICC_PiThread *PICC_ready_queue_pop(PICC_ReadyQueue *rq);
 extern int PICC_ready_queue_size(PICC_ReadyQueue *rq);
 
 extern PICC_WaitQueue *PICC_create_wait_queue(PICC_Error *error);
-extern void PICC_wait_queue_push(PICC_WaitQueue *wq, struct _PICC_PiThread *pt, PICC_Error *error);
+extern void PICC_wait_queue_push(PICC_WaitQueue *wq, struct _PICC_PiThread *pt);
 extern struct _PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, struct _PICC_PiThread *pt);
 extern void PICC_wait_queue_push_old(PICC_WaitQueue *wq, struct _PICC_PiThread *pt, PICC_Error *error);
 extern struct _PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq);

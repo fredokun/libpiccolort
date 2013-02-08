@@ -1,5 +1,5 @@
 /**
- * @file runtime.c
+ * @file runtime_tests.c
  * File that contains all the necesseray tests to check the behavior of all functions of runtime.c
  *
  * This project is released under MIT License.
@@ -13,6 +13,7 @@
 #include <pthread.h>
 #include <pi_thread.h>
 #include <runtime.h>
+#include <runtime_tests.h>
 
 //int PICC_GC2(PICC_SchedPool schedpool);
 
@@ -25,11 +26,8 @@
 bool check_pithread(PICC_Error *error)
 {
 
-    ALLOC_ERROR(create_error);
-    PICC_PiThread *p = PICC_create_pithread(1, 1, &create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-    } else if (p == NULL) {
+    PICC_PiThread *p = PICC_create_pithread(1, 1);
+    if (p == NULL) {
         NEW_ERROR(error,ERR_NULLPOINTER_PITHREAD);
     } else {
         free(p);
@@ -42,13 +40,13 @@ bool check_pithread(PICC_Error *error)
 /**
 * Test : Create Commitments
 *
-* @return boolean true if it works else false 
+* @return boolean true if it works else false
 *
 */
 bool check_create_commitments(PICC_Error* error)
-{	
+{
     ALLOC_ERROR(create_error);
-    c = PICC_create_commitment(&create_error);
+    PICC_Commit* c = PICC_create_commitment(&create_error);
     if (HAS_ERROR(create_error)) {
         FORWARD_ERROR(error, create_error);
         return false;
@@ -57,27 +55,77 @@ bool check_create_commitments(PICC_Error* error)
         NEW_ERROR(error, ERR_NULLPOINTER_COMMIT);
         return false;
     }
+
+    return true;
 }
 
 bool check_register_outcommits(PICC_Error* error)
 {
-    PICC_Commit *c;
     PICC_PiThread* pt;
     PICC_Channel *ch;
     PICC_EvalFunction *eval;
     PICC_Label cont_pc;
-
-    ALLOC_ERROR(create_error);
-    c = PICC_create_commitment(&create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-        return false;
-    }
+    int size;
 
     //check pithread, channel first
-    pt = PICC_create_pithread();
+    pt = PICC_create_pithread(1, 1);
     ch = PICC_create_channel(error);
-    
+    size = pt->commits->size;
+    PICC_Value* func(PICC_PiThread* a) { printf("my eval func !\n"); return NULL; };
+    eval = func;
+    cont_pc = 10;
+
+    //pre
+    ASSERT(pt != NULL);
+    ASSERT(ch != NULL);
+    ASSERT(eval != NULL);
+   ASSERT(cont_pc >= 0);
+
+    PICC_register_output_commitment(pt, ch, eval, cont_pc);
+
+    //post
+    ASSERT(pt->commits->size == (size + 1));
+    ASSERT(pt->commits->head->commit->type == PICC_OUT_COMMIT);
+    ASSERT(pt->commits->head->commit->content.out->eval_func == eval);
+    ASSERT(pt->commits->head->commit->thread == pt);
+    ASSERT(pt->commits->head->commit->channel == ch);
+    ASSERT(pt->commits->head->commit->cont_pc == cont_pc);
+
+    return true;
+}
+
+bool check_register_incommits(PICC_Error* error)
+{
+    int refvar;
+    PICC_PiThread* pt;
+    PICC_Channel *ch;
+    PICC_Label cont_pc;
+    int size;
+
+    //check pithread, channel first
+    pt = PICC_create_pithread(1, 1);
+    ch = PICC_create_channel(error);
+    size = pt->commits->size;
+    refvar = 42;
+    cont_pc = 10;
+
+    //pre
+    ASSERT(pt != NULL);
+    ASSERT(ch != NULL);
+    ASSERT(cont_pc >= 0);
+    ASSERT(refvar == 1);
+
+    PICC_register_input_commitment(pt, ch, refvar, cont_pc);
+
+    //post
+    ASSERT(pt->commits->size == (size + 1));
+    ASSERT(pt->commits->head->commit->type == PICC_IN_COMMIT);
+    ASSERT(pt->commits->head->commit->content.in->refvar == refvar);
+    ASSERT(pt->commits->head->commit->thread == pt);
+    ASSERT(pt->commits->head->commit->channel == ch);
+    ASSERT(pt->commits->head->commit->cont_pc == cont_pc);
+
+    return true;
 }
 
 /**
