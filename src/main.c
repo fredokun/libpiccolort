@@ -19,9 +19,6 @@
 #include <pi_thread.h>
 #include <runtime.h>
 #include <errors.h>
-#include <runtime_tests.h>
-#include <pithread_test.h>
-#include <commit_test.h>
 
 #define DEBUG
 
@@ -32,7 +29,7 @@ int main()
     PICC_all_channel_test();
        printf("end\n");
     /*
-    
+
     ALLOC_ERROR(error);
 
     check_pithread(&error);
