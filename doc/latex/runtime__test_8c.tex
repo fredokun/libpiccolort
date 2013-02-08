@@ -7,29 +7,45 @@
 {\ttfamily \#include $<$pthread.\-h$>$}\\*
 {\ttfamily \#include $<$pi\-\_\-thread.\-h$>$}\\*
 {\ttfamily \#include $<$runtime.\-h$>$}\\*
+{\ttfamily \#include $<$runtime\-\_\-tests.\-h$>$}\\*
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
 bool \hyperlink{runtime__test_8c_a09778f56a4e5739bd16273f058067c4d}{check\-\_\-pithread} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
 \item 
-bool \hyperlink{runtime__test_8c_a285f5b6a70e1fdb34f6bacdbf92e23c3}{check\-\_\-commits} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+bool \hyperlink{runtime__test_8c_a2e40a1d298bd7400b0048da0f76108c0}{check\-\_\-create\-\_\-commitments} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+bool \hyperlink{runtime__test_8c_a0e2b965ee9c107372ebdce98671eaaff}{check\-\_\-register\-\_\-outcommits} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+bool \hyperlink{runtime__test_8c_a950212beb10d5e1cdc79222e64d11bd9}{check\-\_\-register\-\_\-incommits} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
+\item 
+bool \hyperlink{runtime__test_8c_a7ffc5362996c96ac6d138927f069993c}{check\-\_\-commitlists} (\hyperlink{error_8h_af89348b58191950b36702ace17a79c0b}{P\-I\-C\-C\-\_\-\-Error} $\ast$error)
 \end{DoxyCompactItemize}
 
 
 \subsection{Function Documentation}
-\hypertarget{runtime__test_8c_a285f5b6a70e1fdb34f6bacdbf92e23c3}{\index{runtime\-\_\-test.\-c@{runtime\-\_\-test.\-c}!check\-\_\-commits@{check\-\_\-commits}}
-\index{check\-\_\-commits@{check\-\_\-commits}!runtime_test.c@{runtime\-\_\-test.\-c}}
-\subsubsection[{check\-\_\-commits}]{\setlength{\rightskip}{0pt plus 5cm}bool check\-\_\-commits (
+\hypertarget{runtime__test_8c_a7ffc5362996c96ac6d138927f069993c}{\index{runtime\-\_\-test.\-c@{runtime\-\_\-test.\-c}!check\-\_\-commitlists@{check\-\_\-commitlists}}
+\index{check\-\_\-commitlists@{check\-\_\-commitlists}!runtime_test.c@{runtime\-\_\-test.\-c}}
+\subsubsection[{check\-\_\-commitlists}]{\setlength{\rightskip}{0pt plus 5cm}bool check\-\_\-commitlists (
 \begin{DoxyParamCaption}
 \item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
 \end{DoxyParamCaption}
-)}}\label{runtime__test_8c_a285f5b6a70e1fdb34f6bacdbf92e23c3}
+)}}\label{runtime__test_8c_a7ffc5362996c96ac6d138927f069993c}
 Test \-: Commitments \par
- P\-I\-C\-C\-\_\-\-Commit $\ast$\-P\-I\-C\-C\-\_\-create\-\_\-commitment(); \par
  P\-I\-C\-C\-\_\-\-Commit\-List $\ast$\-P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list(); \par
  P\-I\-C\-C\-\_\-\-Commit\-List\-Element $\ast$\-P\-I\-C\-C\-\_\-create\-\_\-commit\-\_\-list\-\_\-element();
 
-plop
+\begin{DoxyReturn}{Returns}
+boolean true if it works else false 
+\end{DoxyReturn}
+\hypertarget{runtime__test_8c_a2e40a1d298bd7400b0048da0f76108c0}{\index{runtime\-\_\-test.\-c@{runtime\-\_\-test.\-c}!check\-\_\-create\-\_\-commitments@{check\-\_\-create\-\_\-commitments}}
+\index{check\-\_\-create\-\_\-commitments@{check\-\_\-create\-\_\-commitments}!runtime_test.c@{runtime\-\_\-test.\-c}}
+\subsubsection[{check\-\_\-create\-\_\-commitments}]{\setlength{\rightskip}{0pt plus 5cm}bool check\-\_\-create\-\_\-commitments (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{runtime__test_8c_a2e40a1d298bd7400b0048da0f76108c0}
+Test \-: Create Commitments
 
 \begin{DoxyReturn}{Returns}
 boolean true if it works else false 
@@ -47,3 +63,17 @@ Test \-: P\-I\-C\-C\-\_\-create\-\_\-pithread \par
 \begin{DoxyReturn}{Returns}
 boolean true if it works else false 
 \end{DoxyReturn}
+\hypertarget{runtime__test_8c_a950212beb10d5e1cdc79222e64d11bd9}{\index{runtime\-\_\-test.\-c@{runtime\-\_\-test.\-c}!check\-\_\-register\-\_\-incommits@{check\-\_\-register\-\_\-incommits}}
+\index{check\-\_\-register\-\_\-incommits@{check\-\_\-register\-\_\-incommits}!runtime_test.c@{runtime\-\_\-test.\-c}}
+\subsubsection[{check\-\_\-register\-\_\-incommits}]{\setlength{\rightskip}{0pt plus 5cm}bool check\-\_\-register\-\_\-incommits (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{runtime__test_8c_a950212beb10d5e1cdc79222e64d11bd9}
+\hypertarget{runtime__test_8c_a0e2b965ee9c107372ebdce98671eaaff}{\index{runtime\-\_\-test.\-c@{runtime\-\_\-test.\-c}!check\-\_\-register\-\_\-outcommits@{check\-\_\-register\-\_\-outcommits}}
+\index{check\-\_\-register\-\_\-outcommits@{check\-\_\-register\-\_\-outcommits}!runtime_test.c@{runtime\-\_\-test.\-c}}
+\subsubsection[{check\-\_\-register\-\_\-outcommits}]{\setlength{\rightskip}{0pt plus 5cm}bool check\-\_\-register\-\_\-outcommits (
+\begin{DoxyParamCaption}
+\item[{{\bf P\-I\-C\-C\-\_\-\-Error} $\ast$}]{error}
+\end{DoxyParamCaption}
+)}}\label{runtime__test_8c_a0e2b965ee9c107372ebdce98671eaaff}

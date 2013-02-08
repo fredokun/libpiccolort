@@ -1,4 +1,4 @@
-.TH "_PICC_Channel" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.TH "_PICC_Channel" 3 "Fri Feb 8 2013" "PiThread" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -17,10 +17,10 @@ _PICC_Channel \-
 .in +1c
 .in +1c
 .ti -1c
-.RI "struct \fB_PICC_Commit\fP * \fBincommits\fP"
+.RI "struct \fB_PICC_CommitList\fP * \fBincommits\fP"
 .br
 .ti -1c
-.RI "struct \fB_PICC_Commit\fP * \fBoutcommits\fP"
+.RI "struct \fB_PICC_CommitList\fP * \fBoutcommits\fP"
 .br
 .ti -1c
 .RI "int \fBglobal_rc\fP"
@@ -37,11 +37,13 @@ The type of the pi-thread channels
 .PP 
 .SS "int _PICC_Channel::global_rc"
 
-.SS "struct \fB_PICC_Commit\fP* _PICC_Channel::incommits"
+.SS "struct \fB_PICC_CommitList\fP* _PICC_Channel::incommits"
 The input commits list 
 .SS "\fBPICC_Mutex\fP _PICC_Channel::lock"
-The number of commitments to that reference this channel (TODO see spec) 
-.SS "struct \fB_PICC_Commit\fP* _PICC_Channel::outcommits"
+The number of commitments to that reference
+.PP
+this channel (TODO see spec) 
+.SS "struct \fB_PICC_CommitList\fP* _PICC_Channel::outcommits"
 The output commits list 
 
 .SH "Author"

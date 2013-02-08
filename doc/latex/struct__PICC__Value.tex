@@ -6,25 +6,7 @@
 {\ttfamily \#include $<$value.\-h$>$}
 
 \subsection*{Data Fields}
-{\bf }\par
 \begin{DoxyCompactItemize}
-\item 
-\hyperlink{value_8h_aa36f34a9037f3bd711984b08dfc22c15}{P\-I\-C\-C\-\_\-\-Value\-Kind} \hyperlink{struct__PICC__Value_a3daeb493d6690c977813226ce2f50421}{kind}
-\item 
-\hyperlink{sync_8h_a600a20a1dd394c06182a81d72e3357f4}{P\-I\-C\-C\-\_\-\-Mutex} \hyperlink{struct__PICC__Value_aa81746d9bb365cc0a8f8229780b70e78}{lock}
-\end{DoxyCompactItemize}
-
-\begin{Indent}{\bf The possible types a value can have.}\par
-\end{Indent}
-\begin{Indent}{\bf The possible types a value can have.}\par
-{\em A lock that may be used tu block the value for concurent accesses
-
-Only the value for the type that corresponds to the
-\begin{DoxyParams}{Parameters}
-{\em kind} & matters. \\
-\hline
-\end{DoxyParams}
-}\begin{DoxyCompactItemize}
 \item 
 \begin{tabbing}
 xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
@@ -37,7 +19,16 @@ union \{\\
 \} \hyperlink{struct__PICC__Value_ae479e83bf66b91bb89f7b7dd5b19f2b5}{content}\\
 
 \end{tabbing}\end{DoxyCompactItemize}
-\end{Indent}
+{\bf }\par
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{value_8h_aa36f34a9037f3bd711984b08dfc22c15}{P\-I\-C\-C\-\_\-\-Value\-Kind} \hyperlink{struct__PICC__Value_a3daeb493d6690c977813226ce2f50421}{kind}
+\item 
+\hyperlink{sync_8h_a600a20a1dd394c06182a81d72e3357f4}{P\-I\-C\-C\-\_\-\-Mutex} \hyperlink{struct__PICC__Value_aa81746d9bb365cc0a8f8229780b70e78}{lock}
+\end{DoxyCompactItemize}
+
+{\bf }\par
+
 
 
 \subsection{Detailed Description}

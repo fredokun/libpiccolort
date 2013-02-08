@@ -20,6 +20,8 @@
 #include <runtime.h>
 #include <errors.h>
 #include <runtime_tests.h>
+#include <pithread_test.h>
+#include <commit_test.h>
 
 #define DEBUG
 

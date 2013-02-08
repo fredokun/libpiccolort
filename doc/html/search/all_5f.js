@@ -7,6 +7,7 @@ var searchData=
   ['_5fpicc_5fcommitl',['_PICC_CommitL',['../struct__PICC__CommitL.html',1,'']]],
   ['_5fpicc_5fcommitlist',['_PICC_CommitList',['../struct__PICC__CommitList.html',1,'']]],
   ['_5fpicc_5fcommitlistelement',['_PICC_CommitListElement',['../struct__PICC__CommitListElement.html',1,'']]],
+  ['_5fpicc_5fcommitstatus',['_PICC_CommitStatus',['../commit_8h.html#ae02c3ef906a0c629225851fce977eecd',1,'commit.h']]],
   ['_5fpicc_5fcommittype',['_PICC_CommitType',['../commit_8h.html#a5376f03680bdea1adab9e810d0e58a09',1,'commit.h']]],
   ['_5fpicc_5ferror',['_PICC_Error',['../struct__PICC__Error.html',1,'']]],
   ['_5fpicc_5ferrorid',['_PICC_ErrorId',['../errors_8h.html#a9c1e47db6d7c91cf096eaecd0eb79b64',1,'errors.h']]],
@@ -25,6 +26,7 @@ var searchData=
   ['_5fpicc_5fsetelement',['_PICC_SetElement',['../struct__PICC__SetElement.html',1,'']]],
   ['_5fpicc_5fsettype',['_PICC_SetType',['../set_8h.html#a4ae626311d31582e5af6f0f0ece4b108',1,'set.h']]],
   ['_5fpicc_5fstatuskind',['_PICC_StatusKind',['../pi__thread_8h.html#aa9853ca57c550ff19db8117a12d12371',1,'pi_thread.h']]],
+  ['_5fpicc_5ftryresult',['_PICC_TryResult',['../pi__thread_8h.html#a615f13dafc6d32dfbb1597f92c35d16f',1,'pi_thread.h']]],
   ['_5fpicc_5fvalue',['_PICC_Value',['../struct__PICC__Value.html',1,'']]],
   ['_5fpicc_5fvaluekind',['_PICC_ValueKind',['../value_8h.html#a6934f0b1c34b064056b37127d168d5cf',1,'value.h']]],
   ['_5fpicc_5fwaitqueue',['_PICC_WaitQueue',['../struct__PICC__WaitQueue.html',1,'']]]

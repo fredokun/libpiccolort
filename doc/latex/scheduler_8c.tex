@@ -6,11 +6,11 @@
 \subsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
-\#define \hyperlink{scheduler_8c_a114502be78de7a46f79de097c24fcbbf}{L\-O\-C\-K\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L}(sp)~\hyperlink{sync_8c_ad533486752c5f9d3dd499a06288f31ab}{P\-I\-C\-C\-\_\-acquire}(sp-\/$>$lock);
+\#define \hyperlink{scheduler_8c_a114502be78de7a46f79de097c24fcbbf}{L\-O\-C\-K\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L}(sp)~\hyperlink{sync_8c_aa27397e8ad870b7b7ae763a71009be13}{P\-I\-C\-C\-\_\-acquire}(\&(sp-\/$>$lock));
 \item 
-\#define \hyperlink{scheduler_8c_a32cfe95d325ff82d0ab33bd7482816b6}{R\-E\-L\-E\-A\-S\-E\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L}(sp)~\hyperlink{sync_8c_a0a6cdd715fc6aba7327880215401fa71}{P\-I\-C\-C\-\_\-release}(sp-\/$>$lock, N\-U\-L\-L);
+\#define \hyperlink{scheduler_8c_a32cfe95d325ff82d0ab33bd7482816b6}{R\-E\-L\-E\-A\-S\-E\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L}(sp)~\hyperlink{sync_8c_ad5a8707a554e73b819db9986b371aca0}{P\-I\-C\-C\-\_\-release}(\&(sp-\/$>$lock));
 \item 
-\#define \hyperlink{scheduler_8c_a77f0fdb4f9c1472c7361ad7b60d1cb20}{W\-A\-I\-T\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L}(sp)~\hyperlink{sync_8c_afc97dc4dafa74e0e3c2a47bc16b03927}{P\-I\-C\-C\-\_\-cond\-\_\-wait}(sp-\/$>$cond, sp-\/$>$lock);
+\#define \hyperlink{scheduler_8c_a77f0fdb4f9c1472c7361ad7b60d1cb20}{W\-A\-I\-T\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L}(sp)~\hyperlink{sync_8c_aaad4930f81e40868d898bd94105e60e2}{P\-I\-C\-C\-\_\-cond\-\_\-wait}(\&(sp-\/$>$cond), \&(sp-\/$>$lock));
 \end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
@@ -44,21 +44,21 @@ Mickaël M\-E\-N\-U
 \begin{DoxyParamCaption}
 \item[{}]{sp}
 \end{DoxyParamCaption}
-)~{\bf P\-I\-C\-C\-\_\-acquire}(sp-\/$>$lock);}}\label{scheduler_8c_a114502be78de7a46f79de097c24fcbbf}
+)~{\bf P\-I\-C\-C\-\_\-acquire}(\&(sp-\/$>$lock));}}\label{scheduler_8c_a114502be78de7a46f79de097c24fcbbf}
 \hypertarget{scheduler_8c_a32cfe95d325ff82d0ab33bd7482816b6}{\index{scheduler.\-c@{scheduler.\-c}!R\-E\-L\-E\-A\-S\-E\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L@{R\-E\-L\-E\-A\-S\-E\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L}}
 \index{R\-E\-L\-E\-A\-S\-E\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L@{R\-E\-L\-E\-A\-S\-E\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L}!scheduler.c@{scheduler.\-c}}
 \subsubsection[{R\-E\-L\-E\-A\-S\-E\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L}]{\setlength{\rightskip}{0pt plus 5cm}\#define R\-E\-L\-E\-A\-S\-E\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L(
 \begin{DoxyParamCaption}
 \item[{}]{sp}
 \end{DoxyParamCaption}
-)~{\bf P\-I\-C\-C\-\_\-release}(sp-\/$>$lock, N\-U\-L\-L);}}\label{scheduler_8c_a32cfe95d325ff82d0ab33bd7482816b6}
+)~{\bf P\-I\-C\-C\-\_\-release}(\&(sp-\/$>$lock));}}\label{scheduler_8c_a32cfe95d325ff82d0ab33bd7482816b6}
 \hypertarget{scheduler_8c_a77f0fdb4f9c1472c7361ad7b60d1cb20}{\index{scheduler.\-c@{scheduler.\-c}!W\-A\-I\-T\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L@{W\-A\-I\-T\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L}}
 \index{W\-A\-I\-T\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L@{W\-A\-I\-T\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L}!scheduler.c@{scheduler.\-c}}
 \subsubsection[{W\-A\-I\-T\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L}]{\setlength{\rightskip}{0pt plus 5cm}\#define W\-A\-I\-T\-\_\-\-S\-C\-H\-E\-D\-\_\-\-P\-O\-O\-L(
 \begin{DoxyParamCaption}
 \item[{}]{sp}
 \end{DoxyParamCaption}
-)~{\bf P\-I\-C\-C\-\_\-cond\-\_\-wait}(sp-\/$>$cond, sp-\/$>$lock);}}\label{scheduler_8c_a77f0fdb4f9c1472c7361ad7b60d1cb20}
+)~{\bf P\-I\-C\-C\-\_\-cond\-\_\-wait}(\&(sp-\/$>$cond), \&(sp-\/$>$lock));}}\label{scheduler_8c_a77f0fdb4f9c1472c7361ad7b60d1cb20}
 
 
 \subsection{Function Documentation}

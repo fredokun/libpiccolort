@@ -1,4 +1,4 @@
-.TH "include/tools.h" 3 "Fri Jan 25 2013" "PiThread" \" -*- nroff -*-
+.TH "include/tools.h" 3 "Fri Feb 8 2013" "PiThread" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -32,6 +32,13 @@ include/tools.h \-
 .br
 .ti -1c
 .RI "#define \fBPICC_FREE_SET\fP(s)   \fBPICC_set_destroy\fP(s);"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBdebug\fP (const char *s)"
 .br
 .in -1c
 .SH "Detailed Description"
@@ -116,6 +123,10 @@ var = malloc(sizeof(type)); \
         NEW_ERROR(error, ERR_OUT_OF_MEMORY); \
     } else
 .fi
+.SH "Function Documentation"
+.PP 
+.SS "void debug (const char *s)"
+
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for PiThread from the source code\&.

@@ -6,6 +6,16 @@
 {\ttfamily \#include $<$commit.\-h$>$}
 
 \subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>\hyperlink{commit_8h_a0f71a22c7590232b08181e5cc63de548}{PICC\_InCommit} $\ast$ \hyperlink{struct__PICC__Commit_a745a1a078043d4467bfa29ebf5d08a5b}{in}\\
+\>\hyperlink{commit_8h_aecc9149969ed6c8695575a3c520b5bf2}{PICC\_OutCommit} $\ast$ \hyperlink{struct__PICC__Commit_a7ec6ea1ae1ab4b2b46da706874b4adda}{out}\\
+\} \hyperlink{struct__PICC__Commit_a64f32e0f5452a5abf31a90440b13be6e}{content}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
 {\bf }\par
 \begin{DoxyCompactItemize}
 \item 
@@ -17,29 +27,17 @@ struct \hyperlink{struct__PICC__Clock}{\-\_\-\-P\-I\-C\-C\-\_\-\-Clock} $\ast$ \
 \item 
 struct \hyperlink{struct__PICC__Value}{\-\_\-\-P\-I\-C\-C\-\_\-\-Value} $\ast$ \hyperlink{struct__PICC__Commit_ad26ca86d6ec9cf47f14ce4eac9d2dfaf}{clockval}
 \item 
-int \hyperlink{struct__PICC__Commit_a880e72c43ee08a0eaad3ebc3234bc612}{cont\-\_\-pc}
+\hyperlink{symbols_8h_ae23ad6ae115253385182f5a898d32c1e}{P\-I\-C\-C\-\_\-\-Label} \hyperlink{struct__PICC__Commit_ad0a2d3efd431b0f5a76713654b08f140}{cont\-\_\-pc}
 \item 
 struct \hyperlink{struct__PICC__Channel}{\-\_\-\-P\-I\-C\-C\-\_\-\-Channel} $\ast$ \hyperlink{struct__PICC__Commit_af80b43fa7c7a1fee8446a6b2efdaab03}{channel}
 \end{DoxyCompactItemize}
 
-\begin{Indent}{\bf The specific pârt of the commitments. One of the pointers}\par
-\end{Indent}
-\begin{Indent}{\bf The specific pârt of the commitments. One of the pointers}\par
-{\em below should always be N\-U\-L\-L. }\begin{DoxyCompactItemize}
-\item 
-\begin{tabbing}
-xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
-union \{\\
-\>\hyperlink{commit_8h_a0f71a22c7590232b08181e5cc63de548}{PICC\_InCommit} $\ast$ \hyperlink{struct__PICC__Commit_a745a1a078043d4467bfa29ebf5d08a5b}{in}\\
-\>\hyperlink{commit_8h_aecc9149969ed6c8695575a3c520b5bf2}{PICC\_OutCommit} $\ast$ \hyperlink{struct__PICC__Commit_a7ec6ea1ae1ab4b2b46da706874b4adda}{out}\\
-\} \hyperlink{struct__PICC__Commit_a64f32e0f5452a5abf31a90440b13be6e}{content}\\
+{\bf }\par
 
-\end{tabbing}\end{DoxyCompactItemize}
-\end{Indent}
 
 
 \subsection{Detailed Description}
-The commitment common part 
+The commitment common part  type != null \&\& thread != null \&\& clock != null \&\& clockval != null \&\& channel != null \&\& content != null  cont\-\_\-pc $>$ 0 
 
 \subsection{Field Documentation}
 \hypertarget{struct__PICC__Commit_af80b43fa7c7a1fee8446a6b2efdaab03}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit@{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit}!channel@{channel}}
@@ -51,9 +49,9 @@ The channel of this commitment \hypertarget{struct__PICC__Commit_acf28d34611ca55
 The pi-\/thread that has this commit \hypertarget{struct__PICC__Commit_ad26ca86d6ec9cf47f14ce4eac9d2dfaf}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit@{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit}!clockval@{clockval}}
 \index{clockval@{clockval}!_PICC_Commit@{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit}}
 \subsubsection[{clockval}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf \-\_\-\-P\-I\-C\-C\-\_\-\-Value}$\ast$ \-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-::clockval}}\label{struct__PICC__Commit_ad26ca86d6ec9cf47f14ce4eac9d2dfaf}
-The time when the commitment has been made T\-O\-D\-O see spec \hypertarget{struct__PICC__Commit_a880e72c43ee08a0eaad3ebc3234bc612}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit@{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit}!cont\-\_\-pc@{cont\-\_\-pc}}
+The time when the commitment has been made T\-O\-D\-O see spec \hypertarget{struct__PICC__Commit_ad0a2d3efd431b0f5a76713654b08f140}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit@{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit}!cont\-\_\-pc@{cont\-\_\-pc}}
 \index{cont\-\_\-pc@{cont\-\_\-pc}!_PICC_Commit@{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit}}
-\subsubsection[{cont\-\_\-pc}]{\setlength{\rightskip}{0pt plus 5cm}int \-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-::cont\-\_\-pc}}\label{struct__PICC__Commit_a880e72c43ee08a0eaad3ebc3234bc612}
+\subsubsection[{cont\-\_\-pc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf P\-I\-C\-C\-\_\-\-Label} \-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-::cont\-\_\-pc}}\label{struct__PICC__Commit_ad0a2d3efd431b0f5a76713654b08f140}
 T\-O\-D\-O see spec \hypertarget{struct__PICC__Commit_a64f32e0f5452a5abf31a90440b13be6e}{\index{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit@{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit}!content@{content}}
 \index{content@{content}!_PICC_Commit@{\-\_\-\-P\-I\-C\-C\-\_\-\-Commit}}
 \subsubsection[{content}]{\setlength{\rightskip}{0pt plus 5cm}union \{ ... \}   \-\_\-\-P\-I\-C\-C\-\_\-\-Commit\-::content}}\label{struct__PICC__Commit_a64f32e0f5452a5abf31a90440b13be6e}

@@ -24,6 +24,7 @@
   <td style="padding-left: 0.5em;">
    <div id="projectname">PiThread
    </div>
+   <div id="projectbrief">A Stackless Runtime Environment for a Pi-calculus</div>
   </td>
  </tr>
  </tbody>
@@ -81,6 +82,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 </div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#pub-attribs">Data Fields</a>  </div>
   <div class="headertitle">
 <div class="title">_PICC_Commit Struct Reference</div>  </div>
 </div><!--header-->
@@ -90,6 +93,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
+<tr class="memitem:a64f32e0f5452a5abf31a90440b13be6e"><td class="memItemLeft" >union {</td></tr>
+<tr class="memitem:adac8d7e575c5ef81874edc744e223707"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="commit_8h.html#a0f71a22c7590232b08181e5cc63de548">PICC_InCommit</a> *&#160;&#160;&#160;<a class="el" href="struct__PICC__Commit.html#a745a1a078043d4467bfa29ebf5d08a5b">in</a></td></tr>
+<tr class="separator:adac8d7e575c5ef81874edc744e223707"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0849a1bad596c2dddf109c81876a666d"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="commit_8h.html#aecc9149969ed6c8695575a3c520b5bf2">PICC_OutCommit</a> *&#160;&#160;&#160;<a class="el" href="struct__PICC__Commit.html#a7ec6ea1ae1ab4b2b46da706874b4adda">out</a></td></tr>
+<tr class="separator:a0849a1bad596c2dddf109c81876a666d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64f32e0f5452a5abf31a90440b13be6e"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__PICC__Commit.html#a64f32e0f5452a5abf31a90440b13be6e">content</a></td></tr>
+<tr class="separator:a64f32e0f5452a5abf31a90440b13be6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:a3300308e83e1bd4843a73089906a25a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="commit_8h.html#a2293a8e8b20ef3f60159b32fb2ac6d45">PICC_CommitType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__PICC__Commit.html#a3300308e83e1bd4843a73089906a25a9">type</a></td></tr>
 <tr class="separator:a3300308e83e1bd4843a73089906a25a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -99,24 +109,14 @@ Data Fields</h2></td></tr>
 <tr class="separator:acf28d34611ca5566a2681238e0d105ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad26ca86d6ec9cf47f14ce4eac9d2dfaf"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="struct__PICC__Value.html">_PICC_Value</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__PICC__Commit.html#ad26ca86d6ec9cf47f14ce4eac9d2dfaf">clockval</a></td></tr>
 <tr class="separator:ad26ca86d6ec9cf47f14ce4eac9d2dfaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a880e72c43ee08a0eaad3ebc3234bc612"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__PICC__Commit.html#a880e72c43ee08a0eaad3ebc3234bc612">cont_pc</a></td></tr>
-<tr class="separator:a880e72c43ee08a0eaad3ebc3234bc612"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0a2d3efd431b0f5a76713654b08f140"><td class="memItemLeft" align="right" valign="top"><a class="el" href="symbols_8h.html#ae23ad6ae115253385182f5a898d32c1e">PICC_Label</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__PICC__Commit.html#ad0a2d3efd431b0f5a76713654b08f140">cont_pc</a></td></tr>
+<tr class="separator:ad0a2d3efd431b0f5a76713654b08f140"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af80b43fa7c7a1fee8446a6b2efdaab03"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="struct__PICC__Channel.html">_PICC_Channel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__PICC__Commit.html#af80b43fa7c7a1fee8446a6b2efdaab03">channel</a></td></tr>
 <tr class="separator:af80b43fa7c7a1fee8446a6b2efdaab03"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">The specific pârt of the commitments. One of the pointers</div></td></tr>
-<tr><td colspan="2"><div class="groupHeader">The specific pârt of the commitments. One of the pointers</div></td></tr>
-<tr><td colspan="2"><div class="groupText"><p>below should always be NULL. </p>
-</div></td></tr>
-<tr class="memitem:a64f32e0f5452a5abf31a90440b13be6e"><td class="memItemLeft" >union {</td></tr>
-<tr class="memitem:adac8d7e575c5ef81874edc744e223707"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="commit_8h.html#a0f71a22c7590232b08181e5cc63de548">PICC_InCommit</a> *&#160;&#160;&#160;<a class="el" href="struct__PICC__Commit.html#a745a1a078043d4467bfa29ebf5d08a5b">in</a></td></tr>
-<tr class="separator:adac8d7e575c5ef81874edc744e223707"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0849a1bad596c2dddf109c81876a666d"><td class="memItemLeft" >&#160;&#160;&#160;<a class="el" href="commit_8h.html#aecc9149969ed6c8695575a3c520b5bf2">PICC_OutCommit</a> *&#160;&#160;&#160;<a class="el" href="struct__PICC__Commit.html#a7ec6ea1ae1ab4b2b46da706874b4adda">out</a></td></tr>
-<tr class="separator:a0849a1bad596c2dddf109c81876a666d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64f32e0f5452a5abf31a90440b13be6e"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__PICC__Commit.html#a64f32e0f5452a5abf31a90440b13be6e">content</a></td></tr>
-<tr class="separator:a64f32e0f5452a5abf31a90440b13be6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The commitment common part </p>
+<div class="textblock"><p>The commitment common part  type != null &amp;&amp; thread != null &amp;&amp; clock != null &amp;&amp; clockval != null &amp;&amp; channel != null &amp;&amp; content != null  cont_pc &gt; 0 </p>
 </div><h2 class="groupheader">Field Documentation</h2>
 <a class="anchor" id="af80b43fa7c7a1fee8446a6b2efdaab03"></a>
 <div class="memitem">
@@ -157,12 +157,12 @@ Data Fields</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a880e72c43ee08a0eaad3ebc3234bc612"></a>
+<a class="anchor" id="ad0a2d3efd431b0f5a76713654b08f140"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int _PICC_Commit::cont_pc</td>
+          <td class="memname"><a class="el" href="symbols_8h.html#ae23ad6ae115253385182f5a898d32c1e">PICC_Label</a> _PICC_Commit::cont_pc</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -239,7 +239,7 @@ Data Fields</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 25 2013 14:42:43 for PiThread by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 8 2013 15:26:12 for PiThread by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.3
 </small></address>
