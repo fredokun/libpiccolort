@@ -19,8 +19,9 @@
 
 
 /**
- * Test : channel creation\n
- * check if created channel has correct commitment size and correct global reference count
+ * Test : channel creation
+ *
+ * Check if created channel has correct commitment size and correct global reference count
  * @return boolean true if it works else false
  */
 bool test_create_channel(PICC_Error *error)
@@ -46,8 +47,9 @@ bool test_create_channel(PICC_Error *error)
 }
 
 /**
- * Test : channel global reference \n
- *   check if global reference field is correctly incremented and decremented \n
+ * Test : channel global reference
+ *
+ * Check if global reference field is correctly incremented and decremented \n
  * @return boolean true if it works else false
  */
 bool test_global_reference(PICC_Error *error)

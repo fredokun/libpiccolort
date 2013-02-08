@@ -68,8 +68,6 @@ typedef struct _PICC_OutCommit {
 
 /**
  * The commitment common part
- * @inv type != null && thread != null && clock != null && clockval  != null && channel  != null && content  != null
- * @inv cont_pc > 0
  *
  */
 typedef struct _PICC_Commit {
@@ -129,5 +127,9 @@ extern bool PICC_commit_list_is_empty(PICC_CommitList *clist);
 extern void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *c, PICC_Error *error);
 extern PICC_Commit *PICC_fetch_input_commitment(struct _PICC_Channel *ch);
 extern PICC_Commit *PICC_fetch_output_commitment(struct _PICC_Channel *ch);
+
+extern void PICC_Commit_inv(PICC_Commit *commit);
+extern void PICC_CommitListElement_inv(PICC_CommitListElement *elem);
+extern void PICC_CommitList_inv(PICC_CommitList *list);
 
 #endif

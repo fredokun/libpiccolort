@@ -40,6 +40,14 @@ PICC_Commit *PICC_create_commitment(PICC_Error *error)
         commit->channel = NULL;
     }
 
+    #ifdef CONTRACT
+        // inv
+        PICC_Commit_inv(commit);
+
+        // post
+        ASSERT(commit != NULL);
+    #endif
+
     return commit;
 }
 
@@ -56,6 +64,7 @@ PICC_CommitList *PICC_create_commit_list(PICC_Error *error)
         clist->tail = NULL;
         clist->size = 0;
     }
+   
     return clist;
 }
 
@@ -80,7 +89,7 @@ PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PIC
  *
  * @pre pt != null && ch != null && eval != null &&  cont_pc >= 0 
  *
- * @post pt->commits->size(PICC_register_output_commitment(pt)) = pt->commits->size(pt) + 1
+ * @post pt->commits->size = pt->commits->size@pre + 1
  * @post pt->commits->tail = commit
  * @post commit->type = PICC_OUT_COMMIT
  * @post commit->content.out = out
@@ -96,27 +105,55 @@ PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PIC
  */
 void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_EvalFunction *eval, PICC_Label cont_pc)
 {
-        ALLOC_ERROR(sub_error);
-        PICC_Commit *commit = PICC_create_commitment(&sub_error);
-        if (HAS_ERROR(sub_error)) {
-            ADD_ERROR(&sub_error, sub_error, ERR_REGISTER_OUT_COMMIT);
-        }
-        else
-        {
-            INIT_COMMIT(commit, pt, ch, cont_pc);
-            PICC_MALLOC(commit->content.out, PICC_OutCommit, &sub_error);
-            commit->content.out->eval_func = eval;
-            commit->type = PICC_OUT_COMMIT;
+    #ifdef CONTRACT
+        // inv
+        // ...
 
-            ALLOC_ERROR(add_error);
-            PICC_commit_list_add(pt->commits, commit, &add_error);
-            if (HAS_ERROR(add_error)) {
-                ADD_ERROR(&sub_error, add_error, ERR_REGISTER_IN_COMMIT);
-                free(commit);
-            }
+        // pre
+        ASSERT(pt != NULL);
+        ASSERT(ch != NULL);
+        ASSERT(eval != NULL);
+        ASSERT(cont_pc >= 0);
+
+        // captures
+        int size_at_pre = pt->commits->size;
+    #endif
+
+    ALLOC_ERROR(sub_error);
+    PICC_Commit *commit = PICC_create_commitment(&sub_error);
+    if (HAS_ERROR(sub_error)) {
+        ADD_ERROR(&sub_error, sub_error, ERR_REGISTER_OUT_COMMIT);
+    }
+    else
+    {
+        INIT_COMMIT(commit, pt, ch, cont_pc);
+        PICC_MALLOC(commit->content.out, PICC_OutCommit, &sub_error);
+        commit->content.out->eval_func = eval;
+        commit->type = PICC_OUT_COMMIT;
+
+        ALLOC_ERROR(add_error);
+        PICC_commit_list_add(pt->commits, commit, &add_error);
+        if (HAS_ERROR(add_error)) {
+            ADD_ERROR(&sub_error, add_error, ERR_REGISTER_IN_COMMIT);
+            free(commit);
         }
-        if (HAS_ERROR(sub_error))
-            CRASH(&sub_error);
+    }
+    if (HAS_ERROR(sub_error))
+        CRASH(&sub_error);
+
+    #ifdef CONTRACT
+        // inv
+        // ...
+
+        
+        //post
+        ASSERT(pt->commits->size == (size_at_pre + 1));
+        ASSERT(pt->commits->head->commit->type == PICC_OUT_COMMIT);
+        ASSERT(pt->commits->head->commit->content.out->eval_func == eval);
+        ASSERT(pt->commits->head->commit->thread == pt);
+        ASSERT(pt->commits->head->commit->channel == ch);
+        ASSERT(pt->commits->head->commit->cont_pc == cont_pc);
+    #endif
 }
 /**
  * Registers an input commit with given PiThread and channel.
@@ -140,23 +177,23 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
  */
 void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int refvar, PICC_Label cont_pc)
 {
-        ALLOC_ERROR(sub_error);
-        PICC_Commit *commit = PICC_create_commitment(&sub_error);
-        if (HAS_ERROR(sub_error)) {
-            ADD_ERROR(&sub_error, sub_error, ERR_REGISTER_IN_COMMIT);
-        } else {
-            INIT_COMMIT(commit, pt, ch, cont_pc);
-            PICC_MALLOC(commit->content.in, PICC_InCommit, &sub_error);
-            commit->content.in->refvar = refvar;
-            commit->type = PICC_IN_COMMIT;
+    ALLOC_ERROR(sub_error);
+    PICC_Commit *commit = PICC_create_commitment(&sub_error);
+    if (HAS_ERROR(sub_error)) {
+        ADD_ERROR(&sub_error, sub_error, ERR_REGISTER_IN_COMMIT);
+    } else {
+        INIT_COMMIT(commit, pt, ch, cont_pc);
+        PICC_MALLOC(commit->content.in, PICC_InCommit, &sub_error);
+        commit->content.in->refvar = refvar;
+        commit->type = PICC_IN_COMMIT;
 
-            ALLOC_ERROR(add_error);
-            PICC_commit_list_add(pt->commits, commit, &add_error);
-            if (HAS_ERROR(add_error)) {
-                ADD_ERROR(&sub_error, add_error, ERR_REGISTER_IN_COMMIT);
-                free(commit);
-            }
+        ALLOC_ERROR(add_error);
+        PICC_commit_list_add(pt->commits, commit, &add_error);
+        if (HAS_ERROR(add_error)) {
+            ADD_ERROR(&sub_error, add_error, ERR_REGISTER_IN_COMMIT);
+            free(commit);
         }
+    }
     
     if (HAS_ERROR(sub_error))
         CRASH(&sub_error);
@@ -294,3 +331,39 @@ PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
 
     return fetched;
 }
+
+/**
+ * Checks commit invariant.
+ *
+ * @inv thread != null && clock != null && clockval  != null && channel  != null && content  != null
+ * @inv cont_pc > 0
+ */
+void PICC_Commit_inv(PICC_Commit *commit)
+{
+    ASSERT(commit->thread != NULL);
+    ASSERT(commit->clock != NULL);
+    ASSERT(commit->clockval != NULL);
+    ASSERT(commit->channel != NULL);
+
+    if (commit->type == PICC_IN_COMMIT) {
+        ASSERT(commit->content.in != NULL);
+    } else {
+        ASSERT(commit->content.out != NULL);
+    }
+    ASSERT(commit->cont_pc > 0);
+}
+
+/**
+ * Checks commit list element invariant.
+ */
+void PICC_CommitListElement_inv(PICC_CommitListElement *elem)
+{
+}
+
+/**
+ * Checks commit list invariant.
+ */
+void PICC_CommitList_inv(PICC_CommitList *list)
+{
+}
+
