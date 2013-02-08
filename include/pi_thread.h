@@ -60,11 +60,13 @@ typedef enum _PICC_TryResult {
 typedef struct _PICC_PiThread {
     /**@{*/
     PICC_StatusKind status; /**< The pi-thread status */
-    bool *enabled; /**< TODO see spec */
+    bool *enabled; /**< In case of a guarded choice tells if a choice i 
+                        may or may not be followed */
     int enabled_length; /** Length of enabeled choices at the next
                             step */
-    struct _PICC_KnownsSet *knowns; /**< TODO see spec */
-    struct _PICC_Value **env; /**< The local pi-thread variables */
+    struct _PICC_KnownsSet *knowns; /** The channels known by this 
+                                        thread */
+    struct _PICC_Value *env; /**< The local pi-thread variables */
     int env_length; /**< The number of variables in the environment */
     struct _PICC_Commit *commit; /** The last commitment of the
                                     pi-thread */
@@ -73,12 +75,12 @@ typedef struct _PICC_PiThread {
     PICC_PiThreadProc *proc; /** The pi-thread procedure to execute */
     PICC_Label pc; /** The label to the execution point of the
                         pi-thread procedure */
-    struct _PICC_Value *val; /** The last transmited lalue over the
+    struct _PICC_Value *val; /** The last transmited value over the
                                 current channel */
-    struct _PICC_Clock *clock; /** The pi-tjread clock. TODO see
+    struct _PICC_Clock *clock; /** The pi-thread clock. TODO see
                                 spec */
     int fuel; /** Number of iterations of the pi-thread execution after
-                wich the garbage collector tries to free some space */
+                wich it goes to the end of the ready queue */
     PICC_Mutex lock; /** The lock of the pi-thread. TODO see spec */
     /**@}*/
 } PICC_PiThread;
