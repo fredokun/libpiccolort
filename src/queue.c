@@ -9,7 +9,9 @@
  */
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include <queue.h>
+#include <tools.h>
 
 #define LOCK_QUEUE(q) \
     PICC_acquire(&(q->lock));
@@ -35,6 +37,12 @@ PICC_QueueCell *PICC_create_queue_cell(PICC_Error *error)
         cell->thread = NULL;
         cell->next = NULL;
     }
+
+    #ifdef CONTRACT
+        // inv
+        PICC_QueueCell_inv(cell);
+    #endif
+
     return cell;
 }
 
@@ -56,19 +64,50 @@ PICC_ReadyQueue *PICC_create_ready_queue(PICC_Error *error)
         queue->q.size = 0;
     }
 
+    #ifdef CONTRACT
+        // inv
+        PICC_ReadyQueue_inv(queue);
+    #endif
+
     return queue;
 }
 
 /**
  * Pushes a PiThread on the given ready queue.
  *
+ * @pre rq != null and pt != null
+ * @pre pt not in rq
+ * @post pt in rq
+ * @post rq.size == rq.size@pre + 1
+ * @post rq.head.thread == pt
  * @param rq Ready queue
  * @param pt PiThread
  */
 void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt)
 {
-    ASSERT(rq != NULL);
-    ASSERT(pt != NULL);
+    #ifdef CONTRACT
+        // inv
+        PICC_ReadyQueue_inv(rq);
+        // PICC_PiThread_inv(pt);
+
+        // pre: rq != null && pt != null
+        ASSERT(rq != NULL);
+        ASSERT(pt != NULL);
+
+        // pre: pt not in rq
+        bool found = false;
+        PICC_QueueCell *c = rq->q.head;
+        while (c != NULL) {
+            if (c->thread == pt) {
+                found = true;
+                break;
+            }
+        }
+        ASSERT(found == false);
+
+        // captures
+        int size_at_pre = rq->q.size;
+    #endif
 
     LOCK_QUEUE(rq);
     ALLOC_ERROR(error);
@@ -96,18 +135,65 @@ void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt)
         CRASH(&error);
 
     RELEASE_QUEUE(rq);
+
+    #ifdef CONTRACT
+        // inv
+        PICC_ReadyQueue_inv(rq);
+        // PICC_PiThread_inv(pt);
+
+        // post: pt in rq
+        found = false;
+        c = rq->q.head;
+        while (c != NULL) {
+            if (c->thread == pt) {
+                found = true;
+                break;
+            }
+        }
+        ASSERT(found == true);
+        // post: rq.size == rq.size@pre + 1
+        ASSERT(rq->q.size == size_at_pre + 1)
+        // post: rq.head.thread == pt
+        ASSERT(rq->q.head->thread == pt);
+    #endif
 }
 
 /**
  * Adds a PiThread at the end of the given ready queue.
  *
+ * @pre rq != null && pt != null
+ * @pre pt not in rq
+ * @post pt in rq
+ * @post rq.size == rq.size@pre + 1
+ * @post rq.tail.thread == pt
  * @param rq Ready queue
  * @param pt PiThread
  */
 void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt)
 {
-    ASSERT(rq != NULL);
-    ASSERT(pt != NULL);
+    #ifdef CONTRACT
+        // inv
+        PICC_ReadyQueue_inv(rq);
+        // PICC_PiThread_inv(pt);
+
+        // pre: rq != null && pt != null
+        ASSERT(rq != NULL);
+        ASSERT(pt != NULL);
+
+        // pre: pt not in rq
+        bool found = false;
+        PICC_QueueCell *c = rq->q.head;
+        while (c != NULL) {
+            if (c->thread == pt) {
+                found = true;
+                break;
+            }
+        }
+        ASSERT(found == false);
+
+        // captures
+        int size_at_pre = rq->q.size;
+    #endif
 
     LOCK_QUEUE(rq);
     ALLOC_ERROR(error);
@@ -137,17 +223,54 @@ void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt)
 
     if (HAS_ERROR(error))
         CRASH(&error);
+
+    #ifdef CONTRACT
+        // inv
+        PICC_ReadyQueue_inv(rq);
+        // PICC_PiThread_inv(pt);
+
+        // post: pt in rq
+        found = false;
+        c = rq->q.head;
+        while (c != NULL) {
+            if (c->thread == pt) {
+                found = true;
+                break;
+            }
+        }
+        ASSERT(found == true);
+        // post: rq.size == rq.size@pre + 1
+        ASSERT(rq->q.size == size_at_pre + 1)
+        // post: rq.tail.thread == pt
+        ASSERT(rq->q.tail->thread == pt);
+    #endif
 }
 
 /**
  * Pops a PiThread from the given ready queue.
  *
+ * @pre rq != null
+ * @post if (rq@pre.size == 0) then NULL
+ * @post if (rq@pre.size > 0) then rq@pre.head.thread
+ * @post if (rq@pre.size > 0) then rq.size == rq@pre.size - 1
  * @param rq Ready queue
  * @return Popped PiThread
  */
 PICC_PiThread *PICC_ready_queue_pop(PICC_ReadyQueue *rq)
 {
-    ASSERT(rq != NULL);
+    #ifdef CONTRACT
+        // inv
+        PICC_ReadyQueue_inv(rq);
+
+        // pre: rq != null
+        ASSERT(rq != NULL);
+
+        // captures
+        int size_at_pre = rq->q.size;
+        PICC_PiThread *head_at_pre = NULL;
+        if (rq->q.head != NULL)
+            head_at_pre = rq->q.head->thread;
+    #endif
 
     LOCK_QUEUE(rq);
     PICC_PiThread *popped_thread = NULL;
@@ -160,20 +283,60 @@ PICC_PiThread *PICC_ready_queue_pop(PICC_ReadyQueue *rq)
     }
 
     RELEASE_QUEUE(rq);
+
+    #ifdef CONTRACT
+        // inv
+        PICC_ReadyQueue_inv(rq);
+
+        // post: if (rq@pre.size == 0) then NULL
+        if (size_at_pre == 0) {
+            ASSERT(popped_thread == NULL);
+        } else if (size_at_pre > 0) {
+            // post: if (rq@pre.size > 0) then rq@pre.head.thread
+            ASSERT(popped_thread == head_at_pre);
+            // post if (rq@pre.size > 0) then rq.size == rq@pre.size - 1
+            ASSERT(rq->q.size == size_at_pre - 1);
+        }
+    #endif
+
     return popped_thread;
 }
 
 /**
  * Returns the size of the given ready queue.
  *
+ * @pre rq != null
+ * @post size == SUM(rq.head => rq.tail)
  * @return Size of the ready queue
  */
 int PICC_ready_queue_size(PICC_ReadyQueue *rq)
 {
-    ASSERT(rq != NULL);
+    #ifdef CONTRACT
+        // inv
+        PICC_ReadyQueue_inv(rq);
+
+        // pre: rq != null
+        ASSERT(rq != NULL);
+    #endif
+
     LOCK_QUEUE(rq);
     int size = rq->q.size;
     RELEASE_QUEUE(rq);
+
+    #ifdef CONTRACT
+        // inv
+        PICC_ReadyQueue_inv(rq);
+
+        // post: size == SUM(rq.head => rq.tail)
+        int count = 0;
+        PICC_QueueCell *cell = rq->q.head;
+        while (cell != NULL) {
+            count++;
+            cell = cell->next;
+        }
+        ASSERT(size == count);
+    #endif
+
     return size;
 }
 
@@ -199,19 +362,62 @@ PICC_WaitQueue *PICC_create_wait_queue(PICC_Error *error)
         queue->old.size = 0;
     }
 
+    #ifdef CONTRACT
+        // inv
+        PICC_WaitQueue_inv(queue);
+    #endif
+
     return queue;
 }
 
 /**
  * Pushes a PiThread on the given wait queue.
  *
+ * @pre wq != null and pt != null
+ * @pre pt not in wq.active
+ * @pre pt not in wq.old
+ * @post pt in wq.active
+ * @post wq.active.size == wq.size@pre + 1
+ * @post wq.active.head.thread == pt
  * @param wq Wait queue
  * @param pt PiThread
  */
 void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt)
 {
-    ASSERT(wq != NULL);
-    ASSERT(pt != NULL);
+    #ifdef CONTRACT
+        // inv
+        PICC_WaitQueue_inv(wq);
+        // PICC_PiThread_inv(pt);
+
+        // pre: wq != null and pt != null
+        ASSERT(wq != NULL);
+        ASSERT(pt != NULL);
+
+        // pre: pt not in wq.active
+        bool found = false;
+        PICC_QueueCell *c = wq->active.head;
+        while (c != NULL) {
+            if (c->thread == pt) {
+                found = true;
+                break;
+            }
+        }
+        ASSERT(found == false);
+
+        // pre: pt not in wq.old
+        found = false;
+        c = wq->old.head;
+        while (c != NULL) {
+            if (c->thread == pt) {
+                found = true;
+                break;
+            }
+        }
+        ASSERT(found == false);
+
+        // captures
+        int size_at_pre = wq->active.size;
+    #endif
 
     LOCK_QUEUE(wq);
     ALLOC_ERROR(error);
@@ -240,22 +446,77 @@ void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt)
 
     if (HAS_ERROR(error))
         CRASH(&error);
+
+    #ifdef CONTRACT
+        // inv
+        PICC_WaitQueue_inv(wq);
+        // PICC_PiThread_inv(pt);
+
+        // post: pt in wq.active
+        found = false;
+        c = wq->active.head;
+        while (c != NULL) {
+            if (c->thread == pt) {
+                found = true;
+                break;
+            }
+        }
+        ASSERT(found == true);
+
+        // post: wq.active.size == wq.size@pre + 1
+        ASSERT(wq->active.size == size_at_pre + 1);
+        // post: wq.active.head.thread == pt
+        ASSERT(wq->active.head->thread == pt);
+    #endif
 }
 
 
 /**
  * Gets a given PiThread from the wait queue.
  *
+ * @pre wq != null and pt != null
+ * @post if (pt in wq@pre) then pt
+ * @post if (pt in wq.active@pre) then (pt not in wq.active && wq.active.size = wq.active@pre.size - 1)
+ * @post if (pt in wq.old@pre) then (pt not in wq.old && wq.old.size = wq.old@pre.size - 1)
  * @param wq Wait queue
  * @param pt PiThread
  */
 PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
 {
-    ASSERT(wq != NULL);
-    ASSERT(pt != NULL);
+    #ifdef CONTRACT
+        // inv
+        PICC_WaitQueue_inv(wq);
+        // PICC_PiThread_inv(pt);
+
+        // pre: wq != null and pt != null
+        ASSERT(wq != NULL);
+        ASSERT(pt != NULL);
+
+        // captures
+        bool pt_in_active_at_pre = false;
+        PICC_QueueCell *c = wq->active.head;
+        while (c != NULL) {
+            if (c->thread == pt) {
+                pt_in_active_at_pre = true;
+                break;
+            }
+        }
+        bool pt_in_old_at_pre = false;
+        c = wq->old.head;
+        while (c != NULL) {
+            if (c->thread == pt) {
+                pt_in_old_at_pre = true;
+                break;
+            }
+        }
+        bool pt_in_wq_at_pre = pt_in_active_at_pre || pt_in_old_at_pre;
+        int active_size_at_pre = wq->active.size;
+        int old_size_at_pre = wq->old.size;
+    #endif
 
     LOCK_QUEUE(wq);
 
+    PICC_PiThread *result = NULL;
     int zone = ACTIVE;
     PICC_QueueCell *current = wq->active.head;
     PICC_QueueCell *prev = NULL;
@@ -285,8 +546,8 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
                 wq->old.size--;
             }
 
-            RELEASE_QUEUE(wq);
-            return current->thread;
+            result = current->thread;
+            break;
         }
 
         prev = current;
@@ -297,7 +558,49 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
     }
 
     RELEASE_QUEUE(wq);
-    return NULL;
+
+    #ifdef CONTRACT
+        // inv
+        PICC_WaitQueue_inv(wq);
+        // PICC_PiThread_inv(pt);
+
+        if (pt_in_wq_at_pre) {
+            // post: if (pt in wq@pre) then pt
+            // post: if (pt in wq@pre) then (pt not in wq)
+            ASSERT(result == pt);
+        }
+
+        // post: if (pt in wq.active@pre) then (pt not in wq.active && wq.active.size = wq.active@pre.size - 1)
+        bool found;
+        if (pt_in_active_at_pre) {
+            found = false;
+            c = wq->active.head;
+            while (c != NULL) {
+                if (c->thread == pt) {
+                    found = true;
+                    break;
+                }
+            }
+            ASSERT(found == false);
+            ASSERT(active_size_at_pre == wq->active.size - 1)
+        }
+
+        // post: if (pt in wq.old@pre) then (pt not in wq.old && wq.old.size = wq.old@pre.size - 1)
+        if (pt_in_old_at_pre) {
+            found = false;
+            c = wq->old.head;
+            while (c != NULL) {
+                if (c->thread == pt) {
+                    found = true;
+                    break;
+                }
+            }
+            ASSERT(found == false);
+            ASSERT(old_size_at_pre == wq->old.size - 1)
+        }
+    #endif
+
+    return result;
 }
 
 /**
