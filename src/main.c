@@ -28,9 +28,10 @@
 int main()
 {
     //PICC_test_generic_sets();
-    //printf("run tests channel\n");
-    //PICC_test_channels();
-
+    printf("run tests channel\n");
+    PICC_all_channel_test();
+       printf("end\n");
+    /*
     
     ALLOC_ERROR(error);
 
@@ -45,6 +46,7 @@ int main()
     debug("+ register incommits :\tOK\n");
     check_commitlists(&error);
     debug("+ commitlists functions :\tOK\n");
+    */
 
     return 0;
 }
