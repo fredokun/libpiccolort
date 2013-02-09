@@ -89,6 +89,9 @@ PICC_Clock *PICC_create_clock(PICC_Error *error)
     return clock;
 }
 
+/**
+ * Frees the given clock.
+ */
 void PICC_reclaim_clock(PICC_Clock *clock)
 {
     PICC_reclaim_atomic_int(clock->val);

@@ -81,6 +81,7 @@ extern PICC_Value *PICC_create_value(PICC_ValueKind type, PICC_Error *error);
 extern PICC_AtomicBoolean *PICC_create_atomic_bool(PICC_Error *error);
 extern PICC_AtomicInt *PICC_create_atomic_int(PICC_Error *error);
 extern PICC_Clock *PICC_create_clock(PICC_Error *error);
+extern void PICC_reclaim_clock(PICC_Clock *clock);
 
 extern PICC_Value *PICC_create_value_int(int i, PICC_Error *error);
 

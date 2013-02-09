@@ -10,6 +10,7 @@
 
 #include <pi_thread.h>
 #include <tools.h>
+#include <value.h>
 
 /**
  * Creates a new PiThread with given environment and knowns set length.
