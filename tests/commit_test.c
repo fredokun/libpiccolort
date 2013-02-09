@@ -14,30 +14,6 @@
 #include <pthread.h>
 #include <pi_thread.h>
 
-
-
-/**
-* Test : Create Commitments
-*
-* @return boolean true if it works else false
-*
-*/
-bool check_create_commitments(PICC_Error* error)
-{
-    ALLOC_ERROR(create_error);
-    PICC_Commit* c = PICC_create_commitment(&create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-        return false;
-
-    } else if (c == NULL) {
-        NEW_ERROR(error, ERR_NULLPOINTER_COMMIT);
-        return false;
-    }
-
-    return true;
-}
-
 bool check_register_outcommits(PICC_Error* error)
 {
     PICC_PiThread* pt;
@@ -54,21 +30,7 @@ bool check_register_outcommits(PICC_Error* error)
     eval = func;
     cont_pc = 10;
 
-    //pre
-    ASSERT(pt != NULL);
-    ASSERT(ch != NULL);
-    ASSERT(eval != NULL);
-    ASSERT(cont_pc >= 0);
-
     PICC_register_output_commitment(pt, ch, eval, cont_pc);
-
-    //post
-    ASSERT(pt->commits->size == (size + 1));
-    ASSERT(pt->commits->head->commit->type == PICC_OUT_COMMIT);
-    ASSERT(pt->commits->head->commit->content.out->eval_func == eval);
-    ASSERT(pt->commits->head->commit->thread == pt);
-    ASSERT(pt->commits->head->commit->channel == ch);
-    ASSERT(pt->commits->head->commit->cont_pc == cont_pc);
 
     return true;
 }
@@ -88,21 +50,7 @@ bool check_register_incommits(PICC_Error* error)
     refvar = 42;
     cont_pc = 10;
 
-    //pre
-    ASSERT(pt != NULL);
-    ASSERT(ch != NULL);
-    ASSERT(cont_pc >= 0);
-    ASSERT(refvar == 1);
-
     PICC_register_input_commitment(pt, ch, refvar, cont_pc);
-
-    //post
-    ASSERT(pt->commits->size == (size + 1));
-    ASSERT(pt->commits->head->commit->type == PICC_IN_COMMIT);
-    ASSERT(pt->commits->head->commit->content.in->refvar == refvar);
-    ASSERT(pt->commits->head->commit->thread == pt);
-    ASSERT(pt->commits->head->commit->channel == ch);
-    ASSERT(pt->commits->head->commit->cont_pc == cont_pc);
 
     return true;
 }
@@ -213,5 +161,11 @@ bool check_commitlists(PICC_Error *error)
     free(clist);
 
     return true;
+}
+
+void PICC_test_Commit(PICC_Error* error){
+    ASSERT(check_register_outcommits(error));
+    ASSERT(check_register_incommits(error));
+    ASSERT(check_commitlists(error));
 }
 
