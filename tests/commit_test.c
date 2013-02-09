@@ -14,19 +14,18 @@
 #include <pthread.h>
 #include <pi_thread.h>
 
+PICC_Value* func(PICC_PiThread* a) { printf("my eval func !\n"); return NULL; };
+
 bool check_register_outcommits(PICC_Error* error)
 {
     PICC_PiThread* pt;
     PICC_Channel *ch;
     PICC_EvalFunction *eval;
     PICC_Label cont_pc;
-    int size;
 
     //check pithread, channel first
     pt = PICC_create_pithread(1, 1);
     ch = PICC_create_channel(error);
-    size = pt->commits->size;
-    PICC_Value* func(PICC_PiThread* a) { printf("my eval func !\n"); return NULL; };
     eval = func;
     cont_pc = 10;
 
@@ -41,12 +40,10 @@ bool check_register_incommits(PICC_Error* error)
     PICC_PiThread* pt;
     PICC_Channel *ch;
     PICC_Label cont_pc;
-    int size;
 
     //check pithread, channel first
     pt = PICC_create_pithread(1, 1);
     ch = PICC_create_channel(error);
-    size = pt->commits->size;
     refvar = 42;
     cont_pc = 10;
 
@@ -163,9 +160,11 @@ bool check_commitlists(PICC_Error *error)
     return true;
 }
 
-void PICC_test_Commit(PICC_Error* error){
-    ASSERT(check_register_outcommits(error));
-    ASSERT(check_register_incommits(error));
-    ASSERT(check_commitlists(error));
+void PICC_test_commit(){
+    ALLOC_ERROR(error);
+    
+    ASSERT(check_register_outcommits(&error));
+    ASSERT(check_register_incommits(&error));
+    ASSERT(check_commitlists(&error));
 }
 

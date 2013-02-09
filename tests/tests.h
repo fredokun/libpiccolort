@@ -8,5 +8,8 @@
  * @author Joël HING
  */
 
+extern void PICC_test_pithread();
+extern void PICC_test_runtime();
 extern void PICC_test_queue();
-extern void PICC_test_Commit(PICC_Error* error);
+extern void PICC_test_commit();
+extern void PICC_test_channel();

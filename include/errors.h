@@ -34,12 +34,12 @@
         ERR_WAIT_QUEUE_PUSH_OLD,
 
         ERR_NOT_IMPLEMENTED,
-        ERR_OUT_OF_MEMORY, /**< No more memory available */
+        ERR_OUT_OF_MEMORY,
         ERR_COMMIT_CREATE,
         ERR_ADD_COMMIT_TO_LIST,
         ERR_REGISTER_OUT_COMMIT,
         ERR_REGISTER_IN_COMMIT,
-        ERR_THREAD_CREATE, /**< Unable to create a new posix thread */
+        ERR_THREAD_CREATE,
         ERR_PTHREAD_CREATE,
         ERR_SCHED_POOL_CREATE,
         ERR_CLOCK_CREATE,

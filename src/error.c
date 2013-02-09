@@ -17,7 +17,6 @@
 // APPLICATION ERROR MESSAGES /////////////////////////////////////////////////
 
     static const char *PICC_error_messages[PICC_NB_ERRORS] = {
-        "No error",
         "Scheduler deadlock",
 
         "Can't alloc a new queue cell.",
@@ -123,8 +122,11 @@ PICC_Error *PICC_copy_error(const PICC_Error error)
  */
 void PICC_crash(PICC_Error *error, const char *file, const char *fct)
 {
-    PICC_print_error(error, file, fct);
-    exit(EXIT_FAILURE);
+    if (HAS_ERROR((*error))) {
+        PICC_print_error(error, file, fct);
+        printf("Exiting runtime...\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
 /**
