@@ -32,7 +32,7 @@ PICC_QueueCell *PICC_create_queue_cell(PICC_Error *error)
 {
     PICC_QueueCell *cell = malloc(sizeof(PICC_QueueCell));
     if (cell == NULL) {
-        NEW_ERROR(error, ERR_ALLOC_QUEUE_CELL);
+        NEW_ERROR(error, ERR_OUT_OF_MEMORY);
     } else {
         cell->thread = NULL;
         cell->next = NULL;
@@ -102,6 +102,7 @@ void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt)
                 found = true;
                 break;
             }
+            c = c->next;
         }
         ASSERT(found == false);
 
@@ -131,7 +132,7 @@ void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt)
         rq->q.size++;
     }
 
-    if (HAS_ERROR(&error))
+    if (HAS_ERROR(error))
         CRASH(&error);
 
     RELEASE_QUEUE(rq);
@@ -149,6 +150,7 @@ void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt)
                 found = true;
                 break;
             }
+            c = c->next;
         }
         ASSERT(found == true);
         // post: rq.size == rq.size@pre + 1
@@ -188,6 +190,7 @@ void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt)
                 found = true;
                 break;
             }
+            c = c->next;
         }
         ASSERT(found == false);
 
@@ -237,6 +240,7 @@ void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt)
                 found = true;
                 break;
             }
+            c = c->next;
         }
         ASSERT(found == true);
         // post: rq.size == rq.size@pre + 1
@@ -280,6 +284,9 @@ PICC_PiThread *PICC_ready_queue_pop(PICC_ReadyQueue *rq)
         popped_thread = popped_cell->thread;
         rq->q.head = popped_cell->next;
         rq->q.size--;
+
+        if (rq->q.size == 0)
+            rq->q.tail = NULL;
     }
 
     RELEASE_QUEUE(rq);
@@ -401,6 +408,7 @@ void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt)
                 found = true;
                 break;
             }
+            c = c->next;
         }
         ASSERT(found == false);
 
@@ -412,6 +420,7 @@ void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt)
                 found = true;
                 break;
             }
+            c = c->next;
         }
         ASSERT(found == false);
 
@@ -460,6 +469,7 @@ void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt)
                 found = true;
                 break;
             }
+            c = c->next;
         }
         ASSERT(found == true);
 
@@ -500,6 +510,7 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
                 pt_in_active_at_pre = true;
                 break;
             }
+            c = c->next;
         }
         bool pt_in_old_at_pre = false;
         c = wq->old.head;
@@ -508,6 +519,7 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
                 pt_in_old_at_pre = true;
                 break;
             }
+            c = c->next;
         }
         bool pt_in_wq_at_pre = pt_in_active_at_pre || pt_in_old_at_pre;
         int active_size_at_pre = wq->active.size;
@@ -580,9 +592,10 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
                     found = true;
                     break;
                 }
+                c = c->next;
             }
             ASSERT(found == false);
-            ASSERT(active_size_at_pre == wq->active.size - 1)
+            ASSERT(wq->active.size == active_size_at_pre - 1)
         }
 
         // post: if (pt in wq.old@pre) then (pt not in wq.old && wq.old.size = wq.old@pre.size - 1)
@@ -594,9 +607,10 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
                     found = true;
                     break;
                 }
+                c = c->next;
             }
             ASSERT(found == false);
-            ASSERT(old_size_at_pre == wq->old.size - 1)
+            ASSERT(wq->old.size == old_size_at_pre - 1)
         }
     #endif
 
@@ -610,7 +624,7 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
  * @pre pt not in wq
  * @post pt in wq.old
  * @post pt == wq.old.head.thread
- * @post wq.old.head.next.thread == wq.old.head@pre
+ * @post if (wq.old.size@pre > 0) then wq.old.head.next.thread == wq.old.head@pre
  * @post wq.old.size == wq.old.size@pre + 1
  * @param wq Wait queue
  * @param pt PiThread
@@ -635,6 +649,7 @@ void PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error 
                 pt_in_active_at_pre = true;
                 break;
             }
+            c = c->next;
         }
         bool pt_in_old_at_pre = false;
         c = wq->old.head;
@@ -643,6 +658,7 @@ void PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error 
                 pt_in_old_at_pre = true;
                 break;
             }
+            c = c->next;
         }
         ASSERT(!(pt_in_active_at_pre || pt_in_old_at_pre));
 
@@ -693,15 +709,18 @@ void PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error 
                 found = true;
                 break;
             }
+            c = c->next;
         }
         ASSERT(found == true);
 
         // post: pt == wq.old.head.thread
         ASSERT(pt == wq->old.head->thread);
-        // post: wq.old.head.next.thread == wq.old.head@pre
-        ASSERT(wq->old.head->next->thread == head_at_pre);
+        // post: if (wq.old.size@pre > 0) then wq.old.head.next.thread == wq.old.head@pre
+        if (size_at_pre > 0)
+            ASSERT(wq->old.head->next->thread == head_at_pre);
         // post: wq.old.size == wq.old.size@pre + 1
         ASSERT(wq->old.size == size_at_pre + 1);
+
     #endif
 }
 
@@ -739,16 +758,21 @@ PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq)
         PICC_QueueCell *popped_cell = wq->old.tail;
         popped_thread = popped_cell->thread;
 
-        PICC_QueueCell *prev = wq->old.head;
-        while (prev != NULL && prev->next != popped_cell) {
-            prev = prev->next;
-        }
+        if (wq->old.size == 1) {
+            wq->old.tail = NULL;
+            wq->old.head = NULL;
+        } else {
+            PICC_QueueCell *prev = wq->old.head;
+            while (prev != NULL && prev->next != popped_cell) {
+                prev = prev->next;
+            }
 
-        if (prev != NULL) {
-            prev->next = NULL;
-            wq->old.tail = prev;
-            wq->old.size--;
+            if (prev != NULL) {
+                prev->next = NULL;
+                wq->old.tail = prev;
+            }
         }
+        wq->old.size--;
     }
 
     RELEASE_QUEUE(wq);
@@ -914,10 +938,10 @@ void PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq)
  *
  * @inv size >= 0
  * @inv size == SUM(head => tail)
- * @inv tail.next == null
  * @inv if (size == 0) then (head == tail == NULL)
  * @inv if (size == 1) then (head == tail)
  * @inv if (size > 0) then (head != NULL and tail != NULL)
+ * @inv if (size > 0) then tail.next == null
  */
 void PICC_Queue_inv(PICC_Queue *queue)
 {
@@ -931,8 +955,6 @@ void PICC_Queue_inv(PICC_Queue *queue)
     }
     ASSERT(size == queue->size);
 
-    ASSERT(queue->tail->next == NULL);
-
     if (queue->size == 0) {
         ASSERT(queue->head == NULL);
         ASSERT(queue->tail == NULL);
@@ -941,6 +963,7 @@ void PICC_Queue_inv(PICC_Queue *queue)
     }
 
     if (queue->size > 0) {
+        ASSERT(queue->tail->next == NULL);
         ASSERT(queue->head != NULL);
         ASSERT(queue->tail != NULL);
     }

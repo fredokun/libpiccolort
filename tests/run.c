@@ -13,11 +13,9 @@
 
 int main(int argc, char **argv)
 {
-    printf("Run unit tests suite... ");
+    printf("== Run unit tests suite ==\n\n");
 
     PICC_test_queue();
-
-    printf("OK\n");
 
     return 0;
 }

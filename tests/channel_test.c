@@ -15,9 +15,6 @@
 #include <runtime.h>
 #include <value.h>
 
-#define TESTS
-
-
 /**
  * Test : channel creation
  *
@@ -32,7 +29,7 @@ bool test_create_channel(PICC_Error *error)
     PICC_reclaim_channel(channel,error);
     PICC_reclaim_channel(channel2,error);
     return true;
-    
+
 
 }
 
@@ -74,13 +71,13 @@ bool test_global_reference(PICC_Error *error)
  */
 bool test_knowsSet(PICC_Error *error)
 {
-    
+
     PICC_KnownsSet *set = PICC_create_knowns_set(10, error);
     PICC_Channel* channel = PICC_create_channel();
 
     int i = 0;
     PICC_Knowns *knowns;
-    
+
     for (i=0;i<10;i++)
     {
         knowns = PICC_create_knowns(channel,error);
@@ -122,6 +119,6 @@ void PICC_all_channel_test()
     {
          CRASH(&error);
     }
-   
+
 }
 
