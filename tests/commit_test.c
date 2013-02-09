@@ -38,6 +38,8 @@ bool check_create_commitments(PICC_Error* error)
     return true;
 }
 
+PICC_Value* func(PICC_PiThread* a) { printf("my eval func !\n"); return NULL; };
+
 bool check_register_outcommits(PICC_Error* error)
 {
     PICC_PiThread* pt;
@@ -50,7 +52,6 @@ bool check_register_outcommits(PICC_Error* error)
     pt = PICC_create_pithread(1, 1);
     ch = PICC_create_channel(error);
     size = pt->commits->size;
-    PICC_Value* func(PICC_PiThread* a) { printf("my eval func !\n"); return NULL; };
     eval = func;
     cont_pc = 10;
 

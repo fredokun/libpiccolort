@@ -204,16 +204,63 @@ void test_wait_queue_pop_old(PICC_Error *error)
 
 void test_wait_queue_size(PICC_Error *error)
 {
+    PICC_WaitQueue *q = PICC_create_wait_queue(error);
+    PICC_PiThread *pt1 = create_stub_thread();
+    PICC_PiThread *pt2 = create_stub_thread();
+    ASSERT_NO_ERROR();
+    ASSERT(PICC_wait_queue_size(q) == 0);
+
+    PICC_wait_queue_push(q, pt1);
+    ASSERT(PICC_wait_queue_size(q) == 1);
+    PICC_wait_queue_push_old(q, pt2, error);
+    ASSERT_NO_ERROR();
+    ASSERT(PICC_wait_queue_size(q) == 2);
+    PICC_wait_queue_pop_old(q);
+    ASSERT(PICC_wait_queue_size(q) == 1);
+    PICC_wait_queue_fetch(q, pt1);
+    ASSERT(PICC_wait_queue_size(q) == 0);
 }
 
 void test_wait_queue_max_active(PICC_Error *error)
 {
+    PICC_WaitQueue *q = PICC_create_wait_queue(error);
+    PICC_PiThread *pt1 = create_stub_thread();
+    PICC_PiThread *pt2 = create_stub_thread();
+    ASSERT_NO_ERROR();
+    ASSERT(PICC_wait_queue_max_active(q) == 0);
 
+    PICC_wait_queue_push(q, pt1);
+    ASSERT(PICC_wait_queue_max_active(q) == 1);
+    PICC_wait_queue_push_old(q, pt2, error);
+    ASSERT_NO_ERROR();
+    ASSERT(PICC_wait_queue_max_active(q) == 1);
+    PICC_wait_queue_pop_old(q);
+    ASSERT(PICC_wait_queue_max_active(q) == 1);
+    PICC_wait_queue_fetch(q, pt1);
+    ASSERT(PICC_wait_queue_max_active(q) == 0);
 }
 
 void test_wait_queue_max_active_reset(PICC_Error *error)
 {
+    PICC_WaitQueue *q = PICC_create_wait_queue(error);
+    PICC_PiThread *pt1 = create_stub_thread();
+    PICC_PiThread *pt2 = create_stub_thread();
+    PICC_PiThread *pt3 = create_stub_thread();
+    ASSERT_NO_ERROR();
 
+    PICC_wait_queue_push(q, pt1);
+    PICC_wait_queue_push(q, pt2);
+    PICC_wait_queue_push_old(q, pt3, error);
+    ASSERT_NO_ERROR();
+    ASSERT(q->active.size == 2);
+    ASSERT(q->old.size == 1);
+
+    PICC_wait_queue_max_active_reset(q);
+    ASSERT(q->active.size == 0);
+    ASSERT(q->old.size = 3);
+    ASSERT(q->active.head == NULL);
+    ASSERT(q->active.tail == NULL);
+    ASSERT(q->old.head->thread == pt2);
 }
 
 /**
