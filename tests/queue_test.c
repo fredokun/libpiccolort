@@ -7,9 +7,7 @@
  * @author Mickaël MENU
  */
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <pi_thread.h>
 #include <queue.h>
 #include <tools.h>
@@ -268,7 +266,6 @@ void test_wait_queue_max_active_reset(PICC_Error *error)
  */
 void PICC_test_queue()
 {
-    printf("Run queue tests...\n");
     ALLOC_ERROR(error);
     test_ready_queue_push(&error);
     test_ready_queue_add(&error);

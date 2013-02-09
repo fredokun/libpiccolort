@@ -5,15 +5,16 @@
  * This project is released under MIT License.
  *
  * @author Dany SIRIPHOL
+ * @author Mickaël MENU
  */
 
-
-#include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
 #include <pi_thread.h>
-#include <runtime.h>
+#include <channel.h>
 #include <value.h>
+
+#define ASSERT_NO_ERROR() \
+ ASSERT(!HAS_ERROR((*error)))
 
 /**
  * Test : channel creation
@@ -21,16 +22,16 @@
  * Check if created channel has correct commitment size and correct global reference count
  * @return boolean true if it works else false
  */
-bool test_create_channel(PICC_Error *error)
+void test_create_channel(PICC_Error *error)
 {
     PICC_Channel *channel = PICC_create_channel(error);
+    ASSERT_NO_ERROR();
     PICC_Channel *channel2 = PICC_create_channel_cn(50,20);
 
-    PICC_reclaim_channel(channel,error);
-    PICC_reclaim_channel(channel2,error);
-    return true;
-
-
+    PICC_reclaim_channel(channel, error);
+    ASSERT_NO_ERROR();
+    PICC_reclaim_channel(channel2, error);
+    ASSERT_NO_ERROR();
 }
 
 /**
@@ -39,7 +40,7 @@ bool test_create_channel(PICC_Error *error)
  * Check if global reference field is correctly incremented and decremented \n
  * @return boolean true if it works else false
  */
-bool test_global_reference(PICC_Error *error)
+void test_global_reference(PICC_Error *error)
 {
     PICC_Channel* channel = PICC_create_channel();
 
@@ -59,8 +60,6 @@ bool test_global_reference(PICC_Error *error)
     ASSERT(channel->global_rc == 1);
 
     PICC_channel_dec_ref_count(channel);
-
-    return true;
 }
 
 /**
@@ -69,10 +68,11 @@ bool test_global_reference(PICC_Error *error)
     knowns type is created with PICC_UNKNOWN state
  * @return boolean true if it works else false
  */
-bool test_knowsSet(PICC_Error *error)
+void test_knowsSet(PICC_Error *error)
 {
 
     PICC_KnownsSet *set = PICC_create_knowns_set(10, error);
+    ASSERT_NO_ERROR();
     PICC_Channel* channel = PICC_create_channel();
 
     int i = 0;
@@ -81,44 +81,35 @@ bool test_knowsSet(PICC_Error *error)
     for (i=0;i<10;i++)
     {
         knowns = PICC_create_knowns(channel,error);
+        ASSERT_NO_ERROR();
         set->knowns[i] = knowns;
     }
-
-    return true;
 }
 
 PICC_Value *eval_int(PICC_Error *error)
 {
-    PICC_Value *value = PICC_create_value_int(2,error);
+    PICC_Value *value = PICC_create_value_int(2, error);
+    ASSERT_NO_ERROR();
     return value;
 }
 
-bool test_channel_send(PICC_Error *error)
+void test_channel_send(PICC_Error *error)
 {
-  //  PICC_Channel* channel = PICC_create_channel(error);
-    PICC_Value * v = eval_int(error);
+    PICC_Value *v = eval_int(error);
     ASSERT(v->content.as_int == 2);
-    return true;
 }
 
-
 /**
- * Launch all channel tests
+ * Runs all channel tests.
  */
-void PICC_all_channel_test()
+void PICC_test_channel()
 {
     ALLOC_ERROR(error);
     test_create_channel(&error);
-    printf("test create_channel success \n");
     test_global_reference(&error);
-    printf("test global_reference success \n");
     test_channel_send(&error);
-    printf("test channel send success \n");
     test_knowsSet(&error);
-    if(HAS_ERROR(error))
-    {
-         CRASH(&error);
-    }
 
+    if (HAS_ERROR(error))
+        PRINT_ERROR(&error);
 }
-

@@ -7,4 +7,7 @@
  * @author Mickaël MENU
  */
 
+extern void PICC_test_pithread();
+extern void PICC_test_runtime();
 extern void PICC_test_queue();
+extern void PICC_test_channel();

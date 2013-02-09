@@ -1,6 +1,6 @@
 /**
  * @file runtime_tests.c
- * File that contains all the necesseray tests to check the behavior of all functions of runtime.c
+ * Runtime unit tests
  *
  * This project is released under MIT License.
  *
@@ -10,6 +10,20 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <runtime.h>
 
+#define ASSERT_NO_ERROR() \
+ ASSERT(!HAS_ERROR((*error)))
+
+
+/**
+ * Runs all runtime tests.
+ */
+void PICC_test_runtime()
+{
+    ALLOC_ERROR(error);
+    //...
+
+    if (HAS_ERROR(error))
+        PRINT_ERROR(&error);
+}
