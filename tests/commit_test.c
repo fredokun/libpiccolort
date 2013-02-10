@@ -23,28 +23,29 @@
     commit->clockval = pt->clock->val; \
     commit->channel = ch;
 
+#define ASSERT_NO_ERROR() \
+ ASSERT(!HAS_ERROR((*error)))
 
 PICC_Value* func(PICC_PiThread* a) { printf("my eval func !\n"); return NULL; };
 
-void check_register_outcommits(PICC_Error* error)
+void test_register_outcommits(PICC_Error* error)
 {
     PICC_PiThread* pt;
     PICC_Channel *ch;
     PICC_EvalFunction *eval;
     PICC_Label cont_pc;
 
-    //check pithread, channel first
+    // check pithread, channel first
     pt = PICC_create_pithread(1, 1);
     ch = PICC_create_channel(error);
+    ASSERT_NO_ERROR();
     eval = func;
     cont_pc = 10;
 
-    printf("init reg out OK\n");
     PICC_register_output_commitment(pt, ch, eval, cont_pc);
-
 }
 
-void check_register_incommits(PICC_Error* error)
+void test_register_incommits(PICC_Error* error)
 {
     int refvar;
     PICC_PiThread* pt;
@@ -54,44 +55,27 @@ void check_register_incommits(PICC_Error* error)
     //check pithread, channel first
     pt = PICC_create_pithread(1, 1);
     ch = PICC_create_channel(error);
+    ASSERT_NO_ERROR();
     refvar = 42;
     cont_pc = 10;
 
     PICC_register_input_commitment(pt, ch, refvar, cont_pc);
-
 }
 
-
-bool check_commitlists(PICC_Error *error)
+void test_commitlists(PICC_Error *error)
 {
     PICC_Commit *c, *c2, *c3;
     PICC_CommitListElement *clistelem;
     PICC_CommitList *clist;
 
-
     // creating commitments
-    ALLOC_ERROR(create_error);
-    c = PICC_create_commitment(&create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-        return false;
-    }
+    c = PICC_create_commitment(error);
+    c2 = PICC_create_commitment(error);
+    c3 = PICC_create_commitment(error);
+    ASSERT_NO_ERROR();
 
-    c2 = PICC_create_commitment(&create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-        return false;
-    }
-
-    c3 = PICC_create_commitment(&create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-        return false;
-    }
-    
-    
     // initializing commitments
-    
+
     // init c
     PICC_PiThread* pt;
     PICC_Channel *ch;
@@ -103,12 +87,13 @@ bool check_commitlists(PICC_Error *error)
     ch = PICC_create_channel(error);
     eval = func;
     cont_pc = 10;
-    
+
     INIT_COMMIT(c, pt, ch, cont_pc);
     PICC_MALLOC(c->content.out, PICC_OutCommit, error);
+    ASSERT_NO_ERROR();
     c->content.out->eval_func = eval;
     c->type = PICC_OUT_COMMIT;
-    
+
     // init c2
     PICC_PiThread* pt2;
     PICC_Channel *ch2;
@@ -118,14 +103,16 @@ bool check_commitlists(PICC_Error *error)
     //check pithread, channel first
     pt2 = PICC_create_pithread(1, 1);
     ch2 = PICC_create_channel(error);
+    ASSERT_NO_ERROR();
     eval2 = func;
     cont_pc2 = 20;
-    
+
     INIT_COMMIT(c2, pt2, ch2, cont_pc2);
     PICC_MALLOC(c2->content.out, PICC_OutCommit, error);
+    ASSERT_NO_ERROR();
     c2->content.out->eval_func = eval2;
     c2->type = PICC_OUT_COMMIT;
-    
+
     // init c3
     int refvar;
     PICC_PiThread* pt3;
@@ -135,95 +122,59 @@ bool check_commitlists(PICC_Error *error)
     //check pithread, channel first
     pt3 = PICC_create_pithread(1, 1);
     ch3 = PICC_create_channel(error);
+    ASSERT_NO_ERROR();
     refvar = 42;
     cont_pc3 = 30;
-    
+
     INIT_COMMIT(c3, pt3, ch3, cont_pc3);
     PICC_MALLOC(c3->content.in, PICC_InCommit, error);
+    ASSERT_NO_ERROR();
     c3->content.in->refvar = refvar;
     c3->type = PICC_IN_COMMIT;
 
-    
 
-    clistelem = PICC_create_commit_list_element(c, &create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-        return false;
-    } else if(clistelem == NULL) {
-        NEW_ERROR(error, ERR_NULLPOINTER_COMMITLISTELEM);
-        return false;
-    }
 
-    clist = PICC_create_commit_list(&create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-        return false;
+    clistelem = PICC_create_commit_list_element(c, error);
+    ASSERT_NO_ERROR();
+    ASSERT(clistelem != NULL);
 
-    } else if(clist == NULL) {
-        NEW_ERROR(error, ERR_NULLPOINTER_COMMITLIST);
-        return false;
-    }
+    clist = PICC_create_commit_list(error);
+    ASSERT_NO_ERROR();
+    ASSERT(clist != NULL);
 
     c->cont_pc = 1;
     c2->cont_pc = 2;
     c3->cont_pc = 3;
 
-    ALLOC_ERROR(add_error);
-    PICC_commit_list_add(clist, c, &add_error);
-    
-    PICC_commit_list_add(clist, c2, &add_error);
-    
-    PICC_commit_list_add(clist, c3, &add_error);
-    
-    if (HAS_ERROR(add_error)) {
-        FORWARD_ERROR(error, add_error);
-        return false;
-    }
-
-    if(clist->head == NULL || clist->tail == NULL)
-    {
-        NEW_ERROR(error, ERR_NULLPOINTER_COMMITLISTELEM);
-        return false;
-    }
-
-    if(clist->head->commit->cont_pc != 1)
-    {
-        NEW_ERROR(error, ERR_INVALID_VALUE);
-        return false;
-    }
-
-    if(clist->head->next->commit->cont_pc != 2)
-    {
-        NEW_ERROR(error, ERR_INVALID_VALUE);
-        return false;
-    }
-
-    if(clist->tail->commit->cont_pc != 3)
-    {
-        NEW_ERROR(error, ERR_INVALID_VALUE);
-        return false;
-    }
+    PICC_commit_list_add(clist, c, error);
+    ASSERT_NO_ERROR();
+    PICC_commit_list_add(clist, c2, error);
+    ASSERT_NO_ERROR();
+    PICC_commit_list_add(clist, c3, error);
+    ASSERT_NO_ERROR();
+    ASSERT(clist->head != NULL);
+    ASSERT(clist->tail != NULL);
+    ASSERT(clist->head->commit->cont_pc == 1);
+    ASSERT(clist->head->next->commit->cont_pc == 2);
+    ASSERT(clist->tail->commit->cont_pc == 3);
 
     free(c);
     free(c2);
     free(c3);
     free(clistelem);
     free(clist);
-
-    return true;
 }
 
+/**
+ * Runs all commit tests.
+ */
 void PICC_test_commit()
 {
     ALLOC_ERROR(error);
-    
-    check_register_outcommits(&error);
-    printf("reg out OK\n");
-    check_register_incommits(&error);
-    printf("reg in OK\n");
-    ASSERT(check_commitlists(&error));
-    printf("commit list OK\n");
-    
+    test_register_outcommits(&error);
+    test_register_incommits(&error);
+    test_commitlists(&error);
+
     if (HAS_ERROR(error))
         PRINT_ERROR(&error);
 }
