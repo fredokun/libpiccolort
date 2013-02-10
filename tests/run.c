@@ -27,5 +27,8 @@ int main(int argc, char **argv)
     printf("Run channel tests...\n");
     PICC_test_channel();
 
+    printf("Run commit tests...\n");
+    PICC_test_commit();
+
     return 0;
 }
