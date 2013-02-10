@@ -434,7 +434,7 @@ bool PICC_commit_list_is_empty(PICC_CommitList *clist)
  * 
  * @post fetched = clist_at_pre->head->commit
  * @post clist->size = clist_at_pre->size - 1
- * @post clist->head = clist_at_pre->head->next
+ * @post clist->head-> = clist_at_pre->head->next
  * 
  * @param clist Commit list
  * @return first element of the commit list
@@ -451,28 +451,37 @@ PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
 		ASSERT(clist->size > 0);
 		
 		// capture
-		PICC_CommitListElement *head_at_pre = clist->head;
+		PICC_CommitListElement *head_at_pre_next = clist->head->next;
+		PICC_Commit *head_at_pre_commit = clist->head->commit;
 		int size_at_pre = clist->size;
 		
     #endif
 	
     PICC_CommitListElement *commit_list_element = clist->head;
-    clist->head = commit_list_element->next;
+    if(clist->size == 1){
+        clist->head = NULL;
+        clist->tail = NULL;
+    }
+    else{
+        clist->head = commit_list_element->next;
+    }
     clist->size--;
     PICC_Commit *fetched  = commit_list_element->commit;
     commit_list_element->next = NULL;
     commit_list_element->commit = NULL;
     free(commit_list_element);
     
+    //if(fetched == NULL) printf("FETCHED NULL\n");
+    //if(head_at_pre == NULL) printf("HEAD AT PRE commit NULL\n");
+    
     #ifdef CONTRACT
 		// inv
         PICC_CommitList_inv(clist);
-
         
         //post
-		ASSERT(fetched == head_at_pre->commit);		
+		ASSERT(fetched == head_at_pre_commit);		
 		ASSERT(clist->size == size_at_pre - 1);
-		ASSERT(clist->head == head_at_pre->next);
+		ASSERT(clist->head == head_at_pre_next);
 		
     #endif
     
@@ -483,9 +492,6 @@ PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
  * Fetches the first element of the input commitList from a channel.
  *
  * @pre ch != null
- *
- * @post if(c->incommits->size > 0 && PICC_is_valid_commit(PICC_commit_list_fetch(c->incommits))) PICC_fetch_input_commitment(c) =  PICC_commit_list_fetch(c->incommits)
- * @post if(c->incommits->size = 0 || !(PICC_is_valid_commit(PICC_commit_list_fetch(c->incommits)))) PICC_fetch_input_commitment(c) = null
  *
  * @param ch Channel to fetch the commit from
  * @return Fetched commit
@@ -521,17 +527,6 @@ PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
 		// inv
         // PICC_Channel_inv(ch);
 
-        
-        //post
-        if((ch->incommits->size > 0) && (PICC_is_valid_commit(PICC_commit_list_fetch(ch->incommits)))){
-			ASSERT(fetched ==  PICC_commit_list_fetch(ch->incommits));
-		}
-		
-		if((ch->incommits->size = 0) || (!(PICC_is_valid_commit(PICC_commit_list_fetch(ch->incommits))))){
-			ASSERT(fetched == NULL);
-		}
-
-
     #endif
 
     return fetched;
@@ -541,9 +536,6 @@ PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
  * Fetches he first element of the output commitList from a channel
  *
  * @pre ch != null
- *
- * @post if(c->outcommits->size > 0 && PICC_is_valid_commit(PICC_commit_list_fetch(c->outcommits))) PICC_fetch_output_commitment(c) =  PICC_commit_list_fetch(c->outcommits)
- * @post if(c->outcommits->size = 0 || !(PICC_is_valid_commit(PICC_commit_list_fetch(c->outcommits)))) PICC_fetch_output_commitment(c) = null
  *
  * @param ch Channel to fetch the commit from
  * @return Fetched commit
@@ -581,17 +573,6 @@ PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
 	#ifdef CONTRACT
 		// inv
         // PICC_Channel_inv(ch);
-
-        
-        //post
-        if((ch->outcommits->size > 0) && (PICC_is_valid_commit(PICC_commit_list_fetch(ch->outcommits)))){
-			ASSERT(fetched ==  PICC_commit_list_fetch(ch->outcommits));
-		}
-		
-		if((ch->outcommits->size = 0) || (!(PICC_is_valid_commit(PICC_commit_list_fetch(ch->outcommits))))){
-			ASSERT(fetched == NULL);
-		}
-
 
     #endif
     

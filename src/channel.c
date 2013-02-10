@@ -24,15 +24,15 @@
  */
 PICC_Channel *PICC_create_channel()
 {
-    PICC_Channel *channel = PICC_create_channel_cn(DEFAULT_CHANNEL_COMMIT_SIZE ,DEFAULT_CHANNEL_COMMIT_SIZE );
+    PICC_Channel *channel = PICC_create_channel_cn(0, 0);
     
      #ifdef CONTRACT
         // inv
         PICC_Channel_inv(channel);
 
         //post
-        ASSERT(channel->incommits->size == DEFAULT_CHANNEL_COMMIT_SIZE );
-        ASSERT(channel->outcommits->size == DEFAULT_CHANNEL_COMMIT_SIZE  );
+        ASSERT(channel->incommits->size == 0);
+        ASSERT(channel->outcommits->size == 0);
     #endif
 
     return channel;
@@ -55,8 +55,8 @@ PICC_Channel *PICC_create_channel_cn(int incommit_size,int outcommit_size)
         // inv
 
         // pre
-        ASSERT(incommit_size> 0);
-        ASSERT(outcommit_size >0);
+        //ASSERT(incommit_size> 0);
+        //ASSERT(outcommit_size >0);
 
     #endif
     ALLOC_ERROR(error);

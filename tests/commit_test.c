@@ -86,6 +86,7 @@ void test_commitlists(PICC_Error *error)
 
     //check pithread, channel first
     pt = PICC_create_pithread(1, 1);
+    pt->clock = PICC_create_clock(error);
     ch = PICC_create_channel(error);
     ASSERT_NO_ERROR();
     eval = func;
@@ -105,6 +106,7 @@ void test_commitlists(PICC_Error *error)
 
     //check pithread, channel first
     pt2 = PICC_create_pithread(1, 1);
+    pt2->clock = PICC_create_clock(error);
     ch2 = PICC_create_channel(error);
     ASSERT_NO_ERROR();
     eval2 = func;
@@ -124,6 +126,7 @@ void test_commitlists(PICC_Error *error)
 
     //check pithread, channel first
     pt3 = PICC_create_pithread(1, 1);
+    pt3->clock = PICC_create_clock(error);
     ch3 = PICC_create_channel(error);
     ASSERT_NO_ERROR();
     refvar = 42;
@@ -150,7 +153,7 @@ void test_commitlists(PICC_Error *error)
     c->cont_pc = 1;
     c2->cont_pc = 2;
     c3->cont_pc = 3;
-    
+
     
     // ADDING COMMITMENTS INTO COMMITLIST
 
@@ -181,12 +184,27 @@ void test_commitlists(PICC_Error *error)
     ASSERT(clist->head->next->commit->cont_pc == 2);
     ASSERT(clist->tail->commit->cont_pc == 3);
 
+
+    // MODIFYING CHANNEL TO TEST FETCHING
+    PICC_commit_list_add(c->channel->outcommits, c, error);
+    PICC_commit_list_add(c3->channel->incommits, c3, error);
+    
+
+    // FETCHING COMMITMENT
+    PICC_Commit *fetched_out_commit = PICC_fetch_output_commitment(c->channel);
+    ASSERT(fetched_out_commit == c);    
+ 
+    PICC_Commit *fetched_in_commit = PICC_fetch_input_commitment(c3->channel);
+    ASSERT(fetched_in_commit == c3);
+
     free(c);
     free(c2);
     free(c3);
     free(clistelem);
     free(clist);
 }
+
+
 
 /**
  * Runs all commit tests.
