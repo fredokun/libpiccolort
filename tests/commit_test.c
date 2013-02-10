@@ -69,7 +69,7 @@ bool check_commitlists(PICC_Error *error)
     PICC_CommitList *clist;
 
 
-    // creating commitments
+    // CREATING COMMITMENTS
     ALLOC_ERROR(create_error);
     c = PICC_create_commitment(&create_error);
     if (HAS_ERROR(create_error)) {
@@ -90,7 +90,7 @@ bool check_commitlists(PICC_Error *error)
     }
     
     
-    // initializing commitments
+    // INITIALIZING COMMITMENTS
     
     // init c
     PICC_PiThread* pt;
@@ -144,6 +144,7 @@ bool check_commitlists(PICC_Error *error)
     c3->type = PICC_IN_COMMIT;
 
     
+    // CREATING COMMITLIST ELEMENT
 
     clistelem = PICC_create_commit_list_element(c, &create_error);
     if (HAS_ERROR(create_error)) {
@@ -153,6 +154,9 @@ bool check_commitlists(PICC_Error *error)
         NEW_ERROR(error, ERR_NULLPOINTER_COMMITLISTELEM);
         return false;
     }
+    
+    
+    // CREATING COMMITLIST
 
     clist = PICC_create_commit_list(&create_error);
     if (HAS_ERROR(create_error)) {
@@ -167,13 +171,29 @@ bool check_commitlists(PICC_Error *error)
     c->cont_pc = 1;
     c2->cont_pc = 2;
     c3->cont_pc = 3;
+    
+    
+    // ADDING COMMITMENTS INTO COMMITLIST
 
     ALLOC_ERROR(add_error);
     PICC_commit_list_add(clist, c, &add_error);
     
+    ASSERT(clist->head->commit == c);
+    ASSERT(clist->tail->commit == c);
+    ASSERT(clist->size == 1);
+    
     PICC_commit_list_add(clist, c2, &add_error);
+    ASSERT(clist->head->commit == c);
+    ASSERT(clist->head->next->commit == c2);
+    ASSERT(clist->tail->commit == c2);
+    ASSERT(clist->size == 2);
     
     PICC_commit_list_add(clist, c3, &add_error);
+    ASSERT(clist->head->commit == c);
+    ASSERT(clist->head->next->commit == c2);
+    ASSERT(clist->head->next->next->commit == c3);
+    ASSERT(clist->tail->commit == c3);
+    ASSERT(clist->size == 3);
     
     if (HAS_ERROR(add_error)) {
         FORWARD_ERROR(error, add_error);
