@@ -6,9 +6,13 @@
  *
  * @author Mickaël MENU
  * @author Maxence WO
+ * @author Sergiu TIGANU
  */
 
+#include <sched.h>
+
 #include <pi_thread.h>
+#include <scheduler.h>
 #include <tools.h>
 #include <value.h>
 
@@ -66,7 +70,7 @@ enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
         PICC_release(&(pt->lock));
         return PICC_INVALID_COMMIT;
     }
-    if (pt->clock->val == PICC_CLOCK_MAX_INT) {
+    if (pt->clock->val->content.as_int == PICC_CLOCK_MAX_INT) {
         PICC_reclaim_clock(pt->clock);
         pt->clock = NULL;
         ALLOC_ERROR(error);
@@ -74,9 +78,12 @@ enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
         if (HAS_ERROR(error)) {
             CRASH(&error);
         }
+    } else {
+        ++(pt->clock->val);
     }
-    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
-    return PICC_STATUS_ENDED;
+    pt->commit = commit;
+    PICC_release(&(pt->lock));
+    return PICC_VALID_COMMIT;
 }
 
 /**
@@ -85,15 +92,25 @@ enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
  * @param sched Scheduler
  * @param pt PiThread to be awaken
  */
-void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt)
+void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Commit *commit)
 {
-    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
+    if (pt->commit != commit) {
+        CRASH_NEW_ERROR(ERR_INVALID_COMMIT);
+    }
+    PICC_wait_queue_fetch(sched->wait, pt);
+    pt->commit = NULL;
+    pt->pc = commit->cont_pc;
+    pt->status = PICC_STATUS_RUN;
+    PICC_ready_queue_push(sched->ready, pt);
 }
 
 /**
- * ??????????????
+ * Puts the current posix thread at the end of the system thread queue
  */
 void PICC_low_level_yield()
 {
-    CRASH_NEW_ERROR(ERR_NOT_IMPLEMENTED);
+    int status = sched_yield();
+    if (status) {
+        CRASH_NEW_ERROR(ERR_THREAD_YIELD);
+    }
 }
