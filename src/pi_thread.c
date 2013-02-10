@@ -41,7 +41,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
                     thread->enabled = NULL;
                     thread->enabled_length = 0;
                     thread->commit = NULL;
-                    thread->commits = NULL;
+                    thread->commits = PICC_create_commit_list(&sub_error);
                     thread->proc = NULL;
                     thread->pc = PICC_DEFAULT_ENTRY_LABEL;
                     thread->fuel = PICC_FUEL_INIT;

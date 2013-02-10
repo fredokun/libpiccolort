@@ -41,9 +41,6 @@ PICC_Commit *PICC_create_commitment(PICC_Error *error)
     }
 
     #ifdef CONTRACT
-        // inv
-        PICC_Commit_inv(commit);
-
         // post
         ASSERT(commit != NULL);
     #endif
@@ -98,8 +95,6 @@ PICC_CommitList *PICC_create_commit_list(PICC_Error *error)
 PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PICC_Error *error)
 {
 	#ifdef CONTRACT
-        // inv
-		PICC_Commit_inv(commit);
 
         // pre
         ASSERT(commit != NULL);
@@ -111,9 +106,7 @@ PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PIC
         clist_elem->next = NULL;
     }
     
-    #ifdef CONTRACT        
-        // inv
-		PICC_Commit_inv(commit);
+    #ifdef CONTRACT
 		
         //post
         ASSERT(clist_elem != NULL);
@@ -231,10 +224,9 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
         PICC_Label_inv(cont_pc);
 
         //pre
-			ASSERT(pt != NULL);
-			ASSERT(ch != NULL);
-			ASSERT(cont_pc >= 0);
-			ASSERT(refvar == 1);
+		ASSERT(pt != NULL);
+		ASSERT(ch != NULL);
+		ASSERT(cont_pc >= 0);
 
         // captures
         int size_at_pre = pt->commits->size;
@@ -270,12 +262,12 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
 
         
         //post
-			ASSERT(pt->commits->size == (size_at_pre + 1));
-			ASSERT(pt->commits->head->commit->type == PICC_IN_COMMIT);
-			ASSERT(pt->commits->head->commit->content.in->refvar == refvar);
-			ASSERT(pt->commits->head->commit->thread == pt);
-			ASSERT(pt->commits->head->commit->channel == ch);
-			ASSERT(pt->commits->head->commit->cont_pc == cont_pc);
+		ASSERT(pt->commits->size == (size_at_pre + 1));
+		ASSERT(pt->commits->head->commit->type == PICC_IN_COMMIT);
+		ASSERT(pt->commits->head->commit->content.in->refvar == refvar);
+		ASSERT(pt->commits->head->commit->thread == pt);
+		ASSERT(pt->commits->head->commit->channel == ch);
+		ASSERT(pt->commits->head->commit->cont_pc == cont_pc);
     #endif
         
 }
@@ -365,9 +357,16 @@ void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Erro
     if (HAS_ERROR(create_error)) {
         ADD_ERROR(error, create_error, ERR_ADD_COMMIT_TO_LIST);
     } else {
-        clist->tail->next = clist_elem;
-        clist->tail = clist_elem;
-        clist->size++;
+        if(clist->head != NULL && clist->tail != NULL){            
+            clist->tail->next = clist_elem;
+            clist->tail = clist_elem;
+            clist->size++;
+        }
+        else{
+            clist->head = clist_elem;
+            clist->tail = clist_elem;
+            clist->size++;
+        }
     }
     
     #ifdef CONTRACT
