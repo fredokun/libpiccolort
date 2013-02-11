@@ -71,21 +71,14 @@ void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint)
         sched_pool->nb_slaves++;
     }
 
-    // while (sched_pool.nb_waiting_slaves != sched_pool.nb_slaves) {
-    //     status = pthread_yield();
-    //     if (status)
-    //     {
-    //         NEW_ERROR(&error, ERR_READY_QUEUE_PUSH ERR_THREAD_YIELD);
-    //         CRASH(&error);
-    //     }
-    // }
+    while (sched_pool->nb_waiting_slaves != sched_pool->nb_slaves) {
+        PICC_low_level_yield();
+    }
 
-    PICC_PiThread *init_thread = PICC_create_pithread(1, 1, &error);
-    if (HAS_ERROR(error)) CRASH(&error);
+    PICC_PiThread *init_thread = PICC_create_pithread(1, 1);
     init_thread->proc = entrypoint;
 
-    PICC_ready_queue_push(sched_pool->ready, init_thread, &error);
-    if (HAS_ERROR(error)) CRASH(&error);
+    PICC_ready_queue_push(sched_pool->ready, init_thread);
 
     PICC_sched_pool_master(sched_pool, 2, 2, 2, &error);
     if (HAS_ERROR(error)) CRASH(&error);

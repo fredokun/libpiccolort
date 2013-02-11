@@ -46,12 +46,16 @@
 #include <assert.h>
 #include <errors.h>
 
-// An error stack.
+/**
+ *  An error stack.
+ */
 typedef struct _PICC_Error {
-    enum _PICC_ErrorId id;  // ID of the error (0 if the error didn't occured).
-    char *file;      // File where the error occured.
-    int line;        // Line in <file> where the error occured.
-    struct _PICC_Error *prev; // Link to the previous error (NULL if this is the first).
+    /**@{*/
+    enum _PICC_ErrorId id;  /**< ID of the error (0 if the error didn't occured). */
+    char *file;      /**< File where the error occured. */
+    int line;        /**< Line in <file> where the error occured. */
+    struct _PICC_Error *prev; /**< Link to the previous error (NULL if this is the first). */
+    /**@}*/
 } PICC_Error;
 
 // macros used to handle the errors
@@ -78,6 +82,16 @@ typedef struct _PICC_Error {
 
 #define PRINT_ERROR(error) \
     PICC_print_error(error, __FILE__, __FUNCTION__)
+
+#define CRASH_NEW_ERROR(id) \
+    ALLOC_ERROR(error); \
+    NEW_ERROR(&error, id); \
+    CRASH(&error);
+
+#define PRINT_NEW_ERROR(id) \
+    ALLOC_ERROR(error); \
+    NEW_ERROR(&error, id); \
+    PRINT_ERROR(&error);
 
 // underlying error functions
 extern void PICC_init_error(PICC_Error *error, PICC_ErrorId id, const char *file, int line);
