@@ -66,7 +66,7 @@ typedef struct _PICC_PiThread {
                             step */
     struct _PICC_KnownsSet *knowns; /** The channels known by this 
                                         thread */
-    struct _PICC_Value *env; /**< The local pi-thread variables */
+    struct _PICC_Value **env; /**< The local pi-thread variables */
     int env_length; /**< The number of variables in the environment */
     struct _PICC_Commit *commit; /** The last commitment of the
                                     pi-thread */
@@ -89,5 +89,7 @@ extern PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length);
 extern enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, struct _PICC_Commit *commit);
 extern void PICC_awake(struct _PICC_SchedPool *sched, PICC_PiThread *pt, struct _PICC_Commit *commit);
 extern void PICC_low_level_yield();
+
+extern void PICC_PiThread_inv(PICC_PiThread *pt);
 
 #endif
