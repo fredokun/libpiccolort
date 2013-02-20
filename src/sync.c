@@ -76,3 +76,17 @@ void PICC_cond_wait(PICC_Condition *cond, PICC_Mutex *lock)
 {
     pthread_cond_wait(cond, lock);
 }
+
+void PICC_cond_signal(PICC_Condition *cond, PICC_Error *error) {
+    int status = pthread_cond_signal(cond);
+    if (status) {
+        NEW_ERROR(error, ERR_CONDITION_SIGNAL);
+    }
+}
+
+void PICC_cond_broadcast(PICC_Condition *cond, PICC_Error *error) {
+    int status = pthread_cond_broadcast(cond);
+    if (status) {
+        NEW_ERROR(error, ERR_CONDITION_BROADCAST);
+    }
+}

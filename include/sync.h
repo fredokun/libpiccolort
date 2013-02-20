@@ -24,5 +24,6 @@ extern bool PICC_try_acquire(PICC_Mutex *mutex);
 extern void PICC_acquire(PICC_Mutex *mutex);
 extern void PICC_release(PICC_Mutex *mutex);
 extern void PICC_cond_wait(PICC_Condition *cond, PICC_Mutex *lock);
-
+extern void PICC_cond_signal(PICC_Condition *cond, PICC_Error *error);
+extern void PICC_cond_broadcast(PICC_Condition *cond, PICC_Error *error);
 #endif

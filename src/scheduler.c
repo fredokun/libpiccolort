@@ -19,6 +19,12 @@
 
 #define WAIT_SCHED_POOL(sp) \
     PICC_cond_wait(&(sp->cond), &(sp->lock));
+    
+#define SIGNAL_SCHED_POOL(sp, error) \
+    PICC_cond_signal(&(sp->cond), error);
+    
+#define BROADCAST_SCHED_POOL(sp, error) \
+    PICC_cond_broadcast(&(sp->cond), error);
 
 /**
  * Creates a new scheduler.
@@ -41,6 +47,8 @@ PICC_SchedPool *PICC_create_sched_pool(PICC_Error *error)
             pool->nb_waiting_slaves = 0;
             pool->running = false;
         }
+        PICC_init_mutex(&(pool->lock));
+        PICC_init_condition(&(pool->cond));
     }
     return pool;
 }
@@ -63,7 +71,7 @@ PICC_Args *PICC_create_args(PICC_SchedPool *sp, PICC_Error *err, PICC_Error *err
 }
 
 /**
- * Handles the behavior of a scheduler pool.
+ * Handles the behavior of secondary real threads in scheduler pool.
  *
  * @param args Arguments containing the scheduler pool and the error stack
  */
@@ -94,15 +102,42 @@ void PICC_sched_pool_slave(PICC_Args *args)
 }
 
 /**
- * ????????????????????
+ * Handles the main thread in the scheduler pool after the 
+ * initialisation in the main entry point
  *
- * @param sp ????????????????
- * @param std_gc_fuel ???????????????
- * @param quick_gc_fuel ?????????????
- * @param active_factor ?????????????
+ * @param sp the Scheduler pool
+ * @param std_gc_fuel the standard garbedge collector fuel
+ * @param quick_gc_fuel the quick garbedge collector fuel
+ * @param active_factor contributes somehow in the garbedge collection
  * @param error Error stack
  */
 void PICC_sched_pool_master(PICC_SchedPool *sp, int std_gc_fuel, int quick_gc_fuel, int active_factor, PICC_Error *error)
 {
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
+    PICC_PiThread *current;
+
+    while(sp->running) {
+        while(PICC_ready_queue_size(sp->ready)) {
+            current = PICC_ready_queue_pop(sp->ready);
+            
+            if (PICC_ready_queue_size(sp->ready) >= 1 && sp->nb_waiting_slaves > 0) {
+                LOCK_SCHED_POOL(sp);        
+                SIGNAL_SCHED_POOL(sp, error);        
+                RELEASE_SCHED_POOL(sp);
+            }
+            
+            do {
+                current->proc(sp, current);
+            } while(current->status == PICC_STATUS_CALL);
+
+            if (current->status == PICC_STATUS_BLOCKED) // && safe_choice
+                NEW_ERROR(error, ERR_DEADLOCK);
+        }
+
+        LOCK_SCHED_POOL(sp);
+        if (sp->nb_waiting_slaves == sp->nb_slaves) {
+            sp->running = false;
+            BROADCAST_SCHED_POOL(sp, error);
+        }
+        RELEASE_SCHED_POOL(sp);
+    }
 }
