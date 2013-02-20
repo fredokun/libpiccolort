@@ -17,6 +17,7 @@
 #include <channel.h>
 #include <value.h>
 #include <error.h>
+#include <atomic.h>
 
 /**
  * @see pi_thread.h
@@ -78,7 +79,7 @@ typedef struct _PICC_Commit {
                                     commit */
     struct _PICC_Clock *clock; /** The time when the commitment has
                                 been made */
-    struct _PICC_Value *clockval; /**< TODO see spec */
+    PICC_AtomicInt *clockval; /**< TODO see spec */
     PICC_Label cont_pc; /**< TODO see spec */
     struct _PICC_Channel *channel; /**< The channel of this commitment */
     /**@}*/

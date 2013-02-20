@@ -41,9 +41,9 @@ void test_compare_and_swap(PICC_Error *error)
     ASSERT(bret == false);
     ASSERT(PICC_atomic_bool_get(abool) == true);
 
-    bret = PICC_atomic_bool_compare_and_swap(abool, false, true);
+    bret = PICC_atomic_bool_compare_and_swap(abool, false, false);
     ASSERT(bret == true);
-    ASSERT(PICC_atomic_bool_get(abool) == false);
+    ASSERT(PICC_atomic_bool_get(abool) == true);
 
     bret = PICC_atomic_bool_compare_and_swap(abool, true, true);
     ASSERT(bret == true);
@@ -59,7 +59,7 @@ void test_compare_and_swap(PICC_Error *error)
 
     iret = PICC_atomic_int_compare_and_swap(aint, 1, 3);
     ASSERT(iret == 2);
-    ASSERT(PICC_atomic_int_get(aint) == 1);
+    ASSERT(PICC_atomic_int_get(aint) == 2);
 
     iret = PICC_atomic_int_compare_and_swap(aint, 2, 2);
     ASSERT(iret == 2);

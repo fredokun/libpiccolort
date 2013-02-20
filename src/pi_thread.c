@@ -21,7 +21,7 @@
  *
  * @pre env_length >= 0
  * @pre knowns_length >= 0
- * 
+ *
  * @post thread->env_length == env_length
  * @post thread->enabled == NULL
  * @post thread->enabled_length == 0
@@ -30,7 +30,7 @@
  * @post thread->pc == PICC_DEFAULT_ENTRY_LABEL
  * @post thread->fuel == PICC_FUEL_INIT
  * @post thread->val == NULL
- * 
+ *
  * @param env_length Size of the environment
  * @param knowns_length Size of the knowns set
  * @return Created PiThread
@@ -94,10 +94,10 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
  *
  * @pre PICC_PiThread_inv(pt) must pass
  * @pre PICC_Commit_inv(commit) must pass
- * 
- * @post valid commitment implies pt->clock->val->content.as_int <= PICC_CLOCK_MAX_IN
+ *
+ * @post valid commitment implies pt->clock->val <= PICC_CLOCK_MAX_IN
  * @post valid commitment implies pt->commit == commit
- * 
+ *
  * @param pt PiThread to check
  * @param commit Commitment
  * @return Whether the PiThread can be awaken with given commit
@@ -107,7 +107,7 @@ enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
     #ifdef CONTRACT
         // inv
         PICC_PiThread_inv(pt);
-        
+
         // pre
         ASSERT(commit != NULL);
         PICC_Commit_inv(commit);
@@ -127,7 +127,8 @@ enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
         #endif
         return PICC_INVALID_COMMIT;
     }
-    if (pt->clock->val->content.as_int == PICC_CLOCK_MAX_INT) {
+    int clock_val = PICC_atomic_int_get(pt->clock->val);
+    if (clock_val == PICC_CLOCK_MAX_INT) {
         PICC_reclaim_clock(pt->clock);
         pt->clock = NULL;
         ALLOC_ERROR(error);
@@ -136,7 +137,7 @@ enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
             CRASH(&error);
         }
     } else {
-        ++(pt->clock->val);
+        PICC_atomic_int_compare_and_swap(pt->clock->val, clock_val, clock_val + 1);
     }
     pt->commit = commit;
     PICC_release(&(pt->lock));
@@ -145,8 +146,8 @@ enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
         PICC_PiThread_inv(pt);
 
         //post
-        ASSERT(pt->clock->val->content.as_int <= PICC_CLOCK_MAX_INT);
-        ASSERT(pt->commit == commit);        
+        ASSERT(PICC_atomic_int_get(pt->clock->val) <= PICC_CLOCK_MAX_INT);
+        ASSERT(pt->commit == commit);
     #endif
     return PICC_VALID_COMMIT;
 }
@@ -157,17 +158,17 @@ enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
  * @pre PICC_PiThread_inv(pt) must pass
  * @pre PICC_Commit_inv(commit) must pass
  * @pre sched != NULL
- * 
+ *
  * @post pt->commit == NULL
  * @post pt->pc == commit->cont_pc
  * @post pt->status == PICC_STATUS_RUN
- * 
+ *
  * @param sched Scheduler
  * @param pt PiThread to be awaken
  */
 void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Commit *commit)
 {
-    #ifdef CONTRACT                
+    #ifdef CONTRACT
         // pre
         PICC_PiThread_inv(pt);
         ASSERT(commit != NULL);
@@ -209,9 +210,9 @@ void PICC_low_level_yield()
  * PiThread invariant.
  *
  * @inv pt != NULL
- * 
+ *
  * The variables below are members of pt
- * 
+ *
  * @inv status >= PICC_STATUS_RUN && status <= PICC_STATUS_BLOCKED
  * @inv enabeled_length >= 0
  * @inv enabeled_length == 0 implies enabled == NULL

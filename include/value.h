@@ -14,6 +14,7 @@
 #include <channel.h>
 #include <sync.h>
 #include <error.h>
+#include <atomic.h>
 
 /**
  * The types a value may have
@@ -32,7 +33,7 @@ typedef enum _PICC_ValueKind {
 typedef struct _PICC_Value {
     /**@{*/
     PICC_ValueKind kind; /**< The real type of the value */
-    PICC_Mutex lock; /** A lock that may be used tu block the value for
+    PICC_Mutex lock; /** A lock that may be used to block the value for
                         concurent accesses */
     /**@}*/
     /**
@@ -52,20 +53,6 @@ typedef struct _PICC_Value {
 } PICC_Value;
 
 /**
- * An atomic boolean is a PICC_Value that has PICC_BOOL_VAL in kind.
- * To acquire and release an atomic boolean, on it's lock of use the
- * PICC_acquire and PICC_release functions that are defined in sync.h
- */
-typedef struct _PICC_Value PICC_AtomicBoolean;
-
-/**
- * An atomic integer is a PICC_Value that has PICC_INT_VAL in kind.
- * To acquire and release an atomic integer, on it's lock of use the
- * PICC_acquire and PICC_release functions that are defined in sync.h
- */
-typedef struct _PICC_Value PICC_AtomicInt;
-
-/**
  * A type to represent PiThread clocks
  */
 typedef struct _PICC_Clock {
@@ -78,8 +65,6 @@ typedef struct _PICC_Clock {
 
 
 extern PICC_Value *PICC_create_value(PICC_ValueKind type, PICC_Error *error);
-extern PICC_AtomicBoolean *PICC_create_atomic_bool(PICC_Error *error);
-extern PICC_AtomicInt *PICC_create_atomic_int(PICC_Error *error);
 extern PICC_Clock *PICC_create_clock(PICC_Error *error);
 extern void PICC_reclaim_clock(PICC_Clock *clock);
 

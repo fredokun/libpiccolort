@@ -181,10 +181,10 @@ int PICC_atomic_int_compare_and_swap(PICC_AtomicInt *atomic_int, int expected_va
         ASSERT(atomic_int != NULL);
 
         // captures
-        bool val_at_pre = atomic_int->val;
+        int val_at_pre = atomic_int->val;
     #endif CONTRACT
 
-    bool old_val = atomic_int->val;
+    int old_val = atomic_int->val;
     if (old_val == expected_val)
         atomic_int->val = new_val;
 

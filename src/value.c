@@ -33,42 +33,6 @@ PICC_Value *PICC_create_value_int(int i, PICC_Error *error)
     return value;
 }
 
-
-/**
- * Creates an atomic boolean.
- *
- * @param error Error stack
- * @return Created atomic boolean
- */
-PICC_AtomicBoolean *PICC_create_atomic_boolean(PICC_Error *error)
-{
-    PICC_AtomicBoolean *abool = PICC_create_value(PICC_BOOL_VAL, error);
-    if (abool != NULL) {
-        abool->content.as_bool = false;
-    }
-    return abool;
-}
-
-/**
- * Creates an atomic integer.
- *
- * @param error Error stack
- * @return Created atomic integer
- */
-PICC_AtomicInt *PICC_create_atomic_int(PICC_Error *error)
-{
-    PICC_AtomicInt *aint = PICC_create_value(PICC_INT_VAL, error);
-    if (aint != NULL) {
-        aint->content.as_int = 0;
-    }
-    return aint;
-}
-
-void PICC_reclaim_atomic_int(PICC_AtomicInt *aint)
-{
-    //PICC_FREE_VALUE(aint);
-}
-
 /**
  * Creates a new clock.
  *
@@ -94,7 +58,7 @@ PICC_Clock *PICC_create_clock(PICC_Error *error)
  */
 void PICC_reclaim_clock(PICC_Clock *clock)
 {
-    PICC_reclaim_atomic_int(clock->val);
+    PICC_free_atomic_int(clock->val);
     free(clock);
 }
 
