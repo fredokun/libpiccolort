@@ -32,6 +32,11 @@ typedef enum _PICC_TryResult PICC_TryResult;
 typedef struct _PICC_PiThread PICC_PiThread;
 
 /**
+ * A type to represent PiThread clocks
+ */
+typedef struct _PICC_Clock PICC_Clock;
+
+/**
  * The procedure type that a pi-thread executes. May use a couple of
  * labels to show where it shoud start.
  */

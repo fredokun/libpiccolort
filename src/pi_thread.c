@@ -15,6 +15,7 @@
 #include <commit_repr.h>
 #include <queue_repr.h>
 #include <value_repr.h>
+#include <atomic_repr.h>
 #include <tools.h>
 
 /**
@@ -226,6 +227,42 @@ void PICC_low_level_yield()
         CRASH_NEW_ERROR(ERR_THREAD_YIELD);
     }
 }
+
+
+// Clocks //////////////////////////////////////////////////////////////////////
+
+/**
+ * Creates a new clock.
+ *
+ * @param error Error stack
+ * @return Created clock
+ */
+PICC_Clock *PICC_create_clock(PICC_Error *error)
+{
+    PICC_ALLOC(clock, PICC_Clock, error) {
+        ALLOC_ERROR(sub_error);
+        clock->val = PICC_create_atomic_int(&sub_error);
+        if (HAS_ERROR(sub_error)) {
+            ADD_ERROR(error, sub_error, ERR_CLOCK_CREATE);
+            free(clock);
+            clock = NULL;
+        }
+    }
+    return clock;
+}
+
+/**
+ * Frees the given clock.
+ */
+void PICC_reclaim_clock(PICC_Clock *clock)
+{
+    PICC_free_atomic_int(clock->val);
+    free(clock);
+}
+
+
+
+// Invariants //////////////////////////////////////////////////////////////////
 
 /**
  * PiThread invariant.

@@ -21,9 +21,4 @@ typedef enum _PICC_ValueKind PICC_ValueKind;
  */
 typedef struct _PICC_Value PICC_Value;
 
-/**
- * A type to represent PiThread clocks
- */
-typedef struct _PICC_Clock PICC_Clock;
-
 #endif

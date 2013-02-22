@@ -35,8 +35,8 @@
  */
 struct _PICC_Channel {
     /**@{*/
-    struct _PICC_CommitList* incommits; /**< The input commits list */
-    struct _PICC_CommitList* outcommits; /**< The output commits list */
+    PICC_CommitList* incommits; /**< The input commits list */
+    PICC_CommitList* outcommits; /**< The output commits list */
     int global_rc; /** The number of commitments to that reference
 
                     this channel (TODO see spec)*/

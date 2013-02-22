@@ -66,13 +66,13 @@ struct _PICC_OutCommit {
 struct _PICC_Commit {
     /**@{*/
     PICC_CommitType type; /**< The type of the commit */
-    struct _PICC_PiThread *thread; /** The pi-thread that has this
+    PICC_PiThread *thread; /** The pi-thread that has this
                                     commit */
-    struct _PICC_Clock *clock; /** The time when the commitment has
+    PICC_Clock *clock; /** The time when the commitment has
                                 been made */
     PICC_AtomicInt *clockval; /**< TODO see spec */
     PICC_Label cont_pc; /**< TODO see spec */
-    struct _PICC_Channel *channel; /**< The channel of this commitment */
+    PICC_Channel *channel; /**< The channel of this commitment */
     /**@}*/
     /**
      * The specific part of the commitments. One of the pointers
@@ -92,7 +92,7 @@ struct _PICC_Commit {
 struct _PICC_CommitListElement {
     /**@{*/
     PICC_Commit *commit; /**< The referenced commit*/
-    struct _PICC_CommitListElement *next; /** A pointer to the next
+    PICC_CommitListElement *next; /** A pointer to the next
                                             element or NULL if none */
     /**@}*/
 };

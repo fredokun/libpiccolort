@@ -21,9 +21,9 @@
  */
 struct _PICC_SchedPool {
     /**@{*/
-    struct _PICC_ReadyQueue *ready; /** The queue that contains the
+    PICC_ReadyQueue *ready; /** The queue that contains the
                                         pi-threads ready tuo run */
-    struct _PICC_WaitQueue *wait; /** The queue that contains the
+    PICC_WaitQueue *wait; /** The queue that contains the
                                     waiting or blocked pi-threads */
     PICC_Lock lock; /**< The scheduler lock. TODO see spec */
     PICC_Condition cond; /** The scheduler condition. Used to

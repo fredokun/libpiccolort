@@ -53,21 +53,8 @@ struct _PICC_Value {
     } content;
 };
 
-/**
- * A type to represent PiThread clocks
- */
-struct _PICC_Clock {
-    /**@{*/
-    PICC_AtomicInt *val; /** Contains the timestamp when the clock has
-                           * been stopped. TODO a function that puts a
-                           * timestamp in a clock */
-    /**@{*/
-};
 
 extern PICC_Value *PICC_create_value(PICC_ValueKind type, PICC_Error *error);
-extern PICC_Clock *PICC_create_clock(PICC_Error *error);
-extern void PICC_reclaim_clock(PICC_Clock *clock);
-
 extern PICC_Value *PICC_create_value_int(int i, PICC_Error *error);
 
 #endif

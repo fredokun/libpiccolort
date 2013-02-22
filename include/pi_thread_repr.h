@@ -16,8 +16,10 @@
 #include <scheduler.h>
 #include <symbols.h>
 #include <channel.h>
+#include <commit.h>
 #include <value.h>
 #include <concurrent.h>
+#include <atomic.h>
 #include <error.h>
 
 /**
@@ -42,6 +44,17 @@ enum _PICC_TryResult {
 };
 
 /**
+ * A type to represent PiThread clocks
+ */
+struct _PICC_Clock {
+    /**@{*/
+    PICC_AtomicInt *val; /** Contains the timestamp when the clock has
+                           * been stopped. TODO a function that puts a
+                           * timestamp in a clock */
+    /**@{*/
+};
+
+/**
  * The PiThread data type
  */
 struct _PICC_PiThread {
@@ -51,26 +64,29 @@ struct _PICC_PiThread {
                         may or may not be followed */
     int enabled_length; /** Length of enabeled choices at the next
                             step */
-    struct _PICC_KnownsSet *knowns; /** The channels known by this
+    PICC_KnownsSet *knowns; /** The channels known by this
                                         thread */
-    struct _PICC_Value **env; /**< The local pi-thread variables */
+    PICC_Value **env; /**< The local pi-thread variables */
     int env_length; /**< The number of variables in the environment */
-    struct _PICC_Commit *commit; /** The last commitment of the
+    PICC_Commit *commit; /** The last commitment of the
                                     pi-thread */
-    struct _PICC_CommitList *commits; /** The commitments of this
+    PICC_CommitList *commits; /** The commitments of this
                                     pi-thread */
     PICC_PiThreadProc *proc; /** The pi-thread procedure to execute */
     PICC_Label pc; /** The label to the execution point of the
                         pi-thread procedure */
-    struct _PICC_Value *val; /** The last transmited value over the
+    PICC_Value *val; /** The last transmited value over the
                                 current channel */
-    struct _PICC_Clock *clock; /** The pi-thread clock. TODO see
+    PICC_Clock *clock; /** The pi-thread clock. TODO see
                                 spec */
     int fuel; /** Number of iterations of the pi-thread execution after
                 wich it goes to the end of the ready queue */
     PICC_Lock lock; /** The lock of the pi-thread. TODO see spec */
     /**@}*/
 };
+
+extern PICC_Clock *PICC_create_clock(PICC_Error *error);
+extern void PICC_reclaim_clock(PICC_Clock *clock);
 
 extern void PICC_PiThread_inv(PICC_PiThread *pt);
 
