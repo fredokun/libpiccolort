@@ -22,7 +22,7 @@ PICC_Value *PICC_create_value(PICC_ValueKind type, PICC_Error *error)
 {
     PICC_ALLOC(value, PICC_Value, error) {
         value->kind = type;
-        PICC_init_mutex(&(value->lock));
+        PICC_init_lock(&(value->lock));
     }
     return value;
 }

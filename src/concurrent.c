@@ -1,5 +1,5 @@
 /**
- * @file sync.c
+ * @file concurrent.c
  * Synchronisation facilities.
  *
  * This project is released under MIT License.
@@ -8,16 +8,16 @@
  * @author Maxence WO
  */
 
-#include <sync.h>
+#include <concurrent.h>
 
 /**
- * Initializes the given mutex.
+ * Initializes the given lock.
  *
- * @param mutex Mutex to initialize
+ * @param lock Mutex to initialize
  */
-void PICC_init_mutex(PICC_Mutex *mutex)
+void PICC_init_lock(PICC_Lock *lock)
 {
-    pthread_mutex_init(mutex, NULL);
+    pthread_mutex_init(lock, NULL);
 }
 
 /**
@@ -31,48 +31,48 @@ void PICC_init_condition(PICC_Condition *cond)
 }
 
 /**
- * Locks the given mutex.
+ * Locks the given lock.
  *
- * @param mutex Mutex to lock.
+ * @param lock Mutex to lock.
  */
-void PICC_acquire(PICC_Mutex *mutex)
+void PICC_acquire(PICC_Lock *lock)
 {
-    pthread_mutex_lock(mutex);
+    pthread_mutex_lock(lock);
 }
 
 /**
- * Tries to lock the given mutex.
+ * Tries to lock the given lock.
  *
- * @param mutex Mutex to try to lock
- * 
+ * @param lock Mutex to try to lock
+ *
  * @return true if the lock was successfull, false otherwise
  */
-bool PICC_try_acquire(PICC_Mutex *mutex)
+bool PICC_try_acquire(PICC_Lock *lock)
 {
-    return pthread_mutex_trylock(mutex) == 0;
+    return pthread_mutex_trylock(lock) == 0;
 }
 
 /**
- * Unlocks the given mutex, fail if the mutex is already unlocked.
+ * Unlocks the given lock, fail if the lock is already unlocked.
  *
- * @param mutex Mutex to unlock
+ * @param lock Mutex to unlock
  */
-void PICC_release(PICC_Mutex *mutex)
+void PICC_release(PICC_Lock *lock)
 {
-    if (pthread_mutex_trylock(mutex) == 0) {
+    if (pthread_mutex_trylock(lock) == 0) {
         CRASH_NEW_ERROR(ERR_MUTEX_ALREADY_UNLOCKED);
     } else {
-        pthread_mutex_unlock(mutex);
+        pthread_mutex_unlock(lock);
     }
 }
 
 /**
- * Waits for the condition over the given mutex.
+ * Waits for the condition over the given lock.
  *
  * @param cond Mutex condition
- * @param mutex Mutex
+ * @param lock Mutex
  */
-void PICC_cond_wait(PICC_Condition *cond, PICC_Mutex *lock)
+void PICC_cond_wait(PICC_Condition *cond, PICC_Lock *lock)
 {
     pthread_cond_wait(cond, lock);
 }

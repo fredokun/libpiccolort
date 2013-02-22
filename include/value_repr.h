@@ -14,7 +14,7 @@
 #include <value.h>
 #include <channel.h>
 #include <atomic.h>
-#include <sync.h>
+#include <concurrent.h>
 #include <error.h>
 
 /**
@@ -34,7 +34,7 @@ enum _PICC_ValueKind {
 struct _PICC_Value {
     /**@{*/
     PICC_ValueKind kind; /**< The real type of the value */
-    PICC_Mutex lock; /** A lock that may be used to block the value for
+    PICC_Lock lock; /** A lock that may be used to block the value for
                         concurent accesses */
     /**@}*/
     /**

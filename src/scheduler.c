@@ -50,7 +50,7 @@ PICC_SchedPool *PICC_create_sched_pool(PICC_Error *error)
             pool->nb_waiting_slaves = 0;
             pool->running = false;
         }
-        PICC_init_mutex(&(pool->lock));
+        PICC_init_lock(&(pool->lock));
         PICC_init_condition(&(pool->cond));
     }
     return pool;

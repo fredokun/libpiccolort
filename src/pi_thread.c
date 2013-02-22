@@ -68,7 +68,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
                         thread->pc = PICC_DEFAULT_ENTRY_LABEL;
                         thread->fuel = PICC_FUEL_INIT;
                         thread->val = NULL;
-                        PICC_init_mutex(&(thread->lock));
+                        PICC_init_lock(&(thread->lock));
                     }
                 }
             }

@@ -17,7 +17,7 @@
 #include <symbols.h>
 #include <channel.h>
 #include <value.h>
-#include <sync.h>
+#include <concurrent.h>
 #include <error.h>
 
 /**
@@ -68,7 +68,7 @@ struct _PICC_PiThread {
                                 spec */
     int fuel; /** Number of iterations of the pi-thread execution after
                 wich it goes to the end of the ready queue */
-    PICC_Mutex lock; /** The lock of the pi-thread. TODO see spec */
+    PICC_Lock lock; /** The lock of the pi-thread. TODO see spec */
     /**@}*/
 };
 

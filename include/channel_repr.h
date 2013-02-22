@@ -16,7 +16,7 @@
 #include <stdbool.h>
 #include <commit.h>
 #include <channel.h>
-#include <sync.h>
+#include <concurrent.h>
 #include <error.h>
 
 #define DEFAULT_CHANNEL_COMMIT_SIZE 10
@@ -40,7 +40,7 @@ struct _PICC_Channel {
     int global_rc; /** The number of commitments to that reference
 
                     this channel (TODO see spec)*/
-    PICC_Mutex lock; /** This channel lock to protect from concurrent
+    PICC_Lock lock; /** This channel lock to protect from concurrent
                         accesses*/
     /**@}*/
 };

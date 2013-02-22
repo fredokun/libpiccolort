@@ -11,7 +11,7 @@
 #define QUEUE_REPR_H
 
 #include <queue.h>
-#include <sync.h>
+#include <concurrent.h>
 #include <error.h>
 
 /**
@@ -36,7 +36,7 @@ struct _PICC_Queue {
  */
 struct _PICC_ReadyQueue {
     PICC_Queue q;
-    PICC_Mutex lock;
+    PICC_Lock lock;
 };
 
 /**
@@ -45,7 +45,7 @@ struct _PICC_ReadyQueue {
 struct _PICC_WaitQueue {
     PICC_Queue active;
     PICC_Queue old;
-    PICC_Mutex lock;
+    PICC_Lock lock;
 };
 
 extern PICC_ReadyQueue *PICC_create_ready_queue(PICC_Error *error);

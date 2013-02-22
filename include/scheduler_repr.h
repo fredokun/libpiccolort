@@ -13,7 +13,7 @@
 
 #include <scheduler.h>
 #include <queue.h>
-#include <sync.h>
+#include <concurrent.h>
 #include <error.h>
 
 /**
@@ -25,7 +25,7 @@ struct _PICC_SchedPool {
                                         pi-threads ready tuo run */
     struct _PICC_WaitQueue *wait; /** The queue that contains the
                                     waiting or blocked pi-threads */
-    PICC_Mutex lock; /**< The scheduler lock. TODO see spec */
+    PICC_Lock lock; /**< The scheduler lock. TODO see spec */
     PICC_Condition cond; /** The scheduler condition. Used to
                             synchronise the running posix threads. */
     int nb_slaves; /** The number of running posix threads in the
