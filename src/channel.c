@@ -10,7 +10,8 @@
  * @author Mickaël MENU
  */
 #include <stdio.h>
-#include <channel.h>
+#include <channel_repr.h>
+#include <commit_repr.h>
 #include <tools.h>
 #include <error.h>
 
@@ -19,13 +20,13 @@
  * Creates a channel which contains 10 commitments.
  *
  * @post channel->incommits->size == DEFAULT_CHANNEL_COMMIT_SIZE
- * @post channel->outcommits->size == DEFAULT_CHANNEL_COMMIT_SIZE 
+ * @post channel->outcommits->size == DEFAULT_CHANNEL_COMMIT_SIZE
  * @return Created channel
  */
 PICC_Channel *PICC_create_channel()
 {
     PICC_Channel *channel = PICC_create_channel_cn(0, 0);
-    
+
      #ifdef CONTRACT
         // inv
         PICC_Channel_inv(channel);
@@ -36,7 +37,7 @@ PICC_Channel *PICC_create_channel()
     #endif
 
     return channel;
-    
+
 }
 
 /**
@@ -92,16 +93,16 @@ PICC_Channel *PICC_create_channel_cn(int incommit_size,int outcommit_size)
  * Creates a new Knowns structure.
  *
  * @pre channel != NULL
- * 
+ *
  * @post knows->state == PICC_UNKNOWN
  * @post knows->channel == channel
- * 
+ *
  * @param error Error stack
  * @return Created knowns structure
  */
 PICC_Knowns *PICC_create_knowns(PICC_Channel *channel, PICC_Error *error)
 {
-    
+
     #ifdef CONTRACT
 
         //pre
@@ -118,7 +119,7 @@ PICC_Knowns *PICC_create_knowns(PICC_Channel *channel, PICC_Error *error)
 
         //inv
         PICC_Knowns_inv(knowns);
-        
+
         //post
         ASSERT(knowns->state == PICC_UNKNOWN );
         ASSERT(knowns->channel == channel );
@@ -130,9 +131,9 @@ PICC_Knowns *PICC_create_knowns(PICC_Channel *channel, PICC_Error *error)
  * Creates a new Knowns set.
  *
  * @pre size > 0
- * 
+ *
  * @post knowns_set->size == size
- * 
+ *
  * @param error Error stack
  * @return Created knowns set
  */
@@ -180,7 +181,7 @@ PICC_KnownsSet *PICC_create_knowns_set(int size, PICC_Error *error)
 void PICC_channel_incr_ref_count(PICC_Channel *channel)
 {
     #ifdef CONTRACT
-        
+
         //inv
         PICC_Channel_inv(channel);
 
@@ -220,7 +221,7 @@ void PICC_channel_dec_ref_count(PICC_Channel *channel)
 {
 
      #ifdef CONTRACT
-        
+
         //inv
         PICC_Channel_inv(channel);
 
@@ -253,9 +254,9 @@ void PICC_channel_dec_ref_count(PICC_Channel *channel)
         //post
         ASSERT(channel->global_rc == global_rc_at_pre - 1 );
         }
-        
+
     #endif
-    
+
 }
 
 /**
@@ -285,7 +286,7 @@ PICC_KnownsSet *PICC_knowns_set_search(PICC_KnownsSet *ks, PICC_KnownsState stat
 {
 
     #ifdef CONTRACT
-        
+
         //inv
         PICC_KnownsSet_inv(ks);
 
@@ -305,7 +306,7 @@ PICC_KnownsSet *PICC_knowns_set_search(PICC_KnownsSet *ks, PICC_KnownsState stat
             count ++;
         }
     }
-    
+
     PICC_KnownsSet *result = PICC_create_knowns_set(count, NULL);
     count = 0;
 
@@ -320,7 +321,7 @@ PICC_KnownsSet *PICC_knowns_set_search(PICC_KnownsSet *ks, PICC_KnownsState stat
     }
 
     #ifdef CONTRACT
-        
+
         //inv
         PICC_KnownsSet_inv(result);
         PICC_KnownsSet_inv(ks);
@@ -367,7 +368,7 @@ PICC_KnownsSet *PICC_knowns_set_forget(PICC_KnownsSet *ks)
  *
  * @pre ks != NULL
  * @pre ch != NULL
- 
+
  * @param ks Knows set
  * @param ch Channel to switch state
  */
@@ -375,7 +376,7 @@ void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch)
 {
 
     #ifdef CONTRACT
-        
+
         //inv
         PICC_KnownsSet_inv(ks);
         PICC_Channel_inv(ch);
@@ -393,11 +394,11 @@ void PICC_knowns_set_forget_to_unknown(PICC_KnownsSet *ks, PICC_Channel *ch)
         known = ks->knowns[i];
         if(known->channel == ch)
             known->state = PICC_UNKNOWN;
-        
+
     }
 
     #ifdef CONTRACT
-        
+
         //inv
         PICC_KnownsSet_inv(ks);
         PICC_Channel_inv(ch);
@@ -421,7 +422,7 @@ void PICC_knowns_set_forget_all(PICC_KnownsSet *ks)
 
 
     #ifdef CONTRACT
-        
+
          //inv
          PICC_KnownsSet_inv(ks);
 
@@ -439,7 +440,7 @@ void PICC_knowns_set_forget_all(PICC_KnownsSet *ks)
     }
 
     #ifdef CONTRACT
-        
+
         //inv
 
         PICC_KnownsSet_inv(ks);
@@ -473,7 +474,7 @@ bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch)
 {
 
     #ifdef CONTRACT
-          
+
         //inv
         PICC_KnownsSet_inv(ks);
         PICC_Channel_inv(ch);
@@ -493,11 +494,11 @@ bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch)
             if(known->state == PICC_KNOWN)
             {
                 #ifdef CONTRACT
-          
+
                     //inv
                     PICC_KnownsSet_inv(ks);
                     PICC_Channel_inv(ch);
-                    
+
                 #endif
                 return false;
             }
@@ -505,14 +506,14 @@ bool PICC_knowns_register(PICC_KnownsSet *ks, PICC_Channel *ch)
             {
                 known->state = PICC_KNOWN;
                 #ifdef CONTRACT
-          
+
                     //inv
                     PICC_KnownsSet_inv(ks);
                     PICC_Channel_inv(ch);
-                
+
                     //post
                     ASSERT(known->state == PICC_KNOWN);
-                    
+
                 #endif
                 return false;
             }

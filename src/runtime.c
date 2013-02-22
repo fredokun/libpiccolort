@@ -12,7 +12,9 @@
 
 #include <pthread.h>
 #include <runtime.h>
-#include <queue.h>
+#include <pi_thread_repr.h>
+#include <queue_repr.h>
+#include <scheduler_repr.h>
 
 /**
  * Temporary main entry point.

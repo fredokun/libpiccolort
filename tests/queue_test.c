@@ -8,8 +8,8 @@
  */
 
 #include <stdlib.h>
-#include <pi_thread.h>
-#include <queue.h>
+#include <pi_thread_repr.h>
+#include <queue_repr.h>
 #include <tools.h>
 
 #define ASSERT_NO_ERROR() \

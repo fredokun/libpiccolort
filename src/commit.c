@@ -9,7 +9,9 @@
  * @author Joel HING
  */
 
-#include <commit.h>
+#include <commit_repr.h>
+#include <pi_thread_repr.h>
+#include <value_repr.h>
 #include <tools.h>
 
 #define LOCK_CLOCK(commit) \

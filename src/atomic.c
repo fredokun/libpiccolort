@@ -8,7 +8,7 @@
  */
 
 #include <stdlib.h>
-#include <atomic.h>
+#include <atomic_repr.h>
 #include <tools.h>
 
 #define LOCK_ATOMIC_VALUE(val) \

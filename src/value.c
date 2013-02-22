@@ -7,7 +7,8 @@
  * @author Mickaël MENU
  */
 
-#include <value.h>
+#include <value_repr.h>
+#include <atomic_repr.h>
 #include <tools.h>
 
 /**

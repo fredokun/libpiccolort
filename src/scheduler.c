@@ -8,8 +8,11 @@
  * @author Mickaël MENU
  */
 
-#include <scheduler.h>
+#include <scheduler_repr.h>
+#include <queue_repr.h>
+#include <pi_thread_repr.h>
 #include <tools.h>
+#include <error.h>
 
 #define LOCK_SCHED_POOL(sp) \
     PICC_acquire(&(sp->lock));
@@ -19,10 +22,10 @@
 
 #define WAIT_SCHED_POOL(sp) \
     PICC_cond_wait(&(sp->cond), &(sp->lock));
-    
+
 #define SIGNAL_SCHED_POOL(sp, error) \
     PICC_cond_signal(&(sp->cond), error);
-    
+
 #define BROADCAST_SCHED_POOL(sp, error) \
     PICC_cond_broadcast(&(sp->cond), error);
 
@@ -102,7 +105,7 @@ void PICC_sched_pool_slave(PICC_Args *args)
 }
 
 /**
- * Handles the main thread in the scheduler pool after the 
+ * Handles the main thread in the scheduler pool after the
  * initialisation in the main entry point
  *
  * @param sp the Scheduler pool
@@ -118,13 +121,13 @@ void PICC_sched_pool_master(PICC_SchedPool *sp, int std_gc_fuel, int quick_gc_fu
     while(sp->running) {
         while(PICC_ready_queue_size(sp->ready)) {
             current = PICC_ready_queue_pop(sp->ready);
-            
+
             if (PICC_ready_queue_size(sp->ready) >= 1 && sp->nb_waiting_slaves > 0) {
-                LOCK_SCHED_POOL(sp);        
-                SIGNAL_SCHED_POOL(sp, error);        
+                LOCK_SCHED_POOL(sp);
+                SIGNAL_SCHED_POOL(sp, error);
                 RELEASE_SCHED_POOL(sp);
             }
-            
+
             do {
                 current->proc(sp, current);
             } while(current->status == PICC_STATUS_CALL);

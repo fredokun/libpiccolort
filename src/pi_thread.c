@@ -9,12 +9,13 @@
  * @author Sergiu TIGANU
  */
 
-#include <sched.h>
-
-#include <pi_thread.h>
-#include <scheduler.h>
+#include <channel_repr.h>
+#include <pi_thread_repr.h>
+#include <scheduler_repr.h>
+#include <commit_repr.h>
+#include <queue_repr.h>
+#include <value_repr.h>
 #include <tools.h>
-#include <value.h>
 
 /**
  * Creates a new PiThread with given environment and knowns set length.

@@ -10,7 +10,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
-#include <queue.h>
+#include <queue_repr.h>
 #include <tools.h>
 
 #define LOCK_QUEUE(q) \
