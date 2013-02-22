@@ -43,7 +43,7 @@ PICC_AtomicBoolean *PICC_create_atomic_bool(PICC_Error *error)
  */
 void PICC_free_atomic_bool(PICC_AtomicBoolean *atomic_bool)
 {
-    #ifdef CONTRACT
+    #ifdef CONTRACT_PRE
         // pre: atomic_bool != null
         ASSERT(atomic_bool != NULL);
     #endif
@@ -66,23 +66,25 @@ bool PICC_atomic_bool_compare_and_swap(PICC_AtomicBoolean *atomic_bool, bool exp
 {
     LOCK_ATOMIC_VALUE(atomic_bool);
 
-    #ifdef CONTRACT
+    #ifdef CONTRACT_PRE
         // pre: atomic_bool != null
         ASSERT(atomic_bool != NULL);
+    #endif
 
+    #ifdef CONTRACT_POST
         // captures
         bool val_at_pre = atomic_bool->val;
-    #endif CONTRACT
+    #endif
 
     bool old_val = atomic_bool->val;
     if (old_val == expected_val)
         atomic_bool->val = new_val;
 
-    #ifdef CONTRACT
+    #ifdef CONTRACT_POST
         // post: if (atomic_bool.val@pre == expected_val) then atomic_bool.val = new_val
         if (val_at_pre == expected_val)
             ASSERT(atomic_bool->val == new_val);
-    #endif CONTRACT
+    #endif
 
     RELEASE_ATOMIC_VALUE(atomic_bool);
     return old_val;
@@ -97,7 +99,7 @@ bool PICC_atomic_bool_compare_and_swap(PICC_AtomicBoolean *atomic_bool, bool exp
  */
 bool PICC_atomic_bool_get(PICC_AtomicBoolean *atomic_bool)
 {
-    #ifdef CONTRACT
+    #ifdef CONTRACT_PRE
         // pre: atomic_bool != null
         ASSERT(atomic_bool != NULL);
     #endif
@@ -114,14 +116,14 @@ bool PICC_atomic_bool_get(PICC_AtomicBoolean *atomic_bool)
  */
 void PICC_atomic_bool_set(PICC_AtomicBoolean *atomic_bool, bool new_val)
 {
-    #ifdef CONTRACT
+    #ifdef CONTRACT_PRE
         // pre: atomic_bool != null
         ASSERT(atomic_bool != NULL);
-    #endif CONTRACT
+    #endif
 
     atomic_bool->val = new_val;
 
-    #ifdef CONTRACT
+    #ifdef CONTRACT_POST
         // post: atomic_bool.val == new_val
         ASSERT(atomic_bool->val == new_val);
     #endif
@@ -153,7 +155,7 @@ PICC_AtomicInt *PICC_create_atomic_int(PICC_Error *error)
  */
 void PICC_free_atomic_int(PICC_AtomicInt *atomic_int)
 {
-    #ifdef CONTRACT
+    #ifdef CONTRACT_PRE
         // pre: atomic_int != null
         ASSERT(atomic_int != NULL);
     #endif
@@ -176,23 +178,25 @@ int PICC_atomic_int_compare_and_swap(PICC_AtomicInt *atomic_int, int expected_va
 {
     LOCK_ATOMIC_VALUE(atomic_int);
 
-    #ifdef CONTRACT
+    #ifdef CONTRACT_PRE
         // pre: atomic_int != null
         ASSERT(atomic_int != NULL);
+    #endif
 
+    #ifdef CONTRACT_POST
         // captures
         int val_at_pre = atomic_int->val;
-    #endif CONTRACT
+    #endif
 
     int old_val = atomic_int->val;
     if (old_val == expected_val)
         atomic_int->val = new_val;
 
-    #ifdef CONTRACT
+    #ifdef CONTRACT_POST
         // post: if (atomic_int.val@pre == expected_val) then atomic_int.val = new_val
         if (val_at_pre == expected_val)
             ASSERT(atomic_int->val == new_val);
-    #endif CONTRACT
+    #endif
 
     RELEASE_ATOMIC_VALUE(atomic_int);
     return old_val;
@@ -207,7 +211,7 @@ int PICC_atomic_int_compare_and_swap(PICC_AtomicInt *atomic_int, int expected_va
  */
 int PICC_atomic_int_get(PICC_AtomicInt *atomic_int)
 {
-    #ifdef CONTRACT
+    #ifdef CONTRACT_PRE
         // pre: atomic_int != null
         ASSERT(atomic_int != NULL);
     #endif
@@ -224,14 +228,14 @@ int PICC_atomic_int_get(PICC_AtomicInt *atomic_int)
  */
 void PICC_atomic_int_set(PICC_AtomicInt *atomic_int, int new_val)
 {
-    #ifdef CONTRACT
+    #ifdef CONTRACT_PRE
         // pre: atomic_int != null
         ASSERT(atomic_int != NULL);
-    #endif CONTRACT
+    #endif
 
     atomic_int->val = new_val;
 
-    #ifdef CONTRACT
+    #ifdef CONTRACT_POST
         // post: atomic_int.val == new_val
         ASSERT(atomic_int->val == new_val);
     #endif

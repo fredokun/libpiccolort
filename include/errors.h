@@ -11,74 +11,52 @@
 #ifndef ERRORS_H
 #define ERRORS_H
 
-#ifndef TESTS
+/**
+ * Number of errors defined.
+ */
+#define PICC_NB_ERRORS 500
 
-// APPLICATION ERROR MESSAGES /////////////////////////////////////////////////
+/**
+ *  List of all errors defined.
+ */
+typedef enum _PICC_ErrorId {
+    ERR_DEADLOCK,
 
-    /**
-     * Number of errors defined.
-     */
-    #define PICC_NB_ERRORS 500
+    ERR_ALLOC_QUEUE_CELL,
+    ERR_READY_QUEUE_PUSH,
+    ERR_READY_QUEUE_ADD,
+    ERR_WAIT_QUEUE_PUSH,
+    ERR_WAIT_QUEUE_ADD,
+    ERR_WAIT_QUEUE_PUSH_OLD,
 
-    /**
-     *  List of all errors defined.
-     */
-    typedef enum _PICC_ErrorId {
-        ERR_DEADLOCK,
+    ERR_NOT_IMPLEMENTED,
+    ERR_OUT_OF_MEMORY,
+    ERR_COMMIT_CREATE,
+    ERR_ADD_COMMIT_TO_LIST,
+    ERR_REGISTER_OUT_COMMIT,
+    ERR_REGISTER_IN_COMMIT,
+    ERR_THREAD_CREATE,
+    ERR_THREAD_YIELD,
+    ERR_PTHREAD_CREATE,
+    ERR_SCHED_POOL_CREATE,
+    ERR_CLOCK_CREATE,
 
-        ERR_ALLOC_QUEUE_CELL,
-        ERR_READY_QUEUE_PUSH,
-        ERR_READY_QUEUE_ADD,
-        ERR_WAIT_QUEUE_PUSH,
-        ERR_WAIT_QUEUE_ADD,
-        ERR_WAIT_QUEUE_PUSH_OLD,
+    ERR_MUTEX_ALREADY_UNLOCKED,
+    ERR_CONDITION_SIGNAL,
+    ERR_CONDITION_BROADCAST,
 
-        ERR_NOT_IMPLEMENTED,
-        ERR_OUT_OF_MEMORY,
-        ERR_COMMIT_CREATE,
-        ERR_ADD_COMMIT_TO_LIST,
-        ERR_REGISTER_OUT_COMMIT,
-        ERR_REGISTER_IN_COMMIT,
-        ERR_THREAD_CREATE,
-        ERR_THREAD_YIELD,
-        ERR_PTHREAD_CREATE,
-        ERR_SCHED_POOL_CREATE,
-        ERR_CLOCK_CREATE,
+    ERR_NULLPOINTER_PITHREAD,
+    ERR_NULLPOINTER_CHANNEL,
+    ERR_NULLPOINTER_COMMIT,
+    ERR_NULLPOINTER_COMMITLISTELEM,
+    ERR_NULLPOINTER_COMMITLIST,
 
-        ERR_MUTEX_ALREADY_UNLOCKED,
-        ERR_CONDITION_SIGNAL,
-        ERR_CONDITION_BROADCAST,
+    ERR_CHANNEL_GLOBAL_RC,
 
-        ERR_NULLPOINTER_PITHREAD,
-        ERR_NULLPOINTER_CHANNEL,
-        ERR_NULLPOINTER_COMMIT,
-        ERR_NULLPOINTER_COMMITLISTELEM,
-        ERR_NULLPOINTER_COMMITLIST,
+    ERR_INVALID_COMMIT,
+    ERR_INVALID_VALUE,
+    ERR_INVALID_TYPE,
 
-        ERR_CHANNEL_GLOBAL_RC,
-
-        ERR_INVALID_COMMIT,
-        ERR_INVALID_VALUE,
-        ERR_INVALID_TYPE,
-
-    } PICC_ErrorId;
-
-#else
-
-// TESTS ERROR MESSAGES ///////////////////////////////////////////////////////
-
-    /**
-     *  Number of errors defined.
-     */
-    #define PICC_NB_ERRORS 500
-
-    /**
-     *  List of all errors defined.
-     */
-    typedef enum _PICC_ErrorId {
-        ERR_TEST1
-    } PICC_ErrorId;
-
-#endif
+} PICC_ErrorId;
 
 #endif

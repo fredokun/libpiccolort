@@ -12,43 +12,29 @@
 #include <string.h>
 #include <error.h>
 
-#ifndef TESTS
+static const char *PICC_error_messages[PICC_NB_ERRORS] = {
+    "Scheduler deadlock",
 
-// APPLICATION ERROR MESSAGES /////////////////////////////////////////////////
+    "Can't alloc a new queue cell.",
+    "Can't push the PiThread on the ready queue.",
+    "Can't append the PiThread on the ready queue.",
+    "Can't push the PiThread on the wait queue.",
+    "Can't append the PiThread on the wait queue.",
+    "Can't push the PiThread on the old wait queue.",
 
-    static const char *PICC_error_messages[PICC_NB_ERRORS] = {
-        "Scheduler deadlock",
+    "Not implemented yet.",
+    "Out of memory.",
+    "Can't create the commit.",
+    "Can't add the commit to given commit list.",
+    "Can't register a new out commit.",
+    "Can't register a new in commit.",
+    "Can't create the PiThread.",
+    "Can't create the POSIX thread.",
+    "Can't create the scheduler pool.",
+    "Can't create the clock.",
 
-        "Can't alloc a new queue cell.",
-        "Can't push the PiThread on the ready queue.",
-        "Can't append the PiThread on the ready queue.",
-        "Can't push the PiThread on the wait queue.",
-        "Can't append the PiThread on the wait queue.",
-        "Can't push the PiThread on the old wait queue.",
-
-        "Not implemented yet.",
-        "Out of memory.",
-        "Can't create the commit.",
-        "Can't add the commit to given commit list.",
-        "Can't register a new out commit.",
-        "Can't register a new in commit.",
-        "Can't create the PiThread.",
-        "Can't create the POSIX thread.",
-        "Can't create the scheduler pool.",
-        "Can't create the clock.",
-
-        "Released a free mutex"
-    };
-
-#else
-
-// TESTS ERROR MESSAGES ///////////////////////////////////////////////////////
-
-    static const char *PICC_error_messages[PICC_NB_ERRORS] = {
-        "Test 1"
-    };
-
-#endif
+    "Released a free mutex"
+};
 
 /**
  * Initializes a new error with a given error ID, file and line.

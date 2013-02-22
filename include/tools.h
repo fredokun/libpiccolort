@@ -29,7 +29,7 @@
     if (var == NULL) { \
         NEW_ERROR(error, ERR_OUT_OF_MEMORY); \
     } else
-    
+
 #define PICC_ALLOC_N_CRASH(var, type, size) \
     type *var = malloc(sizeof(type) * (size)); \
     if (size == 0) { \
@@ -78,7 +78,10 @@
     PICC_set_destroy(s);
 
 
-#define CONTRACT 1
+#define CONTRACT_PRE
+#define CONTRACT_PRE_INV
+#define CONTRACT_POST
+#define CONTRACT_POST_INV
 
 extern void debug(const char* s);
 

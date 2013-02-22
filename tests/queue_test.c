@@ -22,8 +22,7 @@
  */
 PICC_PiThread *create_stub_thread()
 {
-    PICC_ALLOC_CRASH(thread, PICC_PiThread) {}
-    return thread;
+    return PICC_create_pithread(1, 1);
 }
 
 void test_ready_queue_push(PICC_Error *error)
