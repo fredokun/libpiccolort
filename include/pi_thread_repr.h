@@ -14,13 +14,29 @@
 #include <stdbool.h>
 #include <pi_thread.h>
 #include <scheduler.h>
-#include <symbols.h>
 #include <channel.h>
 #include <commit.h>
 #include <value.h>
 #include <concurrent.h>
 #include <atomic.h>
 #include <error.h>
+
+static const PICC_Label PICC_DEFAULT_ENTRY_LABEL = 0;
+
+/**
+ * The maximum number of iterations a thread can execute without being scheduled.
+ */
+static const int PICC_FUEL_INIT = 358;
+
+/**
+ * Invalid position in the program counter.
+ */
+static const int PICC_INVALID_PC = -1;
+
+/**
+ *  The maximum value a PiThread clock may have
+ */
+static const int PICC_CLOCK_MAX_INT = 1000;
 
 /**
  * The status of a pi-thread

@@ -14,7 +14,6 @@
 
 #include <commit.h>
 #include <pi_thread.h>
-#include <symbols.h>
 #include <channel_repr.h>
 #include <value.h>
 #include <error.h>

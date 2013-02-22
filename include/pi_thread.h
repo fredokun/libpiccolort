@@ -17,6 +17,12 @@ struct _PICC_Commit;
 enum _PICC_CommitStatus;
 
 /**
+ * The label type. Used by the pi-threads to point to a place where to
+ * start it's procedure.
+ */
+typedef int PICC_Label;
+
+/**
  * The status of a pi-thread
  */
 typedef enum _PICC_StatusKind PICC_StatusKind;

@@ -13,10 +13,9 @@
 #define COMMIT_H
 
 #include <stdbool.h>
-#include <symbols.h>
+#include <pi_thread.h>
 
 // Forward declarations
-struct _PICC_PiThread;
 struct _PICC_Channel;
 struct _PICC_Value;
 
