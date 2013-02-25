@@ -9,7 +9,9 @@
  * @author Joel HING
  */
 
-#include <commit.h>
+#include <commit_repr.h>
+#include <pi_thread_repr.h>
+#include <value_repr.h>
 #include <tools.h>
 
 #define LOCK_CLOCK(commit) \
@@ -40,7 +42,7 @@ PICC_Commit *PICC_create_commitment(PICC_Error *error)
         commit->channel = NULL;
     }
 
-    #ifdef CONTRACT
+    #ifdef CONTRACT_POSt
         // post
         ASSERT(commit != NULL);
     #endif
@@ -55,35 +57,34 @@ PICC_Commit *PICC_create_commitment(PICC_Error *error)
  * @post clist->head = NULL
  * @post clist->tail = NULL
  * @post clist->size = 0
- * 
+ *
  * @param error Error stack
  * @return Created commit list
  */
 PICC_CommitList *PICC_create_commit_list(PICC_Error *error)
-{    
+{
     PICC_ALLOC(clist, PICC_CommitList, error) {
         clist->head = NULL;
         clist->tail = NULL;
         clist->size = 0;
     }
-    
-     #ifdef CONTRACT        
+
+     #ifdef CONTRACT_POST
         //post
         ASSERT(clist != NULL);
         ASSERT(clist->head == NULL);
         ASSERT(clist->tail == NULL);
         ASSERT(clist->size == 0);
-        
     #endif
-   
+
     return clist;
 }
 
 /**
  * Creates a new  element of commit list.
- * 
+ *
  * @pre commit != NULL
- * 
+ *
  * @post clist_elem != NULL
  * @post clist_elem->commit = commit
  * @post clist_elem->next = NULL
@@ -94,34 +95,30 @@ PICC_CommitList *PICC_create_commit_list(PICC_Error *error)
  */
 PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PICC_Error *error)
 {
-	#ifdef CONTRACT
-
+	#ifdef CONTRACT_PRE
         // pre
         ASSERT(commit != NULL);
-
     #endif
-	
+
     PICC_ALLOC(clist_elem, PICC_CommitListElement, error) {
         clist_elem->commit = commit;
         clist_elem->next = NULL;
     }
-    
-    #ifdef CONTRACT
-		
+
+    #ifdef CONTRACT_POST
         //post
         ASSERT(clist_elem != NULL);
         ASSERT(clist_elem->commit == commit);
         ASSERT(clist_elem->next == NULL);
-        
     #endif
-    
+
     return clist_elem;
 }
 
 /**
  * Registers an output commit with given PiThread and channel.
  *
- * @pre pt != null && ch != null && eval != null &&  cont_pc >= 0 
+ * @pre pt != null && ch != null && eval != null &&  cont_pc >= 0
  *
  * @post pt->commits->size = pt->commits->size_at_pre + 1
  * @post pt->commits->tail = commit
@@ -139,19 +136,23 @@ PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PIC
  */
 void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_EvalFunction *eval, PICC_Label cont_pc)
 {
-    #ifdef CONTRACT
+    #ifdef CONTRACT_PRE_INV
         // inv
-        // PICC_PiThread_inv(pt);
-        // PICC_Channel_inv(ch);
+        PICC_PiThread_inv(pt);
+        PICC_Channel_inv(ch);
         PICC_EvalFunction_inv(eval);
         PICC_Label_inv(cont_pc);
+    #endif
 
+    #ifdef CONTRACT_PRE
         // pre
         ASSERT(pt != NULL);
         ASSERT(ch != NULL);
         ASSERT(eval != NULL);
         ASSERT(cont_pc >= 0);
+    #endif
 
+    #ifdef CONTRACT_POST
         // captures
         int size_at_pre = pt->commits->size;
     #endif
@@ -178,13 +179,15 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
     if (HAS_ERROR(sub_error))
         CRASH(&sub_error);
 
-    #ifdef CONTRACT
+    #ifdef CONTRACT_POST_INV
         // inv
-        // PICC_PiThread_inv(pt);
-        // PICC_Channel_inv(ch);
+        PICC_PiThread_inv(pt);
+        PICC_Channel_inv(ch);
         PICC_EvalFunction_inv(eval);
         PICC_Label_inv(cont_pc);
-        
+    #endif
+
+    #ifdef CONTRACT_POST
         //post
         ASSERT(pt->commits->size == (size_at_pre + 1));
         ASSERT(pt->commits->head->commit->type == PICC_OUT_COMMIT);
@@ -198,7 +201,7 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
  * Registers an input commit with given PiThread and channel.
  *
  *
- * @pre pt != null && ch != null && cont_pc >= 0 
+ * @pre pt != null && ch != null && cont_pc >= 0
  *
  * @post pt->commits->size(PICC_register_input_commitment(pt)) = pt->commits->size(pt) + 1
  * @post pt->commits->tail = commit
@@ -216,22 +219,26 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
  */
 void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int refvar, PICC_Label cont_pc)
 {
-	#ifdef CONTRACT
+	#ifdef CONTRACT_PRE_INV
         // inv
-        // PICC_PiThread_inv(pt);
-        // PICC_Channel_inv(ch);
+        PICC_PiThread_inv(pt);
+        PICC_Channel_inv(ch);
         PICC_Refvar_inv(refvar);
         PICC_Label_inv(cont_pc);
+    #endif
 
+    #ifdef CONTRACT_PRE
         //pre
 		ASSERT(pt != NULL);
 		ASSERT(ch != NULL);
 		ASSERT(cont_pc >= 0);
+    #endif
 
+    #ifdef CONTRACT_POST
         // captures
         int size_at_pre = pt->commits->size;
     #endif
-	
+
     ALLOC_ERROR(sub_error);
     PICC_Commit *commit = PICC_create_commitment(&sub_error);
     if (HAS_ERROR(sub_error)) {
@@ -249,18 +256,19 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
             free(commit);
         }
     }
-    
+
     if (HAS_ERROR(sub_error))
         CRASH(&sub_error);
-        
-    #ifdef CONTRACT
+
+    #ifdef CONTRACT_POST_INV
         // inv
-        // PICC_PiThread_inv(pt);
-        // PICC_Channel_inv(ch);
+        PICC_PiThread_inv(pt);
+        PICC_Channel_inv(ch);
         PICC_Refvar_inv(refvar);
         PICC_Label_inv(cont_pc);
+    #endif
 
-        
+    #ifdef CONTRACT_POST
         //post
 		ASSERT(pt->commits->size == (size_at_pre + 1));
 		ASSERT(pt->commits->head->commit->type == PICC_IN_COMMIT);
@@ -269,7 +277,7 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
 		ASSERT(pt->commits->head->commit->channel == ch);
 		ASSERT(pt->commits->head->commit->cont_pc == cont_pc);
     #endif
-        
+
 }
 
 /**
@@ -284,41 +292,40 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
  */
 bool PICC_is_valid_commit(PICC_Commit *commit)
 {
-	#ifdef CONTRACT
+	#ifdef CONTRACT_PRE_INV
         // inv
         PICC_Commit_inv(commit);
+    #endif
 
-
+    #ifdef CONTRACT_PRE
 		// pre
 		ASSERT(commit != NULL);
-		
     #endif
-    
+
     bool valid = false;
     LOCK_CLOCK(commit);
     if (commit->clock == commit->thread->clock
     && commit->clockval == commit->thread->clock->val)
         valid = true;
     RELEASE_CLOCK(commit);
-    
-    
-    #ifdef CONTRACT
+
+
+    #ifdef CONTRACT_POST_INV
         // inv
         PICC_Commit_inv(commit);
-
-        
-        // post
-        if ((commit->clock == commit->thread->clock) && (commit->clockval == commit->thread->clock->val)){
-			ASSERT(valid == true); 
-		}
-        else {
-			ASSERT(valid == false);
-		}
-	
     #endif
-    
+
+    #ifdef CONTRACT_POST
+        // post
+        if ((commit->clock == commit->thread->clock) && (commit->clockval == commit->thread->clock->val)) {
+			ASSERT(valid == true);
+        } else {
+			ASSERT(valid == false);
+        }
+    #endif
+
     return valid;
-    
+
 }
 
 
@@ -327,37 +334,40 @@ bool PICC_is_valid_commit(PICC_Commit *commit)
  *
  * @pre clist != NULL
  * @pre commit != NULL
- * 
+ *
  * @post clist->size = clist_at_pre->size + 1
  * @post clist->tail->commit = commit
  * @post clist->tail->next = NULL
- * 
+ *
  * @param clist Commit list
  * @param commit Commit to add
  * @param error Error stack
  */
 void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Error *error)
 {
-	#ifdef CONTRACT
+	#ifdef CONTRACT_PRE_INV
         // inv
         PICC_CommitList_inv(clist);
         PICC_Commit_inv(commit);
+    #endif
 
+    #ifdef CONTRACT_PRE
 		// pre
 		ASSERT(clist != NULL);
 		ASSERT(commit != NULL);
-		
+    #endif
+
+    #ifdef CONTRACT_POST
 		// capture
 		int size_at_pre = clist->size;
-		
     #endif
-	
+
     ALLOC_ERROR(create_error);
     PICC_CommitListElement *clist_elem = PICC_create_commit_list_element(commit, &create_error);
     if (HAS_ERROR(create_error)) {
         ADD_ERROR(error, create_error, ERR_ADD_COMMIT_TO_LIST);
     } else {
-        if(clist->head != NULL && clist->tail != NULL){            
+        if(clist->head != NULL && clist->tail != NULL){
             clist->tail->next = clist_elem;
             clist->tail = clist_elem;
             clist->size++;
@@ -368,17 +378,18 @@ void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Erro
             clist->size++;
         }
     }
-    
-    #ifdef CONTRACT
+
+    #ifdef CONTRACT_POST_INV
 		// inv
         PICC_CommitList_inv(clist);
 		PICC_Commit_inv(commit);
-        
+    #endif
+
+    #ifdef CONTRACT_POST
         //post
 		ASSERT(clist->size == size_at_pre + 1);
 		ASSERT(clist->tail->commit == commit);
 		ASSERT(clist->tail->next == NULL);
-		
     #endif
 }
 
@@ -386,43 +397,42 @@ void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Erro
  * Returns whether a commit list is empty.
  *
  * @pre clist != NULL
- * 
+ *
  * @post if clist->size = 0 , res = true else res = false
- * 
+ *
  * @param clist Commit list to check
  * @return Whether the commit list is empty.
  */
 bool PICC_commit_list_is_empty(PICC_CommitList *clist)
 {
-	#ifdef CONTRACT
+	#ifdef CONTRACT_PRE_INV
         // inv
         PICC_CommitList_inv(clist);
+    #endif
 
-
+    #ifdef CONTRACT_PRE
 		// pre
 		ASSERT(clist != NULL);
-		
     #endif
-	
+
     ASSERT(clist != NULL);
     bool res = clist->size == 0;
-    
-    
-    #ifdef CONTRACT
+
+
+    #ifdef CONTRACT_POST_INV
 		// inv
         PICC_CommitList_inv(clist);
-
-        
-        //post
-		if(clist-> size == 0){
-			ASSERT(res);
-		}
-		else{
-			ASSERT(!res);
-		}
-		
     #endif
-    
+
+    #ifdef CONTRACT_POST
+        //post
+		if(clist-> size == 0) {
+			ASSERT(res);
+		} else {
+			ASSERT(!res);
+        }
+    #endif
+
     return res;
 }
 
@@ -431,32 +441,34 @@ bool PICC_commit_list_is_empty(PICC_CommitList *clist)
  *
  * @pre clist != NULL
  * @pre clist->size > 0
- * 
+ *
  * @post fetched = clist_at_pre->head->commit
  * @post clist->size = clist_at_pre->size - 1
  * @post clist->head-> = clist_at_pre->head->next
- * 
+ *
  * @param clist Commit list
  * @return first element of the commit list
  */
 PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
 {
-	#ifdef CONTRACT
+	#ifdef CONTRACT_PRE_INV
         // inv
         PICC_CommitList_inv(clist);
+    #endif
 
-
+    #ifdef CONTRACT_PRE
 		// pre
 		ASSERT(clist != NULL);
 		ASSERT(clist->size > 0);
-		
+    #endif
+
+    #ifdef CONTRACT_POST
 		// capture
 		PICC_CommitListElement *head_at_pre_next = clist->head->next;
 		PICC_Commit *head_at_pre_commit = clist->head->commit;
 		int size_at_pre = clist->size;
-		
     #endif
-	
+
     PICC_CommitListElement *commit_list_element = clist->head;
     if(clist->size == 1){
         clist->head = NULL;
@@ -470,21 +482,22 @@ PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
     commit_list_element->next = NULL;
     commit_list_element->commit = NULL;
     free(commit_list_element);
-    
+
     //if(fetched == NULL) printf("FETCHED NULL\n");
     //if(head_at_pre == NULL) printf("HEAD AT PRE commit NULL\n");
-    
-    #ifdef CONTRACT
+
+    #ifdef CONTRACT_POST_INV
 		// inv
         PICC_CommitList_inv(clist);
-        
+    #endif
+
+    #ifdef CONTRACT_POST
         //post
-		ASSERT(fetched == head_at_pre_commit);		
+		ASSERT(fetched == head_at_pre_commit);
 		ASSERT(clist->size == size_at_pre - 1);
 		ASSERT(clist->head == head_at_pre_next);
-		
     #endif
-    
+
     return fetched;
 }
 
@@ -498,16 +511,16 @@ PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
  */
 PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
 {
-	#ifdef CONTRACT
+	#ifdef CONTRACT_PRE_INV
         // inv
-        //PICC_Channel_inv(ch);
+        PICC_Channel_inv(ch);
+    #endif
 
-
+    #ifdef CONTRACT_PRE
 		// pre
 		ASSERT(ch != NULL);
-		
     #endif
-	
+
     PICC_Commit *fetched = NULL;
     ALLOC_ERROR(alloc_error);
     PICC_ALLOC(current, PICC_Commit, &alloc_error) {
@@ -523,10 +536,9 @@ PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
     if (HAS_ERROR(alloc_error))
         CRASH(&alloc_error);
 
-	#ifdef CONTRACT
+	#ifdef CONTRACT_POST_INV
 		// inv
-        // PICC_Channel_inv(ch);
-
+        PICC_Channel_inv(ch);
     #endif
 
     return fetched;
@@ -542,16 +554,16 @@ PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
  */
 PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
 {
-	#ifdef CONTRACT
+	#ifdef CONTRACT_PRE_INV
         // inv
-        //PICC_Channel_inv(ch);
+        PICC_Channel_inv(ch);
+    #endif
 
-
+    #ifdef CONTRACT_PRE
 		// pre
 		ASSERT(ch != NULL);
-		
     #endif
-    
+
     PICC_Commit *fetched = NULL;
     ALLOC_ERROR(alloc_error);
     PICC_ALLOC(current, PICC_Commit, &alloc_error)
@@ -568,14 +580,13 @@ PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
 
     if (HAS_ERROR(alloc_error))
         CRASH(&alloc_error);
-        
 
-	#ifdef CONTRACT
+
+	#ifdef CONTRACT_POST_INV
 		// inv
-        // PICC_Channel_inv(ch);
-
+        PICC_Channel_inv(ch);
     #endif
-    
+
 
     return fetched;
 }
@@ -609,7 +620,7 @@ void PICC_Commit_inv(PICC_Commit *commit)
 
 /**
  * Checks commit list element invariant.
- * 
+ *
  * @inv elem->commit != NULL
  */
 void PICC_CommitListElement_inv(PICC_CommitListElement *elem)
@@ -619,7 +630,7 @@ void PICC_CommitListElement_inv(PICC_CommitListElement *elem)
 
 /**
  * Checks commit list invariant.
- * 
+ *
  * @inv if list->size = 0, list->head = NULL && list->tail = NULL
  * @inv if list->size = 1, list->head = list->tail
  * @inv if list->size > 1, list->head != list->tail
@@ -629,41 +640,41 @@ void PICC_CommitList_inv(PICC_CommitList *list)
 	if(list->size == 0){
 		ASSERT(list->head == NULL && list->tail == NULL);
 	}
-	
+
 	if(list->size == 1){
 		ASSERT(list->head == list->tail);
 	}
-	
+
 	if(list->size > 1){
 		ASSERT(list->head != list->tail);
 	}
 }
 /**
  * Checks refvar invariant.
- * 
+ *
  * @inv refvar > 0
  */
 void PICC_Refvar_inv(int refvar)
 {
-	
+
 }
 
 /**
  * Checks evalFunction invariant.
- * 
+ *
  * @inv eval !=  NULL
  */
 void PICC_EvalFunction_inv(PICC_EvalFunction eval)
 {
-	
+
 }
 
 /**
  * Checks Label invariant.
- * 
+ *
  * @inv cont_pc > -1
  */
 void PICC_Label_inv(PICC_Label cont_pc)
 {
-	
+
 }

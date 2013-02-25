@@ -8,8 +8,8 @@
  */
 
 #include <stdlib.h>
-#include <pi_thread.h>
-#include <queue.h>
+#include <pi_thread_repr.h>
+#include <queue_repr.h>
 #include <tools.h>
 
 #define ASSERT_NO_ERROR() \
@@ -22,8 +22,7 @@
  */
 PICC_PiThread *create_stub_thread()
 {
-    PICC_ALLOC_CRASH(thread, PICC_PiThread) {}
-    return thread;
+    return PICC_create_pithread(1, 1);
 }
 
 void test_ready_queue_push(PICC_Error *error)

@@ -12,8 +12,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <pthread.h>
-#include <pi_thread.h>
-#include <commit.h>
+#include <pi_thread_repr.h>
+#include <commit_repr.h>
+#include <value_repr.h>
 #include <tools.h>
 
 #define INIT_COMMIT(commit, pt, ch, pc) \
@@ -67,17 +68,17 @@ void test_commitlists(PICC_Error *error)
     PICC_Commit *c, *c2, *c3;
     PICC_CommitListElement *clistelem;
     PICC_CommitList *clist;
-    
+
 
     // CREATING COMMITMENTS
-    
+
     c = PICC_create_commitment(error);
     c2 = PICC_create_commitment(error);
     c3 = PICC_create_commitment(error);
     ASSERT_NO_ERROR();
-        
-    
-    // INITIALIZING COMMITMENTS  
+
+
+    // INITIALIZING COMMITMENTS
     // init c
     PICC_PiThread* pt;
     PICC_Channel *ch;
@@ -154,7 +155,7 @@ void test_commitlists(PICC_Error *error)
     c2->cont_pc = 2;
     c3->cont_pc = 3;
 
-    
+
     // ADDING COMMITMENTS INTO COMMITLIST
 
     PICC_commit_list_add(clist, c, error);
@@ -162,14 +163,14 @@ void test_commitlists(PICC_Error *error)
     ASSERT(clist->head->commit == c);
     ASSERT(clist->tail->commit == c);
     ASSERT(clist->size == 1)
-    
+
     PICC_commit_list_add(clist, c2, error);
     ASSERT_NO_ERROR();
     ASSERT(clist->head->commit == c);
     ASSERT(clist->head->next->commit == c2);
     ASSERT(clist->tail->commit == c2);
     ASSERT(clist->size == 2);
-    
+
     PICC_commit_list_add(clist, c3, error);
     ASSERT_NO_ERROR();
     ASSERT(clist->head->commit == c);
@@ -177,7 +178,7 @@ void test_commitlists(PICC_Error *error)
     ASSERT(clist->head->next->next->commit == c3);
     ASSERT(clist->tail->commit == c3);
     ASSERT(clist->size == 3);
-        
+
     ASSERT(clist->head != NULL);
     ASSERT(clist->tail != NULL);
     ASSERT(clist->head->commit->cont_pc == 1);
@@ -188,12 +189,12 @@ void test_commitlists(PICC_Error *error)
     // MODIFYING CHANNEL TO TEST FETCHING
     PICC_commit_list_add(c->channel->outcommits, c, error);
     PICC_commit_list_add(c3->channel->incommits, c3, error);
-    
+
 
     // FETCHING COMMITMENT
     PICC_Commit *fetched_out_commit = PICC_fetch_output_commitment(c->channel);
-    ASSERT(fetched_out_commit == c);    
- 
+    ASSERT(fetched_out_commit == c);
+
     PICC_Commit *fetched_in_commit = PICC_fetch_input_commitment(c3->channel);
     ASSERT(fetched_in_commit == c3);
 

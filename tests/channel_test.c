@@ -9,9 +9,9 @@
  */
 
 #include <stdlib.h>
-#include <pi_thread.h>
-#include <channel.h>
-#include <value.h>
+#include <pi_thread_repr.h>
+#include <channel_repr.h>
+#include <value_repr.h>
 
 #define ASSERT_NO_ERROR() \
  ASSERT(!HAS_ERROR((*error)))

@@ -30,5 +30,8 @@ int main(int argc, char **argv)
     printf("Run commit tests...\n");
     PICC_test_commit();
 
+    printf("Run atomic tests...\n");
+    PICC_test_atomic();
+
     return 0;
 }
