@@ -26,7 +26,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
         thread->knowns = PICC_create_knowns_set(knowns_length, &sub_error);
         if (HAS_ERROR(sub_error)) {
             ADD_ERROR(&error, sub_error, ERR_THREAD_CREATE);
-        } else {
+        } else {/*
             PICC_ALLOC_N(env, PICC_Value, env_length, &sub_error) {
                 thread->clock = PICC_create_clock(&sub_error);
                 if (HAS_ERROR(sub_error)) {
@@ -44,7 +44,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
                     thread->val = NULL;                
                     PICC_init_mutex(&(thread->lock));
                 }
-            }
+            }*/
         }
     }
     return thread;

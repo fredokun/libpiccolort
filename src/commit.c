@@ -10,13 +10,12 @@
  */
 
 #include <commit.h>
+#include <pi_thread.h>
+#include <value_repr.h>
 #include <tools.h>
 
-#define LOCK_CLOCK(commit) \
-    PICC_acquire(&(commit->thread->clock->val->lock));
 
-#define RELEASE_CLOCK(commit) \
-    PICC_release(&(commit->thread->clock->val->lock));
+
 
 #define INIT_COMMIT(commit, pt, ch, pc) \
     commit->thread = pt; \
@@ -296,18 +295,17 @@ bool PICC_is_valid_commit(PICC_Commit *commit)
         // inv
         PICC_Commit_inv(commit);
 
-
 		// pre
 		ASSERT(commit != NULL);
 		
     #endif
     
     bool valid = false;
-    LOCK_CLOCK(commit);
+    //LOCK_CLOCK(commit);
     if (commit->clock == commit->thread->clock
     && commit->clockval == commit->thread->clock->val)
         valid = true;
-    RELEASE_CLOCK(commit);
+    //RELEASE_CLOCK(commit);
     
     
     #ifdef CONTRACT

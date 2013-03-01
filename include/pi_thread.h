@@ -14,9 +14,9 @@
 #include <stdbool.h>
 #include <symbols.h>
 #include <scheduler.h>
+#include <value.h>
 #include <channel.h>
 #include <commit.h>
-#include <value.h>
 #include <sync.h>
 #include <error.h>
 

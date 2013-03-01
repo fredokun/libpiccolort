@@ -12,9 +12,8 @@
 #ifndef COMMIT_H
 #define COMMIT_H
 
+
 #include <pi_thread.h>
-#include <symbols.h>
-#include <channel.h>
 #include <value.h>
 #include <error.h>
 
