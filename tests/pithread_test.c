@@ -23,7 +23,7 @@
  */
 void test_create_pithread(PICC_Error *error)
 {
-    PICC_PiThread *p = PICC_create_pithread(1, 1);
+    PICC_PiThread *p = PICC_create_pithread(1, 1, 1);
     ASSERT(p != NULL);
 }
 

@@ -45,7 +45,8 @@ int PICC_GC2(PICC_SchedPool *sp, PICC_Error *error)
  * @param nb_core_threads Maximum number of core threads that can run at the same time
  * @param entrypoint Entry procedure the for the first thread
  */
-void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint)
+void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint, 
+                int entry_env_length, int entry_knowns_length, int entry_enabled_length)
 {
     // contains all the errors
     ALLOC_ERROR(error);
@@ -77,7 +78,8 @@ void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint)
         PICC_low_level_yield();
     }
 
-    PICC_PiThread *init_thread = PICC_create_pithread(1, 1);
+    PICC_PiThread *init_thread = 
+        PICC_create_pithread(entry_env_length, entry_knowns_length, entry_enabled_length);
     init_thread->proc = entrypoint;
 
     PICC_ready_queue_push(sched_pool->ready, init_thread);

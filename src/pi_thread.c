@@ -37,12 +37,13 @@
  * @param knowns_length Size of the knowns set
  * @return Created PiThread
  */
-PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
+PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabled_length)
 {
     #ifdef CONTRACT_PRE
         // pre
         ASSERT(env_length >= 0);
         ASSERT(knowns_length >= 0);
+        ASSERT(enabled_length >= 0);
     #endif
 
     PICC_ALLOC_CRASH(thread, PICC_PiThread) {
@@ -57,19 +58,21 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
                     CRASH(&sub_error);
                 } else {
                     thread->commits = PICC_create_commit_list(&sub_error);
+                    thread->commit = NULL;
                     if (HAS_ERROR(sub_error)) {
                         CRASH(&sub_error);
                     } else {
                         thread->env = env;
                         thread->env_length = env_length;
-                        thread->enabled = NULL;
-                        thread->enabled_length = 0;
-                        thread->commit = NULL;
-                        thread->proc = NULL;
-                        thread->pc = PICC_DEFAULT_ENTRY_LABEL;
-                        thread->fuel = PICC_FUEL_INIT;
-                        thread->val = NULL;
-                        PICC_init_lock(&(thread->lock));
+                        PICC_ALLOC_N_CRASH(enabled, bool, enabled_length) {
+                            thread->enabled = enabled;
+                            thread->enabled_length = enabled_length;                        
+                            thread->proc = NULL;
+                            thread->pc = PICC_DEFAULT_ENTRY_LABEL;
+                            thread->fuel = PICC_FUEL_INIT;
+                            thread->val = NULL;
+                            PICC_init_lock(&(thread->lock));
+                        }
                     }
                 }
             }
@@ -84,8 +87,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
     #ifdef CONTRACT_POST
         // post
         ASSERT(thread->env_length == env_length);
-        ASSERT(thread->enabled == NULL);
-        ASSERT(thread->enabled_length == 0);
+        ASSERT(thread->enabled_length == enabled_length);
         ASSERT(thread->commit == NULL);
         ASSERT(thread->proc == NULL);
         ASSERT(thread->pc == PICC_DEFAULT_ENTRY_LABEL);
