@@ -15,6 +15,7 @@
 #include <value.h>
 #include <channel.h>
 #include <atomic.h>
+#include <atomic_repr.h>
 #include <concurrent.h>
 #include <error.h>
 
@@ -22,25 +23,36 @@
  * Tag & control management *
  ***************************/
 
-typedef enum { TAG_RESERVED=0, 
-               TAG_NOVALUE=1, 
-               TAG_BOOLEAN=2,
-               TAG_INTEGER=3,
-               TAG_FLOAT=4,
-               TAG_TUPLE=64,
-               TAG_STRING=128,
-               TAG_CHANNEL=253,
-               TAG_USER_DEFINED_IMMEDIATE=254,
-               TAG_USER_DEFINED_MANAGED=255 } PICC_TagValue;
+typedef enum { TAG_RESERVED               =0x00, 
+               TAG_NOVALUE                =0x01, 
+               TAG_BOOLEAN                =0x02,
+               TAG_INTEGER                =0x03,
+               TAG_FLOAT                  =0x04,
+               TAG_TUPLE                  =0x40,
+               TAG_STRING                 =0x80,
+               TAG_CHANNEL                =0xFD,
+               TAG_USER_DEFINED_IMMEDIATE =0xFE,
+               TAG_USER_DEFINED_MANAGED   =0xFF } PICC_TagValue;
 
 #define VALUE_HEADER unsigned int header
 
 #define WORD_SIZE 32
-#define GET_VALUE_TAG(header) ((unsigned int) ((header) >> (WORD_SIZE - 8)))
+#define GET_VALUE_TAG(header) ( ((unsigned int) (header)) >> (WORD_SIZE - 8) )
 #define VALUE_CTRL_MASK (~(0xFF << (WORD_SIZE - 8) ))
 #define GET_VALUE_CTRL(header) ((header) & VALUE_CTRL_MASK)
 
 #define MAKE_HEADER(tag,ctrl) ((unsigned int) (((tag) << (WORD_SIZE - 8)) | ((ctrl) & VALUE_CTRL_MASK)))
+
+
+#define IS_NOVALUE(header) (! ((GET_VALUE_TAG(header) ^ TAG_NOVALUE)))
+#define IS_BOOLEAN(header) (! ((GET_VALUE_TAG(header) ^ TAG_BOOLEAN)))
+#define IS_INT(header)     (! ((GET_VALUE_TAG(header) ^ TAG_INTEGER)))
+#define IS_FLOAT(header)   (! ((GET_VALUE_TAG(header) ^ TAG_FLOAT)))
+//---
+#define IS_STRING(header)  (! ((GET_VALUE_TAG(header) ^ TAG_STRING)))
+#define IS_CHANNEL(header) (! ((GET_VALUE_TAG(header) ^ TAG_CHANNEL)))
+
+
 
 /*******************************
  * Common value representation *
@@ -58,18 +70,22 @@ struct _no_value_t {
     VALUE_HEADER ;
 };
 
-#define MAKE_NO_VALUE ((PICC_BoolValue)  { MAKE_HEADER(TAG_NOVALUE,0) })
+#define MAKE_NO_VALUE ((PICC_NoValue)  { MAKE_HEADER(TAG_NOVALUE,0) })
+extern void PICC_NoValue_inv(PICC_NoValue *val);
 
 /******************************
  * Immediate values : integer *
  ******************************/
 
-#define MAKE_INT_VALUE(data) ((PICC_IntValue)  { MAKE_HEADER(TAG_INTEGER,0), ((int) (data)) })
 
 struct _int_value_t {
     VALUE_HEADER ;
     int data;
 };
+
+#define MAKE_INT_VALUE(data) ((PICC_IntValue)  { MAKE_HEADER(TAG_INTEGER,0), ((int) (data)) })
+extern void PICC_IntValue_inv(PICC_IntValue *val);
+extern PICC_IntValue *PICC_free_int(PICC_IntValue *val);
 
 /******************************
  * Immediate values : boolean *
@@ -81,6 +97,7 @@ struct _bool_value_t {
 
 #define MAKE_TRUE_VALUE ((PICC_BoolValue)  { MAKE_HEADER(TAG_BOOLEAN,1) })
 #define MAKE_FALSE_VALUE ((PICC_BoolValue)  { MAKE_HEADER(TAG_BOOLEAN,0) })
+extern void PICC_BoolValue_inv(PICC_BoolValue *val);
 
 /******************************
  * Immediate values : float *
@@ -97,8 +114,6 @@ struct _float_value_t {
  * String values  *
  ******************/
 
-PICC_StringHandle *string_handles;
-
 struct _string_value_t {
     VALUE_HEADER;
     PICC_StringHandle *handle;
@@ -106,14 +121,15 @@ struct _string_value_t {
 
 struct _string_handle_t 
 {
-    int refcount;
+    PICC_AtomicInt *refcount;
     char *data;
 };
 
+extern void PICC_StringValue_inv(PICC_StringValue *string);
 
-extern void PICC_init_string_handles(int arity);
 extern PICC_StringHandle *PICC_create_string_handle(char *string);
 extern void PICC_StringHandle_inv(PICC_StringHandle *handle);
+extern PICC_StringValue *PICC_free_string( PICC_StringValue *string);
 
 
 /******************
@@ -138,6 +154,9 @@ struct _channel_value_t {
     VALUE_HEADER ;
     void *channel;
 };
+
+extern void PICC_ChannelValue_inv(PICC_ChannelValue *channel);
+extern PICC_ChannelValue *PICC_free_channel_value( PICC_ChannelValue *channel);
 
 /**********************************
  * user defined immediate values  *

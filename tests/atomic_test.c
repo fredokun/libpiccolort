@@ -53,15 +53,15 @@ void test_compare_and_swap(PICC_Error *error)
     ASSERT_NO_ERROR();
     ASSERT(PICC_atomic_int_get(aint) == 0);
 
-    iret = PICC_atomic_int_compare_and_swap(aint, 0, 2);
+    iret = PICC_atomic_int_val_compare_and_swap(aint, 0, 2);
     ASSERT(iret == 0);
     ASSERT(PICC_atomic_int_get(aint) == 2);
 
-    iret = PICC_atomic_int_compare_and_swap(aint, 1, 3);
+    iret = PICC_atomic_int_val_compare_and_swap(aint, 1, 3);
     ASSERT(iret == 2);
     ASSERT(PICC_atomic_int_get(aint) == 2);
 
-    iret = PICC_atomic_int_compare_and_swap(aint, 2, 2);
+    iret = PICC_atomic_int_val_compare_and_swap(aint, 2, 2);
     ASSERT(iret == 2);
     ASSERT(PICC_atomic_int_get(aint) == 2);
 

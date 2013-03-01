@@ -174,7 +174,7 @@ void PICC_free_atomic_int(PICC_AtomicInt *atomic_int)
  * @param new_val New value of the integer
  * @return Value of the integer before the operation
  */
-int PICC_atomic_int_compare_and_swap(PICC_AtomicInt *atomic_int, int expected_val, int new_val)
+int PICC_atomic_int_val_compare_and_swap(PICC_AtomicInt *atomic_int, int expected_val, int new_val)
 {
     LOCK_ATOMIC_VALUE(atomic_int);
 
@@ -200,6 +200,35 @@ int PICC_atomic_int_compare_and_swap(PICC_AtomicInt *atomic_int, int expected_va
 
     RELEASE_ATOMIC_VALUE(atomic_int);
     return old_val;
+}
+
+
+int PICC_atomic_int_bool_compare_and_swap(PICC_AtomicInt *atomic_int, int expected_val, int new_val)
+{
+    LOCK_ATOMIC_VALUE(atomic_int);
+
+    #ifdef CONTRACT_PRE
+        // pre: atomic_int != null
+        ASSERT(atomic_int != NULL);
+    #endif
+
+    #ifdef CONTRACT_POST
+        // captures
+        int val_at_pre = atomic_int->val;
+    #endif
+
+    int old_val = atomic_int->val;
+    if (old_val == expected_val)
+        atomic_int->val = new_val;
+
+    #ifdef CONTRACT_POST
+        // post: if (atomic_int.val@pre == expected_val) then atomic_int.val = new_val
+        if (val_at_pre == expected_val)
+            ASSERT(atomic_int->val == new_val);
+    #endif
+
+    RELEASE_ATOMIC_VALUE(atomic_int);
+    return true;
 }
 
 /**

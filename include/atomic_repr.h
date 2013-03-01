@@ -33,6 +33,10 @@ struct _PICC_AtomicInt {
 
 extern PICC_AtomicBoolean *PICC_create_atomic_bool(PICC_Error *error);
 extern void PICC_free_atomic_bool(PICC_AtomicBoolean *atomic_bool);
+
+/* [TODO] ? pass an integer to the constructor so we don't have
+   to do a lock to initialize the value.
+ */
 extern PICC_AtomicInt *PICC_create_atomic_int(PICC_Error *error);
 extern void PICC_free_atomic_int(PICC_AtomicInt *atomic_int);
 

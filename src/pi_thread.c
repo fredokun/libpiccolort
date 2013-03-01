@@ -142,7 +142,7 @@ PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
                 CRASH(&error);
             }
         } else {
-            PICC_atomic_int_compare_and_swap(pt->clock->val, clock_val, clock_val + 1);
+            PICC_atomic_int_val_compare_and_swap(pt->clock->val, clock_val, clock_val + 1);
         }
         pt->commit = commit;
         PICC_release(&(pt->lock));
