@@ -16,8 +16,7 @@
 
 /*******************************
  * Common value representation *
- *******************************/
-
+ *******************************/   
 
 typedef struct _PICC_Value PICC_Value ;
 

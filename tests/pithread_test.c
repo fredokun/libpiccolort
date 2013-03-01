@@ -1,6 +1,6 @@
 /**
  * @file pithread_tests.c
- * File that contains all the necesseray tests to check the behavior of all functions of runtime.c
+ * PiThread unit tests.
  *
  * This project is released under MIT License.
  *
@@ -10,12 +10,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <pthread.h>
-#include <pi_thread.h>
+#include <pi_thread_repr.h>
 
-
-//int PICC_GC2(PICC_SchedPool schedpool);
+#define ASSERT_NO_ERROR() \
+ ASSERT(!HAS_ERROR((*error)))
 
 /**
  * Test : PICC_create_pithread \n
@@ -23,16 +21,20 @@
  *
  * @return boolean true if it works else false
  */
-bool check_pithread(PICC_Error *error)
+void test_create_pithread(PICC_Error *error)
 {
-
     PICC_PiThread *p = PICC_create_pithread(1, 1);
-    if (p == NULL) {
-        NEW_ERROR(error,ERR_NULLPOINTER_PITHREAD);
-    } else {
-        free(p);
-        return true;
-    }
+    ASSERT(p != NULL);
+}
 
-    return false;
+/**
+ * Runs all PiThread tests.
+ */
+void PICC_test_pithread()
+{
+    ALLOC_ERROR(error);
+    test_create_pithread(&error);
+
+    if (HAS_ERROR(error))
+        PRINT_ERROR(&error);
 }

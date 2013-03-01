@@ -12,7 +12,9 @@
 
 #include <pthread.h>
 #include <runtime.h>
-#include <queue.h>
+#include <pi_thread_repr.h>
+#include <queue_repr.h>
+#include <scheduler_repr.h>
 
 /**
  * Temporary main entry point.
@@ -71,14 +73,9 @@ void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint)
         sched_pool->nb_slaves++;
     }
 
-    // while (sched_pool.nb_waiting_slaves != sched_pool.nb_slaves) {
-    //     status = pthread_yield();
-    //     if (status)
-    //     {
-    //         NEW_ERROR(&error, ERR_READY_QUEUE_PUSH ERR_THREAD_YIELD);
-    //         CRASH(&error);
-    //     }
-    // }
+    while (sched_pool->nb_waiting_slaves != sched_pool->nb_slaves) {
+        PICC_low_level_yield();
+    }
 
     PICC_PiThread *init_thread = PICC_create_pithread(1, 1);
     init_thread->proc = entrypoint;

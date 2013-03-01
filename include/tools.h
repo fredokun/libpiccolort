@@ -18,16 +18,25 @@
         NEW_ERROR(error, ERR_OUT_OF_MEMORY); \
     } else
 
+#define PICC_ALLOC_CRASH(var, type) \
+    type *var = malloc(sizeof(type)); \
+    if (var == NULL) { \
+        CRASH_NEW_ERROR(ERR_OUT_OF_MEMORY); \
+    } else
+
 #define PICC_MALLOC(var, type, error) \
     var = malloc(sizeof(type)); \
     if (var == NULL) { \
         NEW_ERROR(error, ERR_OUT_OF_MEMORY); \
     } else
-    
-#define PICC_ALLOC_N(var, type, size, error) \
+
+#define PICC_ALLOC_N_CRASH(var, type, size) \
     type *var = malloc(sizeof(type) * (size)); \
-    if (var == NULL) { \
-        NEW_ERROR(error, ERR_OUT_OF_MEMORY); \
+    if (size == 0) { \
+        var = NULL; \
+    } \
+    if (var == NULL && size != 0) { \
+        CRASH_NEW_ERROR(ERR_OUT_OF_MEMORY); \
     } else
 
 #define PICC_FREE_MUTEX(m) \
@@ -69,7 +78,10 @@
     PICC_set_destroy(s);
 
 
-#define CONTRACT 1
+#define CONTRACT_PRE
+#define CONTRACT_PRE_INV
+#define CONTRACT_POST
+#define CONTRACT_POST_INV
 
 extern void debug(const char* s);
 

@@ -12,206 +12,212 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <pthread.h>
-#include <pi_thread.h>
+#include <pi_thread_repr.h>
+#include <commit_repr.h>
+#include <value_repr.h>
+#include <tools.h>
 
+#define INIT_COMMIT(commit, pt, ch, pc) \
+    commit->thread = pt; \
+    commit->cont_pc = pc; \
+    commit->clock = pt->clock; \
+    commit->clockval = pt->clock->val; \
+    commit->channel = ch;
 
+#define ASSERT_NO_ERROR() \
+ ASSERT(!HAS_ERROR((*error)))
 
-/**
-* Test : Create Commitments
-*
-* @return boolean true if it works else false
-*
-*/
-bool check_create_commitments(PICC_Error* error)
-{
-    ALLOC_ERROR(create_error);
-    PICC_Commit* c = PICC_create_commitment(&create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-        return false;
+PICC_Value* func(PICC_PiThread* a) { printf("my eval func !\n"); return NULL; };
 
-    } else if (c == NULL) {
-        NEW_ERROR(error, ERR_NULLPOINTER_COMMIT);
-        return false;
-    }
-
-    return true;
-}
-
-bool check_register_outcommits(PICC_Error* error)
+void test_register_outcommits(PICC_Error* error)
 {
     PICC_PiThread* pt;
     PICC_Channel *ch;
     PICC_EvalFunction *eval;
     PICC_Label cont_pc;
-    int size;
 
-    //check pithread, channel first
+    // check pithread, channel first
     pt = PICC_create_pithread(1, 1);
     ch = PICC_create_channel(error);
-    size = pt->commits->size;
-    PICC_Value* func(PICC_PiThread* a) { printf("my eval func !\n"); return NULL; };
+    ASSERT_NO_ERROR();
     eval = func;
     cont_pc = 10;
 
-    //pre
-    ASSERT(pt != NULL);
-    ASSERT(ch != NULL);
-    ASSERT(eval != NULL);
-    ASSERT(cont_pc >= 0);
-
     PICC_register_output_commitment(pt, ch, eval, cont_pc);
-
-    //post
-    ASSERT(pt->commits->size == (size + 1));
-    ASSERT(pt->commits->head->commit->type == PICC_OUT_COMMIT);
-    ASSERT(pt->commits->head->commit->content.out->eval_func == eval);
-    ASSERT(pt->commits->head->commit->thread == pt);
-    ASSERT(pt->commits->head->commit->channel == ch);
-    ASSERT(pt->commits->head->commit->cont_pc == cont_pc);
-
-    return true;
 }
 
-bool check_register_incommits(PICC_Error* error)
+void test_register_incommits(PICC_Error* error)
 {
     int refvar;
     PICC_PiThread* pt;
     PICC_Channel *ch;
     PICC_Label cont_pc;
-    int size;
 
     //check pithread, channel first
     pt = PICC_create_pithread(1, 1);
     ch = PICC_create_channel(error);
-    size = pt->commits->size;
+    ASSERT_NO_ERROR();
     refvar = 42;
     cont_pc = 10;
 
-    //pre
-    ASSERT(pt != NULL);
-    ASSERT(ch != NULL);
-    ASSERT(cont_pc >= 0);
-    ASSERT(refvar == 1);
-
     PICC_register_input_commitment(pt, ch, refvar, cont_pc);
-
-    //post
-    ASSERT(pt->commits->size == (size + 1));
-    ASSERT(pt->commits->head->commit->type == PICC_IN_COMMIT);
-    ASSERT(pt->commits->head->commit->content.in->refvar == refvar);
-    ASSERT(pt->commits->head->commit->thread == pt);
-    ASSERT(pt->commits->head->commit->channel == ch);
-    ASSERT(pt->commits->head->commit->cont_pc == cont_pc);
-
-    return true;
 }
 
-/**
- * Test : Commitments \n
- * PICC_CommitList *PICC_create_commit_list(); \n
- * PICC_CommitListElement *PICC_create_commit_list_element();
- *
- * @return boolean true if it works else false
- */
-bool check_commitlists(PICC_Error *error)
+void test_commitlists(PICC_Error *error)
 {
     PICC_Commit *c, *c2, *c3;
     PICC_CommitListElement *clistelem;
     PICC_CommitList *clist;
 
-    ALLOC_ERROR(create_error);
-    c = PICC_create_commitment(&create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-        return false;
-    }
 
-    c2 = PICC_create_commitment(&create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-        return false;
-    }
+    // CREATING COMMITMENTS
 
-    c3 = PICC_create_commitment(&create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-        return false;
-    }
+    c = PICC_create_commitment(error);
+    c2 = PICC_create_commitment(error);
+    c3 = PICC_create_commitment(error);
+    ASSERT_NO_ERROR();
 
 
-    //is_valid ?
-    if(!PICC_is_valid_commit(c))
-    {
-        NEW_ERROR(error, ERR_INVALID_COMMIT);
-        return false;
-    }
+    // INITIALIZING COMMITMENTS
+    // init c
+    PICC_PiThread* pt;
+    PICC_Channel *ch;
+    PICC_EvalFunction *eval;
+    PICC_Label cont_pc;
 
-    clistelem = PICC_create_commit_list_element(c, &create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-        return false;
-    } else if(clistelem == NULL) {
-        NEW_ERROR(error, ERR_NULLPOINTER_COMMITLISTELEM);
-        return false;
-    }
+    //check pithread, channel first
+    pt = PICC_create_pithread(1, 1);
+    pt->clock = PICC_create_clock(error);
+    ch = PICC_create_channel(error);
+    ASSERT_NO_ERROR();
+    eval = func;
+    cont_pc = 10;
 
-    clist = PICC_create_commit_list(&create_error);
-    if (HAS_ERROR(create_error)) {
-        FORWARD_ERROR(error, create_error);
-        return false;
+    INIT_COMMIT(c, pt, ch, cont_pc);
+    PICC_MALLOC(c->content.out, PICC_OutCommit, error);
+    ASSERT_NO_ERROR();
+    c->content.out->eval_func = eval;
+    c->type = PICC_OUT_COMMIT;
 
-    } else if(clist == NULL) {
-        NEW_ERROR(error, ERR_NULLPOINTER_COMMITLIST);
-        return false;
-    }
+    // init c2
+    PICC_PiThread* pt2;
+    PICC_Channel *ch2;
+    PICC_EvalFunction *eval2;
+    PICC_Label cont_pc2;
 
-    clist->head = clistelem;
-    clist->tail = clistelem;
+    //check pithread, channel first
+    pt2 = PICC_create_pithread(1, 1);
+    pt2->clock = PICC_create_clock(error);
+    ch2 = PICC_create_channel(error);
+    ASSERT_NO_ERROR();
+    eval2 = func;
+    cont_pc2 = 20;
+
+    INIT_COMMIT(c2, pt2, ch2, cont_pc2);
+    PICC_MALLOC(c2->content.out, PICC_OutCommit, error);
+    ASSERT_NO_ERROR();
+    c2->content.out->eval_func = eval2;
+    c2->type = PICC_OUT_COMMIT;
+
+    // init c3
+    int refvar;
+    PICC_PiThread* pt3;
+    PICC_Channel *ch3;
+    PICC_Label cont_pc3;
+
+    //check pithread, channel first
+    pt3 = PICC_create_pithread(1, 1);
+    pt3->clock = PICC_create_clock(error);
+    ch3 = PICC_create_channel(error);
+    ASSERT_NO_ERROR();
+    refvar = 42;
+    cont_pc3 = 30;
+
+    INIT_COMMIT(c3, pt3, ch3, cont_pc3);
+    PICC_MALLOC(c3->content.in, PICC_InCommit, error);
+    ASSERT_NO_ERROR();
+    c3->content.in->refvar = refvar;
+    c3->type = PICC_IN_COMMIT;
+
+
+
+    // CREATING COMMITLIST ELEMENT
+    clistelem = PICC_create_commit_list_element(c, error);
+    ASSERT_NO_ERROR();
+    ASSERT(clistelem != NULL);
+
+    // CREATING COMMITLIST
+    clist = PICC_create_commit_list(error);
+    ASSERT_NO_ERROR();
+    ASSERT(clist != NULL);
 
     c->cont_pc = 1;
     c2->cont_pc = 2;
     c3->cont_pc = 3;
 
-    ALLOC_ERROR(add_error);
-    PICC_commit_list_add(clist, c, &add_error);
-    PICC_commit_list_add(clist, c2, &add_error);
-    PICC_commit_list_add(clist, c3, &add_error);
-    if (HAS_ERROR(add_error)) {
-        FORWARD_ERROR(error, add_error);
-        return false;
-    }
 
-    if(clist->head == NULL || clist->tail == NULL)
-    {
-        NEW_ERROR(error, ERR_NULLPOINTER_COMMITLISTELEM);
-        return false;
-    }
+    // ADDING COMMITMENTS INTO COMMITLIST
 
-    if(clist->head->commit->cont_pc != 1)
-    {
-        NEW_ERROR(error, ERR_INVALID_VALUE);
-        return false;
-    }
+    PICC_commit_list_add(clist, c, error);
+    ASSERT_NO_ERROR();
+    ASSERT(clist->head->commit == c);
+    ASSERT(clist->tail->commit == c);
+    ASSERT(clist->size == 1)
 
-    if(clist->head->next->commit->cont_pc != 2)
-    {
-        NEW_ERROR(error, ERR_INVALID_VALUE);
-        return false;
-    }
+    PICC_commit_list_add(clist, c2, error);
+    ASSERT_NO_ERROR();
+    ASSERT(clist->head->commit == c);
+    ASSERT(clist->head->next->commit == c2);
+    ASSERT(clist->tail->commit == c2);
+    ASSERT(clist->size == 2);
 
-    if(clist->tail->commit->cont_pc != 3)
-    {
-        NEW_ERROR(error, ERR_INVALID_VALUE);
-        return false;
-    }
+    PICC_commit_list_add(clist, c3, error);
+    ASSERT_NO_ERROR();
+    ASSERT(clist->head->commit == c);
+    ASSERT(clist->head->next->commit == c2);
+    ASSERT(clist->head->next->next->commit == c3);
+    ASSERT(clist->tail->commit == c3);
+    ASSERT(clist->size == 3);
+
+    ASSERT(clist->head != NULL);
+    ASSERT(clist->tail != NULL);
+    ASSERT(clist->head->commit->cont_pc == 1);
+    ASSERT(clist->head->next->commit->cont_pc == 2);
+    ASSERT(clist->tail->commit->cont_pc == 3);
+
+
+    // MODIFYING CHANNEL TO TEST FETCHING
+    PICC_commit_list_add(c->channel->outcommits, c, error);
+    PICC_commit_list_add(c3->channel->incommits, c3, error);
+
+
+    // FETCHING COMMITMENT
+    PICC_Commit *fetched_out_commit = PICC_fetch_output_commitment(c->channel);
+    ASSERT(fetched_out_commit == c);
+
+    PICC_Commit *fetched_in_commit = PICC_fetch_input_commitment(c3->channel);
+    ASSERT(fetched_in_commit == c3);
 
     free(c);
     free(c2);
     free(c3);
     free(clistelem);
     free(clist);
+}
 
-    return true;
+
+
+/**
+ * Runs all commit tests.
+ */
+void PICC_test_commit()
+{
+    ALLOC_ERROR(error);
+    test_register_outcommits(&error);
+    test_register_incommits(&error);
+    test_commitlists(&error);
+
+    if (HAS_ERROR(error))
+        PRINT_ERROR(&error);
 }
 
