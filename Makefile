@@ -7,7 +7,7 @@
 # @author Dany SIRIPHOL
 
 CC=gcc
-CFLAGS=-Wall -std=c99 -I\include -I\tests
+CFLAGS=-g -Wall -std=c99 -I\include -I\tests
 OFLAGS= -lpthread
 NAME=run_tests
 BIN=bin

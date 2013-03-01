@@ -37,7 +37,7 @@ void test_register_outcommits(PICC_Error* error)
     PICC_Label cont_pc;
 
     // check pithread, channel first
-    pt = PICC_create_pithread(1, 1);
+    pt = PICC_create_pithread(1, 1, 1);
     ch = PICC_create_channel(error);
     ASSERT_NO_ERROR();
     eval = func;
@@ -54,7 +54,7 @@ void test_register_incommits(PICC_Error* error)
     PICC_Label cont_pc;
 
     //check pithread, channel first
-    pt = PICC_create_pithread(1, 1);
+    pt = PICC_create_pithread(1, 1, 1);
     ch = PICC_create_channel(error);
     ASSERT_NO_ERROR();
     refvar = 42;
@@ -86,7 +86,7 @@ void test_commitlists(PICC_Error *error)
     PICC_Label cont_pc;
 
     //check pithread, channel first
-    pt = PICC_create_pithread(1, 1);
+    pt = PICC_create_pithread(1, 1, 1);
     pt->clock = PICC_create_clock(error);
     ch = PICC_create_channel(error);
     ASSERT_NO_ERROR();
@@ -106,7 +106,7 @@ void test_commitlists(PICC_Error *error)
     PICC_Label cont_pc2;
 
     //check pithread, channel first
-    pt2 = PICC_create_pithread(1, 1);
+    pt2 = PICC_create_pithread(1, 1, 1);
     pt2->clock = PICC_create_clock(error);
     ch2 = PICC_create_channel(error);
     ASSERT_NO_ERROR();
@@ -126,7 +126,7 @@ void test_commitlists(PICC_Error *error)
     PICC_Label cont_pc3;
 
     //check pithread, channel first
-    pt3 = PICC_create_pithread(1, 1);
+    pt3 = PICC_create_pithread(1, 1, 1);
     pt3->clock = PICC_create_clock(error);
     ch3 = PICC_create_channel(error);
     ASSERT_NO_ERROR();
