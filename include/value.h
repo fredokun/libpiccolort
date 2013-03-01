@@ -27,8 +27,8 @@ typedef struct _PICC_Value PICC_Value ;
 typedef struct _no_value_t PICC_NoValue;
 
 extern PICC_NoValue *PICC_create_no_value();
-extern PICC_NoValue *PICC_free_no_value(PICC_NoValue * val);
-extern void PICC_no_value_inv(PICC_NoValue * val);
+extern PICC_NoValue *PICC_free_no_value(PICC_NoValue *val);
+extern void PICC_NoValue_inv(PICC_NoValue *val);
 
 /******************************
  * Immediate values : boolean *
@@ -36,9 +36,16 @@ extern void PICC_no_value_inv(PICC_NoValue * val);
 
 typedef struct _bool_value_t PICC_BoolValue;
 
-extern PICC_BoolValue *PICC_create_bool_value(int boolean);
-extern PICC_BoolValue *PICC_free_bool(PICC_BoolValue * val);
-extern void PICC_bool_inv(PICC_BoolValue * val);
+extern PICC_BoolValue *PICC_create_bool_value(bool boolean);
+extern PICC_BoolValue *PICC_free_bool(PICC_BoolValue *val);
+extern void PICC_BoolValue_inv(PICC_BoolValue *val);
+
+// boolean primitives
+
+extern void PICC_Bool_and( PICC_BoolValue *val, bool boolean);
+extern void PICC_Bool_or( PICC_BoolValue *val, bool boolean);
+extern void PICC_Bool_xor( PICC_BoolValue *val, bool boolean);
+extern void PICC_Bool_not( PICC_BoolValue *val);
 
 /******************************
  * Immediate values : integer *
@@ -47,8 +54,15 @@ extern void PICC_bool_inv(PICC_BoolValue * val);
 typedef struct _int_value_t PICC_IntValue;
 
 extern PICC_IntValue *PICC_create_int_value(int data);
-extern PICC_IntValue *PICC_free_int(PICC_IntValue * val);
-extern void PICC_int_inv(PICC_IntValue * val);
+extern PICC_IntValue *PICC_free_int(PICC_IntValue *val);
+extern void PICC_IntValue_inv(PICC_IntValue *val);
+
+// integer primitives
+
+extern void PICC_Int_add(PICC_IntValue *val, int value);
+extern void PICC_Int_multiply(PICC_IntValue *val, int value);
+extern void PICC_Int_divide(PICC_IntValue *val, int value);
+extern void PICC_Int_substract(PICC_IntValue *val, int value);
 
 /******************************
  * Immediate values : float *
@@ -57,8 +71,15 @@ extern void PICC_int_inv(PICC_IntValue * val);
 typedef struct _float_value_t PICC_FloatValue ;
 
 extern PICC_FloatValue *PICC_create_float_value(double data);
-extern PICC_FloatValue *PICC_free_float(PICC_IntValue * val);
-extern void PICC_float_inv(PICC_FloatValue * val);
+extern PICC_FloatValue *PICC_free_float(PICC_IntValue *val);
+extern void PICC_FloatValue_inv(PICC_FloatValue *val);
+
+// float primitives
+
+extern void PICC_Float_add(PICC_FloatValue *val, double value);
+extern void PICC_Float_multiply(PICC_FloatValue *val, double value);
+extern void PICC_Float_divide(PICC_FloatValue *val, double value);
+extern void PICC_Float_substract(PICC_FloatValue *val, double value);
 
 /******************
  * Tuples values  *
@@ -112,13 +133,11 @@ typedef struct _user_managed_channel_value_t PICC_ManagedValue ;
  * user defined immediate values  *
  **********************************/
 
-typedef struct _PICC_Clock PICC_Clock;
 
 extern PICC_ManagedValue *PICC_create_managed_value(int size);
 extern PICC_ManagedValue *PICC_free_managed_value( PICC_ManagedValue *value);
 extern void PICC_ManagedValue_inv(PICC_ManagedValue *value);
 
-extern PICC_Clock *PICC_create_clock(PICC_Error *error);
 /*
 extern PICC_Value *PICC_create_value(PICC_ValueKind type, PICC_Error *error);
 extern PICC_AtomicBoolean *PICC_create_atomic_bool(PICC_Error *error);

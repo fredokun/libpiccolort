@@ -89,12 +89,7 @@ void test_knowsSet(PICC_Error *error)
 
 PICC_Value *eval_int(PICC_Error *error)
 {
-    /*PICC_Value *value = PICC_create_value_int(2,error);
-    return value;*/
-
-
-    PICC_Value *value = PICC_create_value_int(2, error);
-    ASSERT_NO_ERROR();
+    PICC_Value *value = (PICC_Value *)PICC_create_int_value(2);
     return value;
 
 }
@@ -103,8 +98,7 @@ void test_channel_send(PICC_Error *error)
 {
   //  PICC_Channel* channel = PICC_create_channel(error);
     PICC_Value *v = eval_int(error);
-   // ASSERT(v->content.as_int == 2);
-    return true;
+    PICC_IntValue_inv((PICC_IntValue *)v);
 }
 
 /**

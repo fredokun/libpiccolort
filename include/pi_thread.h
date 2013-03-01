@@ -11,21 +11,6 @@
 #ifndef PI_THREAD_H
 #define PI_THREAD_H
 
-#include <stdbool.h>
-#include <symbols.h>
-#include <scheduler.h>
-#include <value.h>
-#include <channel.h>
-#include <commit.h>
-#include <sync.h>
-#include <error.h>
-
-struct _PICC_PiThread;
-
-/**
- * @see scheduler.h
- */
-
 // Forward declarations
 struct _PICC_SchedPool;
 struct _PICC_Commit;
