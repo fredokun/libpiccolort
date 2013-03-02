@@ -25,6 +25,10 @@ void abort_with_message(char * message) {
 
 PICC_Value* PICC_free_value(PICC_Value *v){
 
+    if(v == NULL){
+	abort_with_message("PICC_free_value - Cannot free a NULL pointer");
+    }
+    
     switch(GET_VALUE_TAG(v->header)){
 	/*Do nothing */
     case TAG_RESERVED:
@@ -38,8 +42,8 @@ PICC_Value* PICC_free_value(PICC_Value *v){
     case TAG_STRING:
 	return (PICC_Value*) PICC_free_string((PICC_StringValue*) v);
 
-    /* case TAG_CHANNEL: */
-    /* 	return (PICC_Value*) PICC_free_channel_value((PICC_ChannelValue*) v); */
+    case TAG_CHANNEL:
+    	return (PICC_Value*) PICC_free_channel_value((PICC_ChannelValue*) v);
 	
 	/*TODO*/
     case TAG_FLOAT: 
@@ -493,10 +497,22 @@ PICC_StringHandle *PICC_create_string_handle(char *string)
 
 PICC_StringHandle *PICC_free_string_handle(PICC_StringHandle *handle)
 {
-    free(handle->data);
-    PICC_free_atomic_int(handle->refcount);
-    free(handle);
-    return NULL;
+
+    PICC_AtomicInt *at_int=handle->refcount;
+    
+    int i;
+    do{
+	i = PICC_atomic_int_get(at_int);
+    }while(! PICC_atomic_int_bool_compare_and_swap(at_int, i, i - 1));
+    
+           
+    if ( (i - 1) == 0 ){ //!\ same test in copy, if = 0 -> failure
+	free(handle->data);
+	PICC_free_atomic_int(handle->refcount);
+	free(handle);
+    }
+    
+    return (handle = NULL);
 }
 
 void PICC_StringHandle_inv(PICC_StringHandle *handle)
@@ -543,24 +559,9 @@ PICC_Value *PICC_create_string_value( char *string )
 
 PICC_StringValue *PICC_free_string( PICC_StringValue *string )
 {
-    if(string == NULL){
-	abort_with_message("PICC_free_string - Cannot free a NULL pointer");
-    }
-
-    PICC_AtomicInt *at_int=string->handle->refcount;
-    
-    int i;
-    do{
-	i = PICC_atomic_int_get(at_int);
-    }while(! PICC_atomic_int_bool_compare_and_swap(at_int, i, i-1));
-    
-    
-    if (PICC_atomic_int_get(at_int) == 0 ){ //!\ same test in copy, if = 0 -> failure
-        PICC_free_string_handle(string->handle);
-    }
+    PICC_free_string_handle(string->handle);
     free(string);
-    string = NULL;
-    return string;
+    return (string = NULL);
 }
 
 bool PICC_copy_string(PICC_Value *to, PICC_StringValue* from){
@@ -574,7 +575,10 @@ bool PICC_copy_string(PICC_Value *to, PICC_StringValue* from){
     }while(! PICC_atomic_int_bool_compare_and_swap(at_int, i, i+1));
     
     PICC_StringValue* strto = (PICC_StringValue*) to;
+    
     if(IS_STRING(to)){
+	
+	PICC_free_string_handle(strto->handle);
 	strto->handle = from->handle;
     }
     else{
