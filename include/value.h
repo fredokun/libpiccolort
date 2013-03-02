@@ -39,6 +39,9 @@ typedef struct _bool_value_t PICC_BoolValue;
 
 extern PICC_Value *PICC_create_bool_value(bool boolean);
 
+// needed in some compilation schema
+extern bool PICC_bool_of_bool_value(PICC_Value *val);
+
 // boolean primitives
 
 extern void PICC_Bool_and( PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
@@ -103,7 +106,12 @@ extern PICC_Value *PICC_create_string_value( char *string );
 
 typedef struct _channel_value_t PICC_ChannelValue ;
 
-extern PICC_Value *PICC_create_channel_value();
+extern PICC_Value *PICC_create_channel_value(PICC_Channel* channel);
+
+extern PICC_Channel *PICC_channel_of_channel_value(PICC_Value* channel); 
+extern void PICC_channel_value_acquire(PICC_Value* channel);
+extern int PICC_channel_value_global_rc(PICC_Value* channel);
+//extern void PICC_channel_value_release(PICC_VALUE* channel); // never explicitly released ?
 
 /**********************************
  * user defined immediate values  *

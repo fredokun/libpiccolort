@@ -44,13 +44,13 @@ typedef enum { TAG_RESERVED               =0x00,
 #define MAKE_HEADER(tag,ctrl) ((unsigned int) (((tag) << (WORD_SIZE - 8)) | ((ctrl) & VALUE_CTRL_MASK)))
 
 
-#define IS_NOVALUE(header) (! ((GET_VALUE_TAG(header) ^ TAG_NOVALUE)))
-#define IS_BOOLEAN(header) (! ((GET_VALUE_TAG(header) ^ TAG_BOOLEAN)))
-#define IS_INT(header)     (! ((GET_VALUE_TAG(header) ^ TAG_INTEGER)))
-#define IS_FLOAT(header)   (! ((GET_VALUE_TAG(header) ^ TAG_FLOAT)))
+#define IS_NOVALUE(header) (~ ((GET_VALUE_TAG(header) ^ TAG_NOVALUE)))
+#define IS_BOOLEAN(header) (~ ((GET_VALUE_TAG(header) ^ TAG_BOOLEAN)))
+#define IS_INT(header)     (~ ((GET_VALUE_TAG(header) ^ TAG_INTEGER)))
+#define IS_FLOAT(header)   (~ ((GET_VALUE_TAG(header) ^ TAG_FLOAT)))
 //---
-#define IS_STRING(header)  (! ((GET_VALUE_TAG(header) ^ TAG_STRING)))
-#define IS_CHANNEL(header) (! ((GET_VALUE_TAG(header) ^ TAG_CHANNEL)))
+#define IS_STRING(header)  (~ ((GET_VALUE_TAG(header) ^ TAG_STRING)))
+#define IS_CHANNEL(header) (~ ((GET_VALUE_TAG(header) ^ TAG_CHANNEL)))
 
 
 
@@ -148,7 +148,7 @@ struct _tuple_value_t {
 
 typedef enum {
     PI_CHANNEL =0
-    }PICC_ChannelKind;
+}PICC_ChannelKind;
 
 struct _channel_value_t {
     VALUE_HEADER ;

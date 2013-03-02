@@ -9,7 +9,7 @@
  */
 
 #include <value_repr.h>
-#include <channel.h>
+#include <channel_repr.h>
 #include <error.h>
 #include <tools.h>
 #include <stdlib.h>
@@ -106,6 +106,17 @@ PICC_Value *  PICC_create_bool_value(bool boolean) {
 
     return (PICC_Value*) val;
 }
+
+extern bool PICC_bool_of_bool_value(PICC_Value *val){
+    
+    if(! IS_BOOLEAN(val->header)){
+	abort_with_message("PICC_bool_of_bool_value - Arg was not a BoolValue");
+    }
+    
+    return (PICC_BoolValue*) val == &picc_true;
+    
+}
+
 
 void PICC_BoolValue_inv(PICC_BoolValue * val)
 {
@@ -587,45 +598,82 @@ void PICC_StringValue_inv(PICC_StringValue *string)
  * Channel values  *
  ******************/
 
-/* PICC_ChannelValue *PICC_create_channel_value( PICC_ChannelKind kind ) */
+PICC_ChannelValue *PICC_create_empty_channel_value( PICC_ChannelKind kind )
+{
+    PICC_ChannelValue *val = malloc(sizeof( PICC_ChannelValue));
+    if (val == NULL) {
+        abort_with_message("Cannot allocate channel");
+    }
+    val->header = MAKE_HEADER(TAG_CHANNEL, kind);
+
+    #ifdef CONTRACT_POST_INV
+        PICC_ChannelValue_inv(val);
+    #endif
+
+    return val;
+}
+
+/* PICC_Value *PICC_create_pi_channel_value() */
 /* { */
-/*     PICC_ChannelValue *val = malloc(sizeof( PICC_ChannelValue)); */
-/*     if (val == NULL) { */
-/*         abort_with_message("Cannot allocate channel"); */
-/*     } */
-/*     val->header = MAKE_HEADER(TAG_CHANNEL, kind); */
-
-/*     #ifdef CONTRACT_POST_INV */
-/*         PICC_ChannelValue_inv(val); */
-/*     #endif */
-
-/*     return val; */
+/*     return (PICC_Value*) PICC_create_channel_value(PI_CHANNEL); */
 /* } */
 
-/* PICC_ChannelValue *PICC_create_pi_channel_value() */
-/* { */
-/*     return PICC_create_channel_value(PI_CHANNEL); */
-/* } */
+PICC_Value *PICC_create_channel_value(PICC_Channel* channel)
+{
+    PICC_ChannelValue *val = PICC_create_empty_channel_value(PI_CHANNEL);
+    val->channel = (void*)channel;
+    return (PICC_Value*) val;
+}
 
-/* /\* not finished. should use reclaim channel when possible *\/ */
+PICC_Channel *PICC_channel_of_channel_value(PICC_Value* channel)
+{
+    if(!IS_CHANNEL(channel->header)){
+	abort_with_message("PICC_channel_of_channel_value - value is not a channel");
+    }
+    
+    return (PICC_Channel*) ((PICC_ChannelValue*) channel)->channel;
+    
+}
 
-/* PICC_ChannelValue *PICC_free_channel_value( PICC_ChannelValue *channel) */
-/* { */
-/*     free(channel); */
-/*     return NULL; */
-/* } */
+/* not finished. should use reclaim channel when possible */
 
-/* void PICC_ChannelValue_inv(PICC_ChannelValue *channel) */
-/* { */
-/*     ASSERT(channel != NULL); */
-/*     int tag = GET_VALUE_TAG(channel->header); */
-/*     int ctrl = GET_VALUE_CTRL(channel->header);  */
-/*     ASSERT(tag == TAG_CHANNEL ); */
-/*     if(ctrl == PI_CHANNEL); */
-/*         PICC_Channel_inv(channel->channel); */
+PICC_ChannelValue *PICC_free_channel_value( PICC_ChannelValue *channel)
+{
+    free(channel);
+    return NULL;
+}
+
+void PICC_channel_value_acquire(PICC_Value* channel){
+    if(!IS_CHANNEL(channel->header)){
+	abort_with_message("PICC_channel_value_acquire - value is not a channel");
+    }
+    
+    PICC_Channel *c = (PICC_Channel*) ((PICC_ChannelValue*) channel)->channel;
+    
+    PICC_acquire(&c->lock);
+}
+
+int PICC_channel_value_global_rc(PICC_Value* channel){
+    if(!IS_CHANNEL(channel->header)){
+	abort_with_message("PICC_channel_value_global_rc - value is not a channel");
+    }
+    
+    PICC_Channel *c = (PICC_Channel*) ((PICC_ChannelValue*) channel)->channel;
+    
+    return c->global_rc;
+}
+
+void PICC_ChannelValue_inv(PICC_ChannelValue *channel)
+{
+    ASSERT(channel != NULL);
+    int tag = GET_VALUE_TAG(channel->header);
+    int ctrl = GET_VALUE_CTRL(channel->header);
+    ASSERT(tag == TAG_CHANNEL );
+    if(ctrl == PI_CHANNEL);
+        PICC_Channel_inv(channel->channel);
     
     
-/* } */
+}
 
 /**********************************
  * user defined immediate values  *

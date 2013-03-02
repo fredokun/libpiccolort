@@ -203,7 +203,7 @@ int PICC_atomic_int_val_compare_and_swap(PICC_AtomicInt *atomic_int, int expecte
 }
 
 
-int PICC_atomic_int_bool_compare_and_swap(PICC_AtomicInt *atomic_int, int expected_val, int new_val)
+bool PICC_atomic_int_bool_compare_and_swap(PICC_AtomicInt *atomic_int, int expected_val, int new_val)
 {
     LOCK_ATOMIC_VALUE(atomic_int);
 
@@ -218,9 +218,11 @@ int PICC_atomic_int_bool_compare_and_swap(PICC_AtomicInt *atomic_int, int expect
     #endif
 
     int old_val = atomic_int->val;
-    if (old_val == expected_val)
+    bool success = false;
+    if (old_val == expected_val){
         atomic_int->val = new_val;
-
+	success = true;
+    }
     #ifdef CONTRACT_POST
         // post: if (atomic_int.val@pre == expected_val) then atomic_int.val = new_val
         if (val_at_pre == expected_val)
@@ -228,7 +230,7 @@ int PICC_atomic_int_bool_compare_and_swap(PICC_AtomicInt *atomic_int, int expect
     #endif
 
     RELEASE_ATOMIC_VALUE(atomic_int);
-    return true;
+    return success;
 }
 
 /**
