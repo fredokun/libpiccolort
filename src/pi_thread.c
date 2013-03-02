@@ -66,7 +66,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
                         thread->env_length = env_length;
                         PICC_ALLOC_N_CRASH(enabled, bool, enabled_length) {
                             thread->enabled = enabled;
-                            thread->enabled_length = enabled_length;                        
+                            thread->enabled_length = enabled_length;
                             thread->proc = NULL;
                             thread->pc = PICC_DEFAULT_ENTRY_LABEL;
                             thread->fuel = PICC_FUEL_INIT;
@@ -144,7 +144,7 @@ PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
                 CRASH(&error);
             }
         } else {
-            PICC_atomic_int_val_compare_and_swap(pt->clock->val, clock_val, clock_val + 1);
+            PICC_atomic_int_compare_and_swap(pt->clock->val, clock_val, clock_val + 1);
         }
         pt->commit = commit;
         PICC_release(&(pt->lock));
@@ -243,7 +243,7 @@ PICC_Clock *PICC_create_clock(PICC_Error *error)
 {
     PICC_ALLOC(clock, PICC_Clock, error) {
         ALLOC_ERROR(sub_error);
-        clock->val = PICC_create_atomic_int(&sub_error);
+        clock->val = PICC_create_atomic_int(0, &sub_error);
         if (HAS_ERROR(sub_error)) {
             ADD_ERROR(error, sub_error, ERR_CLOCK_CREATE);
             free(clock);

@@ -17,42 +17,36 @@
 #include <stdarg.h>
 #include <string.h>
 
-void abort_with_message(char * message) {
-  fprintf(stderr,message);
-  fprintf(stderr,"\nAborting...\n");
-  abort();
-}
+PICC_Value* PICC_free_value(PICC_Value *v)
+{
+    #ifdef CONTRACT_PRE
+        ASSERT(v != NULL);
+    #endif
 
-PICC_Value* PICC_free_value(PICC_Value *v){
+    switch(GET_VALUE_TAG(v->header)) {
+    	/*Do nothing */
+        case TAG_RESERVED:
+        case TAG_NOVALUE:
+        case TAG_BOOLEAN:
+    	return NULL;
 
-    if(v == NULL){
-	abort_with_message("PICC_free_value - Cannot free a NULL pointer");
-    }
-    
-    switch(GET_VALUE_TAG(v->header)){
-	/*Do nothing */
-    case TAG_RESERVED:
-    case TAG_NOVALUE:
-    case TAG_BOOLEAN:
-	return NULL;
-	
-    case TAG_INTEGER:
-	return (PICC_Value*) PICC_free_int((PICC_IntValue*) v);
+        case TAG_INTEGER:
+    	return (PICC_Value*) PICC_free_int((PICC_IntValue*) v);
 
-    case TAG_STRING:
-	return (PICC_Value*) PICC_free_string((PICC_StringValue*) v);
+        case TAG_STRING:
+    	return (PICC_Value*) PICC_free_string((PICC_StringValue*) v);
 
-    case TAG_CHANNEL:
-    	return (PICC_Value*) PICC_free_channel_value((PICC_ChannelValue*) v);
-	
-	/*TODO*/
-    case TAG_FLOAT: 
-    case TAG_TUPLE:
-    case TAG_USER_DEFINED_IMMEDIATE:	
-    case TAG_USER_DEFINED_MANAGED:
-	return NULL;
-    default:
-	return NULL;
+        case TAG_CHANNEL:
+        	return (PICC_Value*) PICC_free_channel_value((PICC_ChannelValue*) v);
+
+    	/*TODO*/
+        case TAG_FLOAT:
+        case TAG_TUPLE:
+        case TAG_USER_DEFINED_IMMEDIATE:
+        case TAG_USER_DEFINED_MANAGED:
+    	return NULL;
+        default:
+    	return NULL;
     }
 }
 
@@ -60,14 +54,14 @@ PICC_Value* PICC_free_value(PICC_Value *v){
  * Immediate values : No value *
  ******************************/
 
-static PICC_NoValue picc_novalue = {MAKE_HEADER(TAG_NOVALUE, 0)};
+static PICC_NoValue picc_novalue = { MAKE_HEADER(TAG_NOVALUE, 0) };
 
 PICC_Value *PICC_create_no_value()
 {
-   PICC_Value * val = (PICC_Value*) &picc_novalue;
-    
+    PICC_Value * val = (PICC_Value*) &picc_novalue;
+
     #ifdef CONTRACT_POST_INV
-   PICC_NoValue_inv((PICC_NoValue*)val);
+        PICC_NoValue_inv((PICC_NoValue*)val);
     #endif
 
     return val;
@@ -75,11 +69,11 @@ PICC_Value *PICC_create_no_value()
 
 void PICC_NoValue_inv(PICC_NoValue * val)
 {
-    ASSERT(val != NULL );
+    ASSERT(val != NULL);
     int tag = GET_VALUE_TAG(val->header);
     int control = GET_VALUE_CTRL(val->header);
-    ASSERT(tag == TAG_NOVALUE )
-    ASSERT( control == 0);
+    ASSERT(tag == TAG_NOVALUE);
+    ASSERT(control == 0);
 }
 
 /******************************
@@ -89,36 +83,34 @@ void PICC_NoValue_inv(PICC_NoValue * val)
 static PICC_BoolValue picc_true = {MAKE_HEADER(TAG_BOOLEAN, true)};
 static PICC_BoolValue picc_false = {MAKE_HEADER(TAG_BOOLEAN, false)};
 
-
-PICC_Value *  PICC_create_bool_value(bool boolean) {
+PICC_Value *  PICC_create_bool_value(bool boolean)
+{
     PICC_BoolValue * val;
-    if (boolean){
-	val = &picc_true;
-    }
-    else{
-	val = &picc_false;
+    if (boolean) {
+    	val = &picc_true;
+    } else {
+    	val = &picc_false;
     }
 
-#ifdef CONTRACT_POST_INV
-    PICC_BoolValue_inv(val);
-#endif
+    #ifdef CONTRACT_POST_INV
+        PICC_BoolValue_inv(val);
+    #endif
 
-#ifdef CONTRACT_POST
-    //post
-    ASSERT(GET_VALUE_CTRL(val->header) == boolean );
-#endif
+    #ifdef CONTRACT_POST
+        //post
+        ASSERT(GET_VALUE_CTRL(val->header) == boolean);
+    #endif
 
     return (PICC_Value*) val;
 }
 
-extern bool PICC_bool_of_bool_value(PICC_Value *val){
-    
-    if(! IS_BOOLEAN(val)){
-	abort_with_message("PICC_bool_of_bool_value - Arg was not a BoolValue");
-    }
-    
+extern bool PICC_bool_of_bool_value(PICC_Value *val)
+{
+    #ifdef CONTRACT_PRE
+        ASSERT(IS_BOOLEAN(val));
+    #endif
+
     return (PICC_BoolValue*) val == &picc_true;
-    
 }
 
 
@@ -136,19 +128,19 @@ void PICC_Bool_and( PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
 {
     PICC_BoolValue * bv1= (PICC_BoolValue*) v1;
     PICC_BoolValue * bv2= (PICC_BoolValue*) v2;
-   
+
     #ifdef CONTRACT_PRE_INV
         PICC_BoolValue_inv(bv1);
         PICC_BoolValue_inv(bv2);
     #endif
-	
+
     PICC_free_value(res);
-    
+
     int bres = GET_VALUE_CTRL(bv1->header) & GET_VALUE_CTRL(bv2->header);
-    
+
     if(bres) res = (PICC_Value*) &picc_true;
     else res = (PICC_Value*) &picc_false;
-       
+
     #ifdef CONTRACT_POST_INV
         PICC_BoolValue_inv(bv1);
         PICC_BoolValue_inv(bv2);
@@ -164,19 +156,19 @@ void PICC_Bool_or ( PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
 {
     PICC_BoolValue * bv1= (PICC_BoolValue*) v1;
     PICC_BoolValue * bv2= (PICC_BoolValue*) v2;
-   
+
     #ifdef CONTRACT_PRE_INV
         PICC_BoolValue_inv(bv1);
         PICC_BoolValue_inv(bv2);
     #endif
-	
+
     PICC_free_value(res);
-    
+
     int bres = GET_VALUE_CTRL(bv1->header) | GET_VALUE_CTRL(bv2->header);
-    
+
     if(bres) res = (PICC_Value*) &picc_true;
     else res = (PICC_Value*) &picc_false;
-       
+
     #ifdef CONTRACT_POST_INV
         PICC_BoolValue_inv(bv1);
         PICC_BoolValue_inv(bv2);
@@ -193,19 +185,19 @@ void PICC_Bool_xor( PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
 {
     PICC_BoolValue * bv1= (PICC_BoolValue*) v1;
     PICC_BoolValue * bv2= (PICC_BoolValue*) v2;
-   
+
     #ifdef CONTRACT_PRE_INV
         PICC_BoolValue_inv(bv1);
         PICC_BoolValue_inv(bv2);
     #endif
-	
+
     PICC_free_value(res);
-    
+
     int bres = GET_VALUE_CTRL(bv1->header) ^ GET_VALUE_CTRL(bv2->header);
-    
+
     if(bres) res = (PICC_Value*) &picc_true;
     else res = (PICC_Value*) &picc_false;
-       
+
     #ifdef CONTRACT_POST_INV
         PICC_BoolValue_inv(bv1);
         PICC_BoolValue_inv(bv2);
@@ -221,18 +213,18 @@ void PICC_Bool_xor( PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
 void PICC_Bool_not( PICC_Value *res, PICC_Value *v)
 {
     PICC_BoolValue * bv= (PICC_BoolValue*) v;
-    
+
     #ifdef CONTRACT_PRE_INV
         PICC_BoolValue_inv(bv);
     #endif
-	
+
     PICC_free_value(res);
-    
+
     int bres = ! GET_VALUE_CTRL(bv->header);
-    
-    if(bres) res = (PICC_Value*)&picc_true;
+
+    if (bres) res = (PICC_Value*)&picc_true;
     else res = (PICC_Value*)&picc_false;
-       
+
     #ifdef CONTRACT_POST_INV
         PICC_BoolValue_inv(bv);
     #endif
@@ -247,23 +239,22 @@ void PICC_Bool_not( PICC_Value *res, PICC_Value *v)
  * Immediate values : integer *
  ******************************/
 
-PICC_Value * PICC_create_int_value(int data) {
+PICC_Value * PICC_create_int_value(int data)
+{
+    PICC_ALLOC_CRASH(val, PICC_IntValue) {
+        val->header = MAKE_HEADER(TAG_INTEGER, 0);
+        val->data = data;
 
-    PICC_IntValue * val = malloc(sizeof(PICC_IntValue));
-    if (val == NULL) {
-        abort_with_message("Cannot allocate integer");
+        #ifdef CONTRACT_POST_INV
+            PICC_IntValue_inv(val);
+        #endif
     }
-    val->header = MAKE_HEADER(TAG_INTEGER, 0);
-    val->data = data;
-
-    #ifdef CONTRACT_POST_INV
-        PICC_IntValue_inv(val);
-    #endif
 
     return (PICC_Value *) val;
 }
 
-PICC_IntValue * PICC_free_int(PICC_IntValue * val) {
+PICC_IntValue * PICC_free_int(PICC_IntValue * val)
+{
     free(val);
     val = NULL;
     return val;
@@ -271,7 +262,7 @@ PICC_IntValue * PICC_free_int(PICC_IntValue * val) {
 
 void PICC_IntValue_inv(PICC_IntValue * val)
 {
-    ASSERT(val != NULL );
+    ASSERT(val != NULL);
     int tag = GET_VALUE_TAG(val->header);
     ASSERT(tag == TAG_INTEGER )
 }
@@ -281,26 +272,25 @@ void PICC_Int_add (PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
     PICC_IntValue * iv1 = (PICC_IntValue*) v1;
     PICC_IntValue * iv2 = (PICC_IntValue*) v2;
 
-#ifdef CONTRACT_PRE_INV
-    PICC_IntValue_inv(iv1);
-    PICC_IntValue_inv(iv2);
-#endif
+    #ifdef CONTRACT_PRE_INV
+        PICC_IntValue_inv(iv1);
+        PICC_IntValue_inv(iv2);
+    #endif
 
-#ifdef CONTRACT_POST
-    //capture
-    //int data_at_pre = val->data;
-#endif
+    #ifdef CONTRACT_POST
+        //capture
+        //int data_at_pre = val->data;
+    #endif
 
     int r = iv1->data + iv2->data;
-    
-    if(IS_INT(res)){
-	((PICC_IntValue*) res)->data = r;
+
+    if(IS_INT(res)) {
+    	((PICC_IntValue*) res)->data = r;
+    } else {
+    	PICC_free_value(res);
+    	res = PICC_create_int_value(r);
     }
-    else{
-	PICC_free_value(res);
-	res = PICC_create_int_value(r);
-    }
-    
+
     #ifdef CONTRACT_POST_INV
         PICC_IntValue_inv(iv1);
         PICC_IntValue_inv(iv2);
@@ -317,26 +307,25 @@ void PICC_Int_multiply (PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
     PICC_IntValue * iv1 = (PICC_IntValue*) v1;
     PICC_IntValue * iv2 = (PICC_IntValue*) v2;
 
-#ifdef CONTRACT_PRE_INV
-    PICC_IntValue_inv(iv1);
-    PICC_IntValue_inv(iv2);
-#endif
+    #ifdef CONTRACT_PRE_INV
+        PICC_IntValue_inv(iv1);
+        PICC_IntValue_inv(iv2);
+    #endif
 
-#ifdef CONTRACT_POST
-    //capture
-    //int data_at_pre = val->data;
-#endif
+    #ifdef CONTRACT_POST
+        //capture
+        //int data_at_pre = val->data;
+    #endif
 
     int r = iv1->data * iv2->data;
-    
-    if(IS_INT(res)){
-	((PICC_IntValue*) res)->data = r;
+
+    if(IS_INT(res)) {
+    	((PICC_IntValue*) res)->data = r;
+    } else {
+    	PICC_free_value(res);
+    	res = PICC_create_int_value(r);
     }
-    else{
-	PICC_free_value(res);
-	res = PICC_create_int_value(r);
-    }
-    
+
     #ifdef CONTRACT_POST_INV
         PICC_IntValue_inv(iv1);
         PICC_IntValue_inv(iv2);
@@ -353,26 +342,25 @@ void PICC_Int_divide (PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
     PICC_IntValue * iv1 = (PICC_IntValue*) v1;
     PICC_IntValue * iv2 = (PICC_IntValue*) v2;
 
-#ifdef CONTRACT_PRE_INV
-    PICC_IntValue_inv(iv1);
-    PICC_IntValue_inv(iv2);
-#endif
+    #ifdef CONTRACT_PRE_INV
+        PICC_IntValue_inv(iv1);
+        PICC_IntValue_inv(iv2);
+    #endif
 
-#ifdef CONTRACT_POST
-    //capture
-    //int data_at_pre = val->data;
-#endif
+    #ifdef CONTRACT_POST
+        //capture
+        //int data_at_pre = val->data;
+    #endif
 
     int r = iv1->data / iv2->data;
-    
-    if(IS_INT(res)){
-	((PICC_IntValue*) res)->data = r;
+
+    if(IS_INT(res)) {
+    	((PICC_IntValue*) res)->data = r;
+    } else {
+    	PICC_free_value(res);
+    	res = PICC_create_int_value(r);
     }
-    else{
-	PICC_free_value(res);
-	res = PICC_create_int_value(r);
-    }
-    
+
     #ifdef CONTRACT_POST_INV
         PICC_IntValue_inv(iv1);
         PICC_IntValue_inv(iv2);
@@ -389,26 +377,25 @@ void PICC_Int_substract(PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
     PICC_IntValue * iv1 = (PICC_IntValue*) v1;
     PICC_IntValue * iv2 = (PICC_IntValue*) v2;
 
-#ifdef CONTRACT_PRE_INV
-    PICC_IntValue_inv(iv1);
-    PICC_IntValue_inv(iv2);
-#endif
+    #ifdef CONTRACT_PRE_INV
+        PICC_IntValue_inv(iv1);
+        PICC_IntValue_inv(iv2);
+    #endif
 
-#ifdef CONTRACT_POST
-    //capture
-    //int data_at_pre = val->data;
-#endif
+    #ifdef CONTRACT_POST
+        //capture
+        //int data_at_pre = val->data;
+    #endif
 
     int r = iv1->data - iv2->data;
-    
-    if(IS_INT(res)){
-	((PICC_IntValue*) res)->data = r;
+
+    if(IS_INT(res)) {
+    	((PICC_IntValue*) res)->data = r;
+    } else {
+    	PICC_free_value(res);
+    	res = PICC_create_int_value(r);
     }
-    else{
-	PICC_free_value(res);
-	res = PICC_create_int_value(r);
-    }
-    
+
     #ifdef CONTRACT_POST_INV
         PICC_IntValue_inv(iv1);
         PICC_IntValue_inv(iv2);
@@ -446,7 +433,7 @@ void PICC_Int_substract(PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
 /*     if (val->elements == NULL) { */
 /*         abort_with_message("Cannot allocate tuple elements"); */
 /*     } */
-    
+
 /*     #ifdef CONTRACT_POST_INV */
 /*         PICC_TupleValue_inv(val); */
 /*     #endif */
@@ -473,45 +460,42 @@ void PICC_Int_substract(PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
 
 PICC_StringHandle *PICC_create_string_handle(char *string)
 {
-#ifdef CONTRACT_PRE
-    // pre
-    ASSERT(string != NULL);
-#endif
+    #ifdef CONTRACT_PRE
+        // pre
+        ASSERT(string != NULL);
+    #endif
 
-    PICC_StringHandle *val = malloc(sizeof(PICC_StringHandle));
-    if (val == NULL) {
-        abort_with_message("Cannot allocate string handle");
+    PICC_ALLOC_CRASH(val, PICC_StringHandle) {
+        val->refcount = PICC_create_atomic_int(0, NULL);
+        PICC_atomic_int_set(val->refcount, 1);
+        val->data = malloc(sizeof(char)*strlen(string) +1);
+        strcpy(val->data, string);
     }
-    val->refcount = PICC_create_atomic_int(NULL);
-    PICC_atomic_int_set(val->refcount, 1);
-    val->data = malloc(sizeof(char)*strlen(string) +1);
-    strcpy(val->data, string);
 
-#ifdef CONTRACT_POST_INV
-    PICC_StringHandle_inv(val);
-#endif
+    #ifdef CONTRACT_POST_INV
+        PICC_StringHandle_inv(val);
+    #endif
 
     return val;
-
 }
 
 PICC_StringHandle *PICC_free_string_handle(PICC_StringHandle *handle)
 {
 
     PICC_AtomicInt *at_int=handle->refcount;
-    
+
     int i;
-    do{
-	i = PICC_atomic_int_get(at_int);
-    }while(! PICC_atomic_int_bool_compare_and_swap(at_int, i, i - 1));
-    
-           
-    if ( (i - 1) == 0 ){ //!\ same test in copy, if = 0 -> failure
-	free(handle->data);
-	PICC_free_atomic_int(handle->refcount);
-	free(handle);
+    do {
+    	i = PICC_atomic_int_get(at_int);
+    } while(! PICC_atomic_int_compare_and_swap_check(at_int, i, i - 1));
+
+
+    if ((i - 1) == 0) { //!\ same test in copy, if = 0 -> failure
+    	free(handle->data);
+    	PICC_free_atomic_int(handle->refcount);
+    	free(handle);
     }
-    
+
     return (handle = NULL);
 }
 
@@ -523,7 +507,8 @@ void PICC_StringHandle_inv(PICC_StringHandle *handle)
 }
 
 
-static PICC_StringValue *PICC_create_empty_string_value(){
+static PICC_StringValue *PICC_create_empty_string_value()
+{
     PICC_StringValue *val = malloc(sizeof(PICC_StringValue));
     val->header = MAKE_HEADER(TAG_STRING, 0);
     return val;
@@ -531,28 +516,22 @@ static PICC_StringValue *PICC_create_empty_string_value(){
 
 PICC_Value *PICC_create_string_value( char *string )
 {
-#ifdef CONTRACT_PRE
-    // pre
-    ASSERT(string != NULL);
-#endif
+    #ifdef CONTRACT_PRE
+        // pre
+        ASSERT(string != NULL);
+    #endif
 
     PICC_StringValue *val = PICC_create_empty_string_value();
-    
-    if (val == NULL) {
-        abort_with_message("Cannot allocate string");
-    }
-
+    ASSERT(val != NULL);
     PICC_StringHandle *handle = PICC_create_string_handle(string);
-    if (handle == NULL) {
-        abort_with_message("Cannot allocate string handle");
-    }
+    ASSERT(handle != NULL);
 
     val->handle = handle;
 
-#ifdef CONTRACT_POST_INV
-    PICC_StringHandle_inv(handle);
-    PICC_StringValue_inv(val);
-#endif
+    #ifdef CONTRACT_POST_INV
+        PICC_StringHandle_inv(handle);
+        PICC_StringValue_inv(val);
+    #endif
 
     return (PICC_Value*)val;
 }
@@ -567,28 +546,25 @@ PICC_StringValue *PICC_free_string( PICC_StringValue *string )
 bool PICC_copy_string(PICC_Value *to, PICC_StringValue* from){
     PICC_AtomicInt *at_int=from->handle->refcount;
     int i;
-    do{
-	i = PICC_atomic_int_get(at_int);
-	if(i == 0){
-	    return false;
-	}
-    }while(! PICC_atomic_int_bool_compare_and_swap(at_int, i, i+1));
-    
+    do {
+    	i = PICC_atomic_int_get(at_int);
+    	if(i == 0){
+    	    return false;
+    	}
+    } while(! PICC_atomic_int_compare_and_swap_check(at_int, i, i+1));
+
     PICC_StringValue* strto = (PICC_StringValue*) to;
-    
-    if(IS_STRING(to)){
-	
-	PICC_free_string_handle(strto->handle);
-	strto->handle = from->handle;
-    }
-    else{
-	PICC_free_value(to);
-	strto = PICC_create_empty_string_value();
-	strto->handle = from->handle;
+
+    if (IS_STRING(to)) {
+    	PICC_free_string_handle(strto->handle);
+    	strto->handle = from->handle;
+    } else {
+    	PICC_free_value(to);
+    	strto = PICC_create_empty_string_value();
+    	strto->handle = from->handle;
     }
     return true;
 }
-
 
 void PICC_StringValue_inv(PICC_StringValue *string)
 {
@@ -605,9 +581,7 @@ void PICC_StringValue_inv(PICC_StringValue *string)
 PICC_ChannelValue *PICC_create_empty_channel_value( PICC_ChannelKind kind )
 {
     PICC_ChannelValue *val = malloc(sizeof( PICC_ChannelValue));
-    if (val == NULL) {
-        abort_with_message("Cannot allocate channel");
-    }
+    ASSERT(val != NULL);
     val->header = MAKE_HEADER(TAG_CHANNEL, kind);
 
     #ifdef CONTRACT_POST_INV
@@ -631,12 +605,11 @@ PICC_Value *PICC_create_channel_value(PICC_Channel* channel)
 
 PICC_Channel *PICC_channel_of_channel_value(PICC_Value* channel)
 {
-    if(!IS_CHANNEL(channel)){
-	abort_with_message("PICC_channel_of_channel_value - value is not a channel");
-    }
-    
+    #ifdef CONTRACT_PRE
+        ASSERT(IS_CHANNEL(channel));
+    #endif
+
     return (PICC_Channel*) ((PICC_ChannelValue*) channel)->channel;
-    
 }
 
 /* not finished. should use reclaim channel when possible */
@@ -648,22 +621,20 @@ PICC_ChannelValue *PICC_free_channel_value( PICC_ChannelValue *channel)
 }
 
 void PICC_channel_value_acquire(PICC_Value* channel){
-    if(!IS_CHANNEL(channel)){
-	abort_with_message("PICC_channel_value_acquire - value is not a channel");
-    }
-    
+    #ifdef CONTRACT_PRE
+        ASSERT(IS_CHANNEL(channel));
+    #endif
+
     PICC_Channel *c = (PICC_Channel*) ((PICC_ChannelValue*) channel)->channel;
-    
     PICC_acquire(&c->lock);
 }
 
 int PICC_channel_value_global_rc(PICC_Value* channel){
-    if(!IS_CHANNEL(channel)){
-	abort_with_message("PICC_channel_value_global_rc - value is not a channel");
-    }
-    
+    #ifdef CONTRACT_PRE
+        ASSERT(IS_CHANNEL(channel));
+    #endif
+
     PICC_Channel *c = (PICC_Channel*) ((PICC_ChannelValue*) channel)->channel;
-    
     return c->global_rc;
 }
 
@@ -675,8 +646,8 @@ void PICC_ChannelValue_inv(PICC_ChannelValue *channel)
     ASSERT(tag == TAG_CHANNEL );
     if(ctrl == PI_CHANNEL);
         PICC_Channel_inv(channel->channel);
-    
-    
+
+
 }
 
 /**********************************
@@ -747,7 +718,7 @@ void PICC_ChannelValue_inv(PICC_ChannelValue *channel)
 /*     #ifdef CONTRACT_POST_INV */
 /*         PICC_ManagedValue_inv(val); */
 /*     #endif */
-    
+
 /*     return val; */
 /* } */
 
@@ -766,56 +737,61 @@ void PICC_ChannelValue_inv(PICC_ChannelValue *channel)
 /* } */
 
 /* void PICC_copy_value(PICC_Value *to, PICC_Value *from){ */
-  
+
 /*    if(to!=NULL) */
 /*       PICC_free(to); */
-   
-   
+
+
 /* } */
 
 /**** Example of dispatch function *****/
 
-void print_value_infos(PICC_Value * value) {
-  PICC_TagValue tag = GET_VALUE_TAG(value->header);
-  int ctrl = GET_VALUE_CTRL(value->header);
+void print_value_infos(PICC_Value * value)
+{
+    PICC_TagValue tag = GET_VALUE_TAG(value->header);
+    int ctrl = GET_VALUE_CTRL(value->header);
 
-  printf("------------\n");
-  printf("tag = %d\n", GET_VALUE_TAG(value->header));
-  printf("ctrl = %d\n", GET_VALUE_CTRL(value->header));
+    printf("------------\n");
+    printf("tag = %d\n", GET_VALUE_TAG(value->header));
+    printf("ctrl = %d\n", GET_VALUE_CTRL(value->header));
 
-  switch(tag) {
-  case TAG_INTEGER: {
-    printf("Type: integer\n");
-    PICC_IntValue *int_value = (PICC_IntValue *) value;
-    printf("Value = %d\n", int_value->data);
-    break;
-  }
-  case TAG_BOOLEAN: {
-    printf("Type: boolean\n");
-    if (ctrl == 0) {
-      printf("Value = False\n");
-    } else if(ctrl == 1) {
-      printf("Value = True\n");
-    } else {
-      abort_with_message("Unknown boolean value");
+    switch(tag) {
+        case TAG_INTEGER: {
+            printf("Type: integer\n");
+            PICC_IntValue *int_value = (PICC_IntValue *) value;
+            printf("Value = %d\n", int_value->data);
+            break;
+        }
+        case TAG_BOOLEAN: {
+            printf("Type: boolean\n");
+            if (ctrl == 0) {
+                printf("Value = False\n");
+            } else if(ctrl == 1) {
+                printf("Value = True\n");
+            } else {
+                printf("Unknown boolean value\n");
+                abort();
+            }
+            break;
+        }
+        /* case TAG_TUPLE: { */
+        /*   printf("Type: tuple\n"); */
+        /*   PICC_TupleValue *tup = (PICC_TupleValue *) value; */
+        /*   for(int i=0;i<ctrl;i++) { */
+        /*     printf("%d-th element>>>>>>>>>\n",i); */
+        /*     print_value_infos(tup->elements[i]); */
+        /*     printf("<<<<<<<<<<<\n"); */
+        /*   } */
+        /*   break; */
+        /* } */
+
+        case TAG_STRING:
+            printf("%s\n", ((PICC_StringValue *)value)->handle->data );
+            break;
+
+        default:
+            printf("unknown tag\n");
+            abort();
+            break;
     }
-    break;
-  }
-  /* case TAG_TUPLE: { */
-  /*   printf("Type: tuple\n"); */
-  /*   PICC_TupleValue *tup = (PICC_TupleValue *) value; */
-  /*   for(int i=0;i<ctrl;i++) { */
-  /*     printf("%d-th element>>>>>>>>>\n",i); */
-  /*     print_value_infos(tup->elements[i]); */
-  /*     printf("<<<<<<<<<<<\n"); */
-  /*   } */
-  /*   break; */
-  /* } */
-  case TAG_STRING:
-      printf("%s\n", ((PICC_StringValue *)value)->handle->data );
-      break;
-  default:
-    abort_with_message("unknown tag");
-
-  }
 }

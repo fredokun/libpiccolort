@@ -17,15 +17,15 @@
 #include <value_repr.h>
 
 #define ASSERT_NO_ERROR() \
- ASSERT(!HAS_ERROR((*error)))
+    ASSERT(!HAS_ERROR((*error)))
 
 /*Main env :[  ]
  module TestPingPong
 def PingPong(i:chan<string>,o:chan<string>,msg:string) = i?(m:unknown),o!msg:unknown,:PingPong(i:unknown,o:unknown,msg:unknown)
 def Main() = new(c1:chan<string>),new(c2:chan<string>),spawn{:PingPong(c1:unknown,c2:unknown,"<PING>")},0*/
 
-PICC_Value* eval_1(PICC_PiThread* pt){
-  pt->val = pt->env[0]; return pt->val;
+PICC_Value* eval_1(PICC_PiThread* pt) {
+    pt->val = pt->env[0]; return pt->val;
 }
 
 void TestPingPong_Main(PICC_SchedPool* scheduler, PICC_PiThread* pt){
@@ -33,7 +33,7 @@ TestPingPong_Main_begin:
     switch(pt->pc){
         case 0: {
             PICC_TryResult tryresult = PICC_TRY_ENABLED;
-            printf("TestPingPong_Main action label 0\n");
+            printf("\tTestPingPong_Main action label 0\n");
             int nbdisabled;
             nbdisabled = 0;
             PICC_Channel* chans;
@@ -61,14 +61,14 @@ TestPingPong_Main_begin:
                 nbdisabled = nbdisabled + 1;
             }
             if ( nbdisabled == 1 ){
-                PICC_release_all_channels( &chans, 2 );	
+                PICC_release_all_channels( &chans, 2 );
                 pt->status = PICC_STATUS_BLOCKED;
                 return ;
-            }      
+            }
             PICC_acquire( &(pt->lock) );
             PICC_release_all_channels( &chans, 2 );
             pt->pc = PICC_INVALID_PC;
-            pt->fuel = PICC_FUEL_INIT;      
+            pt->fuel = PICC_FUEL_INIT;
             pt->status = PICC_STATUS_WAIT;
             PICC_wait_queue_push( scheduler->wait,  pt );
             PICC_release( &(pt->lock) );
@@ -76,7 +76,7 @@ TestPingPong_Main_begin:
         }
         case 1: {
             PICC_TryResult tryresult = PICC_TRY_ENABLED;
-            printf("TestPingPong_Main action label 1\n");
+            printf("\tTestPingPong_Main action label 1\n");
             int nbdisabled;
             nbdisabled = 0;
             PICC_Channel* chans;
@@ -92,7 +92,7 @@ TestPingPong_Main_begin:
                         if ( pt->fuel == 0 ){
                             PICC_release_all_channels( &chans, 2 );
                             pt->pc = 2;
-                            pt->fuel = PICC_FUEL_INIT;		
+                            pt->fuel = PICC_FUEL_INIT;
                             PICC_ready_queue_add( scheduler->ready,  pt );
                             return ;
                         }
@@ -104,14 +104,14 @@ TestPingPong_Main_begin:
                 nbdisabled = nbdisabled + 1;
             }
             if ( nbdisabled == 1 ){
-                PICC_release_all_channels( &chans, 2 );	  
+                PICC_release_all_channels( &chans, 2 );
                 pt->status = PICC_STATUS_BLOCKED;
                 return ;
-            }      
+            }
             PICC_acquire( &(pt->lock) );
             PICC_release_all_channels( &chans, 2 );
             pt->pc = PICC_INVALID_PC;
-            pt->fuel = PICC_FUEL_INIT;	
+            pt->fuel = PICC_FUEL_INIT;
             pt->status = PICC_STATUS_WAIT;
             PICC_wait_queue_push( scheduler->wait,  pt );
             PICC_release( &(pt->lock) );
@@ -119,7 +119,7 @@ TestPingPong_Main_begin:
         }
         case 2: {
             PICC_TryResult tryresult = PICC_TRY_ENABLED;
-            printf("TestPingPong_Main action label 2\n");
+            printf("\tTestPingPong_Main action label 2\n");
             int nbdisabled;
             nbdisabled = 0;
             PICC_Channel* chans;
@@ -150,7 +150,7 @@ TestPingPong_Main_begin:
                 PICC_release_all_channels( &chans, 2 );
                 pt->status = PICC_STATUS_BLOCKED;
                 return ;
-            }      
+            }
             PICC_acquire( &(pt->lock) );
             PICC_release_all_channels( &chans, 2 );
             pt->pc = PICC_INVALID_PC;
@@ -161,7 +161,7 @@ TestPingPong_Main_begin:
             return ;
         }
         case 3: {
-            printf("TestPingPong_Main action label 3 ... end\n");
+            printf("\tTestPingPong_Main action label 3\n");
             pt->status = PICC_STATUS_ENDED;
             return ;
         }
@@ -173,7 +173,7 @@ TestPingPong_PingPong_begin:
     switch(pt->pc){
         case 0: {
             PICC_TryResult tryresult = PICC_TRY_ENABLED;
-            printf("TestPingPong_PingPong action label 0\n");
+            printf("\tTestPingPong_PingPong action label 0\n");
             int nbdisabled;
             nbdisabled = 0;
             PICC_Channel* chans;
@@ -219,7 +219,7 @@ TestPingPong_PingPong_begin:
         }
         case 1: {
             PICC_TryResult tryresult = PICC_TRY_ENABLED;
-            printf("TestPingPong_PingPong action label 2\n");
+            printf("\tTestPingPong_PingPong action label 2\n");
             int nbdisabled;
             nbdisabled = 0;
             PICC_Channel* chans;
@@ -264,7 +264,7 @@ TestPingPong_PingPong_begin:
             return ;
         }
         case 2: {
-            printf("TestPingPong_PingPong action label 2 : Call for PingPong\n");
+            printf("\tTestPingPong_PingPong action label 2 : Call for PingPong\n");
             PICC_Value *args[3];
             PICC_knowns_set_forget_all( pt->knowns );
             pt->val = pt->env[0];
