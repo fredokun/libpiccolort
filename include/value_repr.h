@@ -44,13 +44,13 @@ typedef enum { TAG_RESERVED               =0x00,
 #define MAKE_HEADER(tag,ctrl) ((unsigned int) (((tag) << (WORD_SIZE - 8)) | ((ctrl) & VALUE_CTRL_MASK)))
 
 
-#define IS_NOVALUE(header) (~ ((GET_VALUE_TAG(header) ^ TAG_NOVALUE)))
-#define IS_BOOLEAN(header) (~ ((GET_VALUE_TAG(header) ^ TAG_BOOLEAN)))
-#define IS_INT(header)     (~ ((GET_VALUE_TAG(header) ^ TAG_INTEGER)))
-#define IS_FLOAT(header)   (~ ((GET_VALUE_TAG(header) ^ TAG_FLOAT)))
+#define IS_NOVALUE(value) ((value->header) == TAG_NOVALUE)
+#define IS_BOOLEAN(value) ((value->header) == TAG_BOOLEAN)
+#define IS_INT(value)     ((value->header) == TAG_INTEGER)
+#define IS_FLOAT(value)   ((value->header) == TAG_FLOAT)
 //---
-#define IS_STRING(header)  (~ ((GET_VALUE_TAG(header) ^ TAG_STRING)))
-#define IS_CHANNEL(header) (~ ((GET_VALUE_TAG(header) ^ TAG_CHANNEL)))
+#define IS_STRING(value)  ((value->header) == TAG_STRING)
+#define IS_CHANNEL(value) ((value->header) == TAG_CHANNEL)
 
 
 

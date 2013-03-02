@@ -109,7 +109,7 @@ PICC_Value *  PICC_create_bool_value(bool boolean) {
 
 extern bool PICC_bool_of_bool_value(PICC_Value *val){
     
-    if(! IS_BOOLEAN(val->header)){
+    if(! IS_BOOLEAN(val)){
 	abort_with_message("PICC_bool_of_bool_value - Arg was not a BoolValue");
     }
     
@@ -289,7 +289,7 @@ void PICC_Int_add (PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
 
     int r = iv1->data + iv2->data;
     
-    if(IS_INT(res->header)){
+    if(IS_INT(res)){
 	((PICC_IntValue*) res)->data = r;
     }
     else{
@@ -325,7 +325,7 @@ void PICC_Int_multiply (PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
 
     int r = iv1->data * iv2->data;
     
-    if(IS_INT(res->header)){
+    if(IS_INT(res)){
 	((PICC_IntValue*) res)->data = r;
     }
     else{
@@ -361,7 +361,7 @@ void PICC_Int_divide (PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
 
     int r = iv1->data / iv2->data;
     
-    if(IS_INT(res->header)){
+    if(IS_INT(res)){
 	((PICC_IntValue*) res)->data = r;
     }
     else{
@@ -397,7 +397,7 @@ void PICC_Int_substract(PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
 
     int r = iv1->data - iv2->data;
     
-    if(IS_INT(res->header)){
+    if(IS_INT(res)){
 	((PICC_IntValue*) res)->data = r;
     }
     else{
@@ -574,7 +574,7 @@ bool PICC_copy_string(PICC_Value *to, PICC_StringValue* from){
     }while(! PICC_atomic_int_bool_compare_and_swap(at_int, i, i+1));
     
     PICC_StringValue* strto = (PICC_StringValue*) to;
-    if(IS_STRING(to->header)){
+    if(IS_STRING(to)){
 	strto->handle = from->handle;
     }
     else{
@@ -627,7 +627,7 @@ PICC_Value *PICC_create_channel_value(PICC_Channel* channel)
 
 PICC_Channel *PICC_channel_of_channel_value(PICC_Value* channel)
 {
-    if(!IS_CHANNEL(channel->header)){
+    if(!IS_CHANNEL(channel)){
 	abort_with_message("PICC_channel_of_channel_value - value is not a channel");
     }
     
@@ -644,7 +644,7 @@ PICC_ChannelValue *PICC_free_channel_value( PICC_ChannelValue *channel)
 }
 
 void PICC_channel_value_acquire(PICC_Value* channel){
-    if(!IS_CHANNEL(channel->header)){
+    if(!IS_CHANNEL(channel)){
 	abort_with_message("PICC_channel_value_acquire - value is not a channel");
     }
     
@@ -654,7 +654,7 @@ void PICC_channel_value_acquire(PICC_Value* channel){
 }
 
 int PICC_channel_value_global_rc(PICC_Value* channel){
-    if(!IS_CHANNEL(channel->header)){
+    if(!IS_CHANNEL(channel)){
 	abort_with_message("PICC_channel_value_global_rc - value is not a channel");
     }
     
