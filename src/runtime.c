@@ -6,7 +6,7 @@
  *
  * @author Maxence WO
  * @author Dany SIRIPHOL
- * @author Joel HING
+ * @author Joël HING
  * @author Mickaël MENU
  */
 
@@ -15,6 +15,7 @@
 #include <pi_thread_repr.h>
 #include <queue_repr.h>
 #include <scheduler_repr.h>
+#include <limits.h>
 
 /**
  * Temporary main entry point.
@@ -48,6 +49,15 @@ int PICC_GC2(PICC_SchedPool *sp, PICC_Error *error)
 void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint, 
                 int entry_env_length, int entry_knowns_length, int entry_enabled_length)
 {
+    // defining word size, 32bit by default
+    #ifdef WORD_BIT
+        WORD_SIZE = WORD_BIT;
+    #endif
+    
+    #ifdef __WORDSIZE
+        WORD_SIZE = __WORDSIZE;
+    #endif
+    
     // contains all the errors
     ALLOC_ERROR(error);
 

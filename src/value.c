@@ -744,6 +744,103 @@ void PICC_ChannelValue_inv(PICC_ChannelValue *channel)
 
 /* } */
 
+
+/*******************************
+ *  compares 2 values          *
+ *******************************/
+int compare_values(PICC_Value * value1, PICC_Value * value2)
+{
+    PICC_TagValue tag1 = GET_VALUE_TAG(value1->header);
+    int ctrl1 = GET_VALUE_CTRL(value1->header);
+    
+    PICC_TagValue tag2 = GET_VALUE_TAG(value2->header);
+    int ctrl2 = GET_VALUE_CTRL(value2->header);
+    
+    if(tag1 != tag2){
+        return -1;
+    }
+
+    switch(tag) {
+        case TAG_INTEGER: {
+            PICC_IntValue *int_value1 = (PICC_IntValue *) value1;
+            PICC_IntValue *int_value2 = (PICC_IntValue *) value2;
+            if(int_value1->data < int_value2->data){
+                // value1 less than value2
+                return -1;
+            }
+            if(int_value1->data > int_value2->data){
+                // value1 greater than value2
+                return 1;
+            }
+            // value1 equals value2
+            return 0;
+            break;
+        }
+        case TAG_BOOLEAN: {
+            if (ctrl1 == ctrl2) {
+                // both true or both false
+                return 0;
+            }
+            // different bool
+            return -1;
+            break;
+        }
+        case TAG_TUPLE: {
+            PICC_TupleValue *tup1 = (PICC_TupleValue *) value1;
+            PICC_TupleValue *tup2 = (PICC_TupleValue *) value2;
+            if(ctrl1 != ctrl2){
+                return -1;
+            }
+            for(int i=0;i<ctrl;i++) {
+                /* 
+                 * if elements 0 to i-1 are the same in both tuples
+                 * but the tuple1 element is greater than the tuple2 element,
+                 * tuple1 is greater than tuple2
+                 */
+                if(tup1->elements[i] > tup2->elements[i]){
+                    return 1;
+                }
+                /* 
+                 * if elements 0 to i-1 are the same in both tuples
+                 * but the tuple1 element is less than the tuple2 element, 
+                 * tuple1 is less than tuple2
+                 */
+                if(tup1->elements[i] < tup2->elements[i]){
+                    return -1;
+                }
+            }
+            // same tuples
+            return 0;
+            break;
+        }
+        case TAG_STRING: {
+            return strcmp(((PICC_StringValue *)value1)->handle->data, ((PICC_StringValue *)value2)->handle->data);
+            break;
+        }
+        case TAG_CHANNEL: {
+            PICC_Channel *ch1 = PICC_channel_of_channel_value(value1);
+            PICC_Channel *ch2 = PICC_channel_of_channel_value(value2);
+            if(ch1->global_rc < ch1->global_rc){
+                return -1;
+            }
+            if(ch1->global_rc > ch2->global_rc){
+                return 1;
+            }
+            // ch1->global_rc  equals ch2->global_rc)
+            return 0;
+            break;
+        }
+
+        default:
+            break;
+    }
+    
+    return -1;
+}
+
+
+
+
 /**** Example of dispatch function *****/
 
 void print_value_infos(PICC_Value * value)
