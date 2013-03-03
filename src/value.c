@@ -760,7 +760,7 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
         return -1;
     }
 
-    switch(tag) {
+    switch(tag1) {
         case TAG_INTEGER: {
             PICC_IntValue *int_value1 = (PICC_IntValue *) value1;
             PICC_IntValue *int_value2 = (PICC_IntValue *) value2;
@@ -785,34 +785,34 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
             return -1;
             break;
         }
-        case TAG_TUPLE: {
-            PICC_TupleValue *tup1 = (PICC_TupleValue *) value1;
-            PICC_TupleValue *tup2 = (PICC_TupleValue *) value2;
-            if(ctrl1 != ctrl2){
-                return -1;
-            }
-            for(int i=0;i<ctrl;i++) {
-                /* 
-                 * if elements 0 to i-1 are the same in both tuples
-                 * but the tuple1 element is greater than the tuple2 element,
-                 * tuple1 is greater than tuple2
-                 */
-                if(tup1->elements[i] > tup2->elements[i]){
-                    return 1;
-                }
-                /* 
-                 * if elements 0 to i-1 are the same in both tuples
-                 * but the tuple1 element is less than the tuple2 element, 
-                 * tuple1 is less than tuple2
-                 */
-                if(tup1->elements[i] < tup2->elements[i]){
-                    return -1;
-                }
-            }
-            // same tuples
-            return 0;
-            break;
-        }
+        /* case TAG_TUPLE: { */
+        /*     PICC_TupleValue *tup1 = (PICC_TupleValue *) value1; */
+        /*     PICC_TupleValue *tup2 = (PICC_TupleValue *) value2; */
+        /*     if(ctrl1 != ctrl2){ */
+        /*         return -1; */
+        /*     } */
+        /*     for(int i=0;i<ctrl;i++) { */
+        /*         /\*  */
+        /*          * if elements 0 to i-1 are the same in both tuples */
+        /*          * but the tuple1 element is greater than the tuple2 element, */
+        /*          * tuple1 is greater than tuple2 */
+        /*          *\/ */
+        /*         if(tup1->elements[i] > tup2->elements[i]){ */
+        /*             return 1; */
+        /*         } */
+        /*         /\*  */
+        /*          * if elements 0 to i-1 are the same in both tuples */
+        /*          * but the tuple1 element is less than the tuple2 element,  */
+        /*          * tuple1 is less than tuple2 */
+        /*          *\/ */
+        /*         if(tup1->elements[i] < tup2->elements[i]){ */
+        /*             return -1; */
+        /*         } */
+        /*     } */
+        /*     // same tuples */
+        /*     return 0; */
+        /*     break; */
+        /* } */
         case TAG_STRING: {
             return strcmp(((PICC_StringValue *)value1)->handle->data, ((PICC_StringValue *)value2)->handle->data);
             break;

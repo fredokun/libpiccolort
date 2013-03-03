@@ -22,7 +22,7 @@ struct _PICC_Value;
 /**
  * TODO see spec
  */
-typedef struct _PICC_Value *(PICC_EvalFunction)(struct _PICC_PiThread *);
+typedef struct _PICC_Value *(*PICC_EvalFunction)(struct _PICC_PiThread *);
 
 /**
  * The type of the commitment
@@ -61,11 +61,13 @@ typedef struct _PICC_CommitListElement PICC_CommitListElement;
  */
 typedef struct _PICC_CommitList PICC_CommitList;
 
-extern void PICC_register_output_commitment(struct _PICC_PiThread *p, struct _PICC_Channel *ch, PICC_EvalFunction *eval, PICC_Label cont_pc);
+extern void PICC_register_output_commitment(struct _PICC_PiThread *p, struct _PICC_Channel *ch, PICC_EvalFunction eval, PICC_Label cont_pc);
 extern void PICC_register_input_commitment(struct _PICC_PiThread *p, struct _PICC_Channel *ch, int refvar, PICC_Label cont_pc);
 
 extern bool PICC_commit_list_is_empty(PICC_CommitList *clist);
 extern PICC_Commit *PICC_fetch_input_commitment(struct _PICC_Channel *ch);
 extern PICC_Commit *PICC_fetch_output_commitment(struct _PICC_Channel *ch);
+
+extern PICC_EvalFunction PICC_eval_func_of_output_commitment(PICC_Commit *ch);
 
 #endif

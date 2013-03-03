@@ -51,11 +51,11 @@ void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint,
 {
     // defining word size, 32bit by default
     #ifdef WORD_BIT
-        WORD_SIZE = WORD_BIT;
+    #define WORD_SIZE WORD_BIT;
     #endif
     
     #ifdef __WORDSIZE
-        WORD_SIZE = __WORDSIZE;
+    #define WORD_SIZE __WORDSIZE;
     #endif
     
     // contains all the errors
