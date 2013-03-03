@@ -36,7 +36,7 @@ typedef enum { TAG_RESERVED               =0x00,
 
 #define VALUE_HEADER unsigned int header
 
-#define WORD_SIZE 32
+int WORD_SIZE = 32;
 #define GET_VALUE_TAG(header) ( ((unsigned int) (header)) >> (WORD_SIZE - 8) )
 #define VALUE_CTRL_MASK (~(0xFF << (WORD_SIZE - 8) ))
 #define GET_VALUE_CTRL(header) ((header) & VALUE_CTRL_MASK)

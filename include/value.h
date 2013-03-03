@@ -68,7 +68,7 @@ extern void PICC_Int_substract(PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
  * Immediate values : float *
  ******************************/
 
-/* typedef struct _float_value_t PICC_FloatValue ; */
+ typedef struct _float_value_t PICC_FloatValue ;
 
 /* extern PICC_FloatValue *PICC_create_float_value(double data); */
 /* extern PICC_FloatValue *PICC_free_float(PICC_IntValue *val); */
@@ -85,7 +85,7 @@ extern void PICC_Int_substract(PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
  * Tuples values  *
  ******************/
 
-/* typedef struct _tuple_value_t PICC_TupleValue ; */
+typedef struct _tuple_value_t PICC_TupleValue ;
 
 /* extern PICC_TupleValue *PICC_create_tuple_value(int arity); */
 /* extern PICC_TupleValue *PICC_free_tuple(PICC_TupleValue *tuple); */

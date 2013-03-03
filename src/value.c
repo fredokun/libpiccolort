@@ -6,6 +6,7 @@
  *
  * @author Mickaël MENU
  * @author Dany SIRIPHOL
+ * @author Joël HING
  */
 
 #include <value_repr.h>
@@ -760,7 +761,13 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
         return -1;
     }
 
-    switch(tag) {
+    switch(tag1) {
+        case TAG_RESERVED: {
+            break;
+        }
+        case TAG_NOVALUE: {
+            break;
+        }
         case TAG_INTEGER: {
             PICC_IntValue *int_value1 = (PICC_IntValue *) value1;
             PICC_IntValue *int_value2 = (PICC_IntValue *) value2;
@@ -769,6 +776,21 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
                 return -1;
             }
             if(int_value1->data > int_value2->data){
+                // value1 greater than value2
+                return 1;
+            }
+            // value1 equals value2
+            return 0;
+            break;
+        }
+        case TAG_FLOAT: {
+            PICC_FloatValue *float_value1 = (PICC_FloatValue *) value1;
+            PICC_FloatValue *float_value2 = (PICC_FloatValue *) value2;
+            if(float_value1->data < float_value2->data){
+                // value1 less than value2
+                return -1;
+            }
+            if(float_value1->data > float_value2->data){
                 // value1 greater than value2
                 return 1;
             }
@@ -791,22 +813,14 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
             if(ctrl1 != ctrl2){
                 return -1;
             }
-            for(int i=0;i<ctrl;i++) {
-                /* 
-                 * if elements 0 to i-1 are the same in both tuples
-                 * but the tuple1 element is greater than the tuple2 element,
-                 * tuple1 is greater than tuple2
-                 */
-                if(tup1->elements[i] > tup2->elements[i]){
-                    return 1;
-                }
-                /* 
-                 * if elements 0 to i-1 are the same in both tuples
-                 * but the tuple1 element is less than the tuple2 element, 
-                 * tuple1 is less than tuple2
-                 */
-                if(tup1->elements[i] < tup2->elements[i]){
-                    return -1;
+            if(ctrl1 == 0){
+                return 0;
+            }
+            
+            for(int i=0;i<ctrl1;i++) {
+                int res = compare_values(tup1->elements[i], tup2->elements[i]) ;
+                if(res != 0){
+                    return res;
                 }
             }
             // same tuples

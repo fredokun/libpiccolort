@@ -16,6 +16,7 @@
 #include <queue_repr.h>
 #include <scheduler_repr.h>
 #include <limits.h>
+#include <value_repr.h>
 
 /**
  * Temporary main entry point.
