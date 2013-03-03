@@ -33,7 +33,7 @@ void test_register_outcommits(PICC_Error* error)
 {
     PICC_PiThread* pt;
     PICC_Channel *ch;
-    PICC_EvalFunction *eval;
+    PICC_EvalFunction eval;
     PICC_Label cont_pc;
 
     // check pithread, channel first
@@ -82,7 +82,7 @@ void test_commitlists(PICC_Error *error)
     // init c
     PICC_PiThread* pt;
     PICC_Channel *ch;
-    PICC_EvalFunction *eval;
+    PICC_EvalFunction eval;
     PICC_Label cont_pc;
 
     //check pithread, channel first
@@ -102,7 +102,7 @@ void test_commitlists(PICC_Error *error)
     // init c2
     PICC_PiThread* pt2;
     PICC_Channel *ch2;
-    PICC_EvalFunction *eval2;
+    PICC_EvalFunction eval2;
     PICC_Label cont_pc2;
 
     //check pithread, channel first

@@ -806,7 +806,7 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
             // different bool
             return -1;
             break;
-        }
+        }/*
         case TAG_TUPLE: {
             PICC_TupleValue *tup1 = (PICC_TupleValue *) value1;
             PICC_TupleValue *tup2 = (PICC_TupleValue *) value2;
@@ -827,6 +827,7 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
             return 0;
             break;
         }
+        */
         case TAG_STRING: {
             return strcmp(((PICC_StringValue *)value1)->handle->data, ((PICC_StringValue *)value2)->handle->data);
             break;

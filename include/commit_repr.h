@@ -52,9 +52,9 @@ struct _PICC_InCommit {
  */
 struct _PICC_OutCommit {
     /**@{*/
-    PICC_EvalFunction *eval_func; /** The function that evaluates the
-                                    * expression passed to the channel
-                                    * referenced by this commit */
+    PICC_EvalFunction eval_func; /** The function that evaluates the
+                                   * expression passed to the channel
+                                   * referenced by this commit */
     /**@}*/
 };
 
