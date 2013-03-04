@@ -64,24 +64,24 @@ struct _PICC_Knowns {
     /**@}*/
 };
 
-/**
- * The set of known channels
- */
-struct _PICC_KnownsSet {
-    /**@{*/
-    PICC_Knowns **knowns; /** A pointer to an array of knowns.
-                            Contains all the data */
-    int size; /**< The size of the set */
-    /**@}*/
-};
+/* /\** */
+/*  * The set of known channels */
+/*  *\/ */
+/* struct _PICC_KnownsSet { */
+/*     /\**@{*\/ */
+/*     PICC_Knowns **knowns; /\** A pointer to an array of knowns. */
+/*                             Contains all the data *\/ */
+/*     int size; /\**< The size of the set *\/ */
+/*     /\**@}*\/ */
+/* }; */
 
 extern PICC_Knowns *PICC_create_knowns(PICC_Channel *channel, PICC_Error *error);
-extern PICC_KnownsSet *PICC_create_knowns_set(int length, PICC_Error *error);
+//extern PICC_KnownsSet *PICC_create_knowns_set(int length, PICC_Error *error);
 extern void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error);
 extern void PICC_free_channel(PICC_Channel *channel);
 
 extern void PICC_Channel_inv(PICC_Channel *channel);
-extern void PICC_KnownsSet_inv(PICC_KnownsSet *set);
+//extern void PICC_KnownsSet_inv(PICC_KnownsSet *set);
 extern void PICC_Knowns_inv(PICC_Knowns *knowns);
 
 #endif

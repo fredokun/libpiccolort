@@ -36,12 +36,12 @@ typedef enum { TAG_RESERVED               =0x00,
 
 #define VALUE_HEADER unsigned int header
 
-int WORD_SIZE = 32;
-#define GET_VALUE_TAG(header) ( ((unsigned int) (header)) >> (WORD_SIZE - 8) )
-#define VALUE_CTRL_MASK (~(0xFF << (WORD_SIZE - 8) ))
+#define VALUE_WORD_SIZE  32 //need to be a define for some definitions in value.c
+#define GET_VALUE_TAG(header) ( ((unsigned int) (header)) >> (VALUE_WORD_SIZE - 8) )
+#define VALUE_CTRL_MASK (~(0xFF << (VALUE_WORD_SIZE - 8) ))
 #define GET_VALUE_CTRL(header) ((header) & VALUE_CTRL_MASK)
 
-#define MAKE_HEADER(tag,ctrl) ((unsigned int) (((tag) << (WORD_SIZE - 8)) | ((ctrl) & VALUE_CTRL_MASK)))
+#define MAKE_HEADER(tag,ctrl) ((unsigned int) (((tag) << (VALUE_WORD_SIZE - 8)) | ((ctrl) & VALUE_CTRL_MASK)))
 
 
 #define IS_NOVALUE(value) ((value->header) == TAG_NOVALUE)
