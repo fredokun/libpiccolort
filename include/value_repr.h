@@ -23,8 +23,8 @@
  * Tag & control management *
  ***************************/
 
-typedef enum { TAG_RESERVED               =0x00, 
-               TAG_NOVALUE                =0x01, 
+typedef enum { TAG_RESERVED               =0x00,
+               TAG_NOVALUE                =0x01,
                TAG_BOOLEAN                =0x02,
                TAG_INTEGER                =0x03,
                TAG_FLOAT                  =0x04,
@@ -36,7 +36,7 @@ typedef enum { TAG_RESERVED               =0x00,
 
 #define VALUE_HEADER unsigned int header
 
-int WORD_SIZE = 32;
+#define WORD_SIZE 32
 #define GET_VALUE_TAG(header) ( ((unsigned int) (header)) >> (WORD_SIZE - 8) )
 #define VALUE_CTRL_MASK (~(0xFF << (WORD_SIZE - 8) ))
 #define GET_VALUE_CTRL(header) ((header) & VALUE_CTRL_MASK)
@@ -119,7 +119,7 @@ struct _string_value_t {
     PICC_StringHandle *handle;
 };
 
-struct _string_handle_t 
+struct _string_handle_t
 {
     PICC_AtomicInt *refcount;
     char *data;
@@ -177,7 +177,7 @@ struct _user_managed_channel_value_t {
 };
 
 extern PICC_ChannelValue *PICC_create_pi_channel_value();
-extern PICC_ChannelValue *PICC_create_typed_channel_value( PICC_ChannelKind kind );   
+extern PICC_ChannelValue *PICC_create_typed_channel_value( PICC_ChannelKind kind );
 extern void PICC_ChannelValue_inv(PICC_ChannelValue *channel);
 
 
