@@ -1,3 +1,15 @@
+/**
+ * @file knownset_repr.h
+ * Data structures for knownsets.
+ *
+ * This project is released under MIT License.
+ *
+ * @author Maxence WO
+ * @author Loïc GIRAULT
+ */
+
+#ifndef KNOWNSET_REPR_H
+#define KNOWNSET_REPR_H
 
 #include <knownset.h>
 
@@ -6,16 +18,16 @@
 */
 struct _Tree
 {
-    PICC_Tree father;
-    PICC_Tree left;
-    PICC_Tree right;
+    PICC_Tree *father;
+    PICC_Tree *left;
+    PICC_Tree *right;
     void* val;
 };
 
 struct _KnownsetTree
 {
     int type;
-    PICC_Tree tree;
+    PICC_Tree *tree;
 };
 
 struct _KnownsetList
@@ -32,20 +44,36 @@ struct _Knownset
 
 struct _KnownSetIterator
 {
-    PICC_KnownSet set;
+    PICC_KnownSet *set;
 };
 
 struct _KnownSetTreeIterator
 {
-    PICC_KnownSetTree set;
-    PICC_Tree current;
-    PICC_Tree next;
+    PICC_KnownSetTree *set;
+    PICC_Tree *current;
+    PICC_Tree *next;
 };
 
 struct _KnownSetListIterator
 {
-    PICC_KnownSetList set;
+    PICC_KnownSetList *set;
     int next;
 };
 
-extern void PICC_KnownSet_inv(PICC_KnownSet ks);
+// tree structure
+extern PICC_KnownSetTreeIterator *PICC_create_known_set_tree_iterator(PICC_KnownSetTree *s);
+extern PICC_KnownSetTreeIterator *PICC_delete_known_set_tree_iterator(PICC_KnownSetTreeIterator *it);
+extern void* PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it);
+extern void* PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it);
+extern bool PICC_known_set_tree_iterator_has_next(PICC_KnownSetListIterator *it);
+
+// list structure
+extern PICC_KnownSetListIterator *PICC_create_known_set_list_iterator(PICC_KnownSetList *s);
+extern PICC_KnownSetListIterator *PICC_delete_known_set_list_iterator(PICC_KnownSetListIterator *it);
+extern void* PICC_known_set_list_iterator_next(PICC_KnownSetListIterator *it);
+extern bool PICC_known_set_list_iterator_has_next(PICC_KnownSetListIterator *it);
+
+// invariants
+extern void PICC_KnownSet_inv(PICC_KnownSet *ks);
+
+#endif

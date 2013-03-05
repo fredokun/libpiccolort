@@ -36,7 +36,7 @@ TestPingPong_Main_begin:
             printf("\tTestPingPong_Main action label 0\n");
             int nbdisabled;
             nbdisabled = 0;
-            PICC_Channel* chans;
+            PICC_KnownSet chans = PICC_create_empty_knowns_set();
             pt->val = (PICC_Value *)PICC_create_bool_value(true);
             pt->enabled[0] = pt->val;
             if ( pt->enabled[0] ){
@@ -47,7 +47,7 @@ TestPingPong_Main_begin:
                     if ( tryresult == PICC_TRY_ENABLED ){
                         pt->fuel = pt->fuel - 1;
                         if ( pt->fuel == 0 ){
-                            PICC_release_all_channels( &chans, 2 );
+                            PICC_release_all_channels( chans );
                             pt->pc = 1;
                             pt->fuel = PICC_FUEL_INIT;
                             PICC_ready_queue_add( scheduler->ready,  pt );
@@ -61,12 +61,12 @@ TestPingPong_Main_begin:
                 nbdisabled = nbdisabled + 1;
             }
             if ( nbdisabled == 1 ){
-                PICC_release_all_channels( &chans, 2 );
+                PICC_release_all_channels( chans );
                 pt->status = PICC_STATUS_BLOCKED;
                 return ;
             }
             PICC_acquire( &(pt->lock) );
-            PICC_release_all_channels( &chans, 2 );
+            PICC_release_all_channels( chans );
             pt->pc = PICC_INVALID_PC;
             pt->fuel = PICC_FUEL_INIT;
             pt->status = PICC_STATUS_WAIT;
@@ -79,7 +79,7 @@ TestPingPong_Main_begin:
             printf("\tTestPingPong_Main action label 1\n");
             int nbdisabled;
             nbdisabled = 0;
-            PICC_Channel* chans;
+            PICC_KnownSet chans = PICC_create_empty_knowns_set();
             pt->val = (PICC_Value *)PICC_create_bool_value(true);
             pt->enabled[0] = pt->val;
             if ( pt->enabled[0] ){
@@ -90,7 +90,7 @@ TestPingPong_Main_begin:
                     if ( tryresult == PICC_TRY_ENABLED ){
                         pt->fuel = pt->fuel - 1;
                         if ( pt->fuel == 0 ){
-                            PICC_release_all_channels( &chans, 2 );
+                            PICC_release_all_channels( chans );
                             pt->pc = 2;
                             pt->fuel = PICC_FUEL_INIT;
                             PICC_ready_queue_add( scheduler->ready,  pt );
@@ -104,12 +104,12 @@ TestPingPong_Main_begin:
                 nbdisabled = nbdisabled + 1;
             }
             if ( nbdisabled == 1 ){
-                PICC_release_all_channels( &chans, 2 );
+                PICC_release_all_channels( chans );
                 pt->status = PICC_STATUS_BLOCKED;
                 return ;
             }
             PICC_acquire( &(pt->lock) );
-            PICC_release_all_channels( &chans, 2 );
+            PICC_release_all_channels( chans );
             pt->pc = PICC_INVALID_PC;
             pt->fuel = PICC_FUEL_INIT;
             pt->status = PICC_STATUS_WAIT;
@@ -122,7 +122,7 @@ TestPingPong_Main_begin:
             printf("\tTestPingPong_Main action label 2\n");
             int nbdisabled;
             nbdisabled = 0;
-            PICC_Channel* chans;
+            PICC_KnownSet chans = PICC_create_empty_knowns_set();
             pt->val = (PICC_Value *)PICC_create_bool_value(true);
             pt->enabled[0] = pt->val;
             if ( pt->enabled[0] ){
@@ -133,7 +133,7 @@ TestPingPong_Main_begin:
                     if ( tryresult == PICC_TRY_ENABLED ){
                         pt->fuel = pt->fuel - 1;
                         if ( pt->fuel == 0 ){
-                            PICC_release_all_channels( &chans, 2 );
+                            PICC_release_all_channels( chans );
                             pt->pc = 3;
                             pt->fuel = PICC_FUEL_INIT;
                             PICC_ready_queue_add( scheduler->ready,  pt );
@@ -147,12 +147,12 @@ TestPingPong_Main_begin:
                 nbdisabled = nbdisabled + 1;
             }
             if ( nbdisabled == 1 ){
-                PICC_release_all_channels( &chans, 2 );
+                PICC_release_all_channels( chans );
                 pt->status = PICC_STATUS_BLOCKED;
                 return ;
             }
             PICC_acquire( &(pt->lock) );
-            PICC_release_all_channels( &chans, 2 );
+            PICC_release_all_channels( chans );
             pt->pc = PICC_INVALID_PC;
             pt->fuel = PICC_FUEL_INIT;
             pt->status = PICC_STATUS_WAIT;
@@ -176,7 +176,7 @@ TestPingPong_PingPong_begin:
             printf("\tTestPingPong_PingPong action label 0\n");
             int nbdisabled;
             nbdisabled = 0;
-            PICC_Channel* chans;
+            PICC_KnownSet chans = PICC_create_empty_knowns_set();
             pt->val = (PICC_Value *)PICC_create_bool_value(true);
             pt->enabled[0] = pt->val;
             if ( pt->enabled[0] ){
@@ -187,7 +187,7 @@ TestPingPong_PingPong_begin:
                     if ( tryresult == PICC_TRY_ENABLED ){
                         pt->fuel = pt->fuel - 1;
                         if ( pt->fuel == 0 ){
-                            PICC_release_all_channels( &chans, 2 );
+                            PICC_release_all_channels( chans );
                             pt->pc = 1;
                             pt->fuel = PICC_FUEL_INIT;
                             PICC_ready_queue_add( scheduler->ready,  pt );
@@ -201,7 +201,7 @@ TestPingPong_PingPong_begin:
                 nbdisabled = nbdisabled + 1;
             }
             if ( nbdisabled == 1 ){
-                PICC_release_all_channels( &chans, 2 );
+                PICC_release_all_channels( chans );
                 pt->status = PICC_STATUS_BLOCKED;
                 return ;
             }
@@ -209,7 +209,7 @@ TestPingPong_PingPong_begin:
                 PICC_register_input_commitment( pt,  ((PICC_ChannelValue *)pt->env[0])->channel,  -1,  1 );
             }
             PICC_acquire( &(pt->lock) );
-            PICC_release_all_channels( &chans, 2 );
+            PICC_release_all_channels( chans );
             pt->pc = PICC_INVALID_PC;
             pt->fuel = PICC_FUEL_INIT;
             pt->status = PICC_STATUS_WAIT;
@@ -222,7 +222,7 @@ TestPingPong_PingPong_begin:
             printf("\tTestPingPong_PingPong action label 2\n");
             int nbdisabled;
             nbdisabled = 0;
-            PICC_Channel* chans;
+            PICC_KnownSet chans = PICC_create_empty_knowns_set();
             pt->val = (PICC_Value *)PICC_create_bool_value(true);
             pt->enabled[0] = pt->val;
             if ( pt->enabled[0] ){
@@ -233,7 +233,7 @@ TestPingPong_PingPong_begin:
                     if ( tryresult == PICC_TRY_ENABLED ){
                         pt->fuel = pt->fuel - 1;
                         if ( pt->fuel == 0 ){
-                            PICC_release_all_channels( &chans, 2 );
+                            PICC_release_all_channels( chans );
                             pt->pc = 2;
                             pt->fuel = PICC_FUEL_INIT;
                             PICC_ready_queue_add( scheduler->ready,  pt );
@@ -247,7 +247,7 @@ TestPingPong_PingPong_begin:
                 nbdisabled = nbdisabled + 1;
             }
             if ( nbdisabled == 1 ){
-                PICC_release_all_channels( &chans, 2 );
+                PICC_release_all_channels( chans );
                 pt->status = PICC_STATUS_BLOCKED;
                 return ;
             }
@@ -255,7 +255,7 @@ TestPingPong_PingPong_begin:
                 PICC_register_output_commitment( pt,  ((PICC_ChannelValue *)pt->env[0])->channel,  eval_1,  2 );
             }
             PICC_acquire( &(pt->lock) );
-            PICC_release_all_channels( &chans, 2 );
+            PICC_release_all_channels( chans );
             pt->pc = PICC_INVALID_PC;
             pt->fuel = PICC_FUEL_INIT;
             pt->status = PICC_STATUS_WAIT;

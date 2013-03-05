@@ -12,6 +12,7 @@
 #include <pi_thread_repr.h>
 #include <channel_repr.h>
 #include <value_repr.h>
+#include <knownset_repr.h>
 
 #define ASSERT_NO_ERROR() \
  ASSERT(!HAS_ERROR((*error)))
@@ -71,8 +72,7 @@ void test_global_reference(PICC_Error *error)
  */
 void test_knowsSet(PICC_Error *error)
 {
-
-    PICC_KnownsSet *set = PICC_create_knowns_set(10, error);
+    PICC_KnownSet set = PICC_create_known_set(10, error);
     ASSERT_NO_ERROR();
     PICC_Channel* channel = PICC_create_channel();
 
@@ -83,7 +83,7 @@ void test_knowsSet(PICC_Error *error)
     {
         knowns = PICC_create_knowns(channel,error);
         ASSERT_NO_ERROR();
-        set->knowns[i] = knowns;
+        PICC_known_set_add(set, knowns);
     }
 }
 

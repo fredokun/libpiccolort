@@ -276,7 +276,7 @@ void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
  * @param state state wanted
  * @param ks knownsSet fetched
  */
-PICC_KnownSet PICC_knowns_set_search(PICC_KnownSet ks, PICC_KnownsState state)
+PICC_KnownSet *PICC_knowns_set_search(PICC_KnownSet *ks, PICC_KnownsState *state)
 {
 
     #ifdef CONTRACT_PRE_INV
@@ -290,7 +290,7 @@ PICC_KnownSet PICC_knowns_set_search(PICC_KnownSet ks, PICC_KnownsState state)
     #endif
 
     int count=0;
-    
+
     PICC_KNOWNSET_FOREACH(PICC_Knowns, known, ks, it);
         if( known->state == state )
         {
