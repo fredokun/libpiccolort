@@ -21,7 +21,7 @@ struct _Tree
     PICC_Tree *father;
     PICC_Tree *left;
     PICC_Tree *right;
-    void* val;
+    GEN_VALUE val;
 };
 
 struct _KnownSetTree
@@ -34,7 +34,7 @@ struct _KnownSetList
 {
     int type;
     int size;
-    void** liste;
+    GEN_VALUE* liste;
 };
 
 struct _KnownSet
@@ -63,14 +63,14 @@ struct _KnownSetListIterator
 // tree structure
 extern PICC_KnownSetTreeIterator *PICC_create_known_set_tree_iterator(PICC_KnownSetTree *s);
 extern PICC_KnownSetTreeIterator *PICC_delete_known_set_tree_iterator(PICC_KnownSetTreeIterator *it);
-extern void* PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it);
-extern void* PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it);
+extern GEN_VALUE PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it);
+extern GEN_VALUE PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it);
 extern bool PICC_known_set_tree_iterator_has_next(PICC_KnownSetListIterator *it);
 
 // list structure
 extern PICC_KnownSetListIterator *PICC_create_known_set_list_iterator(PICC_KnownSetList *s);
 extern PICC_KnownSetListIterator *PICC_delete_known_set_list_iterator(PICC_KnownSetListIterator *it);
-extern void* PICC_known_set_list_iterator_next(PICC_KnownSetListIterator *it);
+extern GEN_VALUE PICC_known_set_list_iterator_next(PICC_KnownSetListIterator *it);
 extern bool PICC_known_set_list_iterator_has_next(PICC_KnownSetListIterator *it);
 
 // invariants
