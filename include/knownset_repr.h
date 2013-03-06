@@ -24,20 +24,20 @@ struct _Tree
     GEN_VALUE val;
 };
 
-struct _KnownsetTree
+struct _KnownSetTree
 {
     int type;
     PICC_Tree *tree;
 };
 
-struct _KnownsetList
+struct _KnownSetList
 {
     int type;
     int size;
     GEN_VALUE* liste;
 };
 
-struct _Knownset
+struct _KnownSet
 {
     int type;
 };

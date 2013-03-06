@@ -47,7 +47,7 @@ extern bool PICC_known_set_has_next(PICC_KnownSetIterator *it);
 #define PICC_KNOWNSET_FOREACH(type, current, set, it)		        \
         do{								\
         type* current;						        \
-        PICC_KnownSetIterator it = PICC_create_known_set_iterator(set);	\
+        PICC_KnownSetIterator *it = PICC_create_known_set_iterator(set);	\
         while(PICC_known_set_has_next(it)){				\
 	    current = (type*) PICC_known_set_next(it)	 // no ; will be add in the code
 
