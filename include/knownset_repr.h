@@ -24,20 +24,20 @@ struct _Tree
     void* val;
 };
 
-struct _KnownsetTree
+struct _KnownSetTree
 {
     int type;
     PICC_Tree *tree;
 };
 
-struct _KnownsetList
+struct _KnownSetList
 {
     int type;
     int size;
     void** liste;
 };
 
-struct _Knownset
+struct _KnownSet
 {
     int type;
 };

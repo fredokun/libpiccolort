@@ -276,7 +276,7 @@ void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
  * @param state state wanted
  * @param ks knownsSet fetched
  */
-PICC_KnownSet *PICC_knowns_set_search(PICC_KnownSet *ks, PICC_KnownsState *state)
+PICC_KnownSet *PICC_knowns_set_search(PICC_KnownSet *ks, PICC_KnownsState state)
 {
 
     #ifdef CONTRACT_PRE_INV
@@ -298,7 +298,7 @@ PICC_KnownSet *PICC_knowns_set_search(PICC_KnownSet *ks, PICC_KnownsState *state
         }
     END_KNOWNSET_FOREACH;
 
-    PICC_KnownSet result = PICC_create_known_set(count, NULL);
+    PICC_KnownSet *result = PICC_create_known_set(count, NULL);
 
     PICC_KNOWNSET_FOREACH(PICC_Knowns, known, ks, it);
         if( known->state == state )
@@ -333,7 +333,7 @@ PICC_KnownSet *PICC_knowns_set_search(PICC_KnownSet *ks, PICC_KnownsState *state
  * @param ks Knowns set
  * @return Subset of all known channel in the given set
  */
-PICC_KnownSet PICC_knowns_set_knows(PICC_KnownSet ks)
+PICC_KnownSet *PICC_knowns_set_knows(PICC_KnownSet *ks)
 {
     return PICC_knowns_set_search(ks, PICC_KNOWN);
 }
@@ -344,7 +344,7 @@ PICC_KnownSet PICC_knowns_set_knows(PICC_KnownSet ks)
  * @param ks Knowns set
  * @return Subset of all forget state in the given set.
  */
-PICC_KnownSet PICC_knowns_set_forget(PICC_KnownSet ks)
+PICC_KnownSet *PICC_knowns_set_forget(PICC_KnownSet *ks)
 {
     return PICC_knowns_set_search(ks, PICC_FORGET);
 }
@@ -359,7 +359,7 @@ PICC_KnownSet PICC_knowns_set_forget(PICC_KnownSet ks)
  * @param ks Knows set
  * @param ch Channel to switch state
  */
-void PICC_knowns_set_forget_to_unknown(PICC_KnownSet ks, PICC_Channel *ch)
+void PICC_knowns_set_forget_to_unknown(PICC_KnownSet *ks, PICC_Channel *ch)
 {
     #ifdef CONTRACT_PRE_INV
         //inv
@@ -395,7 +395,7 @@ void PICC_knowns_set_forget_to_unknown(PICC_KnownSet ks, PICC_Channel *ch)
  *
  * @param ks Knows set
  */
-void PICC_knowns_set_forget_all(PICC_KnownSet ks)
+void PICC_knowns_set_forget_all(PICC_KnownSet *ks)
 {
     #ifdef CONTRACT_PRE_INV
          //inv
@@ -438,7 +438,7 @@ void PICC_knowns_set_forget_all(PICC_KnownSet ks)
  * @param ch Channel to add
  * @return Whether the channel has been added
  */
-bool PICC_knowns_register(PICC_KnownSet ks, PICC_Channel *ch)
+bool PICC_knowns_register(PICC_KnownSet *ks, PICC_Channel *ch)
 {
     #ifdef CONTRACT_PRE_INV
         //inv
@@ -489,7 +489,7 @@ bool PICC_knowns_register(PICC_KnownSet ks, PICC_Channel *ch)
  * @param chans Set of channels to release
  * @param nb_chans
  */
-void PICC_release_all_channels(PICC_KnownSet chans)
+void PICC_release_all_channels(PICC_KnownSet *chans)
 {
     PICC_KNOWNSET_FOREACH(PICC_Channel, ch, chans, it);
         RELEASE_CHANNEL(ch);
@@ -524,7 +524,7 @@ void PICC_Knowns_inv(PICC_Knowns *knowns)
  *
  * @inv knownsSet->size > -1
  */
-void PICC_KnownsSet_inv(PICC_KnownSet set)
+void PICC_KnownsSet_inv(PICC_KnownSet *set)
 {
     ASSERT(PICC_known_set_size(set) > -1);
 }

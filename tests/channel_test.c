@@ -72,7 +72,7 @@ void test_global_reference(PICC_Error *error)
  */
 void test_knowsSet(PICC_Error *error)
 {
-    PICC_KnownSet set = PICC_create_known_set(10, error);
+    PICC_KnownSet *set = PICC_create_known_set(10, error);
     ASSERT_NO_ERROR();
     PICC_Channel* channel = PICC_create_channel();
 
