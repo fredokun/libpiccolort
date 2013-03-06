@@ -54,6 +54,89 @@ bool PICC_known_set_add(PICC_KnownSet *s, GEN_VALUE elem)
 }
 
 /**
+ *  Checks if an element belongs to a knownset.
+ *
+ *  @param s knownset
+ *  @param elem GEN_VALUE
+ *  @return true if elem is in s else return false
+ */
+bool PICC_known_set_mem(PICC_KnownSet *s, GEN_VALUE elem)
+{
+    if(s->type == TREE)
+        return PICC_known_set_mem_tree(s, elem);
+    else
+        return PICC_known_set_mem_list(s, elem);
+}
+
+bool PICC_known_set_mem_tree(PICC_KnownSet *s, GEN_VALUE elem)
+{
+    bool res = PICC_equals(s->val, elem);
+
+    if(res)
+        return res;
+    else
+    {
+        if(s->left != NULL)
+        {
+            res |= PICC_known_set_mem_tree(s->left, elem);
+        }
+
+        if(s->right != NULL)
+        {
+            res |= PICC_known_set_mem_tree(s->right, elem);
+        }
+
+        return res;
+
+    }
+}
+
+bool PICC_known_set_mem_list(PICC_Knownset *s, GEN_VALUE elem)
+{
+    int i;
+
+    for(i=0 ; i<s->size ; i++)
+        if(PICC_equals(s->liste[i], elem);)
+            return true;
+
+    return false;
+}
+
+int PICC_known_set_size(PICC_KnownSet *s)
+{
+    if(s->type == TREE)
+        return PICC_known_set_size_tree(s);
+    else
+        return PICC_known_set_size_list(s);
+}
+
+int PICC_known_set_size_tree(PICC_KnownSet *s)
+{
+    int size = 0;
+
+    if(s->left != NULL)
+    {
+        size += 1 + PICC_known_set_size_tree(s->left);
+    }
+    if(s->right != NULL)
+    {
+        size += 1 + PICC_known_set_size_tree(s->right);
+    }
+
+    return size;
+}
+
+int PICC_known_set_size_list(PICC_KnownSet *s)
+{
+    int size = 0;
+
+    while(s[size] != NULL)
+        size++;
+
+    return size;
+}
+
+/**
  * Compare 2 commits
  *
  * @param s Commit

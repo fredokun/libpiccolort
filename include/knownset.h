@@ -33,15 +33,15 @@ typedef struct _KnownSetListIterator PICC_KnownSetListIterator;
 extern PICC_KnownSet *PICC_create_empty_knowns_set();
 extern PICC_KnownSet *PICC_create_known_set(int size, PICC_Error* error);
 
-extern bool PICC_known_set_add(PICC_KnownSet *s, void* elem);
+extern bool PICC_known_set_add(PICC_KnownSet *s, GEN_VALUE elem);
 extern int PICC_known_set_size(PICC_KnownSet *s);
 
 //tell if elem is in the set
-extern bool PICC_known_set_mem(PICC_KnownSet *s, void* elem);
+extern bool PICC_known_set_mem(PICC_KnownSet *s, GEN_VALUE elem);
 
 extern PICC_KnownSetIterator *PICC_create_known_set_iterator(PICC_KnownSet *s);
 extern PICC_KnownSetIterator *PICC_delete_known_set_iterator(PICC_KnownSetIterator *it);
-extern void* PICC_known_set_next(PICC_KnownSetIterator *it);
+extern GEN_VALUEx PICC_known_set_next(PICC_KnownSetIterator *it);
 extern bool PICC_known_set_has_next(PICC_KnownSetIterator *it);
 
 #define PICC_KNOWNSET_FOREACH(type, current, set, it)		        \
