@@ -19,6 +19,7 @@ enum
     LIST
 } KNOWNSET_TYPE;
 
+typedef void* GEN_VALUE;
 typedef struct _Tree PICC_Tree;
 typedef struct _KnownSet PICC_KnownSet;
 typedef struct _KnownSetTree PICC_KnownSetTree;
