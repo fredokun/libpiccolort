@@ -34,11 +34,11 @@
  * @param error Error stack
  * @return ? ????????????????
  */
-int PICC_GC2(PICC_SchedPool *sp, PICC_Error *error)
+/*int PICC_GC2(PICC_SchedPool *sp, PICC_Error *error)
 {
     NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
     return 0;
-}
+    }*/
 
 /**
  * The entry point of the Runtime library. Initialises the real running

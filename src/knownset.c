@@ -12,6 +12,21 @@
 #include <tools.h>
 #include <errors.h>
 
+PICC_KnownSet* PICC_create_empty_known_set()
+{
+    return PICC_create_known_set(1, NULL);
+}
+
+PICC_KnownSet* PICC_create_known_set(int size, PICC_Error* error)
+{
+    PICC_KnownSetList* s = malloc(sizeof(PICC_KnownSetList));
+    s->size = size;
+    s->type = LIST;
+    s->liste = malloc(size);
+
+    return (PICC_KnownSet*) s;
+}
+
 bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE elem)
 {
     PICC_KnownSetTree* ss = (PICC_KnownSetTree*) s;
