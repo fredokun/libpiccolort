@@ -391,7 +391,7 @@ GEN_VALUE PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool 
                 {
                     it->previous = it->current;
                     it->current = it->current->father;
-                    return PICC_known_set_tree_iterator_next(it->current->father, true);
+                    return PICC_known_set_tree_iterator_next(it, true);
                 }
                 else
                 {
@@ -411,7 +411,7 @@ GEN_VALUE PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool 
             {
                 it->previous = it->current;
                 it->current = it->current->father;
-                return PICC_known_set_tree_iterator_next(it->current->father, true);
+                return PICC_known_set_tree_iterator_next(it, true);
             }
             else
             {
@@ -421,7 +421,7 @@ GEN_VALUE PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool 
                     {
                         it->previous = it->current;
                         it->current = it->current->father;
-                        return PICC_known_set_tree_iterator_next(it->current->father, true);
+                        return PICC_known_set_tree_iterator_next(it, true);
                     }
                     else
                         return NULL;
@@ -446,9 +446,9 @@ bool PICC_known_set_tree_iterator_has_next(PICC_KnownSetTreeIterator *it)
 
 // List structure //////////////////////////////////////////////////////////////
 
-PICC_KnownSetListIterator *PICC_create_known_set_list_iterator(KnownSetListIterator *s)
+PICC_KnownSetListIterator *PICC_create_known_set_list_iterator(PICC_KnownSetList *s)
 {
-    PICC_KnownSetListIterator it = malloc(sizeof(PICC_KnownSetListIterator));
+    PICC_KnownSetListIterator* it = malloc(sizeof(PICC_KnownSetListIterator));
     it->set=s;
     it->next=0;
     return it;
