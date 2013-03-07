@@ -163,6 +163,41 @@ int PICC_known_set_size(PICC_KnownSet *s)
         return PICC_known_set_size_list(s);
 }
 
+bool PICC_known_set_compare_tree(PICC_KnownSet *s, PICC_KnownSet *s2)
+{
+    bool res = false;
+    PICC_KnownSetTree* ss = (PICC_KnownSetTree*) s;
+    PICC_KnownSetTree* ss2 = (PICC_KnownSetTree*) s2;
+
+    res = PICC_equals(ss->tree->val, ss2->tree->val);
+    if(!res)
+        return false;
+    else
+    {
+        if(ss->tree->left != NULL)
+            res &= PICC_known_set_compare_tree((PICC_KnownSet*)ss->tree->left, (PICC_KnownSet*)ss2->tree->left);
+        if(ss->tree->right != NULL)
+            res &= PICC_known_set_compare_tree((PICC_KnownSet*)ss->tree->right, (PICC_KnownSet*)ss2->tree->right);
+        
+        return res;
+    }
+}
+
+bool PICC_known_set_compare_list(PICC_KnownSet *s, PICC_KnownSet *s2)
+{
+    bool res = false;
+    int i;
+    PICC_KnownSetList* ss = (PICC_KnownSetList*) s;
+    PICC_KnownSetList* ss2 = (PICC_KnownSetList*) s2;
+
+    res &= ss->size != ss2->size;
+
+    for(i=0 ; i<ss->size ; i++)
+        res &= (PICC_equals(ss->liste[i], ss2->liste[i]));
+
+    return res;
+}
+
 /**
  * Compare 2 commits
  *
@@ -170,7 +205,7 @@ int PICC_known_set_size(PICC_KnownSet *s)
  * @param s2 Commit
  * @return res true if s is equal to s2
  */
-bool PICC_known_set_compare(PICC_Knownset *s, PICC_Knownset s2)
+bool PICC_known_set_compare(PICC_KnownSet *s, PICC_KnownSet *s2)
 {
     if(s->type != s2->type)
         return false;
@@ -181,70 +216,44 @@ bool PICC_known_set_compare(PICC_Knownset *s, PICC_Knownset s2)
         return PICC_known_set_compare_list(s, s2);
 }
 
-bool PICC_known_set_compare_tree(PICC_KnownSet *s, PICC_KnownSet *s2)
+int PICC_equals(GEN_VALUE vv, GEN_VALUE vv2)
 {
-    bool res = false;
-    PICC_KnownsetTree ss = (PICC_KnownsetTree) s;
-    PICC_KnownsetTree ss2 = (PICC_KnownsetTree) s2;
+    // ******** DO NOT DELETE THIS CODE ! ***********
 
-    res = PICC_equals(ss->elem, ss2->elem);
-    if(!res)
-        return false;
-    else
-    {
-        if(ss->left != NULL)
-            res &= PICC_known_set_compare(ss->left, ss2->left);
-        if(ss->right != NULL)
-            res &= PICC_known_set_compare(ss->right, ss2->right);
-        
-        return res;
-    }
-}
+    /* PICC_Value* v = (PICC_Value*) vv; */
+    /* PICC_Value* v2 = (PICC_Value*) vv2; */
 
-bool PICC_known_set_compare_list(PICC_KnownSet *s, PICC_KnownSet *s2)
-{
-    bool res = false;
-    int i;
-    PICC_KnownsetList ss = (PICC_KnownsetList) s;
-    PICC_KnownsetList ss2 = (PICC_KnownsetList) s2;
+    /* int res = 0; */
 
-    res &= ss->size != ss2->size;
+    /* if(v->kind != v2->kind) */
+    /*     return res; */
 
-    for(i=0 ; i<s->size ; i++)
-        res &= (PICC_equals(ss[i], ss2[i]));
+    /* switch(v->kind) */
+    /* { */
+    /*     case PICC_INT_VAL: */
+    /*         res = (v == v2)?1:0; */
+    /*         break; */
 
-    return res;
-}
+    /*     case PICC_FLOAT_VAL: */
+    /*         res = (v == v2)?1:0; */
+    /*         break; */
 
-int PICC_equals(GEN_VALUE v, GEN_VALUE v2)
-{
-    int res = 0;
+    /*     case PICC_STRING_VAL: */
+    /*         res = strcmp(v, v2); */
+    /*         break; */
 
-    if(v->kind != v2->kind)
-        return res;
+    /*     case PICC_BOOL_VAL: */
+    /*         res = (v == v2)?1:0; */
+    /*         break; */
 
-    switch(v->kind)
-    {
-        case PICC_INT_VAL:
-            res = (v == v2)?1:0;
-            break;
+    /*     case PICC_CHANNEL_VAL: */
+    /*         res = PICC_compare_channel(v, v2); */
+    /*         break; */
+    /* } */
 
-        case PICC_FLOAT_VAL:
-            res = (v == v2)?1:0;
-            break;
+    //**********************************************
 
-        case PICC_STRING_VAL:
-            res = strcmp(v, v2);
-            break;
-
-        case PICC_BOOL_VAL:
-            res = (v == v2)?1:0;
-            break;
-
-        case PICC_CHANNEL_VAL:
-            res = PICC_compare_channel(v, v2);
-            break;
-    }
+    return 1;
 }
 
 /* bool PICC_compare_tree(PICC_KnownSetTree *node, PICC_KnownSetTree *node2, (bool)(*f)(GEN_VALUE, GEN_VALUE)) */
@@ -281,7 +290,7 @@ int PICC_equals(GEN_VALUE v, GEN_VALUE v2)
 
 /*         for(;;) */
 /*         { */
-0/*             if(current2 == NULL) */
+/*             if(current2 == NULL) */
 /*                 break; */
 
 /*             if(PICC_cmp_knowns(current->val, current2->val, NULL)) */
@@ -308,38 +317,38 @@ int PICC_equals(GEN_VALUE v, GEN_VALUE v2)
 
 PICC_KnownSetIterator *PICC_create_known_set_iterator(PICC_KnownSet *s)
 {
-    if( s->set_type == LIST ){
-	return (PICC_KnownSetIterator) PICC_create_known_set_list_iterator((KnownSetList) s);
+    if( s->type == LIST ){
+	return (PICC_KnownSetIterator*) PICC_create_known_set_list_iterator((PICC_KnownSetList*) s);
     }else{
-	return (PICC_KnownSetIterator) PICC_create_known_set_tree_iterator((KnownSetTree) s);
+	return (PICC_KnownSetIterator*) PICC_create_known_set_tree_iterator((PICC_KnownSetTree*) s);
     }
 
 }
 
 PICC_KnownSetIterator *PICC_delete_known_set_iterator(PICC_KnownSetIterator *it)
 {
-    if( it->set->set_type == LIST ){
-	return (PICC_KnownSetIterator) PICC_delete_known_set_list_iterator((KnownSetListIterator) s);
+    if( it->set->type == LIST ){
+	return (PICC_KnownSetIterator*) PICC_delete_known_set_list_iterator((PICC_KnownSetListIterator*) it);
     }else{
-	return (PICC_KnownSetIterator) PICC_delete_known_set_tree_iterator((KnownSetTreeIterator) s);
+	return (PICC_KnownSetIterator*) PICC_delete_known_set_tree_iterator((PICC_KnownSetTreeIterator*) it);
     }
 }
 
 GEN_VALUE PICC_known_set_next(PICC_KnownSetIterator *it)
 {
-    if( it->set->set_type == LIST ){
-	return PICC_known_set_list_iterator_next((PICC_KnownSetListIterator) it);
+    if( it->set->type == LIST ){
+	return PICC_known_set_list_iterator_next((PICC_KnownSetListIterator*) it);
     }else{
-	return PICC_known_set_tree_iterator_next((PICC_KnownSetTreeIterator) it);
+        return PICC_known_set_tree_iterator_next((PICC_KnownSetTreeIterator*) it, false);
     }
 }
 
 bool PICC_known_set_has_next(PICC_KnownSetIterator *it)
 {
-    if( it->set->set_type == LIST ){
-	return PICC_known_set_list_iterator_has_next((PICC_KnownSetListIterator) it);
+    if( it->set->type == LIST ){
+	return PICC_known_set_list_iterator_has_next((PICC_KnownSetListIterator*) it);
     }else{
-	return PICC_known_set_tree_iterator_has_next((PICC_KnownSetTreeIterator) it);
+	return PICC_known_set_tree_iterator_has_next((PICC_KnownSetTreeIterator*) it);
     }
 }
 
@@ -347,10 +356,10 @@ bool PICC_known_set_has_next(PICC_KnownSetIterator *it)
 
 PICC_KnownSetTreeIterator *PICC_create_known_set_tree_iterator(PICC_KnownSetTree *s)
 {
-    PICC_KnownSetTreeIterator it = malloc(sizeof(PICC_KnownSetTreeIterator));
+    PICC_KnownSetTreeIterator* it = malloc(sizeof(PICC_KnownSetTreeIterator));
     it->set=s;
 
-    PICC_Tree n = s->tree;
+    PICC_Tree* n = s->tree;
     while(n->left != NULL)
     n = n->left;
 
@@ -381,6 +390,7 @@ GEN_VALUE PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool 
                 if(it->current->right == NULL)
                 {
                     it->previous = it->current;
+                    it->current = it->current->father;
                     return PICC_known_set_tree_iterator_next(it->current->father, true);
                 }
                 else
@@ -400,6 +410,7 @@ GEN_VALUE PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool 
             if(it->current->right == NULL)
             {
                 it->previous = it->current;
+                it->current = it->current->father;
                 return PICC_known_set_tree_iterator_next(it->current->father, true);
             }
             else
@@ -409,6 +420,7 @@ GEN_VALUE PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool 
                     if(it->current->father != NULL)
                     {
                         it->previous = it->current;
+                        it->current = it->current->father;
                         return PICC_known_set_tree_iterator_next(it->current->father, true);
                     }
                     else
@@ -426,7 +438,7 @@ GEN_VALUE PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool 
     }
 }
 
-bool PICC_known_set_tree_iterator_has_next(PICC_KnownSetListIterator *it)
+bool PICC_known_set_tree_iterator_has_next(PICC_KnownSetTreeIterator *it)
 {
     return it->next != NULL;
 }
@@ -434,7 +446,7 @@ bool PICC_known_set_tree_iterator_has_next(PICC_KnownSetListIterator *it)
 
 // List structure //////////////////////////////////////////////////////////////
 
-PICC_KnownSetListIterator *PICC_create_known_set_list_iterator(KnownSetList *s)
+PICC_KnownSetListIterator *PICC_create_known_set_list_iterator(KnownSetListIterator *s)
 {
     PICC_KnownSetListIterator it = malloc(sizeof(PICC_KnownSetListIterator));
     it->set=s;
