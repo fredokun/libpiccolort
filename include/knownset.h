@@ -13,6 +13,8 @@
 #include <stdbool.h>
 #include <error.h>
 
+#define PICC_MAX_LIST 10
+
 enum
 {
     TREE,
@@ -30,7 +32,7 @@ typedef struct _KnownSetTreeIterator PICC_KnownSetTreeIterator;
 typedef struct _KnownSetListIterator PICC_KnownSetListIterator;
 
 
-extern PICC_KnownSet *PICC_create_empty_knowns_set();
+extern PICC_KnownSet *PICC_create_empty_known_set();
 extern PICC_KnownSet *PICC_create_known_set(int size, PICC_Error* error);
 
 extern bool PICC_known_set_add(PICC_KnownSet *s, GEN_VALUE elem);
