@@ -22,6 +22,7 @@ typedef struct _PICC_Value PICC_Value ;
 
 PICC_Value* PICC_free_value(PICC_Value *v);
 bool PICC_copy_value(PICC_Value *to, PICC_Value *from);
+int compare_values(PICC_Value * value1, PICC_Value * value2);
 
 /******************************
  * Immediate values : No value *
