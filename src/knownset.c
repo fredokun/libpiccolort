@@ -12,6 +12,52 @@
 #include <tools.h>
 #include <errors.h>
 
+bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE elem)
+{
+    PICC_KnownSetTree* ss = (PICC_KnownSetTree*) s;
+    int res;
+
+    while(ss != NULL)
+    {
+        res = PICC_equals(ss->tree->val, elem);
+
+        if(res == 0)
+            return false;
+
+        if(res > 0)
+        {
+            if(ss->tree->right != NULL)
+                ss->tree = ss->tree->right;
+            else
+            {
+                ss->tree->right = malloc(sizeof(PICC_KnownSetTree));
+                ss->tree->right->val = elem;
+            }
+        }
+        if(res < 0)
+        {
+            if(ss->tree->left != NULL)
+                ss->tree = ss->tree->left;
+            else
+            {
+                ss->tree->left = malloc(sizeof(PICC_KnownSetTree));
+                ss->tree->left->val = elem;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE elem)
+{
+    PICC_KnownSetList* ss = (PICC_KnownSetList*) s;
+    ss->size++;
+    ss->liste[ss->size] = elem;
+
+    return true;
+}
+
 /**
  * Add a commit to a set
  *
@@ -23,54 +69,48 @@ bool PICC_known_set_add(PICC_KnownSet *s, GEN_VALUE elem)
     if(s->type == TREE)
         return PICC_known_set_add_tree(s, elem);
     else
-        return PICC_known_set_add_list(e, elem);
+        return PICC_known_set_add_list(s, elem);
 }
 
-bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE elem)
+bool PICC_known_set_mem_tree(PICC_KnownSet *ss, GEN_VALUE elem)
 {
-    PICC_KnownsetTree ss = (PICC_KnownsetTree) s;
-    int res;
+    PICC_KnownSetTree* s = (PICC_KnownSetTree*) ss;
 
-    while(ss != NULL)
+    bool res = PICC_equals(s->tree->val, elem);
+
+    if(res)
+        return res;
+    else
     {
-        res = PICC_equals(ss->elem, elem);
-
-        if(res == 0)
-            return false;
-
-        if(res > 0)
+        if(s->tree->left != NULL)
         {
-            if(ss->right != NULL)
-                ss = ss->right;
-            else
-            {
-                ss->right = malloc(sizeof(PICC_KnownsetTree));
-                ss->right->val = elem;
-            }
+            res |= PICC_known_set_mem_tree((PICC_KnownSet*)s->tree->left, elem);
         }
-        if(res < 0)
+
+        if(s->tree->right != NULL)
         {
-            if(ss->left != NULL)
-                ss = ss->left;
-            else
-            {
-                ss->left = malloc(sizeof(PICC_KnownsetTree));
-                ss->left->val = elem;
-            }
+            res |= PICC_known_set_mem_tree((PICC_KnownSet*)s->tree->right, elem);
         }
+
+        return res;
+
+    }
+}
+
+bool PICC_known_set_mem_list(PICC_KnownSet *ss, GEN_VALUE elem)
+{
+    PICC_KnownSetList* s = (PICC_KnownSetList*) ss;
+    int i;
+
+    for(i=0 ; i<s->size ; i++)
+    {
+        if(PICC_equals(s->liste[i], elem))
+            return true;
     }
 
-    return true;
+    return false;
 }
 
-bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE elem)
-{
-    PICC_KnownsetList ss = (PICC_KnownsetList) s;
-    ss->size++;
-    ss->liste[size] = elem;
-
-    return true;
-}
 
 /**
  *  Checks if an element belongs to a knownset.
@@ -87,38 +127,32 @@ bool PICC_known_set_mem(PICC_KnownSet *s, GEN_VALUE elem)
         return PICC_known_set_mem_list(s, elem);
 }
 
-bool PICC_known_set_mem_tree(PICC_KnownSet *s, GEN_VALUE elem)
+int PICC_known_set_size_tree(PICC_KnownSet *ss)
 {
-    bool res = PICC_equals(s->val, elem);
+    PICC_KnownSetTree* s = (PICC_KnownSetTree*) ss;
+    int size = 0;
 
-    if(res)
-        return res;
-    else
+    if(s->tree->left != NULL)
     {
-        if(s->left != NULL)
-        {
-            res |= PICC_known_set_mem_tree(s->left, elem);
-        }
-
-        if(s->right != NULL)
-        {
-            res |= PICC_known_set_mem_tree(s->right, elem);
-        }
-
-        return res;
-
+        size += 1 + PICC_known_set_size_tree((PICC_KnownSet*)s->tree->left);
     }
+    if(s->tree->right != NULL)
+    {
+        size += 1 + PICC_known_set_size_tree((PICC_KnownSet*)s->tree->right);
+    }
+
+    return size;
 }
 
-bool PICC_known_set_mem_list(PICC_Knownset *s, GEN_VALUE elem)
+int PICC_known_set_size_list(PICC_KnownSet *ss)
 {
-    int i;
+    PICC_KnownSetList* s = (PICC_KnownSetList*) ss;
+    int size = 0;
 
-    for(i=0 ; i<s->size ; i++)
-        if(PICC_equals(s->liste[i], elem);)
-            return true;
+    while(s->liste[size] != NULL)
+        size++;
 
-    return false;
+    return size;
 }
 
 int PICC_known_set_size(PICC_KnownSet *s)
@@ -127,32 +161,6 @@ int PICC_known_set_size(PICC_KnownSet *s)
         return PICC_known_set_size_tree(s);
     else
         return PICC_known_set_size_list(s);
-}
-
-int PICC_known_set_size_tree(PICC_KnownSet *s)
-{
-    int size = 0;
-
-    if(s->left != NULL)
-    {
-        size += 1 + PICC_known_set_size_tree(s->left);
-    }
-    if(s->right != NULL)
-    {
-        size += 1 + PICC_known_set_size_tree(s->right);
-    }
-
-    return size;
-}
-
-int PICC_known_set_size_list(PICC_KnownSet *s)
-{
-    int size = 0;
-
-    while(s[size] != NULL)
-        size++;
-
-    return size;
 }
 
 /**
