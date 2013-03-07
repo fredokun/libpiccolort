@@ -20,37 +20,56 @@
  */
 bool PICC_known_set_add(PICC_KnownSet *s, GEN_VALUE elem)
 {
-    int type = s->type;
-    char c;
-    switch(type)
-    {
-        case TREE:
-        PICC_KnownsetTree ss = (PICC_KnownsetTree s);
-        int res;
+    if(s->type == TREE)
+        return PICC_known_set_add_tree(s, elem);
+    else
+        return PICC_known_set_add_list(e, elem);
+}
 
-        while(ss->elem != NULL)
+bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE elem)
+{
+    PICC_KnownsetTree ss = (PICC_KnownsetTree) s;
+    int res;
+
+    while(ss != NULL)
+    {
+        res = PICC_equals(ss->elem, elem);
+
+        if(res == 0)
+            return false;
+
+        if(res > 0)
         {
-            res = PICC_compare_value(ss->elem, elem);
-            if(res >= 0)
-            {
-                ss->left = malloc(sizeof(PICC_KnownsetTree));
-                ss = ss->left;
-            }
-            if(res < 0)
+            if(ss->right != NULL)
+                ss = ss->right;
+            else
             {
                 ss->right = malloc(sizeof(PICC_KnownsetTree));
-                ss = ss->right;
+                ss->right->val = elem;
             }
         }
-        ss->val = elem;
-        break;
-
-        case LIST:
-        PICC_KnownsetList ss = (PICC_KnownsetList) s;
-        ss->size++;
-        ss->liste[size] = elem;
-        break;
+        if(res < 0)
+        {
+            if(ss->left != NULL)
+                ss = ss->left;
+            else
+            {
+                ss->left = malloc(sizeof(PICC_KnownsetTree));
+                ss->left->val = elem;
+            }
+        }
     }
+
+    return true;
+}
+
+bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE elem)
+{
+    PICC_KnownsetList ss = (PICC_KnownsetList) s;
+    ss->size++;
+    ss->liste[size] = elem;
+
+    return true;
 }
 
 /**
@@ -143,82 +162,80 @@ int PICC_known_set_size_list(PICC_KnownSet *s)
  * @param s2 Commit
  * @return res true if s is equal to s2
  */
-bool PICC_compare_knownset(PICC_Knownset *s, PICC_Knownset s2)
+bool PICC_known_set_compare(PICC_Knownset *s, PICC_Knownset s2)
+{
+    if(s->type != s2->type)
+        return false;
+
+    if(s->type == TREE)
+        return PICC_known_set_compare_tree(s, s2);
+    else
+        return PICC_known_set_compare_list(s, s2);
+}
+
+bool PICC_known_set_compare_tree(PICC_KnownSet *s, PICC_KnownSet *s2)
 {
     bool res = false;
+    PICC_KnownsetTree ss = (PICC_KnownsetTree) s;
+    PICC_KnownsetTree ss2 = (PICC_KnownsetTree) s2;
 
-    if(s->type != s2->type)
-        return res;
-
-    int type = s->type;
-
-    switch(type)
+    res = PICC_equals(ss->elem, ss2->elem);
+    if(!res)
+        return false;
+    else
     {
-        case TREE:
-        PICC_KnownsetTree ss = (PICC_KnownsetTree) s;
-        PICC_KnownsetTree ss2 = (PICC_KnownsetTree) s2;
-
-        while(ss->elem != NULL)
-        {
-            res = PICC_compare_value(ss->elem, elem);
-            if(res >= 0)
-            {
-                ss->left = malloc(sizeof(PICC_KnownsetTree));
-                ss = ss->left;
-            }
-            if(res < 0)
-            {
-                ss->right = malloc(sizeof(PICC_KnownsetTree));
-                ss = ss->right;
-            }
-        }
-
-        break;
-
-        case LIST:
-        PICC_KnownsetList ss = (PICC_KnownsetList) s;
-        PICC_KnownsetList ss2 = (PICC_KnownsetList) s2;
-
-        res &= ss->size != ss2->size
-
-        int i;
-        for(i=0 ; i<s->size ; i++)
-            res &= (PICC_equals(ss[i], ss2[i]));
-
-        break;
+        if(ss->left != NULL)
+            res &= PICC_known_set_compare(ss->left, ss2->left);
+        if(ss->right != NULL)
+            res &= PICC_known_set_compare(ss->right, ss2->right);
+        
+        return res;
     }
+}
+
+bool PICC_known_set_compare_list(PICC_KnownSet *s, PICC_KnownSet *s2)
+{
+    bool res = false;
+    int i;
+    PICC_KnownsetList ss = (PICC_KnownsetList) s;
+    PICC_KnownsetList ss2 = (PICC_KnownsetList) s2;
+
+    res &= ss->size != ss2->size;
+
+    for(i=0 ; i<s->size ; i++)
+        res &= (PICC_equals(ss[i], ss2[i]));
 
     return res;
 }
 
-bool PICC_equals(GEN_VALUE v, GEN_VALUE v2)
+int PICC_equals(GEN_VALUE v, GEN_VALUE v2)
 {
-    bool res = false;
+    int res = 0;
 
-    if(v->kind == v2->kind)
+    if(v->kind != v2->kind)
         return res;
 
     switch(v->kind)
     {
         case PICC_INT_VAL:
-        res = v == v2;
-        break;
+            res = (v == v2)?1:0;
+            break;
 
         case PICC_FLOAT_VAL:
-        res = v == v2;
-        break;
+            res = (v == v2)?1:0;
+            break;
 
         case PICC_STRING_VAL:
-        res = (strcmp(v, v2)?false:true);
-        break;
+            res = strcmp(v, v2);
+            break;
 
         case PICC_BOOL_VAL:
-        res = v == v2;
-        break;
+            res = (v == v2)?1:0;
+            break;
 
         case PICC_CHANNEL_VAL:
-        res = PICC_compare_channel(v, v2);
-        break;
+            res = PICC_compare_channel(v, v2);
+            break;
     }
 }
 
@@ -355,29 +372,49 @@ GEN_VALUE PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool 
             {
                 if(it->current->right == NULL)
                 {
+                    it->previous = it->current;
                     return PICC_known_set_tree_iterator_next(it->current->father, true);
                 }
                 else
                 {
-                    return it->current->right;
+                    it->previous = it->current;
+                    it->current = it->current->right;
                 }
             }
             else
             {
-                return it->current->left;
+                it->previous = it->current;
+                it->current = it->current->left;
             }
         }
         else
         {
             if(it->current->right == NULL)
             {
+                it->previous = it->current;
                 return PICC_known_set_tree_iterator_next(it->current->father, true);
             }
             else
             {
-                return it->current->right;
+                if(PICC_equals(it->previous->val, it->current->right->val))
+                {
+                    if(it->current->father != NULL)
+                    {
+                        it->previous = it->current;
+                        return PICC_known_set_tree_iterator_next(it->current->father, true);
+                    }
+                    else
+                        return NULL;
+                }
+                else
+                {
+                    it->previous = it->current;
+                    it->current = it->current->right;
+                }
             }
         }
+
+        return it->current;
     }
 }
 

@@ -50,6 +50,7 @@ struct _KnownSetIterator
 struct _KnownSetTreeIterator
 {
     PICC_KnownSetTree *set;
+    PICC_Tree *previous;
     PICC_Tree *current;
     PICC_Tree *next;
 };
