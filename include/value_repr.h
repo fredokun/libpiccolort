@@ -42,7 +42,7 @@ typedef enum { TAG_RESERVED               =0x00,
 
 #define GET_VALUE_CTRL(header) ((header) & VALUE_CTRL_MASK)
 
-#define MAKE_HEADER(tag,ctrl) ((unsigned int) (((tag) << (VALUE_WORD_SIZE - 8)) | ((ctrl) & VALUE_CTRL_MASK)))
+#define MAKE_HEADER(tag,ctrl) ((unsigned int) (((tag) << (WORD_SIZE - 8)) | ((ctrl) & VALUE_CTRL_MASK)))
 
 
 #define IS_NOVALUE(value) ((value->header) == TAG_NOVALUE)
