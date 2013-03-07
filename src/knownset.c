@@ -19,7 +19,7 @@ bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE elem)
 
     while(ss != NULL)
     {
-        res = PICC_equals(ss->tree->val, elem);
+        res = compare_values(ss->tree->val, elem);
 
         if(res == 0)
             return false;
@@ -76,7 +76,7 @@ bool PICC_known_set_mem_tree(PICC_KnownSet *ss, GEN_VALUE elem)
 {
     PICC_KnownSetTree* s = (PICC_KnownSetTree*) ss;
 
-    bool res = PICC_equals(s->tree->val, elem);
+    bool res = compare_values(s->tree->val, elem);
 
     if(res)
         return res;
@@ -104,7 +104,7 @@ bool PICC_known_set_mem_list(PICC_KnownSet *ss, GEN_VALUE elem)
 
     for(i=0 ; i<s->size ; i++)
     {
-        if(PICC_equals(s->liste[i], elem))
+        if(compare_values(s->liste[i], elem))
             return true;
     }
 
@@ -169,7 +169,7 @@ bool PICC_known_set_compare_tree(PICC_KnownSet *s, PICC_KnownSet *s2)
     PICC_KnownSetTree* ss = (PICC_KnownSetTree*) s;
     PICC_KnownSetTree* ss2 = (PICC_KnownSetTree*) s2;
 
-    res = PICC_equals(ss->tree->val, ss2->tree->val);
+    res = compare_values(ss->tree->val, ss2->tree->val);
     if(!res)
         return false;
     else
@@ -193,7 +193,7 @@ bool PICC_known_set_compare_list(PICC_KnownSet *s, PICC_KnownSet *s2)
     res &= ss->size != ss2->size;
 
     for(i=0 ; i<ss->size ; i++)
-        res &= (PICC_equals(ss->liste[i], ss2->liste[i]));
+        res &= (compare_values(ss->liste[i], ss2->liste[i]));
 
     return res;
 }
@@ -214,46 +214,6 @@ bool PICC_known_set_compare(PICC_KnownSet *s, PICC_KnownSet *s2)
         return PICC_known_set_compare_tree(s, s2);
     else
         return PICC_known_set_compare_list(s, s2);
-}
-
-int PICC_equals(GEN_VALUE vv, GEN_VALUE vv2)
-{
-    // ******** DO NOT DELETE THIS CODE ! ***********
-
-    /* PICC_Value* v = (PICC_Value*) vv; */
-    /* PICC_Value* v2 = (PICC_Value*) vv2; */
-
-    /* int res = 0; */
-
-    /* if(v->kind != v2->kind) */
-    /*     return res; */
-
-    /* switch(v->kind) */
-    /* { */
-    /*     case PICC_INT_VAL: */
-    /*         res = (v == v2)?1:0; */
-    /*         break; */
-
-    /*     case PICC_FLOAT_VAL: */
-    /*         res = (v == v2)?1:0; */
-    /*         break; */
-
-    /*     case PICC_STRING_VAL: */
-    /*         res = strcmp(v, v2); */
-    /*         break; */
-
-    /*     case PICC_BOOL_VAL: */
-    /*         res = (v == v2)?1:0; */
-    /*         break; */
-
-    /*     case PICC_CHANNEL_VAL: */
-    /*         res = PICC_compare_channel(v, v2); */
-    /*         break; */
-    /* } */
-
-    //**********************************************
-
-    return 1;
 }
 
 /* bool PICC_compare_tree(PICC_KnownSetTree *node, PICC_KnownSetTree *node2, (bool)(*f)(GEN_VALUE, GEN_VALUE)) */
@@ -415,7 +375,7 @@ GEN_VALUE PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool 
             }
             else
             {
-                if(PICC_equals(it->previous->val, it->current->right->val))
+                if(compare_values(it->previous->val, it->current->right->val))
                 {
                     if(it->current->father != NULL)
                     {
