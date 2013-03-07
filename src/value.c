@@ -854,8 +854,6 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
 }
 
 
-
-
 /**** Example of dispatch function *****/
 
 void print_value_infos(PICC_Value * value)

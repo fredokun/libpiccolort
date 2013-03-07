@@ -37,7 +37,7 @@ TestPingPong_Main_begin:
             printf("\tTestPingPong_Main action label 0\n");
             int nbdisabled;
             nbdisabled = 0;
-            PICC_KnownSet *chans = PICC_create_empty_knowns_set();
+            PICC_KnownSet *chans = PICC_create_empty_known_set();
             pt->val = (PICC_Value *)PICC_create_bool_value(true);
             pt->enabled[0] = pt->val;
             if ( pt->enabled[0] ){
@@ -80,7 +80,7 @@ TestPingPong_Main_begin:
             printf("\tTestPingPong_Main action label 1\n");
             int nbdisabled;
             nbdisabled = 0;
-            PICC_KnownSet *chans = PICC_create_empty_knowns_set();
+            PICC_KnownSet *chans = PICC_create_empty_known_set();
             pt->val = (PICC_Value *)PICC_create_bool_value(true);
             pt->enabled[0] = pt->val;
             if ( pt->enabled[0] ){
@@ -123,7 +123,7 @@ TestPingPong_Main_begin:
             printf("\tTestPingPong_Main action label 2\n");
             int nbdisabled;
             nbdisabled = 0;
-            PICC_KnownSet *chans = PICC_create_empty_knowns_set();
+            PICC_KnownSet *chans = PICC_create_empty_known_set();
             pt->val = (PICC_Value *)PICC_create_bool_value(true);
             pt->enabled[0] = pt->val;
             if ( pt->enabled[0] ){
@@ -177,7 +177,7 @@ TestPingPong_PingPong_begin:
             printf("\tTestPingPong_PingPong action label 0\n");
             int nbdisabled;
             nbdisabled = 0;
-            PICC_KnownSet *chans = PICC_create_empty_knowns_set();
+            PICC_KnownSet *chans = PICC_create_empty_known_set();
             pt->val = (PICC_Value *)PICC_create_bool_value(true);
             pt->enabled[0] = pt->val;
             if ( pt->enabled[0] ){
@@ -223,7 +223,7 @@ TestPingPong_PingPong_begin:
             printf("\tTestPingPong_PingPong action label 2\n");
             int nbdisabled;
             nbdisabled = 0;
-            PICC_KnownSet *chans = PICC_create_empty_knowns_set();
+            PICC_KnownSet *chans = PICC_create_empty_known_set();
             pt->val = (PICC_Value *)PICC_create_bool_value(true);
             pt->enabled[0] = pt->val;
             if ( pt->enabled[0] ){
