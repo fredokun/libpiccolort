@@ -51,6 +51,10 @@ PICC_Value* PICC_free_value(PICC_Value *v)
     }
 }
 
+bool PICC_copy_value(PICC_Value *to, PICC_Value *from) {
+    return false;
+}
+
 /******************************
  * Immediate values : No value *
  ******************************/
