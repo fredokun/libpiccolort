@@ -79,11 +79,11 @@ bool PICC_bool_of_bool_value(PICC_Value *val)
     #ifdef CONTRACT_PRE_INV
         PICC_BoolValue_inv((PICC_BoolValue*) val);
     #endif
-    
+
 
     #ifdef CONTRACT_PRE
         ASSERT(IS_BOOLEAN(val));
-        
+
     #endif
 
     return (PICC_BoolValue*) val == &picc_true;
@@ -105,7 +105,7 @@ void PICC_Bool_and( PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
 {
     PICC_BoolValue * bv1= (PICC_BoolValue*) v1;
     PICC_BoolValue * bv2= (PICC_BoolValue*) v2;
-    
+
     #ifdef CONTRACT_PRE_INV
         PICC_BoolValue_inv(bv1);
         PICC_BoolValue_inv(bv2);
@@ -472,14 +472,9 @@ PICC_StringHandle *PICC_free_string_handle(PICC_StringHandle *handle)
 {
 
     PICC_AtomicInt *at_int=handle->refcount;
+    PICC_atomic_int_decrement(at_int);
 
-    int i;
-    do {
-    	i = PICC_atomic_int_get(at_int);
-    } while(! PICC_atomic_int_compare_and_swap_check(at_int, i, i - 1));
-
-
-    if ((i - 1) == 0) { //!\ same test in copy, if = 0 -> failure
+    if (at_int == 0) { //!\ same test in copy, if = 0 -> failure
     	free(handle->data);
     	PICC_free_atomic_int(handle->refcount);
     	free(handle);
@@ -542,14 +537,15 @@ bool PICC_copy_string(PICC_Value *to, PICC_StringValue* from){
         PICC_StringValue_inv(from);
     #endif
     PICC_AtomicInt *at_int=from->handle->refcount;
+    PICC_atomic_int_get_and_increment(at_int);
     int i;
     do {
     	i = PICC_atomic_int_get(at_int);
-    	if(i == 0){
+    	if (i == 0) {
     	    return false;
     	}
-    } while(! PICC_atomic_int_compare_and_swap_check(at_int, i, i+1));
-    
+    } while(!PICC_atomic_int_compare_and_swap_check(at_int, i, i+1));
+
     PICC_StringValue* strto = (PICC_StringValue*) to;
 
     if (IS_STRING(to)) {
@@ -808,10 +804,10 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
 {
     PICC_TagValue tag1 = GET_VALUE_TAG(value1->header);
     int ctrl1 = GET_VALUE_CTRL(value1->header);
-    
+
     PICC_TagValue tag2 = GET_VALUE_TAG(value2->header);
     int ctrl2 = GET_VALUE_CTRL(value2->header);
-    
+
     if(tag1 != tag2){
         return -1;
     }
@@ -871,7 +867,7 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
             if(ctrl1 == 0){
                 return 0;
             }
-            
+
             for(int i=0;i<ctrl1;i++) {
                 int res = compare_values(tup1->elements[i], tup2->elements[i]) ;
                 if(res != 0){
@@ -902,7 +898,7 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
         default:
             break;
     }
-    
+
     return -1;
 }
 
@@ -955,7 +951,7 @@ bool PICC_copy_value(PICC_Value *to, PICC_Value *from) {
             to = (PICC_Value*) &picc_novalue;
             return true;
         case TAG_BOOLEAN:
-            if(GET_VALUE_CTRL(from->header)) 
+            if(GET_VALUE_CTRL(from->header))
                 to = (PICC_Value*) &picc_true;
             else
                 to = (PICC_Value*) &picc_false;
