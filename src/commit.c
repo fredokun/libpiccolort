@@ -404,20 +404,20 @@ void PICC_commit_list_remove(PICC_CommitList* clist, PICC_Commit *c){
 	PICC_CommitListElement* commitEl = clist->head;
 	PICC_CommitListElement* prev = clist->head;
 	while(commitEl){
-		if(commitEL->commit == c){
-			if(commitEL == prev){
-				clist->head = commitEL->next;
+		if(commitEl->commit == c){
+			if(commitEl == prev){
+				clist->head = commitEl->next;
 			} else {
-				prev->next = commitEL->next;
+				prev->next = commitEl->next;
 			}
-			if(clist->tail == commitEL){
+			if(clist->tail == commitEl){
 				clist->tail = prev;
 			}
-			free(commitEL);
+			free(commitEl);
 			break;
 		}
-		prev = commitEL;
-		commitEL = prev->next;
+		prev = commitEl;
+		commitEl = prev->next;
 	}
 }
 

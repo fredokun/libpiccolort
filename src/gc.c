@@ -12,10 +12,12 @@
 #include <queue_repr.h>
 #include <concurrent.h>
 #include <channel.h>
+#include <pi_thread_repr.h>
+#include <commit_repr.h>
 
 bool PICC_GC2(PICC_SchedPool* sched)
 {
-    PICC_KnownSet* clique[1000];
+    PICC_PiThread* clique[1000];
     int clique_size = 0;
     PICC_PiThread* candidate = PICC_wait_queue_pop_old(sched->wait);
     
@@ -25,7 +27,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
         return false;
     }
     
-    PICC_KnownSet* candidates[1000];
+    PICC_PiThread* candidates[1000];
     PICC_KnownSet* chans = PICC_create_empty_known_set();
 	candidates[0] = candidate;
     int candidates_size = 1;
@@ -33,9 +35,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
     do
     {
 		// arbitrary choice of a piThread, here the first piThread of candidates				        
-        PICC_KnownSetIterator *it = PICC_create_known_set_iterator(candidates);
-	    candidate = (PICC_PiThread*) PICC_known_set_next(it);
-	    PICC_delete_known_set_iterator(it);
+	    candidate = candidates[0];
 	    	    
 		PICC_Commit* commit = NULL;
 		PICC_CommitListElement* commitEl = candidate->commits->head;
@@ -50,9 +50,9 @@ bool PICC_GC2(PICC_SchedPool* sched)
 			} else {
 				continue;
 			}
-			PICC_Commit incommit = NULL;
+			PICC_Commit *incommit = NULL;
 			do{
-				incommit = PICC_fetch_input_commitment(chan->incommits);
+				incommit = PICC_fetch_input_commitment(chan);
 				if(PICC_is_valid_commit(incommit)){
 					if(!(PICC_try_acquire(incommit->thread->lock))){
 						PICC_wait_queue_push(sched->wait, incommit->thread);
@@ -81,9 +81,9 @@ bool PICC_GC2(PICC_SchedPool* sched)
 				
 			} while(incommit);
 			
-			PICC_Commit outcommit = NULL;
+			PICC_Commit *outcommit = NULL;
 			do{
-				outcommit = PICC_fetch_output_commitment(chan->outcommits);
+				outcommit = PICC_fetch_output_commitment(chan);
 				if(PICC_is_valid_commit(outcommit)){
 					if(outcommit->thread->status != PICC_STATUS_WAIT){
 						goto abandon_gc;
@@ -129,7 +129,6 @@ bool PICC_GC2(PICC_SchedPool* sched)
 			}
 		}
 		if(can_add){
-			refs++;
 			clique[clique_size] = candidate;
 			clique_size++;
 		}

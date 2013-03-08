@@ -97,7 +97,7 @@ struct _PICC_PiThread {
                                 spec */
     int fuel; /** Number of iterations of the pi-thread execution after
                 wich it goes to the end of the ready queue */
-    PICC_Lock lock; /** The lock of the pi-thread. TODO see spec */
+    PICC_Lock *lock; /** The lock of the pi-thread. TODO see spec */
     /**@}*/
 };
 

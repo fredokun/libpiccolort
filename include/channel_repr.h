@@ -22,10 +22,10 @@
 #define DEFAULT_CHANNEL_COMMIT_SIZE 10
 
 #define LOCK_CHANNEL(c) \
-    PICC_acquire(&(c->lock));
+    PICC_acquire((c->lock));
 
 #define RELEASE_CHANNEL(c) \
-    PICC_release(&(c->lock));
+    PICC_release((c->lock));
 
 
 
@@ -39,7 +39,7 @@ struct _PICC_Channel {
     int global_rc; /** The number of commitments to that reference
 
                     this channel (TODO see spec)*/
-    PICC_Lock lock; /** This channel lock to protect from concurrent
+    PICC_Lock *lock; /** This channel lock to protect from concurrent
                         accesses*/
     /**@}*/
 };
