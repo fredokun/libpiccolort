@@ -28,7 +28,7 @@ PICC_KnownSet* PICC_create_known_set(int size, PICC_Error* error)
     return (PICC_KnownSet*) s;
 }
 
-bool PICC_known_set_add_tree(PICC_KnownSet *s, PICC_Knowns elem)
+bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE elem)
 {
     PICC_KnownSetTree* ss = (PICC_KnownSetTree*) s;
     int res;
@@ -65,7 +65,7 @@ bool PICC_known_set_add_tree(PICC_KnownSet *s, PICC_Knowns elem)
     return true;
 }
 
-bool PICC_known_set_add_list(PICC_KnownSet *s, PICC_Knowns elem)
+bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE elem)
 {
     PICC_KnownSetList* ss = (PICC_KnownSetList*) s;
     ss->size++;
@@ -92,7 +92,7 @@ bool PICC_known_set_add_list(PICC_KnownSet *s, PICC_Knowns elem)
  * @param s knownset
  * @param elem the value to add to the knownset s
  */
-bool PICC_known_set_add(PICC_KnownSet *s, PICC_Knowns elem)
+bool PICC_known_set_add(PICC_KnownSet *s, GEN_VALUE elem)
 {
     if(s->type == TREE)
         return PICC_known_set_add_tree(s, elem);
@@ -100,7 +100,7 @@ bool PICC_known_set_add(PICC_KnownSet *s, PICC_Knowns elem)
         return PICC_known_set_add_list(s, elem);
 }
 
-bool PICC_known_set_mem_tree(PICC_KnownSet *ss, PICC_Knowns elem)
+bool PICC_known_set_mem_tree(PICC_KnownSet *ss, GEN_VALUE elem)
 {
     PICC_KnownSetTree* s = (PICC_KnownSetTree*) ss;
 
@@ -125,7 +125,7 @@ bool PICC_known_set_mem_tree(PICC_KnownSet *ss, PICC_Knowns elem)
     }
 }
 
-bool PICC_known_set_mem_list(PICC_KnownSet *ss, PICC_Knowns elem)
+bool PICC_known_set_mem_list(PICC_KnownSet *ss, GEN_VALUE elem)
 {
     PICC_KnownSetList* s = (PICC_KnownSetList*) ss;
     int i;
@@ -144,10 +144,10 @@ bool PICC_known_set_mem_list(PICC_KnownSet *ss, PICC_Knowns elem)
  *  Checks if an element belongs to a knownset.
  *
  *  @param s knownset
- *  @param elem PICC_Knowns
+ *  @param elem GEN_VALUE
  *  @return true if elem is in s else return false
  */
-bool PICC_known_set_mem(PICC_KnownSet *s, PICC_Knowns elem)
+bool PICC_known_set_mem(PICC_KnownSet *s, GEN_VALUE elem)
 {
     if(s->type == TREE)
         return PICC_known_set_mem_tree(s, elem);
@@ -244,7 +244,7 @@ bool PICC_known_set_compare(PICC_KnownSet *s, PICC_KnownSet *s2)
         return PICC_known_set_compare_list(s, s2);
 }
 
-/* bool PICC_compare_tree(PICC_KnownSetTree *node, PICC_KnownSetTree *node2, (bool)(*f)(PICC_Knowns, PICC_Knowns)) */
+/* bool PICC_compare_tree(PICC_KnownSetTree *node, PICC_KnownSetTree *node2, (bool)(*f)(GEN_VALUE, GEN_VALUE)) */
 /* { */
 /*     if(!( */
 /*         ((node->right == NULL && node2->right == NULL) || (node->right != NULL && node2->right != NULL)) */
@@ -266,8 +266,8 @@ bool PICC_known_set_compare(PICC_KnownSet *s, PICC_KnownSet *s2)
 /*     ASSERT(s1->set_type == s2->set_type && s1->set_type == PICC_KNOWNS); */
 
 /*     PICC_Set* result = PICC_set_make(PICC_KNOWNS); */
-/*     PICC_KnownsList* current = s1->element.knowns; */
-/*     PICC_KnownsList* current2; */
+/*     GEN_VALUEList* current = s1->element.knowns; */
+/*     GEN_VALUEList* current2; */
 
 /*     for(;;) */
 /*     { */
@@ -293,9 +293,9 @@ bool PICC_known_set_compare(PICC_KnownSet *s, PICC_KnownSet *s2)
 /*     return result; */
 /* } */
 
-/* void PICC_set_iter_knowns(PICC_Set* s, void (*func)(PICC_Knowns* arg)) */
+/* void PICC_set_iter_knowns(PICC_Set* s, void (*func)(GEN_VALUE* arg)) */
 /* { */
-/*     PICC_KnownsList* it = s->element.knowns; */
+/*     GEN_VALUEList* it = s->element.knowns; */
 /*     do */
 /*     { */
 /*         func(it->val); */
@@ -322,7 +322,7 @@ PICC_KnownSetIterator *PICC_delete_known_set_iterator(PICC_KnownSetIterator *it)
     }
 }
 
-PICC_Knowns PICC_known_set_next(PICC_KnownSetIterator *it)
+GEN_VALUE PICC_known_set_next(PICC_KnownSetIterator *it)
 {
     if( it->set->type == LIST ){
 	return PICC_known_set_list_iterator_next((PICC_KnownSetListIterator*) it);
@@ -363,7 +363,7 @@ PICC_KnownSetTreeIterator *PICC_delete_known_set_tree_iterator(PICC_KnownSetTree
 }
 
 
-PICC_Knowns PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool check)
+GEN_VALUE PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool check)
 {
     if(it->current == NULL)
     {
@@ -448,9 +448,9 @@ PICC_KnownSetListIterator *PICC_delete_known_set_list_iterator(PICC_KnownSetList
     return (it = NULL);
 }
 
-PICC_Knowns PICC_known_set_list_iterator_next(PICC_KnownSetListIterator *it)
+GEN_VALUE PICC_known_set_list_iterator_next(PICC_KnownSetListIterator *it)
 {
-    PICC_Knowns ret = it->set->liste[it->next];
+    GEN_VALUE ret = it->set->liste[it->next];
     it->next++;
     return ret;
 }
