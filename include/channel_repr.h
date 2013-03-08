@@ -21,7 +21,6 @@
 
 #define DEFAULT_CHANNEL_COMMIT_SIZE 10
 
-
 #define LOCK_CHANNEL(c) \
     PICC_acquire(&(c->lock));
 
@@ -57,12 +56,12 @@ enum _PICC_KnowsState {
 /**
  * The type of a channel with a known state
  */
-struct _PICC_Knowns {
-    /**@{*/
-    PICC_Channel *channel; /**< a reference to the tracked channel */
-    PICC_KnownsState state; /**< the known state */
-    /**@}*/
-};
+/* struct _PICC_Knowns { */
+/*     /\**@{*\/ */
+/*     PICC_Channel *channel; /\**< a reference to the tracked channel *\/ */
+/*     PICC_KnownsState state; /\**< the known state *\/ */
+/*     /\**@}*\/ */
+/* }; */
 
 /* /\** */
 /*  * The set of known channels */

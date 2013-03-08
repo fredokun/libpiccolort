@@ -30,7 +30,7 @@ typedef enum _PICC_KnowsState PICC_KnownsState;
 /**
  * The type of a channel with a known state
  */
-typedef struct _PICC_Knowns PICC_Knowns;
+/* typedef struct _PICC_Knowns PICC_Knowns; */
 
 extern PICC_Channel *PICC_create_channel();
 extern PICC_Channel *PICC_create_channel_cn(int incommit_size,int outcommit_size);

@@ -21,7 +21,7 @@ struct _Tree
     PICC_Tree *father;
     PICC_Tree *left;
     PICC_Tree *right;
-    PICC_Knowns val;
+    PICC_Knowns* val;
 };
 
 struct _KnownSetTree
