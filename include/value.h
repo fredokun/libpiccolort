@@ -100,6 +100,7 @@ typedef struct _string_handle_t PICC_StringHandle;
 typedef struct _string_value_t PICC_StringValue ;
 
 extern PICC_Value *PICC_create_string_value( char *string );
+extern PICC_StringValue *PICC_create_empty_string_value();
 
 /******************
  * Channel values  *

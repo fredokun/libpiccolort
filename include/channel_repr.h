@@ -56,12 +56,14 @@ enum _PICC_KnowsState {
 /**
  * The type of a channel with a known state
  */
+
 struct _PICC_Knowns {
     /**@{*/
     struct _PICC_Value *val; /**< a reference to the tracked channel */
     PICC_KnownsState state; /**< the known state */
     /**@}*/
 };
+
 
 /* /\** */
 /*  * The set of known channels */
