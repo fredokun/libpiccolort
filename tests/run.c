@@ -33,5 +33,8 @@ int main(int argc, char **argv)
     printf("Run atomic tests...\n");
     PICC_test_atomic();
 
+    printf("Run value tests...\n");
+    PICC_test_value();
+
     return 0;
 }

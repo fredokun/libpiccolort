@@ -45,13 +45,13 @@ typedef enum { TAG_RESERVED               =0x00,
 #define MAKE_HEADER(tag,ctrl) ((unsigned int) (((tag) << (WORD_SIZE - 8)) | ((ctrl) & VALUE_CTRL_MASK)))
 
 
-#define IS_NOVALUE(value) ((value->header) == TAG_NOVALUE)
-#define IS_BOOLEAN(value) ((value->header) == TAG_BOOLEAN)
-#define IS_INT(value)     ((value->header) == TAG_INTEGER)
-#define IS_FLOAT(value)   ((value->header) == TAG_FLOAT)
+#define IS_NOVALUE(value) (GET_VALUE_TAG((value->header)) == TAG_NOVALUE)
+#define IS_BOOLEAN(value) (GET_VALUE_TAG((value->header)) == TAG_BOOLEAN)
+#define IS_INT(value)     (GET_VALUE_TAG((value->header)) == TAG_INTEGER)
+#define IS_FLOAT(value)   (GET_VALUE_TAG((value->header)) == TAG_FLOAT)
 //---
-#define IS_STRING(value)  ((value->header) == TAG_STRING)
-#define IS_CHANNEL(value) ((value->header) == TAG_CHANNEL)
+#define IS_STRING(value)  (GET_VALUE_TAG((value->header)) == TAG_STRING)
+#define IS_CHANNEL(value) (GET_VALUE_TAG((value->header)) == TAG_CHANNEL)
 
 
 
@@ -180,6 +180,8 @@ struct _user_managed_channel_value_t {
 extern PICC_ChannelValue *PICC_create_pi_channel_value();
 extern PICC_ChannelValue *PICC_create_typed_channel_value( PICC_ChannelKind kind );
 extern void PICC_ChannelValue_inv(PICC_ChannelValue *channel);
+
+extern void PICC_print_value_infos(PICC_Value * value);
 
 
 #endif

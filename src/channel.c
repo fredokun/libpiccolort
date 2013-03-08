@@ -164,7 +164,7 @@ PICC_Knowns *PICC_create_knowns(PICC_Channel *channel, PICC_Error *error)
 /* } */
 
 /**
- * Increments the global reference count of a channel.
+ * Increments the global reference count of a channel (the number of commitment referencing the channel).
  *
  * @pre channel != NULL
  *
@@ -205,7 +205,7 @@ void PICC_channel_incr_ref_count(PICC_Channel *channel)
 }
 
 /**
- * Decrements the global reference count of a channel.
+ * Decrements the global reference count of a channel (the number of commitment referencing the channel) .
  *
  * @pre channel != NULL
  *
