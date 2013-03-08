@@ -890,14 +890,12 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
         case TAG_CHANNEL: {
             PICC_Channel *ch1 = PICC_channel_of_channel_value(value1);
             PICC_Channel *ch2 = PICC_channel_of_channel_value(value2);
-            if(ch1->global_rc < ch1->global_rc){
+            if(ch1 == ch2)
+				return 0;
+            if(ch1 > ch2)
                 return -1;
-            }
-            if(ch1->global_rc > ch2->global_rc){
-                return 1;
-            }
-            // ch1->global_rc  equals ch2->global_rc)
-            return 0;
+            else
+                return 1;   
             break;
         }
 

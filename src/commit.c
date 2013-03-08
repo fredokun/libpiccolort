@@ -394,6 +394,34 @@ void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Erro
 }
 
 /**
+ * Adds the given element at the end of the commit list.
+ *
+ *
+ * @param clist Commit list
+ * @param commit Commit to remove
+ */
+void PICC_commit_list_remove(PICC_CommitList* clist, PICC_Commit *c){
+	PICC_CommitListElement* commitEl = clist->head;
+	PICC_CommitListElement* prev = clist->head;
+	while(commitEl){
+		if(commitEL->commit == c){
+			if(commitEL == prev){
+				clist->head = commitEL->next;
+			} else {
+				prev->next = commitEL->next;
+			}
+			if(clist->tail == commitEL){
+				clist->tail = prev;
+			}
+			free(commitEL);
+			break;
+		}
+		prev = commitEL;
+		commitEL = prev->next;
+	}
+}
+
+/**
  * Returns whether a commit list is empty.
  *
  * @pre clist != NULL
