@@ -474,7 +474,7 @@ PICC_StringHandle *PICC_free_string_handle(PICC_StringHandle *handle)
     PICC_AtomicInt *at_int=handle->refcount;
     PICC_atomic_int_decrement(at_int);
 
-    if ((i - 1) == 0) { //!\ same test in copy, if = 0 -> failure
+    if (at_int == 0) { //!\ same test in copy, if = 0 -> failure
     	free(handle->data);
     	PICC_free_atomic_int(handle->refcount);
     	free(handle);
