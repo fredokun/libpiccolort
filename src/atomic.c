@@ -152,25 +152,34 @@ bool PICC_atomic_bool_get(PICC_AtomicBoolean *atomic_bool)
 }
 
 /**
- * Unconditionally sets the atomic boolean value.
+ * Atomically sets the atomic boolean value.
  *
  * @pre atomic_bool != null
  * @post atomic_bool.val == new_val
  * @param atomic_bool Atomic boolean to be set
+ * @param new_val The New value
+ * @return The previous value
  */
-void PICC_atomic_bool_set(PICC_AtomicBoolean *atomic_bool, bool new_val)
+bool PICC_atomic_bool_get_and_set(PICC_AtomicBoolean *atomic_bool, bool new_val)
 {
     #ifdef CONTRACT_PRE
         // pre: atomic_bool != null
         ASSERT(atomic_bool != NULL);
     #endif
 
-    atomic_bool->val = new_val;
+    bool current;
+    for (;;) {
+        current = PICC_atomic_bool_get(atomic_bool);
+        if (PICC_atomic_bool_compare_and_swap_check(atomic_bool, current, new_val))
+            break;
+    }
 
     #ifdef CONTRACT_POST
         // post: atomic_bool.val == new_val
         ASSERT(atomic_bool->val == new_val);
     #endif
+
+    return current;
 }
 
 
@@ -307,23 +316,102 @@ int PICC_atomic_int_get(PICC_AtomicInt *atomic_int)
 }
 
 /**
- * Unconditionally sets the atomic integer value.
+ * Atomically sets the atomic integer value.
  *
  * @pre atomic_int != null
  * @post atomic_int.val == new_val
  * @param atomic_int Atomic integer to be set
+ * @param new_val New value
+ * @return Previous value
  */
-void PICC_atomic_int_set(PICC_AtomicInt *atomic_int, int new_val)
+int PICC_atomic_int_get_and_set(PICC_AtomicInt *atomic_int, int new_val)
 {
     #ifdef CONTRACT_PRE
         // pre: atomic_int != null
         ASSERT(atomic_int != NULL);
     #endif
 
-    atomic_int->val = new_val;
+    int current;
+    for (;;) {
+        current = PICC_atomic_int_get(atomic_int);
+        if (PICC_atomic_int_compare_and_swap_check(atomic_int, current, new_val))
+            break;
+    }
 
     #ifdef CONTRACT_POST
         // post: atomic_int.val == new_val
         ASSERT(atomic_int->val == new_val);
     #endif
+
+    return current;
+}
+
+/**
+ * Atomically increments the atomic integer value.
+ *
+ * @pre atomic_int != null
+ * @post atomic_int.val > atomic_int.val@pre
+ * @param atomic_int Atomic integer to be incremented
+ * @return Previous value
+ */
+int PICC_atomic_int_get_and_increment(PICC_AtomicInt *atomic_int)
+{
+    #ifdef CONTRACT_PRE
+        // pre: atomic_int != null
+        ASSERT(atomic_int != NULL);
+    #endif
+
+    #ifdef CONTRACT_POST
+        // captures
+        int val_at_pre = atomic_int->val;
+    #endif
+
+    int current;
+    for (;;) {
+        current = PICC_atomic_int_get(atomic_int);
+        if (PICC_atomic_int_compare_and_swap_check(atomic_int, current, current + 1))
+            break;
+    }
+
+    #ifdef CONTRACT_POST
+        // post: atomic_int.val > atomic_int.val@pre
+        ASSERT(atomic_int->val > val_at_pre);
+    #endif
+
+    return current;
+}
+
+/**
+ * Atomically decrements the atomic integer value.
+ *
+ * @pre atomic_int != null
+ * @post atomic_int.val < atomic_int.val@pre
+ * @param atomic_int Atomic integer to be decremented
+ * @return Previous value
+ */
+int PICC_atomic_int_get_and_decrement(PICC_AtomicInt *atomic_int)
+{
+    #ifdef CONTRACT_PRE
+        // pre: atomic_int != null
+        ASSERT(atomic_int != NULL);
+    #endif
+
+    #ifdef CONTRACT_POST
+        // captures
+        int val_at_pre = atomic_int->val;
+    #endif
+
+    int current;
+    for (;;) {
+        current = PICC_atomic_int_get(atomic_int);
+        if (PICC_atomic_int_compare_and_swap_check(atomic_int, current, current - 1))
+            break;
+    }
+
+    #ifdef CONTRACT_POST
+        // post: atomic_int.val < atomic_int.val@pre
+        ASSERT(atomic_int->val < val_at_pre);
+    #endif
+
+    return current;
 }
