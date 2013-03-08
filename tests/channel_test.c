@@ -79,9 +79,9 @@ void test_knowsSet(PICC_Error *error)
 
     for (i=0;i<10;i++)
     {
-        knowns = PICC_create_knowns(channel,error);
+        knowns = PICC_create_knowns(PICC_create_channel_value(channel), error);
         ASSERT_NO_ERROR();
-        PICC_known_set_add(set, knowns);
+        PICC_known_set_add(set, knowns->val);
     }
 }
 

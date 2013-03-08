@@ -77,13 +77,13 @@ bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE *elem)
     {
         int i;
         PICC_KnownSetTree* t = malloc(sizeof(PICC_KnownSetTree));
-        for(i=0 ; i<PICC_MAX_LIST ; i++) 
+        for(i=0 ; i<PICC_MAX_LIST ; i++)
             PICC_known_set_add_tree((PICC_KnownSet *)t, ss->liste[i].val);
         PICC_known_set_add_tree((PICC_KnownSet *)t, elem);
         s = (PICC_KnownSet*) t;
     }
     else
-    { 
+    {
         ss->liste[ss->size].val = elem;
         ss->liste[ss->size].state = PICC_KNOWN;
     }
@@ -211,7 +211,7 @@ bool PICC_known_set_compare_tree(PICC_KnownSet *s, PICC_KnownSet *s2)
             res &= PICC_known_set_compare_tree((PICC_KnownSet*)ss->tree->left, (PICC_KnownSet*)ss2->tree->left);
         if(ss->tree->right != NULL)
             res &= PICC_known_set_compare_tree((PICC_KnownSet*)ss->tree->right, (PICC_KnownSet*)ss2->tree->right);
-        
+
         return res;
     }
 }
@@ -557,7 +557,7 @@ PICC_KnownSet *PICC_knowns_set_search(PICC_KnownSet *ks, PICC_KnownsState state)
         ASSERT(result != NULL);
         ASSERT(PICC_known_set_size(result) == count);
 
-        /* for(i=0;i<count;i++) */
+           for(i=0;i<count;i++) */
         /* { */
         /*     ASSERT(result->knowns[i]->state == state ); */
         /* } */
@@ -738,7 +738,7 @@ void PICC_Knowns_inv(PICC_Knowns *knowns)
  *
  * @inv knownsSet->size > -1
  */
-void PICC_KnownsSet_inv(PICC_KnownSet *set)
+void PICC_KnownSet_inv(PICC_KnownSet *set)
 {
     ASSERT(PICC_known_set_size(set) > -1);
 }

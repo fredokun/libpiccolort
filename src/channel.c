@@ -64,6 +64,7 @@ PICC_Channel *PICC_create_channel_cn(int incommit_size, int outcommit_size)
     ALLOC_ERROR(error);
     PICC_ALLOC(channel, PICC_Channel, &error) {
         channel->global_rc = 1;
+        channel->lock = PICC_create_lock(&error);
         channel->incommits = malloc(sizeof(PICC_CommitList));
         channel->incommits->size = incommit_size;
         channel->outcommits = malloc(sizeof(PICC_CommitList));

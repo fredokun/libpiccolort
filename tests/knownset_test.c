@@ -44,7 +44,7 @@ GEN_VALUE PICC_known_set_list_iterator_next(PICC_KnownSetListIterator *it);
 bool PICC_known_set_list_iterator_has_next(PICC_KnownSetListIterator *it);
 */
 
-void test_creation(PICC_Error *error)
+void test_knownset_creation(PICC_Error *error)
 {
     PICC_KnownSet *ks;
 
@@ -67,7 +67,7 @@ void test_tree(PICC_Error *error)
 void PICC_test_knownset()
 {
     ALLOC_ERROR(error);
-    test_creation(&error);
+    test_knownset_creation(&error);
     test_tree(&error);
 
     if (HAS_ERROR(error))

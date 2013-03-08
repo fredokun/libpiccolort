@@ -9,14 +9,15 @@
  * @author Joël HING
  */
 
-#include <value_repr.h>
-#include <channel_repr.h>
-#include <error.h>
-#include <tools.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#include <value_repr.h>
+#include <channel_repr.h>
+#include <atomic_repr.h>
+#include <error.h>
+#include <tools.h>
 
 
 
@@ -455,7 +456,7 @@ PICC_StringHandle *PICC_create_string_handle(char *string)
 
     PICC_ALLOC_CRASH(val, PICC_StringHandle) {
         val->refcount = PICC_create_atomic_int(0, NULL);
-        PICC_atomic_int_set(val->refcount, 1);
+        PICC_atomic_int_get_and_set(val->refcount, 1);
         val->data = malloc(sizeof(char)*strlen(string) +1);
         strcpy(val->data, string);
     }
@@ -472,7 +473,7 @@ PICC_StringHandle *PICC_free_string_handle(PICC_StringHandle *handle)
 {
 
     PICC_AtomicInt *at_int=handle->refcount;
-    PICC_atomic_int_decrement(at_int);
+    PICC_atomic_int_get_and_decrement(at_int);
 
     if (at_int == 0) { //!\ same test in copy, if = 0 -> failure
     	free(handle->data);
@@ -677,7 +678,7 @@ void PICC_channel_value_acquire(PICC_Value* channel){
     #endif
 
     PICC_Channel *c = (PICC_Channel*) ((PICC_ChannelValue*) channel)->channel;
-    PICC_acquire(&c->lock);
+    PICC_acquire(c->lock);
 }
 
 int PICC_channel_value_global_rc(PICC_Value* channel){
@@ -891,7 +892,7 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
             if(ch1 > ch2)
                 return -1;
             else
-                return 1;   
+                return 1;
             break;
         }
 
