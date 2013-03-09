@@ -16,7 +16,6 @@ INCLUDE=include
 SRC=src
 TESTS=tests
 
-SRCFILES=$(wildcard $(SRC)/*)
 SRCFILES=$(wildcard $(SRC)/*.c)
 TARG1=$(subst .c,.o, $(SRCFILES))
 TESTSFILES=$(wildcard $(TESTS)/*.c)

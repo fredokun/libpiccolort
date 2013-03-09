@@ -115,6 +115,7 @@ extern void PICC_channel_value_acquire(PICC_Value* channel);
 extern int PICC_channel_value_global_rc(PICC_Value* channel);
 //extern void PICC_channel_value_release(PICC_VALUE* channel); // never explicitly released ?
 
+extern void PICC_print_value_infos(PICC_Value * value);
 /**********************************
  * user defined immediate values  *
  **********************************/
