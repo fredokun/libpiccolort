@@ -28,7 +28,7 @@ PICC_KnownSet* PICC_create_known_set(int size, PICC_Error* error)
     return (PICC_KnownSet*) s;
 }
 
-bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem)
+bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownsState state)
 {
     PICC_KnownSetTree* ss = (PICC_KnownSetTree*) s;
     int res;
@@ -48,7 +48,7 @@ bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem)
             {
                 ss->tree->right = malloc(sizeof(PICC_KnownSetTree));
                 ss->tree->right->known_val.val = elem;
-                ss->tree->right->known_val.state = PICC_KNOWN;
+                ss->tree->right->known_val.state = state;
             }
         }
         if(res < 0)
@@ -59,7 +59,7 @@ bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem)
             {
                 ss->tree->left = malloc(sizeof(PICC_KnownSetTree));
                 ss->tree->left->known_val.val = elem;
-                ss->tree->left->known_val.state = PICC_KNOWN;
+                ss->tree->left->known_val.state = state;
             }
         }
     }
@@ -67,7 +67,7 @@ bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem)
     return true;
 }
 
-bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE *elem)
+bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownsState state)
 {
     PICC_KnownSetList* ss = (PICC_KnownSetList*) s;
     ss->size++;
@@ -78,14 +78,14 @@ bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE *elem)
         int i;
         PICC_KnownSetTree* t = malloc(sizeof(PICC_KnownSetTree));
         for(i=0 ; i<PICC_MAX_LIST ; i++)
-            PICC_known_set_add_tree((PICC_KnownSet *)t, ss->liste[i].val);
-        PICC_known_set_add_tree((PICC_KnownSet *)t, elem);
+            PICC_known_set_add_tree((PICC_KnownSet *)t, ss->liste[i].val, state);
+        PICC_known_set_add_tree((PICC_KnownSet *)t, elem, state);
         s = (PICC_KnownSet*) t;
     }
     else
     {
         ss->liste[ss->size].val = elem;
-        ss->liste[ss->size].state = PICC_KNOWN;
+        ss->liste[ss->size].state = state;
     }
 
     return true;
@@ -97,12 +97,17 @@ bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE *elem)
  * @param s knownset
  * @param elem the value to add to the knownset s
  */
-bool PICC_known_set_add(PICC_KnownSet *s, GEN_VALUE *elem)
+ bool PICC_known_set_add(PICC_KnownSet *s, GEN_VALUE *elem)
+{
+    return PICC_known_set_add_with_state(s, elem, PICC_KNOWN);    
+}
+ 
+bool PICC_known_set_add_with_state(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownsState state)
 {
     if(s->type == TREE)
-        return PICC_known_set_add_tree(s, elem);
+        return PICC_known_set_add_tree(s, elem, state);
     else
-        return PICC_known_set_add_list(s, elem);
+        return PICC_known_set_add_list(s, elem, state);
 }
 
 bool PICC_known_set_mem_tree(PICC_KnownSet *ss, GEN_VALUE *elem)
@@ -336,6 +341,24 @@ GEN_VALUE *PICC_known_set_next(PICC_KnownSetIterator *it)
     }
 }
 
+PICC_KnownsState PICC_known_set_iterator_state(PICC_KnownSetIterator *it)
+{
+    if( it->set->type == LIST ){
+        return PICC_known_set_list_iterator_state((PICC_KnownSetListIterator*) it);
+    }else{
+        return PICC_known_set_tree_iterator_state((PICC_KnownSetTreeIterator*) it);
+    }
+}
+
+void PICC_known_set_iterator_state_set(PICC_KnownSetIterator *it, PICC_KnownsState state)
+{
+    if( it->set->type == LIST ){
+        PICC_known_set_list_iterator_state_set((PICC_KnownSetListIterator*) it, state);
+    }else{
+        PICC_known_set_tree_iterator_state_set((PICC_KnownSetTreeIterator*) it, state);
+    }
+}
+
 bool PICC_known_set_has_next(PICC_KnownSetIterator *it)
 {
     if( it->set->type == LIST ){
@@ -431,6 +454,16 @@ GEN_VALUE *PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool
     }
 }
 
+PICC_KnownsState PICC_known_set_tree_iterator_state(PICC_KnownSetTreeIterator *it) 
+{
+    return it->current->known_val.state;
+}
+
+void PICC_known_set_tree_iterator_state_set(PICC_KnownSetTreeIterator *it, PICC_KnownsState state) 
+{
+    it->current->known_val.state = state;
+}
+
 bool PICC_known_set_tree_iterator_has_next(PICC_KnownSetTreeIterator *it)
 {
     return it->next != NULL;
@@ -460,6 +493,16 @@ GEN_VALUE *PICC_known_set_list_iterator_next(PICC_KnownSetListIterator *it)
     return ret;
 }
 
+PICC_KnownsState PICC_known_set_list_iterator_state(PICC_KnownSetListIterator *it) 
+{
+    return it->set->liste[it->next].state;
+}
+
+void PICC_known_set_list_iterator_state_set(PICC_KnownSetListIterator *it, PICC_KnownsState state)
+{
+    it->set->liste[it->next].state = state;
+}
+
 bool PICC_known_set_list_iterator_has_next(PICC_KnownSetListIterator *it)
 {
     return it->next < it->set->size;
@@ -480,14 +523,14 @@ bool PICC_known_set_list_iterator_has_next(PICC_KnownSetListIterator *it)
  */
 PICC_Knowns *PICC_create_knowns(GEN_VALUE *val, PICC_Error *error)
 {
-    /*#ifdef CONTRACT_PRE
+    #ifdef CONTRACT_PRE
         //pre
-        ASSERT(channel != NULL );
+        ASSERT(val != NULL );
     #endif
 
     PICC_ALLOC(knowns, PICC_Knowns, error) {
-        knowns->channel = channel;
-        knowns->state = PICC_UNKNOWN;
+        knowns->val = val;
+        knowns->state = PICC_KNOWN;
     }
 
     #ifdef CONTRACT_POST_INV
@@ -497,10 +540,10 @@ PICC_Knowns *PICC_create_knowns(GEN_VALUE *val, PICC_Error *error)
 
     #ifdef CONTRACT_POST
         //post
-        ASSERT(knowns->state == PICC_UNKNOWN );
-        ASSERT(knowns->channel == channel );
-    #endif*/
-    return NULL;//knowns;
+        ASSERT(knowns->state == PICC_KNOWN );
+        ASSERT(knowns->val == val );
+    #endif
+    return knowns;
 }
 
 // Spec KnownsSet
@@ -518,7 +561,7 @@ PICC_Knowns *PICC_create_knowns(GEN_VALUE *val, PICC_Error *error)
 PICC_KnownSet *PICC_knowns_set_search(PICC_KnownSet *ks, PICC_KnownsState state)
 {
 
-    /*#ifdef CONTRACT_PRE_INV
+    #ifdef CONTRACT_PRE_INV
         //inv
         PICC_KnownSet_inv(ks);
     #endif
@@ -526,23 +569,23 @@ PICC_KnownSet *PICC_knowns_set_search(PICC_KnownSet *ks, PICC_KnownsState state)
     #ifdef CONTRACT_PRE
         //pre
         ASSERT(ks != NULL);
-    #endif*/
+    #endif
 
     int count=0;
 
-    /*PICC_KNOWNSET_FOREACH(PICC_Knowns, known, ks, it);
-        if( known->state == state )
+    PICC_KNOWNSET_ONLY_STATE_FOREACH(GEN_VALUE, current_state, ks, it);
+        if( current_state == state )
         {
             count ++;
         }
-    END_KNOWNSET_FOREACH;*/
+    END_KNOWNSET_FOREACH;
 
     PICC_KnownSet *result = PICC_create_known_set(count, NULL);
 
-    /*PICC_KNOWNSET_FOREACH(PICC_Knowns, known, ks, it);
-        if( known->state == state )
+    PICC_KNOWNSET_STATE_FOREACH(GEN_VALUE, value, current_state, ks, it);
+        if( current_state == state )
         {
-            PICC_known_set_add(result, (void*)known);
+            PICC_known_set_add_with_state(result, value, state);
         }
     END_KNOWNSET_FOREACH;
 
@@ -556,12 +599,7 @@ PICC_KnownSet *PICC_knowns_set_search(PICC_KnownSet *ks, PICC_KnownsState state)
         //post
         ASSERT(result != NULL);
         ASSERT(PICC_known_set_size(result) == count);
-
-           for(i=0;i<count;i++) */
-        /* { */
-        /*     ASSERT(result->knowns[i]->state == state ); */
-        /* } */
-    //#endif
+    #endif
 
     return result;
 }
@@ -598,31 +636,29 @@ PICC_KnownSet *PICC_knowns_set_forget(PICC_KnownSet *ks)
  * @param ks Knows set
  * @param ch Channel to switch state
  */
-void PICC_knowns_set_forget_to_unknown(PICC_KnownSet *ks, GEN_VALUE *val)
+void PICC_knowns_set_forget_to_unknown_gen(PICC_KnownSet *ks, GEN_VALUE *val)
 {
-    /*#ifdef CONTRACT_PRE_INV
+    #ifdef CONTRACT_PRE_INV
         //inv
         PICC_KnownSet_inv(ks);
-        PICC_Channel_inv(ch);
     #endif
 
     #ifdef CONTRACT_PRE
         //pre
         ASSERT(ks != NULL);
-        ASSERT(ch != NULL);
+        ASSERT(val != NULL);
     #endif
 
-    PICC_KNOWNSET_FOREACH(PICC_Knowns, known, ks, it);
-        if(known->channel == ch){
-            known->state = PICC_UNKNOWN;
+    PICC_KNOWNSET_FOREACH(GEN_VALUE, value, ks, it);
+        if(compare_values(val, value) == 0){
+            PICC_known_set_iterator_state_set(it, PICC_UNKNOWN);
         }
     END_KNOWNSET_FOREACH;
 
     #ifdef CONTRACT_POST_INV
         //inv
         PICC_KnownSet_inv(ks);
-        PICC_Channel_inv(ch);
-    #endif*/
+    #endif
 }
 
 /**
@@ -636,18 +672,20 @@ void PICC_knowns_set_forget_to_unknown(PICC_KnownSet *ks, GEN_VALUE *val)
  */
 void PICC_knowns_set_forget_all(PICC_KnownSet *ks)
 {
-    /*#ifdef CONTRACT_PRE_INV
+    #ifdef CONTRACT_PRE_INV
          //inv
          PICC_KnownSet_inv(ks);
     #endif
 
-     #ifdef CONTRACT_PRE
+    #ifdef CONTRACT_PRE
          //pre
          ASSERT(ks != NULL);
     #endif
 
-    PICC_KNOWNSET_FOREACH(PICC_Knowns, known, ks, it);
-        known->state = PICC_FORGET;
+    PICC_KNOWNSET_ONLY_STATE_FOREACH(GEN_VALUE, state, ks, it);
+        if (state == PICC_KNOWN) {
+            PICC_known_set_iterator_state_set(it, PICC_FORGET);
+        }
     END_KNOWNSET_FOREACH;
 
     #ifdef CONTRACT_POST_INV
@@ -657,10 +695,10 @@ void PICC_knowns_set_forget_all(PICC_KnownSet *ks)
 
     #ifdef CONTRACT_POST
         // post
-        PICC_KNOWNSET_FOREACH(PICC_Knowns, known, ks, it);
-            ASSERT(known->state == PICC_FORGET );
+        PICC_KNOWNSET_ONLY_STATE_FOREACH(GEN_VALUE, state, ks, it);
+            ASSERT(state != PICC_KNOWN );
         END_KNOWNSET_FOREACH;
-    #endif*/
+    #endif
 }
 
 /**
@@ -677,47 +715,46 @@ void PICC_knowns_set_forget_all(PICC_KnownSet *ks)
  * @param ch Channel to add
  * @return Whether the channel has been added
  */
-bool PICC_knowns_register(PICC_KnownSet *ks, GEN_VALUE *val)
+bool PICC_knowns_register_gen(PICC_KnownSet *ks, GEN_VALUE *val)
 {
-    /*#ifdef CONTRACT_PRE_INV
+    #ifdef CONTRACT_PRE_INV
         //inv
         PICC_KnownSet_inv(ks);
-        PICC_Channel_inv(ch);
     #endif
 
     #ifdef CONTRACT_PRE
         //pre
         ASSERT(ks != NULL);
-    #endif*/
+    #endif
 
     bool registered = true;
-    /*PICC_Knowns* known0;
+    GEN_VALUE* val0 = NULL;
 
-    PICC_KNOWNSET_FOREACH(PICC_Knowns, known, ks, it);
-        if(known->channel == ch)
+    PICC_KNOWNSET_STATE_FOREACH(GEN_VALUE, value, state, ks, it);
+        if(compare_values(val, value) == 0)
         {
-	    known0=known;
-            if(known->state == PICC_KNOWN || known->state == PICC_FORGET)
+            val0 = value;
+            if(state == PICC_KNOWN || state == PICC_FORGET)
             {
                 registered = false;
-		break;
             }
+            if(state == PICC_UNKNOWN || state == PICC_FORGET)
+            {
+                PICC_known_set_iterator_state_set(it, PICC_KNOWN);
+            }
+            break;
         }
     END_KNOWNSET_FOREACH;
 
+    if (val0 == NULL)
+    {
+        registered = PICC_known_set_add(ks, val);
+    }
 
     #ifdef CONTRACT_POST_INV
         // inv
         PICC_KnownSet_inv(ks);
-        PICC_Channel_inv(ch);
     #endif
-
-    #ifdef CONTRACT_POST
-        // post
-        if (!registered) {
-            ASSERT(known0->state == PICC_KNOWN);
-        }
-    #endif*/
 
     return registered;
 }
@@ -730,7 +767,7 @@ bool PICC_knowns_register(PICC_KnownSet *ks, GEN_VALUE *val)
  */
 void PICC_Knowns_inv(PICC_Knowns *knowns)
 {
-    //ASSERT(knowns->channel != NULL);
+    ASSERT(knowns->val != NULL);
 }
 
 /**
