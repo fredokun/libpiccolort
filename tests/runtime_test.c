@@ -981,5 +981,5 @@ TestPingPong_Main_begin:
 void PICC_test_runtime()
 {
     //PICC_main(4, TestPingPong_Main, 2, 2, 1);
-    //PICC_main(4, TestPingPong_Main, 4, 4, 4);
+    PICC_main(4, TestPingPong_Main, 4, 4, 4);
 }
