@@ -595,7 +595,8 @@ PICC_ChannelValue *PICC_create_empty_channel_value( PICC_ChannelKind kind )
     val->header = MAKE_HEADER(TAG_CHANNEL, kind);
 
     #ifdef CONTRACT_POST_INV
-        PICC_ChannelValue_inv(val);
+        int tag = GET_VALUE_TAG(val->header);
+        ASSERT(tag == TAG_CHANNEL);
     #endif
 
     return val;
@@ -654,7 +655,7 @@ bool PICC_copy_channel(PICC_Value **to, PICC_ChannelValue *from){
 
     PICC_ChannelValue *channel = (PICC_ChannelValue*) *to;
 
-    if (IS_STRING(channel)) {
+    if (IS_CHANNEL(channel)) {
     	channel->channel = from->channel;
     } else {
     	PICC_free_value(*to);
@@ -699,10 +700,8 @@ void PICC_ChannelValue_inv(PICC_ChannelValue *channel)
     int tag = GET_VALUE_TAG(channel->header);
     int ctrl = GET_VALUE_CTRL(channel->header);
     ASSERT(tag == TAG_CHANNEL );
-    if(ctrl == PI_CHANNEL);
+    if(ctrl == PI_CHANNEL)
         PICC_Channel_inv(channel->channel);
-
-
 }
 
 /**********************************
@@ -920,7 +919,6 @@ PICC_Value* PICC_free_value(PICC_Value *v)
         case TAG_RESERVED:
         case TAG_NOVALUE:
         case TAG_BOOLEAN:
-            free(v);
     	    return NULL;
 
         case TAG_INTEGER:
@@ -967,10 +965,10 @@ bool PICC_copy_value(PICC_Value **to, PICC_Value *from) {
             *to = PICC_create_int_value( ((PICC_IntValue*) from)->data );
     	    return true;
         case TAG_STRING:
-            PICC_copy_string(*to,(PICC_StringValue *)from);
+            PICC_copy_string(to,(PICC_StringValue *)from);
             return true;
         case TAG_CHANNEL:
-        	PICC_copy_channel(*to,(PICC_ChannelValue *)from);
+        	PICC_copy_channel(to,(PICC_ChannelValue *)from);
             return true;
     	/*TODO*/
         case TAG_FLOAT:

@@ -84,8 +84,8 @@ bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownsState
     }
     else
     {
-        ss->liste[ss->size].val = elem;
-        ss->liste[ss->size].state = state;
+        ss->liste[ss->size - 1].val = elem;
+        ss->liste[ss->size - 1].state = state;
     }
 
     return true;
