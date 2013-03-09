@@ -70,7 +70,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
                             thread->proc = NULL;
                             thread->pc = PICC_DEFAULT_ENTRY_LABEL;
                             thread->fuel = PICC_FUEL_INIT;
-                            thread->val = NULL;
+                            thread->val = PICC_create_no_value();
                             thread->lock = PICC_create_lock(&sub_error);
                             if (HAS_ERROR(sub_error)) {
                                 CRASH(&sub_error);
@@ -95,7 +95,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
         ASSERT(thread->proc == NULL);
         ASSERT(thread->pc == PICC_DEFAULT_ENTRY_LABEL);
         ASSERT(thread->fuel == PICC_FUEL_INIT);
-        ASSERT(thread->val == NULL);
+        ASSERT(thread->val == PICC_create_no_value());
     #endif
 
     return thread;

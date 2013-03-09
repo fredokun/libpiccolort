@@ -937,34 +937,34 @@ PICC_Value* PICC_free_value(PICC_Value *v)
     }
 }
 
-bool PICC_copy_value(PICC_Value *to, PICC_Value *from) {
+bool PICC_copy_value(PICC_Value **to, PICC_Value *from) {
 
     #ifdef CONTRACT_PRE
-        ASSERT(to != NULL);
+        ASSERT(to != NULL && *to != NULL);
         ASSERT(from != NULL);
     #endif
 
     switch(GET_VALUE_TAG(from->header)) {
         case TAG_RESERVED:
-            to = NULL;
+            *to = NULL;
             return true;
         case TAG_NOVALUE:
-            to = (PICC_Value*) &picc_novalue;
+            *to = (PICC_Value*) &picc_novalue;
             return true;
         case TAG_BOOLEAN:
             if(GET_VALUE_CTRL(from->header))
-                to = (PICC_Value*) &picc_true;
+                *to = (PICC_Value*) &picc_true;
             else
-                to = (PICC_Value*) &picc_false;
+                *to = (PICC_Value*) &picc_false;
     	    return true;
         case TAG_INTEGER:
-            to = PICC_create_int_value( ((PICC_IntValue*) to)->data );
+            *to = PICC_create_int_value( ((PICC_IntValue*) from)->data );
     	    return true;
         case TAG_STRING:
-            PICC_copy_string(to,(PICC_StringValue *)from);
+            PICC_copy_string(*to,(PICC_StringValue *)from);
             return true;
         case TAG_CHANNEL:
-        	PICC_copy_channel(to,(PICC_ChannelValue *)from);
+        	PICC_copy_channel(*to,(PICC_ChannelValue *)from);
             return true;
     	/*TODO*/
         case TAG_FLOAT:
