@@ -22,6 +22,7 @@ typedef struct _PICC_Value PICC_Value ;
 
 PICC_Value* PICC_free_value(PICC_Value *v);
 bool PICC_copy_value(PICC_Value *to, PICC_Value *from);
+int compare_values(PICC_Value * value1, PICC_Value * value2);
 
 /******************************
  * Immediate values : No value *
@@ -99,6 +100,7 @@ typedef struct _string_handle_t PICC_StringHandle;
 typedef struct _string_value_t PICC_StringValue ;
 
 extern PICC_Value *PICC_create_string_value( char *string );
+extern PICC_StringValue *PICC_create_empty_string_value();
 
 /******************
  * Channel values  *

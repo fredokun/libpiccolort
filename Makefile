@@ -16,19 +16,14 @@ INCLUDE=include
 SRC=src
 TESTS=tests
 
-SRCFILES=$(wildcard $(SRC)/*)
-OBJ=$(patsubst %.c, %.o, $(SRCFILES))
+SRCFILES=$(wildcard $(SRC)/*.c)
+TARG1=$(subst .c,.o, $(SRCFILES))
+TESTSFILES=$(wildcard $(TESTS)/*.c)
+TARG2=$(subst .c,.o, $(TESTSFILES))
+OBJ=$(subst $(SRC), $(LIB), $(TARG1)) $(subst $(TESTS), $(LIB), $(TARG2))
 
-test:
-	echo $(OBJ)
 
 all : clean init $(BIN)/$(NAME)
-
-$(BIN)/main: $(LIB)/main.o
-	$(CC) -o $@ $^ $(OFLAGS)
-
-$(LIB)/main.o: $(SRC)/main.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
 
 init :
 	mkdir -p $(LIB)

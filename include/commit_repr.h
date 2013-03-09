@@ -113,6 +113,7 @@ extern PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *comm
 
 extern bool PICC_is_valid_commit(PICC_Commit *commit);
 extern void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *c, PICC_Error *error);
+extern void PICC_commit_list_remove(PICC_CommitList* clist, PICC_Commit *c);
 
 extern void PICC_Commit_inv(PICC_Commit *commit);
 extern void PICC_CommitListElement_inv(PICC_CommitListElement *elem);
