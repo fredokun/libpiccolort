@@ -76,8 +76,8 @@ extern bool PICC_known_set_has_next(PICC_KnownSetIterator *it);
 extern PICC_KnownSet *PICC_knowns_set_knows(PICC_KnownSet *ks);
 extern PICC_KnownSet *PICC_knowns_set_forget(PICC_KnownSet *ks);
 
-extern void PICC_knowns_set_forget_to_unknown(PICC_KnownSet *ks, GEN_VALUE *val);
+extern void PICC_knowns_set_forget_to_unknown_gen(PICC_KnownSet *ks, GEN_VALUE *val);
 extern void PICC_knowns_set_forget_all(PICC_KnownSet *ks);
 
-extern bool PICC_knowns_register(PICC_KnownSet *ks, GEN_VALUE *val);
+extern bool PICC_knowns_register_gen(PICC_KnownSet *ks, GEN_VALUE *val);
 #endif

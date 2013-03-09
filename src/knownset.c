@@ -636,7 +636,7 @@ PICC_KnownSet *PICC_knowns_set_forget(PICC_KnownSet *ks)
  * @param ks Knows set
  * @param ch Channel to switch state
  */
-void PICC_knowns_set_forget_to_unknown(PICC_KnownSet *ks, GEN_VALUE *val)
+void PICC_knowns_set_forget_to_unknown_gen(PICC_KnownSet *ks, GEN_VALUE *val)
 {
     #ifdef CONTRACT_PRE_INV
         //inv
@@ -715,7 +715,7 @@ void PICC_knowns_set_forget_all(PICC_KnownSet *ks)
  * @param ch Channel to add
  * @return Whether the channel has been added
  */
-bool PICC_knowns_register(PICC_KnownSet *ks, GEN_VALUE *val)
+bool PICC_knowns_register_gen(PICC_KnownSet *ks, GEN_VALUE *val)
 {
     #ifdef CONTRACT_PRE_INV
         //inv

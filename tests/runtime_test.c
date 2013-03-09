@@ -947,8 +947,8 @@ TestPingPong_Main_begin:
       }
       }
    }
-}*/
-
+}
+*/
 /**
  * Runs all runtime tests.
  */
