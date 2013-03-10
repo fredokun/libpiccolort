@@ -45,7 +45,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
         ASSERT(knowns_length >= 0);
         ASSERT(enabled_length >= 0);
     #endif
-
+	int i;
     PICC_ALLOC_CRASH(thread, PICC_PiThread) {
         ALLOC_ERROR(sub_error);
         thread->knowns = PICC_create_known_set(knowns_length, &sub_error);
@@ -66,12 +66,16 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
                         thread->env_length = env_length;
                         PICC_ALLOC_N_CRASH(enabled, bool, enabled_length) {
                             thread->enabled = enabled;
+			    for(i=0; i<enabled_length; i++){
+				thread->enabled[i] = false;
+			    }
                             thread->enabled_length = enabled_length;
                             thread->proc = NULL;
                             thread->pc = PICC_DEFAULT_ENTRY_LABEL;
                             thread->fuel = PICC_FUEL_INIT;
                             thread->val = PICC_create_no_value();
                             thread->lock = PICC_create_lock(&sub_error);
+			    thread->status = PICC_STATUS_RUN;
                             if (HAS_ERROR(sub_error)) {
                                 CRASH(&sub_error);
                             }
