@@ -51,16 +51,16 @@ void test_global_reference(PICC_Error *error)
 
     ASSERT(channel->global_rc == 4);
 
-    PICC_channel_dec_ref_count(channel);
-    PICC_channel_dec_ref_count(channel);
+    PICC_channel_dec_ref_count(&channel);
+    PICC_channel_dec_ref_count(&channel);
 
     ASSERT(channel->global_rc == 2);
 
-    PICC_channel_dec_ref_count(channel);
+    PICC_channel_dec_ref_count(&channel);
 
     ASSERT(channel->global_rc == 1);
 
-    PICC_channel_dec_ref_count(channel);
+    PICC_channel_dec_ref_count(&channel);
 }
 
 /**

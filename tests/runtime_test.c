@@ -305,7 +305,7 @@ TestPingPong_PingPong_begin:
       int nbdisabled;
       nbdisabled = 0;
       PICC_KnownSet* chans;
-      chans = NULL;
+      chans = PICC_create_empty_known_set(  );
       PICC_copy_value( &  pt->val,  PICC_create_bool_value( true ) );
       pt->enabled[0] = PICC_bool_of_bool_value( pt->val );
       if ( pt->enabled[0] ){
@@ -361,9 +361,9 @@ TestPingPong_PingPong_begin:
                   
                   pt->pc = 1;
                   pt->fuel = PICC_FUEL_INIT;
-                  PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+                  PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
                   PICC_knowns_set_forget( pt->knowns ), it);
-                   PICC_channel_dec_ref_count( chan );
+                   PICC_channel_dec_ref_count( &  chan );
                    PICC_knowns_set_forget_to_unknown( pt->knowns,  chan );
                     
                    END_KNOWNSET_FOREACH;
@@ -381,14 +381,14 @@ TestPingPong_PingPong_begin:
       PICC_release_all_channels( chans );
          /* ------compile_end--------- */
          
-         PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+         PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
          PICC_knowns_set_knows( pt->knowns ), it);
-          PICC_channel_dec_ref_count( chan );
+          PICC_channel_dec_ref_count( &  chan );
            
           END_KNOWNSET_FOREACH;
-         PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+         PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
          PICC_knowns_set_forget( pt->knowns ), it);
-          PICC_channel_dec_ref_count( chan );
+          PICC_channel_dec_ref_count( &  chan );
            
           END_KNOWNSET_FOREACH;
          pt->status = PICC_STATUS_BLOCKED;
@@ -407,9 +407,9 @@ TestPingPong_PingPong_begin:
       
       pt->pc = PICC_INVALID_PC;
       pt->fuel = PICC_FUEL_INIT;
-      PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+      PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
       PICC_knowns_set_forget( pt->knowns ), it);
-       PICC_channel_dec_ref_count( chan );
+       PICC_channel_dec_ref_count( &  chan );
        PICC_knowns_set_forget_to_unknown( pt->knowns,  chan );
         
        END_KNOWNSET_FOREACH;
@@ -424,7 +424,7 @@ TestPingPong_PingPong_begin:
       int nbdisabled;
       nbdisabled = 0;
       PICC_KnownSet* chans;
-      chans = NULL;
+      chans = PICC_create_empty_known_set(  );
       PICC_copy_value( &  pt->val,  PICC_create_bool_value( true ) );
       pt->enabled[0] = PICC_bool_of_bool_value( pt->val );
       if ( pt->enabled[0] ){
@@ -476,9 +476,9 @@ TestPingPong_PingPong_begin:
                   
                   pt->pc = 2;
                   pt->fuel = PICC_FUEL_INIT;
-                  PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+                  PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
                   PICC_knowns_set_forget( pt->knowns ), it);
-                   PICC_channel_dec_ref_count( chan );
+                   PICC_channel_dec_ref_count( &  chan );
                    PICC_knowns_set_forget_to_unknown( pt->knowns,  chan );
                     
                    END_KNOWNSET_FOREACH;
@@ -496,14 +496,14 @@ TestPingPong_PingPong_begin:
       PICC_release_all_channels( chans );
          /* ------compile_end--------- */
          
-         PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+         PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
          PICC_knowns_set_knows( pt->knowns ), it);
-          PICC_channel_dec_ref_count( chan );
+          PICC_channel_dec_ref_count( &  chan );
            
           END_KNOWNSET_FOREACH;
-         PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+         PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
          PICC_knowns_set_forget( pt->knowns ), it);
-          PICC_channel_dec_ref_count( chan );
+          PICC_channel_dec_ref_count( &  chan );
            
           END_KNOWNSET_FOREACH;
          pt->status = PICC_STATUS_BLOCKED;
@@ -522,9 +522,9 @@ TestPingPong_PingPong_begin:
       
       pt->pc = PICC_INVALID_PC;
       pt->fuel = PICC_FUEL_INIT;
-      PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+      PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
       PICC_knowns_set_forget( pt->knowns ), it);
-       PICC_channel_dec_ref_count( chan );
+       PICC_channel_dec_ref_count( &  chan );
        PICC_knowns_set_forget_to_unknown( pt->knowns,  chan );
         
        END_KNOWNSET_FOREACH;
@@ -572,7 +572,7 @@ TestPingPong_Main_begin:
       int nbdisabled;
       nbdisabled = 0;
       PICC_KnownSet* chans;
-      chans = NULL;
+      chans = PICC_create_empty_known_set(  );
       PICC_copy_value( &  pt->val,  PICC_create_bool_value( true ) );
       pt->enabled[0] = PICC_bool_of_bool_value( pt->val );
       if ( pt->enabled[0] ){
@@ -597,9 +597,9 @@ TestPingPong_Main_begin:
                   
                   pt->pc = 1;
                   pt->fuel = PICC_FUEL_INIT;
-                  PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+                  PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
                   PICC_knowns_set_forget( pt->knowns ), it);
-                   PICC_channel_dec_ref_count( chan );
+                   PICC_channel_dec_ref_count( &  chan );
                    PICC_knowns_set_forget_to_unknown( pt->knowns,  chan );
                     
                    END_KNOWNSET_FOREACH;
@@ -617,14 +617,14 @@ TestPingPong_Main_begin:
       PICC_release_all_channels( chans );
          /* ------compile_end--------- */
          
-         PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+         PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
          PICC_knowns_set_knows( pt->knowns ), it);
-          PICC_channel_dec_ref_count( chan );
+          PICC_channel_dec_ref_count( &  chan );
            
           END_KNOWNSET_FOREACH;
-         PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+         PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
          PICC_knowns_set_forget( pt->knowns ), it);
-          PICC_channel_dec_ref_count( chan );
+          PICC_channel_dec_ref_count( &  chan );
            
           END_KNOWNSET_FOREACH;
          pt->status = PICC_STATUS_BLOCKED;
@@ -637,9 +637,9 @@ TestPingPong_Main_begin:
       
       pt->pc = PICC_INVALID_PC;
       pt->fuel = PICC_FUEL_INIT;
-      PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+      PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
       PICC_knowns_set_forget( pt->knowns ), it);
-       PICC_channel_dec_ref_count( chan );
+       PICC_channel_dec_ref_count( &  chan );
        PICC_knowns_set_forget_to_unknown( pt->knowns,  chan );
         
        END_KNOWNSET_FOREACH;
@@ -654,7 +654,7 @@ TestPingPong_Main_begin:
       int nbdisabled;
       nbdisabled = 0;
       PICC_KnownSet* chans;
-      chans = NULL;
+      chans = PICC_create_empty_known_set(  );
       PICC_copy_value( &  pt->val,  PICC_create_bool_value( true ) );
       pt->enabled[0] = PICC_bool_of_bool_value( pt->val );
       if ( pt->enabled[0] ){
@@ -679,9 +679,9 @@ TestPingPong_Main_begin:
                   
                   pt->pc = 2;
                   pt->fuel = PICC_FUEL_INIT;
-                  PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+                  PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
                   PICC_knowns_set_forget( pt->knowns ), it);
-                   PICC_channel_dec_ref_count( chan );
+                   PICC_channel_dec_ref_count( &  chan );
                    PICC_knowns_set_forget_to_unknown( pt->knowns,  chan );
                     
                    END_KNOWNSET_FOREACH;
@@ -699,14 +699,14 @@ TestPingPong_Main_begin:
       PICC_release_all_channels( chans );
          /* ------compile_end--------- */
          
-         PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+         PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
          PICC_knowns_set_knows( pt->knowns ), it);
-          PICC_channel_dec_ref_count( chan );
+          PICC_channel_dec_ref_count( &  chan );
            
           END_KNOWNSET_FOREACH;
-         PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+         PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
          PICC_knowns_set_forget( pt->knowns ), it);
-          PICC_channel_dec_ref_count( chan );
+          PICC_channel_dec_ref_count( &  chan );
            
           END_KNOWNSET_FOREACH;
          pt->status = PICC_STATUS_BLOCKED;
@@ -719,9 +719,9 @@ TestPingPong_Main_begin:
       
       pt->pc = PICC_INVALID_PC;
       pt->fuel = PICC_FUEL_INIT;
-      PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+      PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
       PICC_knowns_set_forget( pt->knowns ), it);
-       PICC_channel_dec_ref_count( chan );
+       PICC_channel_dec_ref_count( &  chan );
        PICC_knowns_set_forget_to_unknown( pt->knowns,  chan );
         
        END_KNOWNSET_FOREACH;
@@ -736,7 +736,7 @@ TestPingPong_Main_begin:
       int nbdisabled;
       nbdisabled = 0;
       PICC_KnownSet* chans;
-      chans = NULL;
+      chans = PICC_create_empty_known_set(  );
       PICC_copy_value( &  pt->val,  PICC_create_bool_value( true ) );
       pt->enabled[0] = PICC_bool_of_bool_value( pt->val );
       if ( pt->enabled[0] ){
@@ -778,9 +778,9 @@ TestPingPong_Main_begin:
                   
                   pt->pc = 3;
                   pt->fuel = PICC_FUEL_INIT;
-                  PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+                  PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
                   PICC_knowns_set_forget( pt->knowns ), it);
-                   PICC_channel_dec_ref_count( chan );
+                   PICC_channel_dec_ref_count( &  chan );
                    PICC_knowns_set_forget_to_unknown( pt->knowns,  chan );
                     
                    END_KNOWNSET_FOREACH;
@@ -798,14 +798,14 @@ TestPingPong_Main_begin:
       PICC_release_all_channels( chans );
          /* ------compile_end--------- */
          
-         PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+         PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
          PICC_knowns_set_knows( pt->knowns ), it);
-          PICC_channel_dec_ref_count( chan );
+          PICC_channel_dec_ref_count( &  chan );
            
           END_KNOWNSET_FOREACH;
-         PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+         PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
          PICC_knowns_set_forget( pt->knowns ), it);
-          PICC_channel_dec_ref_count( chan );
+          PICC_channel_dec_ref_count( &  chan );
            
           END_KNOWNSET_FOREACH;
          pt->status = PICC_STATUS_BLOCKED;
@@ -818,9 +818,9 @@ TestPingPong_Main_begin:
       
       pt->pc = PICC_INVALID_PC;
       pt->fuel = PICC_FUEL_INIT;
-      PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+      PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
       PICC_knowns_set_forget( pt->knowns ), it);
-       PICC_channel_dec_ref_count( chan );
+       PICC_channel_dec_ref_count( &  chan );
        PICC_knowns_set_forget_to_unknown( pt->knowns,  chan );
         
        END_KNOWNSET_FOREACH;
@@ -835,7 +835,7 @@ TestPingPong_Main_begin:
       int nbdisabled;
       nbdisabled = 0;
       PICC_KnownSet* chans;
-      chans = NULL;
+      chans = PICC_create_empty_known_set(  );
       PICC_copy_value( &  pt->val,  PICC_create_bool_value( true ) );
       pt->enabled[0] = PICC_bool_of_bool_value( pt->val );
       if ( pt->enabled[0] ){
@@ -887,9 +887,9 @@ TestPingPong_Main_begin:
                   
                   pt->pc = 4;
                   pt->fuel = PICC_FUEL_INIT;
-                  PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+                  PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
                   PICC_knowns_set_forget( pt->knowns ), it);
-                   PICC_channel_dec_ref_count( chan );
+                   PICC_channel_dec_ref_count( &  chan );
                    PICC_knowns_set_forget_to_unknown( pt->knowns,  chan );
                     
                    END_KNOWNSET_FOREACH;
@@ -907,14 +907,14 @@ TestPingPong_Main_begin:
       PICC_release_all_channels( chans );
          /* ------compile_end--------- */
          
-         PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+         PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
          PICC_knowns_set_knows( pt->knowns ), it);
-          PICC_channel_dec_ref_count( chan );
+          PICC_channel_dec_ref_count( &  chan );
            
           END_KNOWNSET_FOREACH;
-         PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+         PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
          PICC_knowns_set_forget( pt->knowns ), it);
-          PICC_channel_dec_ref_count( chan );
+          PICC_channel_dec_ref_count( &  chan );
            
           END_KNOWNSET_FOREACH;
          pt->status = PICC_STATUS_BLOCKED;
@@ -933,9 +933,9 @@ TestPingPong_Main_begin:
       
       pt->pc = PICC_INVALID_PC;
       pt->fuel = PICC_FUEL_INIT;
-      PICC_KNOWNSET_FOREACH(PICC_Channel, chan, 
+      PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
       PICC_knowns_set_forget( pt->knowns ), it);
-       PICC_channel_dec_ref_count( chan );
+       PICC_channel_dec_ref_count( &  chan );
        PICC_knowns_set_forget_to_unknown( pt->knowns,  chan );
         
        END_KNOWNSET_FOREACH;
@@ -974,9 +974,6 @@ TestPingPong_Main_begin:
       }
    }
 }
-
-
-
 
 /**
  * Runs all runtime tests.

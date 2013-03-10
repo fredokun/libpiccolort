@@ -22,10 +22,10 @@
 #define DEFAULT_CHANNEL_COMMIT_SIZE 10
 
 #define LOCK_CHANNEL(c) \
-    PICC_acquire((c->lock));
+    PICC_acquire(((c)->lock));
 
 #define RELEASE_CHANNEL(c) \
-    PICC_release((c->lock));
+    PICC_release(((c)->lock));
 
 
 

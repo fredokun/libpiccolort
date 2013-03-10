@@ -187,7 +187,7 @@ int PICC_known_set_size_list(PICC_KnownSet *ss)
     PICC_KnownSetList* s = (PICC_KnownSetList*) ss;
     int size = 0;
 
-    while(s->liste[size].val != NULL)
+    while(size < s->size && s->liste[size].val != NULL)
         size++;
 
     return size;

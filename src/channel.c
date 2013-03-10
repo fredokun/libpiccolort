@@ -179,43 +179,43 @@ void PICC_channel_incr_ref_count(PICC_Channel *channel)
  *
  * @param Channel to update
  */
-void PICC_channel_dec_ref_count(PICC_Channel *channel)
+void PICC_channel_dec_ref_count(PICC_Channel **channel)
 {
     #ifdef CONTRACT_PRE_INV
         //inv
-        PICC_Channel_inv(channel);
+        PICC_Channel_inv(*channel);
     #endif
 
     #ifdef CONTRACT_PRE
         //pre
-        ASSERT(channel != NULL );
+        ASSERT(*channel != NULL );
     #endif
 
     #ifdef CONTRACT_POST
         // capture
-        int global_rc_at_pre = channel->global_rc;
+        int global_rc_at_pre = (*channel)->global_rc;
     #endif
 
-    LOCK_CHANNEL(channel);
-    channel->global_rc--;
-    RELEASE_CHANNEL(channel);
+    LOCK_CHANNEL(*channel);
+    (*channel)->global_rc--;
+    RELEASE_CHANNEL(*channel);
 
-    if (channel->global_rc == 0) {
+    if ((*channel)->global_rc == 0) {
         ALLOC_ERROR(reclaim_error);
-        PICC_reclaim_channel(channel, &reclaim_error);
-        channel = NULL;
+        PICC_reclaim_channel(*channel, &reclaim_error);
+        *channel = NULL;
         if (HAS_ERROR(reclaim_error))
             CRASH(&reclaim_error);
     }
 
     #ifdef CONTRACT_POST_INV
-        if (channel != NULL)
-            PICC_Channel_inv(channel);
+        if (*channel != NULL)
+            PICC_Channel_inv(*channel);
     #endif
 
     #ifdef CONTRACT_POST
         if(global_rc_at_pre > 1)
-            ASSERT(channel->global_rc == global_rc_at_pre - 1 );
+            ASSERT((*channel)->global_rc == global_rc_at_pre - 1 );
     #endif
 }
 
