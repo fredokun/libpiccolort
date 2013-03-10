@@ -15,10 +15,10 @@
 #include <tools.h>
 
 #define LOCK_QUEUE(q) \
-    PICC_acquire(&(q->lock));
+    PICC_acquire((q->lock));
 
 #define RELEASE_QUEUE(q) \
-    PICC_release(&(q->lock));
+    PICC_release((q->lock));
 
 // used for wait queue zones
 const static int ACTIVE = 1;
@@ -63,6 +63,9 @@ PICC_ReadyQueue *PICC_create_ready_queue(PICC_Error *error)
         queue->q.head = NULL;
         queue->q.tail = NULL;
         queue->q.size = 0;
+
+	queue->lock = PICC_create_lock(error);
+
     }
 
     #ifdef CONTRACT_POST_INV
@@ -390,6 +393,8 @@ PICC_WaitQueue *PICC_create_wait_queue(PICC_Error *error)
         queue->old.head = NULL;
         queue->old.tail = NULL;
         queue->old.size = 0;
+
+	queue->lock = PICC_create_lock(error);
     }
 
     #ifdef CONTRACT_POST_INV

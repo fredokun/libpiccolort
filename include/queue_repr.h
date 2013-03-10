@@ -36,7 +36,7 @@ struct _PICC_Queue {
  */
 struct _PICC_ReadyQueue {
     PICC_Queue q;
-    PICC_Lock lock;
+    PICC_Lock *lock;
 };
 
 /**
@@ -45,7 +45,7 @@ struct _PICC_ReadyQueue {
 struct _PICC_WaitQueue {
     PICC_Queue active;
     PICC_Queue old;
-    PICC_Lock lock;
+    PICC_Lock *lock;
 };
 
 extern PICC_ReadyQueue *PICC_create_ready_queue(PICC_Error *error);

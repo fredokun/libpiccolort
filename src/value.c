@@ -495,6 +495,7 @@ PICC_StringValue *PICC_create_empty_string_value()
 {
     PICC_StringValue *val = malloc(sizeof(PICC_StringValue));
     val->header = MAKE_HEADER(TAG_STRING, 0);
+    val->handle = NULL;
 
     #ifdef CONTRACT_POST_INV
         PICC_StringValue_inv(val);
@@ -943,7 +944,7 @@ PICC_Value* PICC_free_value(PICC_Value *v)
 bool PICC_copy_value(PICC_Value **to, PICC_Value *from) {
 
     #ifdef CONTRACT_PRE
-        ASSERT(to != NULL && *to != NULL);
+        ASSERT(to != NULL ); // && *to != NULL); *to can be NULL !! the new value is allocated
         ASSERT(from != NULL);
     #endif
 
