@@ -80,7 +80,7 @@ struct _PICC_PiThread {
                         may or may not be followed */
     int enabled_length; /** Length of enabeled choices at the next
                             step */
-    PICC_KnownsSet *knowns; /** The channels known by this
+    PICC_KnownSet *knowns; /** The channels known by this
                                         thread */
     PICC_Value **env; /**< The local pi-thread variables */
     int env_length; /**< The number of variables in the environment */
@@ -97,7 +97,7 @@ struct _PICC_PiThread {
                                 spec */
     int fuel; /** Number of iterations of the pi-thread execution after
                 wich it goes to the end of the ready queue */
-    PICC_Lock lock; /** The lock of the pi-thread. TODO see spec */
+    PICC_Lock *lock; /** The lock of the pi-thread. TODO see spec */
     /**@}*/
 };
 

@@ -21,12 +21,11 @@
 
 #define DEFAULT_CHANNEL_COMMIT_SIZE 10
 
-
 #define LOCK_CHANNEL(c) \
-    PICC_acquire(&(c->lock));
+    PICC_acquire((c->lock));
 
 #define RELEASE_CHANNEL(c) \
-    PICC_release(&(c->lock));
+    PICC_release((c->lock));
 
 
 
@@ -40,48 +39,28 @@ struct _PICC_Channel {
     int global_rc; /** The number of commitments to that reference
 
                     this channel (TODO see spec)*/
-    PICC_Lock lock; /** This channel lock to protect from concurrent
+    PICC_Lock *lock; /** This channel lock to protect from concurrent
                         accesses*/
     /**@}*/
 };
 
-/**
- * The known state of a channel
- */
-enum _PICC_KnowsState {
-    PICC_UNKNOWN, /**< TODO see spec */
-    PICC_KNOWN, /**< TODO see spec */
-    PICC_FORGET /**< TODO see spec */
-};
+/* /\** */
+/*  * The set of known channels */
+/*  *\/ */
+/* struct _PICC_KnownsSet { */
+/*     /\**@{*\/ */
+/*     PICC_Knowns **knowns; /\** A pointer to an array of knowns. */
+/*                             Contains all the data *\/ */
+/*     int size; /\**< The size of the set *\/ */
+/*     /\**@}*\/ */
+/* }; */
 
-/**
- * The type of a channel with a known state
- */
-struct _PICC_Knowns {
-    /**@{*/
-    PICC_Channel *channel; /**< a reference to the tracked channel */
-    PICC_KnownsState state; /**< the known state */
-    /**@}*/
-};
 
-/**
- * The set of known channels
- */
-struct _PICC_KnownsSet {
-    /**@{*/
-    PICC_Knowns **knowns; /** A pointer to an array of knowns.
-                            Contains all the data */
-    int size; /**< The size of the set */
-    /**@}*/
-};
-
-extern PICC_Knowns *PICC_create_knowns(PICC_Channel *channel, PICC_Error *error);
-extern PICC_KnownsSet *PICC_create_knowns_set(int length, PICC_Error *error);
+//extern PICC_KnownsSet *PICC_create_knowns_set(int length, PICC_Error *error);
 extern void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error);
 extern void PICC_free_channel(PICC_Channel *channel);
 
 extern void PICC_Channel_inv(PICC_Channel *channel);
-extern void PICC_KnownsSet_inv(PICC_KnownsSet *set);
-extern void PICC_Knowns_inv(PICC_Knowns *knowns);
+//extern void PICC_KnownsSet_inv(PICC_KnownsSet *set);
 
 #endif

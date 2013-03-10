@@ -134,7 +134,7 @@ PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PIC
  * @param eval Evaluation function
  * @param cont_pc Programm counter
  */
-void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_EvalFunction *eval, PICC_Label cont_pc)
+void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_EvalFunction eval, PICC_Label cont_pc)
 {
     #ifdef CONTRACT_PRE_INV
         // inv
@@ -394,6 +394,34 @@ void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Erro
 }
 
 /**
+ * Adds the given element at the end of the commit list.
+ *
+ *
+ * @param clist Commit list
+ * @param commit Commit to remove
+ */
+void PICC_commit_list_remove(PICC_CommitList* clist, PICC_Commit *c){
+	PICC_CommitListElement* commitEl = clist->head;
+	PICC_CommitListElement* prev = clist->head;
+	while(commitEl){
+		if(commitEl->commit == c){
+			if(commitEl == prev){
+				clist->head = commitEl->next;
+			} else {
+				prev->next = commitEl->next;
+			}
+			if(clist->tail == commitEl){
+				clist->tail = prev;
+			}
+			free(commitEl);
+			break;
+		}
+		prev = commitEl;
+		commitEl = prev->next;
+	}
+}
+
+/**
  * Returns whether a commit list is empty.
  *
  * @pre clist != NULL
@@ -591,7 +619,15 @@ PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
     return fetched;
 }
 
+PICC_EvalFunction PICC_eval_func_of_output_commitment(PICC_Commit *c){
+#ifdef CONTRACT_PRE
+    // pre
+    ASSERT(c != NULL && c->type == PICC_OUT_COMMIT);
+#endif
 
+    return c->content.out->eval_func;
+
+}
 
 
 // INVARIANTS CHECKING FUNCTIONS ///////////////////////////////////////////////////////////////////

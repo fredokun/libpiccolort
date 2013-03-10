@@ -22,7 +22,7 @@
  */
 PICC_PiThread *create_stub_thread()
 {
-    return PICC_create_pithread(1, 1);
+    return PICC_create_pithread(1, 1, 1);
 }
 
 void test_ready_queue_push(PICC_Error *error)

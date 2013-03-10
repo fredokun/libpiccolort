@@ -37,17 +37,18 @@
  * @param knowns_length Size of the knowns set
  * @return Created PiThread
  */
-PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
+PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabled_length)
 {
     #ifdef CONTRACT_PRE
         // pre
         ASSERT(env_length >= 0);
         ASSERT(knowns_length >= 0);
+        ASSERT(enabled_length >= 0);
     #endif
 
     PICC_ALLOC_CRASH(thread, PICC_PiThread) {
         ALLOC_ERROR(sub_error);
-        thread->knowns = PICC_create_knowns_set(knowns_length, &sub_error);
+        thread->knowns = PICC_create_known_set(knowns_length, &sub_error);
         if (HAS_ERROR(sub_error)) {
             CRASH(&sub_error);
         } else {
@@ -57,19 +58,24 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
                     CRASH(&sub_error);
                 } else {
                     thread->commits = PICC_create_commit_list(&sub_error);
+                    thread->commit = NULL;
                     if (HAS_ERROR(sub_error)) {
                         CRASH(&sub_error);
                     } else {
                         thread->env = env;
                         thread->env_length = env_length;
-                        thread->enabled = NULL;
-                        thread->enabled_length = 0;
-                        thread->commit = NULL;
-                        thread->proc = NULL;
-                        thread->pc = PICC_DEFAULT_ENTRY_LABEL;
-                        thread->fuel = PICC_FUEL_INIT;
-                        thread->val = NULL;
-                        PICC_init_lock(&(thread->lock));
+                        PICC_ALLOC_N_CRASH(enabled, bool, enabled_length) {
+                            thread->enabled = enabled;
+                            thread->enabled_length = enabled_length;
+                            thread->proc = NULL;
+                            thread->pc = PICC_DEFAULT_ENTRY_LABEL;
+                            thread->fuel = PICC_FUEL_INIT;
+                            thread->val = NULL;
+                            thread->lock = PICC_create_lock(&sub_error);
+                            if (HAS_ERROR(sub_error)) {
+                                CRASH(&sub_error);
+                            }
+                        }
                     }
                 }
             }
@@ -84,8 +90,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length)
     #ifdef CONTRACT_POST
         // post
         ASSERT(thread->env_length == env_length);
-        ASSERT(thread->enabled == NULL);
-        ASSERT(thread->enabled_length == 0);
+        ASSERT(thread->enabled_length == enabled_length);
         ASSERT(thread->commit == NULL);
         ASSERT(thread->proc == NULL);
         ASSERT(thread->pc == PICC_DEFAULT_ENTRY_LABEL);
@@ -124,11 +129,11 @@ PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
 
     PICC_CommitStatus status;
 
-    if (!PICC_try_acquire(&(pt->lock))) {
+    if (!PICC_try_acquire(pt->lock)) {
         status = PICC_CANNOT_ACQUIRE;
 
     } else if (commit->clock != pt->clock || commit->clockval != commit->clock->val) {
-        PICC_release(&(pt->lock));
+        PICC_release(pt->lock);
         status = PICC_INVALID_COMMIT;
 
     } else {
@@ -145,7 +150,7 @@ PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
             PICC_atomic_int_compare_and_swap(pt->clock->val, clock_val, clock_val + 1);
         }
         pt->commit = commit;
-        PICC_release(&(pt->lock));
+        PICC_release(pt->lock);
         status = PICC_VALID_COMMIT;
     }
 
@@ -241,7 +246,7 @@ PICC_Clock *PICC_create_clock(PICC_Error *error)
 {
     PICC_ALLOC(clock, PICC_Clock, error) {
         ALLOC_ERROR(sub_error);
-        clock->val = PICC_create_atomic_int(&sub_error);
+        clock->val = PICC_create_atomic_int(0, &sub_error);
         if (HAS_ERROR(sub_error)) {
             ADD_ERROR(error, sub_error, ERR_CLOCK_CREATE);
             free(clock);

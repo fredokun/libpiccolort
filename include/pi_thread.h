@@ -48,7 +48,7 @@ typedef struct _PICC_Clock PICC_Clock;
  */
 typedef void (PICC_PiThreadProc)(struct _PICC_SchedPool *, PICC_PiThread *);
 
-extern PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length);
+extern PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabled_length);
 extern enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, struct _PICC_Commit *commit);
 extern void PICC_awake(struct _PICC_SchedPool *sched, PICC_PiThread *pt, struct _PICC_Commit *commit);
 extern void PICC_low_level_yield();

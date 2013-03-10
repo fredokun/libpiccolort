@@ -70,7 +70,10 @@ extern void PICC_set_map_knowns(PICC_Set* s, void (* func)(PICC_Knowns*));
 //extern PICC_Set* PICC_set_inter_commit(PICC_Set* s1, PICC_Set* s2);
 
 extern PICC_Set* PICC_set_make(PICC_SetType type);
-extern void PICC_set_add(PICC_Set* s, PICC_SetElement* elem, PICC_Error* err);
+
+#define PICC_CHANNEL_SET_MAKE PICC_set_make(PICC_KNOWNS);
+extern bool PICC_set_add(PICC_Set* s, PICC_SetElement* elem, PICC_Error* err);
+
 extern bool PICC_set_mem(PICC_Set* s, PICC_SetElement* elem, PICC_Error* err);
 extern bool PICC_set_is_empty(PICC_Set* s);
 extern void PICC_set_map(PICC_Set* s, void (* func)(void*));

@@ -31,9 +31,10 @@ struct _PICC_AtomicInt {
     pthread_mutex_t lock;
 };
 
-extern PICC_AtomicBoolean *PICC_create_atomic_bool(PICC_Error *error);
+extern PICC_AtomicBoolean *PICC_create_atomic_bool(bool value, PICC_Error *error);
 extern void PICC_free_atomic_bool(PICC_AtomicBoolean *atomic_bool);
-extern PICC_AtomicInt *PICC_create_atomic_int(PICC_Error *error);
+
+extern PICC_AtomicInt *PICC_create_atomic_int(int value, PICC_Error *error);
 extern void PICC_free_atomic_int(PICC_AtomicInt *atomic_int);
 
 #endif
