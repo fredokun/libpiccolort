@@ -11,6 +11,7 @@
  */
 
 #include <stdio.h>
+#include <value.h>
 #include <channel_repr.h>
 #include <commit_repr.h>
 #include <knownset_repr.h>
@@ -178,43 +179,43 @@ void PICC_channel_incr_ref_count(PICC_Channel *channel)
  *
  * @param Channel to update
  */
-void PICC_channel_dec_ref_count(PICC_Channel *channel)
+void PICC_channel_dec_ref_count(PICC_Channel **channel)
 {
     #ifdef CONTRACT_PRE_INV
         //inv
-        PICC_Channel_inv(channel);
+        PICC_Channel_inv(*channel);
     #endif
 
     #ifdef CONTRACT_PRE
         //pre
-        ASSERT(channel != NULL );
+        ASSERT(*channel != NULL );
     #endif
 
     #ifdef CONTRACT_POST
         // capture
-        int global_rc_at_pre = channel->global_rc;
+        int global_rc_at_pre = (*channel)->global_rc;
     #endif
 
-    LOCK_CHANNEL(channel);
-    channel->global_rc--;
-    RELEASE_CHANNEL(channel);
+    LOCK_CHANNEL(*channel);
+    (*channel)->global_rc--;
+    RELEASE_CHANNEL(*channel);
 
-    if (channel->global_rc == 0) {
+    if ((*channel)->global_rc == 0) {
         ALLOC_ERROR(reclaim_error);
-        PICC_reclaim_channel(channel, &reclaim_error);
-        channel = NULL;
+        PICC_reclaim_channel(*channel, &reclaim_error);
+        *channel = NULL;
         if (HAS_ERROR(reclaim_error))
             CRASH(&reclaim_error);
     }
 
     #ifdef CONTRACT_POST_INV
-        if (channel != NULL)
-            PICC_Channel_inv(channel);
+        if (*channel != NULL)
+            PICC_Channel_inv(*channel);
     #endif
 
     #ifdef CONTRACT_POST
         if(global_rc_at_pre > 1)
-            ASSERT(channel->global_rc == global_rc_at_pre - 1 );
+            ASSERT((*channel)->global_rc == global_rc_at_pre - 1 );
     #endif
 }
 
@@ -230,9 +231,8 @@ void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
     free(channel);
 }
 
-
 bool PICC_known_set_add_channel(PICC_KnownSet *s, PICC_Channel *c){
-      return false; //PICC_known_set_add((void*) c); // ou PICC_known_set_add est la "vraie" fonction que maxence doit écrire.
+    return PICC_known_set_add(s, (GEN_VALUE *) PICC_create_channel_value(c));
 }
 
 /**
@@ -243,9 +243,17 @@ bool PICC_known_set_add_channel(PICC_KnownSet *s, PICC_Channel *c){
  */
 void PICC_release_all_channels(PICC_KnownSet *chans)
 {
-    /*PICC_KNOWNSET_FOREACH(PICC_Channel, ch, chans, it);
-        RELEASE_CHANNEL(ch);
-    END_KNOWNSET_FOREACH;*/
+    PICC_KNOWNSET_FOREACH(PICC_Value, chv, chans, it);
+        RELEASE_CHANNEL(PICC_channel_of_channel_value(chv));
+    END_KNOWNSET_FOREACH;
+}
+
+void PICC_knowns_set_forget_to_unknown(PICC_KnownSet *ks, PICC_Channel *c) {
+    PICC_knowns_set_forget_to_unknown_gen(ks, PICC_create_channel_value(c));
+}
+
+bool PICC_knowns_register(PICC_KnownSet *ks, PICC_Channel *c) {
+    return PICC_knowns_register_gen(ks, PICC_create_channel_value(c));
 }
 
 /**

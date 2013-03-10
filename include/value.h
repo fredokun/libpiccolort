@@ -21,7 +21,7 @@
 typedef struct _PICC_Value PICC_Value ;
 
 PICC_Value* PICC_free_value(PICC_Value *v);
-bool PICC_copy_value(PICC_Value *to, PICC_Value *from);
+bool PICC_copy_value(PICC_Value **to, PICC_Value *from);
 int compare_values(PICC_Value * value1, PICC_Value * value2);
 
 /******************************
@@ -115,6 +115,7 @@ extern void PICC_channel_value_acquire(PICC_Value* channel);
 extern int PICC_channel_value_global_rc(PICC_Value* channel);
 //extern void PICC_channel_value_release(PICC_VALUE* channel); // never explicitly released ?
 
+extern void PICC_print_value_infos(PICC_Value * value);
 /**********************************
  * user defined immediate values  *
  **********************************/
