@@ -302,6 +302,7 @@ TestPingPong_PingPong_begin:
       
       {
       PICC_TryResult tryresult;
+      tryresult = PICC_TRY_DISABLED;
       int nbdisabled;
       nbdisabled = 0;
       PICC_KnownSet* chans;
@@ -421,6 +422,7 @@ TestPingPong_PingPong_begin:
       
       {
       PICC_TryResult tryresult;
+      tryresult = PICC_TRY_DISABLED;
       int nbdisabled;
       nbdisabled = 0;
       PICC_KnownSet* chans;
@@ -569,6 +571,7 @@ TestPingPong_Main_begin:
       
       {
       PICC_TryResult tryresult;
+      tryresult = PICC_TRY_DISABLED;
       int nbdisabled;
       nbdisabled = 0;
       PICC_KnownSet* chans;
@@ -651,6 +654,7 @@ TestPingPong_Main_begin:
       
       {
       PICC_TryResult tryresult;
+      tryresult = PICC_TRY_DISABLED;
       int nbdisabled;
       nbdisabled = 0;
       PICC_KnownSet* chans;
@@ -733,6 +737,7 @@ TestPingPong_Main_begin:
       
       {
       PICC_TryResult tryresult;
+      tryresult = PICC_TRY_DISABLED;
       int nbdisabled;
       nbdisabled = 0;
       PICC_KnownSet* chans;
@@ -748,16 +753,19 @@ TestPingPong_Main_begin:
          child = PICC_create_pithread( 4,  4,  4 );
          PICC_copy_value( &  pt->val,  pt->env[0] );
          args[0] = pt->val;
+         pt->val = PICC_create_no_value();
          PICC_knowns_register( child->knowns, 
                               PICC_channel_of_channel_value( args[0] ) );
          child->env[0] = args[0];
          PICC_copy_value( &  pt->val,  pt->env[1] );
          args[1] = pt->val;
+         pt->val = PICC_create_no_value();
          PICC_knowns_register( child->knowns, 
                               PICC_channel_of_channel_value( args[1] ) );
          child->env[1] = args[1];
          PICC_copy_value( &  pt->val,  PICC_create_string_value( "<PING>" ) );
          args[2] = pt->val;
+         pt->val = PICC_create_no_value();
          
          child->env[2] = args[2];
          child->proc = TestPingPong_PingPong;
@@ -832,6 +840,7 @@ TestPingPong_Main_begin:
       
       {
       PICC_TryResult tryresult;
+      tryresult = PICC_TRY_DISABLED;
       int nbdisabled;
       nbdisabled = 0;
       PICC_KnownSet* chans;
