@@ -495,12 +495,12 @@ GEN_VALUE *PICC_known_set_list_iterator_next(PICC_KnownSetListIterator *it)
 
 PICC_KnownsState PICC_known_set_list_iterator_state(PICC_KnownSetListIterator *it) 
 {
-    return it->set->liste[it->next].state;
+    return it->set->liste[it->next - 1].state;
 }
 
 void PICC_known_set_list_iterator_state_set(PICC_KnownSetListIterator *it, PICC_KnownsState state)
 {
-    it->set->liste[it->next].state = state;
+    it->set->liste[it->next - 1].state = state;
 }
 
 bool PICC_known_set_list_iterator_has_next(PICC_KnownSetListIterator *it)
