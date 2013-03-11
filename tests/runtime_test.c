@@ -756,12 +756,14 @@ TestPingPong_Main_begin:
          pt->val = PICC_create_no_value();
          PICC_knowns_register( child->knowns, 
                               PICC_channel_of_channel_value( args[0] ) );
+         PICC_channel_incr_ref_count( PICC_channel_of_channel_value( args[0] ) );
          child->env[0] = args[0];
          PICC_copy_value( &  pt->val,  pt->env[1] );
          args[1] = pt->val;
          pt->val = PICC_create_no_value();
          PICC_knowns_register( child->knowns, 
                               PICC_channel_of_channel_value( args[1] ) );
+         PICC_channel_incr_ref_count( PICC_channel_of_channel_value( args[1] ) );
          child->env[1] = args[1];
          PICC_copy_value( &  pt->val,  PICC_create_string_value( "<PING>" ) );
          args[2] = pt->val;

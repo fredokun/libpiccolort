@@ -487,32 +487,39 @@ PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
     #ifdef CONTRACT_PRE
 		// pre
 		ASSERT(clist != NULL);
-		ASSERT(clist->size > 0);
+		ASSERT(clist->size >= 0);
     #endif
 
     #ifdef CONTRACT_POST
 		// capture
-		PICC_CommitListElement *head_at_pre_next = clist->head->next;
-		PICC_Commit *head_at_pre_commit = clist->head->commit;
-		int size_at_pre = clist->size;
+        PICC_CommitListElement *head_at_pre_next;
+        PICC_Commit *head_at_pre_commit;
+        if (!PICC_commit_list_is_empty(clist)) {
+            head_at_pre_next = clist->head->next;
+            head_at_pre_commit = clist->head->commit;
+        }
+        int size_at_pre = clist->size;
     #endif
+    
+    PICC_Commit *fetched = NULL;
+    if (!PICC_commit_list_is_empty(clist)) {
+        PICC_CommitListElement *commit_list_element = clist->head;
+        if(clist->size == 1){
+            clist->head = NULL;
+            clist->tail = NULL;
+        }
+        else{
+            clist->head = commit_list_element->next;
+        }
+        clist->size--;
+        fetched  = commit_list_element->commit;
+        commit_list_element->next = NULL;
+        commit_list_element->commit = NULL;
+        free(commit_list_element);
 
-    PICC_CommitListElement *commit_list_element = clist->head;
-    if(clist->size == 1){
-        clist->head = NULL;
-        clist->tail = NULL;
+        //if(fetched == NULL) printf("FETCHED NULL\n");
+        //if(head_at_pre == NULL) printf("HEAD AT PRE commit NULL\n");
     }
-    else{
-        clist->head = commit_list_element->next;
-    }
-    clist->size--;
-    PICC_Commit *fetched  = commit_list_element->commit;
-    commit_list_element->next = NULL;
-    commit_list_element->commit = NULL;
-    free(commit_list_element);
-
-    //if(fetched == NULL) printf("FETCHED NULL\n");
-    //if(head_at_pre == NULL) printf("HEAD AT PRE commit NULL\n");
 
     #ifdef CONTRACT_POST_INV
 		// inv
@@ -521,9 +528,11 @@ PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
 
     #ifdef CONTRACT_POST
         //post
-		ASSERT(fetched == head_at_pre_commit);
-		ASSERT(clist->size == size_at_pre - 1);
-		ASSERT(clist->head == head_at_pre_next);
+		if (!PICC_commit_list_is_empty(clist)) {
+            ASSERT(fetched == head_at_pre_commit);
+            ASSERT(clist->size == size_at_pre - 1);
+            ASSERT(clist->head == head_at_pre_next);
+        }
     #endif
 
     return fetched;
