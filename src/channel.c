@@ -290,7 +290,7 @@ PICC_KnownSet *PICC_knowns_set_search(PICC_KnownSet *ks, PICC_KnownsState state)
     #endif
 
     int count=0;
-
+    /*
     PICC_KNOWNSET_FOREACH(PICC_Knowns, known, ks, it);
         if( known->state == state )
         {
@@ -322,9 +322,10 @@ PICC_KnownSet *PICC_knowns_set_search(PICC_KnownSet *ks, PICC_KnownsState state)
         /* { */
         /*     ASSERT(result->knowns[i]->state == state ); */
         /* } */
-    #endif
+    //#endif
 
-    return result;
+    //return result;
+    return NULL;
 }
 
 /**
@@ -373,11 +374,13 @@ void PICC_knowns_set_forget_to_unknown(PICC_KnownSet *ks, PICC_Channel *ch)
         ASSERT(ch != NULL);
     #endif
 
+    /*
     PICC_KNOWNSET_FOREACH(PICC_Knowns, known, ks, it);
         if(known->channel == ch){
             known->state = PICC_UNKNOWN;
         }
     END_KNOWNSET_FOREACH;
+    */
 
     #ifdef CONTRACT_POST_INV
         //inv
@@ -406,15 +409,16 @@ void PICC_knowns_set_forget_all(PICC_KnownSet *ks)
          //pre
          ASSERT(ks != NULL);
     #endif
-
+    /*
     PICC_KNOWNSET_FOREACH(PICC_Knowns, known, ks, it);
         known->state = PICC_FORGET;
     END_KNOWNSET_FOREACH;
-
+    */
     #ifdef CONTRACT_POST_INV
         // inv
         PICC_KnownSet_inv(ks);
     #endif
+    /*
 
     #ifdef CONTRACT_POST
         // post
@@ -422,6 +426,7 @@ void PICC_knowns_set_forget_all(PICC_KnownSet *ks)
             ASSERT(known->state == PICC_FORGET );
         END_KNOWNSET_FOREACH;
     #endif
+    */
 }
 
 /**
@@ -452,6 +457,7 @@ bool PICC_knowns_register(PICC_KnownSet *ks, PICC_Channel *ch)
     #endif
 
     bool registered = true;
+    /*
     PICC_Knowns* known0;
 
     PICC_KNOWNSET_FOREACH(PICC_Knowns, known, ks, it);
@@ -465,7 +471,7 @@ bool PICC_knowns_register(PICC_KnownSet *ks, PICC_Channel *ch)
             }
         }
     END_KNOWNSET_FOREACH;
-
+    */
 
     #ifdef CONTRACT_POST_INV
         // inv
@@ -476,7 +482,7 @@ bool PICC_knowns_register(PICC_KnownSet *ks, PICC_Channel *ch)
     #ifdef CONTRACT_POST
         // post
         if (!registered) {
-            ASSERT(known0->state == PICC_KNOWN);
+           // ASSERT(known0->state == PICC_KNOWN);
         }
     #endif
 
@@ -491,9 +497,9 @@ bool PICC_knowns_register(PICC_KnownSet *ks, PICC_Channel *ch)
  */
 void PICC_release_all_channels(PICC_KnownSet *chans)
 {
-    PICC_KNOWNSET_FOREACH(PICC_Channel, ch, chans, it);
-        RELEASE_CHANNEL(ch);
-    END_KNOWNSET_FOREACH;
+   // PICC_KNOWNSET_FOREACH(PICC_Channel, ch, chans, it);
+     //   RELEASE_CHANNEL(ch);
+    //END_KNOWNSET_FOREACH;
 }
 
 /**

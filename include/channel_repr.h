@@ -59,7 +59,7 @@ enum _PICC_KnowsState {
 
 struct _PICC_Knowns {
     /**@{*/
-    struct _PICC_Value *val; /**< a reference to the tracked channel */
+    PICC_Channel *channel; /**< a reference to the tracked channel */
     PICC_KnownsState state; /**< the known state */
     /**@}*/
 };
