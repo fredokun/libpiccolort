@@ -543,10 +543,13 @@ TestPingPong_PingPong_begin:
       PICC_knowns_set_forget_all( pt->knowns );
       PICC_copy_value( &  pt->val,  pt->env[1] );
       args[0] = pt->val;
+      pt->val = PICC_create_no_value();
       PICC_copy_value( &  pt->val,  pt->env[0] );
       args[1] = pt->val;
+      pt->val = PICC_create_no_value();
       PICC_copy_value( &  pt->val,  pt->env[3] );
       args[2] = pt->val;
+      pt->val = PICC_create_no_value();
       pt->env[0] = args[0];
       PICC_knowns_register( pt->knowns, 
                            PICC_channel_of_channel_value( args[0] ) );
@@ -963,10 +966,13 @@ TestPingPong_Main_begin:
       PICC_knowns_set_forget_all( pt->knowns );
       PICC_copy_value( &  pt->val,  pt->env[1] );
       args[0] = pt->val;
+      pt->val = PICC_create_no_value();
       PICC_copy_value( &  pt->val,  pt->env[0] );
       args[1] = pt->val;
+      pt->val = PICC_create_no_value();
       PICC_copy_value( &  pt->val,  PICC_create_string_value( "<PONG>" ) );
       args[2] = pt->val;
+      pt->val = PICC_create_no_value();
       pt->env[0] = args[0];
       PICC_knowns_register( pt->knowns, 
                            PICC_channel_of_channel_value( args[0] ) );
@@ -974,7 +980,7 @@ TestPingPong_Main_begin:
       PICC_knowns_register( pt->knowns, 
                            PICC_channel_of_channel_value( args[1] ) );
       pt->env[2] = args[2];
-      pt->proc = TestPingPong_Main;
+      pt->proc = TestPingPong_PingPong;
       pt->pc = 0;
       pt->status = PICC_STATUS_CALL;
       return ;
