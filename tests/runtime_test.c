@@ -22,7 +22,7 @@
     ASSERT(!HAS_ERROR((*error)))
 
 /*module Test/PingPong
-def PingPong(i:chan<string>,o:chan<string>,msg:string) = i?(m), o!msg, PingPong(o,i,m)
+def PingPong(i:chan<string>,o:chan<string>,msg:string) = i?(m), #core/io:print(m), o!msg, PingPong(o,i,m)
 def Main() = new(c1:chan<string>),new(c2:chan<string>),spawn{PingPong(c1,c2,"<PING>")}, c1!"<PONG>", PingPong(c2,c1,"<PONG>")*/
 
 /*
@@ -320,7 +320,7 @@ TestPingPong_PingPong_begin:
             }
          if ( PICC_channel_value_global_rc( pt->env[0] ) == 1 ){
          tryresult = PICC_TRY_DISABLED;
-            goto end_of_try_4;
+            goto end_of_try_5;
             }
          PICC_Commit* commit;
          PICC_CommitStatus ok;
@@ -328,7 +328,7 @@ TestPingPong_PingPong_begin:
          commit = PICC_fetch_output_commitment( in_chan );
          if ( commit == NULL ){
          tryresult = PICC_TRY_COMMIT;
-            goto end_of_try_4;
+            goto end_of_try_5;
             }
          do{
          ok = PICC_can_awake( commit->thread,  commit );
@@ -345,11 +345,11 @@ TestPingPong_PingPong_begin:
             
             PICC_awake( scheduler,  commit->thread,  commit );
             tryresult = PICC_TRY_ENABLED;
-            goto end_of_try_4;
+            goto end_of_try_5;
             }
          }while(PICC_commit_list_is_empty( in_chan->outcommits ));
          }
-         end_of_try_4:
+         end_of_try_5:
          if ( tryresult == PICC_TRY_DISABLED ){
          pt->enabled[0] = false;
             nbdisabled = nbdisabled + 1;
@@ -431,41 +431,12 @@ TestPingPong_PingPong_begin:
       pt->enabled[0] = PICC_bool_of_bool_value( pt->val );
       if ( pt->enabled[0] ){
       {
-         /* ------compile_try_out--------- */
-         
-         PICC_Channel* out_chan;
-         out_chan = PICC_channel_of_channel_value( pt->env[1] );
-         if ( PICC_known_set_add_channel( chans,  out_chan ) ){
-         PICC_channel_value_acquire( pt->env[1] );
-            }
-         if ( PICC_channel_value_global_rc( pt->env[1] ) == 1 ){
-         tryresult = PICC_TRY_DISABLED;
-            goto end_of_try_3;
-            }
-         PICC_Commit* commit;
-         PICC_CommitStatus ok;
-         do{
-         commit = PICC_fetch_input_commitment( out_chan );
-         if ( commit == NULL ){
-         tryresult = PICC_TRY_COMMIT;
-            goto end_of_try_3;
-            }
-         do{
-         ok = PICC_can_awake( commit->thread,  commit );
-         if ( ok == PICC_CANNOT_ACQUIRE ){
-         PICC_low_level_yield(  );
-            }
-         }while(ok == PICC_CANNOT_ACQUIRE);
-         if ( ok == PICC_VALID_COMMIT ){
-         PICC_copy_value( &  pt->val,  pt->env[2] );
-            commit->thread->env[commit->content.in->refvar] = pt->val;
-            PICC_awake( scheduler,  commit->thread,  commit );
-            tryresult = PICC_TRY_ENABLED;
-            goto end_of_try_3;
-            }
-         }while(PICC_commit_list_is_empty( out_chan->incommits ));
+         PICC_Value* args[1];
+         PICC_copy_value( &  pt->val,  pt->env[3] );
+         PICC_copy_value( &  args[0],  pt->val );
+         PICC_print_value( args[0] );
          }
-         end_of_try_3:
+         tryresult = PICC_TRY_ENABLED;
          if ( tryresult == PICC_TRY_DISABLED ){
          pt->enabled[0] = false;
             nbdisabled = nbdisabled + 1;
@@ -511,11 +482,121 @@ TestPingPong_PingPong_begin:
          pt->status = PICC_STATUS_BLOCKED;
          return ;
          }
+      
+      PICC_acquire( pt->lock );
+      PICC_release_all_channels( chans );
+      /* ------compile_wait--------- */
+      
+      pt->pc = PICC_INVALID_PC;
+      pt->fuel = PICC_FUEL_INIT;
+      PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
+      PICC_knowns_set_forget( pt->knowns ), it);
+       PICC_channel_dec_ref_count( &  chan );
+       PICC_knowns_set_forget_to_unknown( pt->knowns,  chan );
+        
+       END_KNOWNSET_FOREACH;
+      pt->status = PICC_STATUS_WAIT;
+      PICC_wait_queue_push( scheduler->wait,  pt );
+      PICC_release( pt->lock );
+      return ;
+      case 2:
+      
+      {
+      PICC_TryResult tryresult;
+      tryresult = PICC_TRY_DISABLED;
+      int nbdisabled;
+      nbdisabled = 0;
+      PICC_KnownSet* chans;
+      chans = PICC_create_empty_known_set(  );
+      PICC_copy_value( &  pt->val,  PICC_create_bool_value( true ) );
+      pt->enabled[0] = PICC_bool_of_bool_value( pt->val );
+      if ( pt->enabled[0] ){
+      {
+         /* ------compile_try_out--------- */
+         
+         PICC_Channel* out_chan;
+         out_chan = PICC_channel_of_channel_value( pt->env[1] );
+         if ( PICC_known_set_add_channel( chans,  out_chan ) ){
+         PICC_channel_value_acquire( pt->env[1] );
+            }
+         if ( PICC_channel_value_global_rc( pt->env[1] ) == 1 ){
+         tryresult = PICC_TRY_DISABLED;
+            goto end_of_try_4;
+            }
+         PICC_Commit* commit;
+         PICC_CommitStatus ok;
+         do{
+         commit = PICC_fetch_input_commitment( out_chan );
+         if ( commit == NULL ){
+         tryresult = PICC_TRY_COMMIT;
+            goto end_of_try_4;
+            }
+         do{
+         ok = PICC_can_awake( commit->thread,  commit );
+         if ( ok == PICC_CANNOT_ACQUIRE ){
+         PICC_low_level_yield(  );
+            }
+         }while(ok == PICC_CANNOT_ACQUIRE);
+         if ( ok == PICC_VALID_COMMIT ){
+         PICC_copy_value( &  pt->val,  pt->env[2] );
+            commit->thread->env[commit->content.in->refvar] = pt->val;
+            PICC_awake( scheduler,  commit->thread,  commit );
+            tryresult = PICC_TRY_ENABLED;
+            goto end_of_try_4;
+            }
+         }while(PICC_commit_list_is_empty( out_chan->incommits ));
+         }
+         end_of_try_4:
+         if ( tryresult == PICC_TRY_DISABLED ){
+         pt->enabled[0] = false;
+            nbdisabled = nbdisabled + 1;
+            }else{
+         if ( tryresult == PICC_TRY_ENABLED ){
+            pt->fuel = pt->fuel - 1;
+               if ( pt->fuel == 0 ){
+               PICC_release_all_channels( chans );
+                  /* ------compile_yield--------- */
+                  
+                  pt->pc = 3;
+                  pt->fuel = PICC_FUEL_INIT;
+                  PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
+                  PICC_knowns_set_forget( pt->knowns ), it);
+                   PICC_channel_dec_ref_count( &  chan );
+                   PICC_knowns_set_forget_to_unknown( pt->knowns,  chan );
+                    
+                   END_KNOWNSET_FOREACH;
+                  PICC_ready_queue_add( scheduler->ready,  pt );
+                  return ;
+                  }
+               pt->pc = 3;
+               goto TestPingPong_PingPong_begin;
+               }
+            }
+         }else{
+      nbdisabled = nbdisabled + 1;
+         }
+      if ( nbdisabled == 1 ){
+      PICC_release_all_channels( chans );
+         /* ------compile_end--------- */
+         
+         PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
+         PICC_knowns_set_knows( pt->knowns ), it);
+          PICC_channel_dec_ref_count( &  chan );
+           
+          END_KNOWNSET_FOREACH;
+         PICC_CHANNEL_KNOWNSET_FOREACH(chan, 
+         PICC_knowns_set_forget( pt->knowns ), it);
+          PICC_channel_dec_ref_count( &  chan );
+           
+          END_KNOWNSET_FOREACH;
+         pt->status = PICC_STATUS_BLOCKED;
+         return ;
+         }
       if ( pt->enabled[0] ){
       {
          PICC_Channel* tmp_chan;
          tmp_chan = PICC_channel_of_channel_value( pt->env[1] );
-         PICC_register_output_commitment( pt,  tmp_chan,  eval_1,  2 );
+         PICC_register_output_commitment( pt,  tmp_chan,  eval_1,  3 );
          }
          }
       PICC_acquire( pt->lock );
@@ -534,7 +615,7 @@ TestPingPong_PingPong_begin:
       PICC_wait_queue_push( scheduler->wait,  pt );
       PICC_release( pt->lock );
       return ;
-      case 2:
+      case 3:
       
       {
       /* ------compile_call--------- */
@@ -561,6 +642,7 @@ TestPingPong_PingPong_begin:
       pt->pc = 0;
       pt->status = PICC_STATUS_CALL;
       return ;
+      }
       }
       }
       }

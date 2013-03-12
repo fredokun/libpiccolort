@@ -49,6 +49,8 @@ typedef struct _KnownSetListIterator PICC_KnownSetListIterator;
 extern PICC_KnownSet *PICC_create_empty_known_set();
 extern PICC_KnownSet *PICC_create_known_set(int size, PICC_Error* error);
 
+extern void PICC_free_known_set(PICC_KnownSet *s);
+
 extern bool PICC_known_set_add(PICC_KnownSet *s, GEN_VALUE *elem);
 extern int PICC_known_set_size(PICC_KnownSet *s);
 extern int PICC_equals(GEN_VALUE *v, GEN_VALUE *v2);

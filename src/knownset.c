@@ -8,6 +8,8 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+
 #include <knownset_repr.h>
 #include <tools.h>
 #include <errors.h>
@@ -26,6 +28,34 @@ PICC_KnownSet* PICC_create_known_set(int size, PICC_Error* error)
     s->liste = malloc(size * sizeof(PICC_Knowns));
 
     return (PICC_KnownSet*) s;
+}
+
+void PICC_free_known_set(PICC_KnownSet *s) 
+{
+    if(s->type == TREE)
+        PICC_free_known_set_tree((PICC_KnownSetTree *)s);
+    else
+        PICC_free_known_set_list((PICC_KnownSetList *)s);
+}
+
+void PICC_free_tree(PICC_Tree *tree)
+{
+    if (tree != NULL) {
+        PICC_free_tree(tree->left);
+        PICC_free_tree(tree->right);
+        free(tree);
+    }
+}
+
+void PICC_free_known_set_tree(PICC_KnownSetTree *s)
+{
+    PICC_free_tree(s->tree);
+    free(s);
+}
+void PICC_free_known_set_list(PICC_KnownSetList *s)
+{
+    free(s->liste);
+    free(s);
 }
 
 bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownsState state)

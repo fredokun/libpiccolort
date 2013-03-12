@@ -1040,3 +1040,49 @@ void PICC_print_value_infos(PICC_Value * value)
             break;
     }
 }
+
+void PICC_print_value(PICC_Value * value)
+{
+    PICC_TagValue tag = GET_VALUE_TAG(value->header);
+    int ctrl = GET_VALUE_CTRL(value->header);
+
+    switch(tag) {
+        case TAG_INTEGER: {
+            PICC_IntValue *int_value = (PICC_IntValue *) value;
+            printf("%d", int_value->data);
+            break;
+        }
+        case TAG_BOOLEAN: {
+            if (ctrl == 0) {
+                printf("false");
+            } else if(ctrl == 1) {
+                printf("true");
+            } else {
+                printf("Invalid boolean");
+                abort();
+            }
+            break;
+        }
+        /* case TAG_TUPLE: { */
+        /*   PICC_TupleValue *tup = (PICC_TupleValue *) value; */
+        /*   for(int i=0;i<ctrl;i++) { */
+        /*     printf("%d-th element>>>>>>>>>\n",i); */
+        /*     print_value_infos(tup->elements[i]); */
+        /*     printf("<<<<<<<<<<<\n"); */
+        /*   } */
+        /*   break; */
+        /* } */
+        case TAG_STRING:
+            printf("%s", ((PICC_StringValue *)value)->handle->data );
+            break;
+        case TAG_FLOAT:
+        case TAG_USER_DEFINED_IMMEDIATE:
+        case TAG_USER_DEFINED_MANAGED:
+            printf("not implemented");
+            break;
+        default:
+            printf("unknown tag\n");
+            abort();
+            break;
+    }
+}

@@ -78,6 +78,9 @@ struct _KnownSetListIterator
 };
 
 // tree structure
+extern void PICC_free_tree(PICC_Tree *tree);
+extern void PICC_free_known_set_tree(PICC_KnownSetTree *s);
+
 extern PICC_KnownSetTreeIterator *PICC_create_known_set_tree_iterator(PICC_KnownSetTree *s);
 extern PICC_KnownSetTreeIterator *PICC_delete_known_set_tree_iterator(PICC_KnownSetTreeIterator *it);
 extern GEN_VALUE *PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool check);
@@ -86,6 +89,8 @@ extern void PICC_known_set_tree_iterator_state_set(PICC_KnownSetTreeIterator *it
 extern bool PICC_known_set_tree_iterator_has_next(PICC_KnownSetTreeIterator *it);
 
 // list structure
+extern void PICC_free_known_set_list(PICC_KnownSetList *s);
+
 extern PICC_KnownSetListIterator *PICC_create_known_set_list_iterator(PICC_KnownSetList *s);
 extern PICC_KnownSetListIterator *PICC_delete_known_set_list_iterator(PICC_KnownSetListIterator *it);
 extern GEN_VALUE *PICC_known_set_list_iterator_next(PICC_KnownSetListIterator *it);
