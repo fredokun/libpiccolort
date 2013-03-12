@@ -231,6 +231,7 @@ void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
     free(channel);
 }
 
+
 bool PICC_known_set_add_channel(PICC_KnownSet *s, PICC_Channel *c){
     return PICC_known_set_add(s, (GEN_VALUE *) PICC_create_channel_value(c));
 }

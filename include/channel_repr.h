@@ -44,6 +44,7 @@ struct _PICC_Channel {
     /**@}*/
 };
 
+
 /* /\** */
 /*  * The set of known channels */
 /*  *\/ */

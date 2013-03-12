@@ -65,6 +65,7 @@ bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownsState
 
     while(ss != NULL)
     {
+
         res = compare_values(ss->tree->known_val.val, elem);
 
         if(res == 0)
@@ -77,6 +78,7 @@ bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownsState
             else
             {
                 ss->tree->right = malloc(sizeof(PICC_KnownSetTree));
+
                 ss->tree->right->known_val.val = elem;
                 ss->tree->right->known_val.state = state;
             }
@@ -88,6 +90,7 @@ bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownsState
             else
             {
                 ss->tree->left = malloc(sizeof(PICC_KnownSetTree));
+
                 ss->tree->left->known_val.val = elem;
                 ss->tree->left->known_val.state = state;
             }
