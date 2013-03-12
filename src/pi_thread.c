@@ -45,7 +45,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
         ASSERT(knowns_length >= 0);
         ASSERT(enabled_length >= 0);
     #endif
-
+	int i;
     PICC_ALLOC_CRASH(thread, PICC_PiThread) {
         ALLOC_ERROR(sub_error);
         thread->knowns = PICC_create_known_set(knowns_length, &sub_error);
@@ -66,12 +66,19 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
                         thread->env_length = env_length;
                         PICC_ALLOC_N_CRASH(enabled, bool, enabled_length) {
                             thread->enabled = enabled;
+			    for(i=0; i<enabled_length; i++){
+				thread->enabled[i] = false;
+			    }
                             thread->enabled_length = enabled_length;
                             thread->proc = NULL;
                             thread->pc = PICC_DEFAULT_ENTRY_LABEL;
                             thread->fuel = PICC_FUEL_INIT;
-                            thread->val = NULL;
-                            PICC_init_lock(&(thread->lock));
+                            thread->val = PICC_create_no_value();
+                            thread->lock = PICC_create_lock(&sub_error);
+			    thread->status = PICC_STATUS_RUN;
+                            if (HAS_ERROR(sub_error)) {
+                                CRASH(&sub_error);
+                            }
                         }
                     }
                 }
@@ -92,7 +99,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
         ASSERT(thread->proc == NULL);
         ASSERT(thread->pc == PICC_DEFAULT_ENTRY_LABEL);
         ASSERT(thread->fuel == PICC_FUEL_INIT);
-        ASSERT(thread->val == NULL);
+        ASSERT(thread->val == PICC_create_no_value());
     #endif
 
     return thread;
@@ -126,11 +133,11 @@ PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
 
     PICC_CommitStatus status;
 
-    if (!PICC_try_acquire(&(pt->lock))) {
+    if (!PICC_try_acquire(pt->lock)) {
         status = PICC_CANNOT_ACQUIRE;
 
     } else if (commit->clock != pt->clock || commit->clockval != commit->clock->val) {
-        PICC_release(&(pt->lock));
+        PICC_release(pt->lock);
         status = PICC_INVALID_COMMIT;
 
     } else {
@@ -147,7 +154,7 @@ PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
             PICC_atomic_int_compare_and_swap(pt->clock->val, clock_val, clock_val + 1);
         }
         pt->commit = commit;
-        PICC_release(&(pt->lock));
+        PICC_release(pt->lock);
         status = PICC_VALID_COMMIT;
     }
 

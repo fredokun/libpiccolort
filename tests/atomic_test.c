@@ -117,11 +117,26 @@ void test_get_and_set(PICC_Error *error)
     PICC_AtomicInt *aint = PICC_create_atomic_int(0, error);
     ASSERT_NO_ERROR();
 
-    PICC_atomic_bool_set(abool, true);
+    ASSERT(PICC_atomic_bool_get_and_set(abool, true) == false);
     ASSERT(PICC_atomic_bool_get(abool) == true);
 
-    PICC_atomic_int_set(aint, 3);
+    ASSERT(PICC_atomic_int_get_and_set(aint, 3) == 0);
     ASSERT(PICC_atomic_int_get(aint) == 3);
+}
+
+void test_increment_and_decrement(PICC_Error *error)
+{
+    PICC_AtomicInt *aint = PICC_create_atomic_int(0, error);
+    ASSERT_NO_ERROR();
+
+    ASSERT(PICC_atomic_int_get_and_increment(aint) == 0);
+    ASSERT(PICC_atomic_int_get(aint) == 1);
+    ASSERT(PICC_atomic_int_get_and_increment(aint) == 1);
+    ASSERT(PICC_atomic_int_get(aint) == 2);
+    ASSERT(PICC_atomic_int_get_and_decrement(aint) == 2);
+    ASSERT(PICC_atomic_int_get(aint) == 1);
+    ASSERT(PICC_atomic_int_get_and_decrement(aint) == 1);
+    ASSERT(PICC_atomic_int_get(aint) == 0);
 }
 
 /**
@@ -134,6 +149,7 @@ void PICC_test_atomic()
     test_compare_and_swap(&error);
     test_compare_and_swap_check(&error);
     test_get_and_set(&error);
+    test_increment_and_decrement(&error);
 
     if (HAS_ERROR(error))
         PRINT_ERROR(&error);

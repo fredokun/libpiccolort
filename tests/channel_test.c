@@ -51,16 +51,16 @@ void test_global_reference(PICC_Error *error)
 
     ASSERT(channel->global_rc == 4);
 
-    PICC_channel_dec_ref_count(channel);
-    PICC_channel_dec_ref_count(channel);
+    PICC_channel_dec_ref_count(&channel);
+    PICC_channel_dec_ref_count(&channel);
 
     ASSERT(channel->global_rc == 2);
 
-    PICC_channel_dec_ref_count(channel);
+    PICC_channel_dec_ref_count(&channel);
 
     ASSERT(channel->global_rc == 1);
 
-    PICC_channel_dec_ref_count(channel);
+    PICC_channel_dec_ref_count(&channel);
 }
 
 /**
@@ -79,9 +79,9 @@ void test_knowsSet(PICC_Error *error)
 
     for (i=0;i<10;i++)
     {
-        knowns = PICC_create_knowns(channel,error);
+        knowns = PICC_create_knowns(PICC_create_channel_value(channel), error);
         ASSERT_NO_ERROR();
-        PICC_known_set_add(set, knowns);
+        PICC_known_set_add(set, knowns->val);
     }
 }
 

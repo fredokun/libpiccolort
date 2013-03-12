@@ -9,14 +9,15 @@
  * @author Joël HING
  */
 
-#include <value_repr.h>
-#include <channel_repr.h>
-#include <error.h>
-#include <tools.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#include <value_repr.h>
+#include <channel_repr.h>
+#include <atomic_repr.h>
+#include <error.h>
+#include <tools.h>
 
 
 
@@ -53,7 +54,7 @@ void PICC_NoValue_inv(PICC_NoValue * val)
 static PICC_BoolValue picc_true = {MAKE_HEADER(TAG_BOOLEAN, true)};
 static PICC_BoolValue picc_false = {MAKE_HEADER(TAG_BOOLEAN, false)};
 
-PICC_Value *  PICC_create_bool_value(bool boolean)
+PICC_Value *PICC_create_bool_value(bool boolean)
 {
     PICC_BoolValue * val;
     if (boolean) {
@@ -79,11 +80,11 @@ bool PICC_bool_of_bool_value(PICC_Value *val)
     #ifdef CONTRACT_PRE_INV
         PICC_BoolValue_inv((PICC_BoolValue*) val);
     #endif
-    
+
 
     #ifdef CONTRACT_PRE
         ASSERT(IS_BOOLEAN(val));
-        
+
     #endif
 
     return (PICC_BoolValue*) val == &picc_true;
@@ -105,7 +106,7 @@ void PICC_Bool_and( PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
 {
     PICC_BoolValue * bv1= (PICC_BoolValue*) v1;
     PICC_BoolValue * bv2= (PICC_BoolValue*) v2;
-    
+
     #ifdef CONTRACT_PRE_INV
         PICC_BoolValue_inv(bv1);
         PICC_BoolValue_inv(bv2);
@@ -455,7 +456,7 @@ PICC_StringHandle *PICC_create_string_handle(char *string)
 
     PICC_ALLOC_CRASH(val, PICC_StringHandle) {
         val->refcount = PICC_create_atomic_int(0, NULL);
-        PICC_atomic_int_set(val->refcount, 1);
+        PICC_atomic_int_get_and_set(val->refcount, 1);
         val->data = malloc(sizeof(char)*strlen(string) +1);
         strcpy(val->data, string);
     }
@@ -472,14 +473,9 @@ PICC_StringHandle *PICC_free_string_handle(PICC_StringHandle *handle)
 {
 
     PICC_AtomicInt *at_int=handle->refcount;
+    PICC_atomic_int_get_and_decrement(at_int);
 
-    int i;
-    do {
-    	i = PICC_atomic_int_get(at_int);
-    } while(! PICC_atomic_int_compare_and_swap_check(at_int, i, i - 1));
-
-
-    if ((i - 1) == 0) { //!\ same test in copy, if = 0 -> failure
+    if (at_int == 0) { //!\ same test in copy, if = 0 -> failure
     	free(handle->data);
     	PICC_free_atomic_int(handle->refcount);
     	free(handle);
@@ -499,6 +495,7 @@ PICC_StringValue *PICC_create_empty_string_value()
 {
     PICC_StringValue *val = malloc(sizeof(PICC_StringValue));
     val->header = MAKE_HEADER(TAG_STRING, 0);
+    val->handle = NULL;
 
     #ifdef CONTRACT_POST_INV
         PICC_StringValue_inv(val);
@@ -531,44 +528,41 @@ PICC_Value *PICC_create_string_value( char *string )
 
 PICC_StringValue *PICC_free_string( PICC_StringValue *string )
 {
-    PICC_free_string_handle(string->handle);
+    if(string->handle != NULL)
+        PICC_free_string_handle(string->handle);
     free(string);
     return (string = NULL);
 }
 
-bool PICC_copy_string(PICC_Value *to, PICC_StringValue* from){
+bool PICC_copy_string(PICC_Value **to, PICC_StringValue* from){
+
+
+    PICC_AtomicInt *at_int=from->handle->refcount;
 
     #ifdef CONTRACT_PRE_INV
         PICC_StringValue_inv(from);
     #endif
-    PICC_AtomicInt *at_int=from->handle->refcount;
-    int i;
-    do {
-    	i = PICC_atomic_int_get(at_int);
-    	if(i == 0){
-    	    return false;
-    	}
-    } while(! PICC_atomic_int_compare_and_swap_check(at_int, i, i+1));
+
+    #ifdef CONTRACT_POST
+        int refcount_at_pre = PICC_atomic_int_get(at_int);
+    #endif
     
-    PICC_StringValue* strto = (PICC_StringValue*) to;
+    PICC_atomic_int_get_and_increment(at_int);
 
-    if (IS_STRING(to)) {
-        if(strto->handle != NULL)
-            PICC_free_string_handle(strto->handle);
-    	strto->handle = from->handle;
-    } else {
-        PICC_free_value(to);
-    	strto = PICC_create_empty_string_value();
-    	strto->handle = from->handle;
-    }
+    PICC_StringValue** strto = (PICC_StringValue**) to;
 
+    *strto = PICC_create_empty_string_value();
+    (*strto)->handle = from->handle;
+
+    
     #ifdef CONTRACT_POST_INV
         PICC_StringValue_inv(from);
-        PICC_StringValue_inv(strto);
+        PICC_StringValue_inv(*strto);
     #endif
 
     #ifdef CONTRACT_POST
-        ASSERT(strcmp(from->handle->data, strto->handle->data) == 0 );
+        ASSERT(strcmp(from->handle->data, (*strto)->handle->data) == 0 );
+        ASSERT(PICC_atomic_int_get(at_int) == (refcount_at_pre + 1) );
     #endif
 
     return true;
@@ -596,7 +590,8 @@ PICC_ChannelValue *PICC_create_empty_channel_value( PICC_ChannelKind kind )
     val->header = MAKE_HEADER(TAG_CHANNEL, kind);
 
     #ifdef CONTRACT_POST_INV
-        PICC_ChannelValue_inv(val);
+        int tag = GET_VALUE_TAG(val->header);
+        ASSERT(tag == TAG_CHANNEL);
     #endif
 
     return val;
@@ -647,29 +642,25 @@ PICC_ChannelValue *PICC_free_channel_value( PICC_ChannelValue *channel)
     return NULL;
 }
 
-bool PICC_copy_channel(PICC_Value *to, PICC_ChannelValue *from){
+bool PICC_copy_channel(PICC_Value **to, PICC_ChannelValue *from){
 
     #ifdef CONTRACT_PRE_INV
         PICC_ChannelValue_inv(from);
     #endif
 
-    PICC_ChannelValue *channel = (PICC_ChannelValue*) to;
+    PICC_ChannelValue **channel = (PICC_ChannelValue**) to;
 
-    if (IS_STRING(channel)) {
-    	channel->channel = from->channel;
-    } else {
-    	PICC_free_value(to);
-    	channel = PICC_create_empty_channel_value( PI_CHANNEL );
-    	channel->channel = from->channel;
-    }
+    	*channel = PICC_create_empty_channel_value( PI_CHANNEL );
+    	(*channel)->channel = from->channel;
 
+    
     #ifdef CONTRACT_POST_INV
-        PICC_ChannelValue_inv(channel);
+        PICC_ChannelValue_inv(*channel);
         PICC_ChannelValue_inv(from);
     #endif
 
     #ifdef CONTRACT_POST
-        ASSERT(channel->channel == from->channel );
+        ASSERT((*channel)->channel == from->channel );
     #endif
 
     return true;
@@ -681,7 +672,7 @@ void PICC_channel_value_acquire(PICC_Value* channel){
     #endif
 
     PICC_Channel *c = (PICC_Channel*) ((PICC_ChannelValue*) channel)->channel;
-    PICC_acquire(&c->lock);
+    PICC_acquire(c->lock);
 }
 
 int PICC_channel_value_global_rc(PICC_Value* channel){
@@ -699,10 +690,8 @@ void PICC_ChannelValue_inv(PICC_ChannelValue *channel)
     int tag = GET_VALUE_TAG(channel->header);
     int ctrl = GET_VALUE_CTRL(channel->header);
     ASSERT(tag == TAG_CHANNEL );
-    if(ctrl == PI_CHANNEL);
+    if(ctrl == PI_CHANNEL)
         PICC_Channel_inv(channel->channel);
-
-
 }
 
 /**********************************
@@ -808,10 +797,10 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
 {
     PICC_TagValue tag1 = GET_VALUE_TAG(value1->header);
     int ctrl1 = GET_VALUE_CTRL(value1->header);
-    
+
     PICC_TagValue tag2 = GET_VALUE_TAG(value2->header);
     int ctrl2 = GET_VALUE_CTRL(value2->header);
-    
+
     if(tag1 != tag2){
         return -1;
     }
@@ -871,7 +860,7 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
             if(ctrl1 == 0){
                 return 0;
             }
-            
+
             for(int i=0;i<ctrl1;i++) {
                 int res = compare_values(tup1->elements[i], tup2->elements[i]) ;
                 if(res != 0){
@@ -890,21 +879,19 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
         case TAG_CHANNEL: {
             PICC_Channel *ch1 = PICC_channel_of_channel_value(value1);
             PICC_Channel *ch2 = PICC_channel_of_channel_value(value2);
-            if(ch1->global_rc < ch1->global_rc){
+            if(ch1 == ch2)
+				return 0;
+            if(ch1 > ch2)
                 return -1;
-            }
-            if(ch1->global_rc > ch2->global_rc){
+            else
                 return 1;
-            }
-            // ch1->global_rc  equals ch2->global_rc)
-            return 0;
             break;
         }
 
         default:
             break;
     }
-    
+
     return -1;
 }
 
@@ -912,6 +899,8 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
 
 PICC_Value* PICC_free_value(PICC_Value *v)
 {
+    if (v==NULL) return NULL;
+
     #ifdef CONTRACT_PRE
         ASSERT(v != NULL);
     #endif
@@ -920,7 +909,6 @@ PICC_Value* PICC_free_value(PICC_Value *v)
         case TAG_RESERVED:
         case TAG_NOVALUE:
         case TAG_BOOLEAN:
-            free(v);
     	    return NULL;
 
         case TAG_INTEGER:
@@ -942,28 +930,28 @@ PICC_Value* PICC_free_value(PICC_Value *v)
     }
 }
 
-bool PICC_copy_value(PICC_Value *to, PICC_Value *from) {
+bool PICC_copy_value(PICC_Value **to, PICC_Value *from) {
 
     #ifdef CONTRACT_PRE
-        ASSERT(to != NULL);
+        ASSERT(to != NULL ); // && *to != NULL); *to can be NULL !! the new value is allocated
         ASSERT(from != NULL);
     #endif
-
+    PICC_free_value(*to);
     switch(GET_VALUE_TAG(from->header)) {
         case TAG_RESERVED:
-            to = NULL;
+            *to = NULL;
             return true;
         case TAG_NOVALUE:
-            to = (PICC_Value*) &picc_novalue;
+            *to = (PICC_Value*) &picc_novalue;
             return true;
         case TAG_BOOLEAN:
-            if(GET_VALUE_CTRL(from->header)) 
-                to = (PICC_Value*) &picc_true;
+            if(GET_VALUE_CTRL(from->header))
+                *to = (PICC_Value*) &picc_true;
             else
-                to = (PICC_Value*) &picc_false;
+                *to = (PICC_Value*) &picc_false;
     	    return true;
         case TAG_INTEGER:
-            to = PICC_create_int_value( ((PICC_IntValue*) to)->data );
+            *to = PICC_create_int_value( ((PICC_IntValue*) from)->data );
     	    return true;
         case TAG_STRING:
             PICC_copy_string(to,(PICC_StringValue *)from);

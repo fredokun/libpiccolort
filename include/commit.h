@@ -65,6 +65,7 @@ extern void PICC_register_output_commitment(struct _PICC_PiThread *p, struct _PI
 extern void PICC_register_input_commitment(struct _PICC_PiThread *p, struct _PICC_Channel *ch, int refvar, PICC_Label cont_pc);
 
 extern bool PICC_commit_list_is_empty(PICC_CommitList *clist);
+extern PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist);
 extern PICC_Commit *PICC_fetch_input_commitment(struct _PICC_Channel *ch);
 extern PICC_Commit *PICC_fetch_output_commitment(struct _PICC_Channel *ch);
 
