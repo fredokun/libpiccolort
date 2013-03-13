@@ -118,9 +118,19 @@ void PICC_free_known_set_list(PICC_KnownSetList *s)
  * @param elem GEN_VALUE
  * @param state PICC_KnownState
  *
+ * @pre s != NULL
+ *
+ * @post PICC_known_set_mem(s,elem) == true
+ *
+ * @return true if element successfully added else false
  */
 bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownState state)
 {
+
+#ifdef CONTRACT_PRE
+    ASSERT(s != NULL);
+#endif
+
     PICC_KnownSetTree* ss = (PICC_KnownSetTree*) s;
     int res;
 
@@ -158,11 +168,33 @@ bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownState 
         }
     }
 
+#ifdef CONTRACT_POST
+    ASSERT(ss != NULL);
+    ASSERT(PICC_known_set_mem((PICC_KnownSet* )ss, elem));
+#endif
+
+
     return true;
 }
 
+/**
+ * Add an element to a knownset list.
+ *
+ * @pre s != NULL
+ * @pre s->size >= 0
+ *
+ * @post PICC_known_set_size(s) == size+1
+ * @post (s->type == LIST && s->size > 0 && s->size < PICC_MAX_LIST) || (s->type == TREE && PICC_known_set_size(s) >10)
+ * @post PICC_known_set_mem(s, elem) == true
+ *
+ */
 bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownState state)
 {
+#ifdef CONTRACT_PRE
+    ASSERT(s == NULL);
+    ASSERT(s->size >= 0);
+#endif
+
     PICC_KnownSetList* ss = (PICC_KnownSetList*) s;
     ss->size++;
 
@@ -182,11 +214,21 @@ bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownState 
         ss->liste[ss->size - 1].state = state;
     }
 
+#ifdef CONTRACT_POST
+    ASSERT(s->type == TREE || s->type == LIST);
+    if(s->type == TREE)
+        ASSERT(PICC_known_set_size(s) == ss->size + 1);
+    if(s->type == LIST)
+        ASSERT(ss->size >= 0 && ss->size < PICC_MAX_LIST);
+    ASSERT(PICC_known_set_mem(s, elem));
+
+#endif
+
     return true;
 }
 
 /**
- * Add a commit to a set
+ * Add an element to a set
  *
  * @param s knownset
  * @param elem the value to add to the knownset s
@@ -195,7 +237,11 @@ bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownState 
 {
     return PICC_known_set_add_with_state(s, elem, PICC_KNOWN);    
 }
- 
+
+/**
+ * Add an element with a state to a set
+ *
+ */
 bool PICC_known_set_add_with_state(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownState state)
 {
     if(s->type == TREE)
@@ -204,6 +250,10 @@ bool PICC_known_set_add_with_state(PICC_KnownSet *s, GEN_VALUE *elem, PICC_Known
         return PICC_known_set_add_list(s, elem, state);
 }
 
+/**
+ * Check if an element belongs to a knownset tree
+ *
+ */
 bool PICC_known_set_mem_tree(PICC_KnownSet *ss, GEN_VALUE *elem)
 {
     PICC_KnownSetTree* s = (PICC_KnownSetTree*) ss;
@@ -229,6 +279,14 @@ bool PICC_known_set_mem_tree(PICC_KnownSet *ss, GEN_VALUE *elem)
     }
 }
 
+/**
+ * Check if an element belongs to a knownset list
+ * 
+ * @param ss PICC_KnownSet
+ * @param elem GEN_VALUE
+ *
+ * @return true if elem is in ss
+ */
 bool PICC_known_set_mem_list(PICC_KnownSet *ss, GEN_VALUE *elem)
 {
     PICC_KnownSetList* s = (PICC_KnownSetList*) ss;
@@ -259,6 +317,13 @@ bool PICC_known_set_mem(PICC_KnownSet *s, GEN_VALUE *elem)
         return PICC_known_set_mem_list(s, elem);
 }
 
+/**
+ * Calculate the size of a knownset tree
+ *
+ * @param ss PICC_KnownSet
+ *
+ * @return size of the knownset tree
+ */
 int PICC_known_set_size_tree(PICC_KnownSet *ss)
 {
     PICC_KnownSetTree* s = (PICC_KnownSetTree*) ss;
@@ -276,6 +341,13 @@ int PICC_known_set_size_tree(PICC_KnownSet *ss)
     return size;
 }
 
+/**
+ * Calculate the size of a knownset list
+ *
+ * @param ss PICC_KnownSet
+ *
+ * @return size of the knownset list
+ */
 int PICC_known_set_size_list(PICC_KnownSet *ss)
 {
     PICC_KnownSetList* s = (PICC_KnownSetList*) ss;
@@ -287,6 +359,13 @@ int PICC_known_set_size_list(PICC_KnownSet *ss)
     return size;
 }
 
+/**
+ * Calculate the size of a knownset
+ *
+ * @param s PICC_KnownSet
+ *
+ * @return size of the knownset
+ */
 int PICC_known_set_size(PICC_KnownSet *s)
 {
     if(s->type == TREE)
@@ -295,6 +374,14 @@ int PICC_known_set_size(PICC_KnownSet *s)
         return PICC_known_set_size_list(s);
 }
 
+/**
+ * Compare two knownset tree
+ *
+ * @param s PICC_KnownSet
+ * @param s2 PICC_KnownSet
+ *
+ * @return true if both knownsets are equals
+ */
 bool PICC_known_set_compare_tree(PICC_KnownSet *s, PICC_KnownSet *s2)
 {
     bool res = false;
@@ -315,6 +402,14 @@ bool PICC_known_set_compare_tree(PICC_KnownSet *s, PICC_KnownSet *s2)
     }
 }
 
+/**
+ * Compare two knownset list
+ *
+ * @param s PICC_KnownSet
+ * @param s2 PICC_KnownSet
+ *
+ * @return true if both are equals
+ */
 bool PICC_known_set_compare_list(PICC_KnownSet *s, PICC_KnownSet *s2)
 {
     bool res = false;
@@ -331,10 +426,10 @@ bool PICC_known_set_compare_list(PICC_KnownSet *s, PICC_KnownSet *s2)
 }
 
 /**
- * Compare 2 commits
+ * Compare two knownset
  *
- * @param s Commit
- * @param s2 Commit
+ * @param s PICC_KnownSet
+ * @param s2 PICC_KnownSet
  * @return res true if s is equal to s2
  */
 bool PICC_known_set_compare(PICC_KnownSet *s, PICC_KnownSet *s2)
@@ -407,6 +502,13 @@ bool PICC_known_set_compare(PICC_KnownSet *s, PICC_KnownSet *s2)
 /*     }while(it != NULL); */
 /* } */
 
+/**
+ * Create an iterator for a knownset
+ *
+ * @param s PICC_KnownSet
+ *
+ * @return the iterator
+ */
 PICC_KnownSetIterator *PICC_create_known_set_iterator(PICC_KnownSet *s)
 {
     if( s->type == LIST ){
@@ -417,6 +519,13 @@ PICC_KnownSetIterator *PICC_create_known_set_iterator(PICC_KnownSet *s)
 
 }
 
+/**
+ * Delete an iterator for a knownset
+ *
+ * @param it PICC_KnownSetIterator
+ *
+ * @return NULL
+ */
 PICC_KnownSetIterator *PICC_delete_known_set_iterator(PICC_KnownSetIterator *it)
 {
     if( it->set->type == LIST ){
@@ -426,6 +535,13 @@ PICC_KnownSetIterator *PICC_delete_known_set_iterator(PICC_KnownSetIterator *it)
     }
 }
 
+/**
+ * Return the next element of the iterator
+ *
+ * @param it PICC_KnownSetIterator
+ *
+ * @return the next element
+ */
 GEN_VALUE *PICC_known_set_next(PICC_KnownSetIterator *it)
 {
     if( it->set->type == LIST ){
@@ -435,6 +551,13 @@ GEN_VALUE *PICC_known_set_next(PICC_KnownSetIterator *it)
     }
 }
 
+/**
+ * Return the next state of the iterator
+ *
+ * @param it PICC_KnownSetIterator
+ *
+ * @return the next state
+ */
 PICC_KnownState PICC_known_set_iterator_state(PICC_KnownSetIterator *it)
 {
     if( it->set->type == LIST ){
@@ -444,6 +567,13 @@ PICC_KnownState PICC_known_set_iterator_state(PICC_KnownSetIterator *it)
     }
 }
 
+/**
+ * Set a state for the current state of the iterator
+ *
+ * @param it PICC_KnownSetIterator
+ * @param state PICC_KnownState
+ *
+ */
 void PICC_known_set_iterator_state_set(PICC_KnownSetIterator *it, PICC_KnownState state)
 {
     if( it->set->type == LIST ){
@@ -453,6 +583,13 @@ void PICC_known_set_iterator_state_set(PICC_KnownSetIterator *it, PICC_KnownStat
     }
 }
 
+/**
+ * Check if the iterator has a next element
+ *
+ * @param it PICC_KnownSetIterator
+ *
+ * @return true if it has a next element 
+ */
 bool PICC_known_set_has_next(PICC_KnownSetIterator *it)
 {
     if( it->set->type == LIST ){
@@ -464,6 +601,13 @@ bool PICC_known_set_has_next(PICC_KnownSetIterator *it)
 
 // Tree structure //////////////////////////////////////////////////////////////
 
+/**
+ * Create an iterator on a knownset tree
+ *
+ * @param s PICC_KnownSetTree
+ *
+ * @return the iterator
+ */
 PICC_KnownSetTreeIterator *PICC_create_known_set_tree_iterator(PICC_KnownSetTree *s)
 {
     PICC_KnownSetTreeIterator* it = malloc(sizeof(PICC_KnownSetTreeIterator));
@@ -478,13 +622,27 @@ PICC_KnownSetTreeIterator *PICC_create_known_set_tree_iterator(PICC_KnownSetTree
     return it;
 }
 
+/**
+ * Delete an iterator on a knownset tree
+ *
+ * @param it PICC_KnownSetTreeIterator
+ *
+ * @return NULL
+ */
 PICC_KnownSetTreeIterator *PICC_delete_known_set_tree_iterator(PICC_KnownSetTreeIterator *it){
     free(it);
     return (it = NULL);
 
 }
 
-
+/**
+ * Return the next element of the iterator
+ *
+ * @param it PICC_KnownSetTreeIterator
+ * @param check bool
+ *
+ * @return the next element
+ */
 GEN_VALUE *PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool check)
 {
     if(it->current == NULL)
@@ -548,16 +706,37 @@ GEN_VALUE *PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool
     }
 }
 
+/**
+ * return the current state of the iterator
+ *
+ * @param it PICC_KnownSetTreeIterator
+ *
+ * @return the state
+ */
 PICC_KnownState PICC_known_set_tree_iterator_state(PICC_KnownSetTreeIterator *it) 
 {
     return it->current->known_val.state;
 }
 
+/**
+ * Set the state of the current element
+ *
+ * @param it PICC_KnownSetTreeIterator
+ * @param state PICC_KnownState
+ *
+ */
 void PICC_known_set_tree_iterator_state_set(PICC_KnownSetTreeIterator *it, PICC_KnownState state) 
 {
     it->current->known_val.state = state;
 }
 
+/**
+ * Check if there's a next element on the iterator
+ *
+ * @param it PICC_KnownSetTreeIterator
+ *
+ * @return true if it has a next
+ */
 bool PICC_known_set_tree_iterator_has_next(PICC_KnownSetTreeIterator *it)
 {
     return it->next != NULL;
@@ -566,6 +745,13 @@ bool PICC_known_set_tree_iterator_has_next(PICC_KnownSetTreeIterator *it)
 
 // List structure //////////////////////////////////////////////////////////////
 
+/**
+ * Create a knowset list iterator
+ *
+ * @param s PICC_KnownSetList
+ *
+ * @return the iterator
+ */
 PICC_KnownSetListIterator *PICC_create_known_set_list_iterator(PICC_KnownSetList *s)
 {
     PICC_KnownSetListIterator* it = malloc(sizeof(PICC_KnownSetListIterator));
@@ -574,12 +760,26 @@ PICC_KnownSetListIterator *PICC_create_known_set_list_iterator(PICC_KnownSetList
     return it;
 }
 
+/**
+ * Delete a knownset list iterator
+ *
+ * @param it PICC_KnownSetListIterator
+ *
+ * @return NULL
+ */
 PICC_KnownSetListIterator *PICC_delete_known_set_list_iterator(PICC_KnownSetListIterator *it)
 {
     free(it);
     return (it = NULL);
 }
 
+/**
+ * Return the next element of the iterator
+ *
+ * @param it PICC_KnownSetListIterator
+ *
+ * @return the next element
+ */
 GEN_VALUE *PICC_known_set_list_iterator_next(PICC_KnownSetListIterator *it)
 {
     GEN_VALUE *ret = it->set->liste[it->next].val;
@@ -587,16 +787,36 @@ GEN_VALUE *PICC_known_set_list_iterator_next(PICC_KnownSetListIterator *it)
     return ret;
 }
 
+/**
+ * Set the state of the current element
+ *
+ * @param it PICC_KnownSetListIterator
+ *
+ * @return the state of the current element
+ */
 PICC_KnownState PICC_known_set_list_iterator_state(PICC_KnownSetListIterator *it) 
 {
     return it->set->liste[it->next - 1].state;
 }
 
+/**
+ * Set the state of the current element
+ *
+ * @param it PICC_KnownSetListIterator
+ * @param state PICC_KnownState
+ */
 void PICC_known_set_list_iterator_state_set(PICC_KnownSetListIterator *it, PICC_KnownState state)
 {
     it->set->liste[it->next - 1].state = state;
 }
 
+/**
+ * Check if the iterator has a next element
+ *
+ * @param it PICC_KnownSetListIterator
+ *
+ * @return true if it has a next element
+ */
 bool PICC_known_set_list_iterator_has_next(PICC_KnownSetListIterator *it)
 {
     return it->next < it->set->size;
@@ -640,7 +860,6 @@ PICC_Knowns *PICC_create_knowns(GEN_VALUE *val, PICC_Error *error)
     return knowns;
 }
 
-// Spec KnownSet
 /**
  * search within a knownsSet the knowns with a specific state
  *
