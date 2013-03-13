@@ -35,7 +35,7 @@ typedef struct _PICC_Value GEN_VALUE;
 /**
  * The known state of a channel
  */
-typedef enum _PICC_KnowsState PICC_KnownsState;
+typedef enum _PICC_KnowsState PICC_KnownState;
 typedef struct _Tree PICC_Tree;
 typedef struct _KnownSet PICC_KnownSet;
 typedef struct _KnownSetTree PICC_KnownSetTree;
@@ -82,4 +82,5 @@ extern void PICC_knowns_set_forget_to_unknown_gen(PICC_KnownSet *ks, GEN_VALUE *
 extern void PICC_knowns_set_forget_all(PICC_KnownSet *ks);
 
 extern bool PICC_knowns_register_gen(PICC_KnownSet *ks, GEN_VALUE *val);
+extern void PICC_KnownSet_Inv(PICC_KnownSet *set);
 #endif

@@ -15,29 +15,71 @@
 #include <errors.h>
 #include <value_repr.h>
 
+/**
+ * Create an empty known_set
+ *
+ * @return a newly created knownset
+ */
 PICC_KnownSet* PICC_create_empty_known_set()
 {
     return PICC_create_known_set(PICC_MAX_LIST, NULL);
 }
 
+/**
+ * Create a knownset.
+ *
+ * @pre size >= 0
+ *
+ * @post s->size == size
+ * @post s->type == LIST
+ *
+ * @return created knownset
+ */
 PICC_KnownSet* PICC_create_known_set(int size, PICC_Error* error)
 {
+
+#ifdef CONTRACT_PRE
+    ASSERT(size >= 0);
+#endif
+
     PICC_KnownSetList* s = malloc(sizeof(PICC_KnownSetList));
     s->size = 0;
     s->type = LIST;
     s->liste = malloc(size * sizeof(PICC_Knowns));
 
+#ifdef CONTRACT_POST_INV
+    PICC_KnownSet_inv((PICC_KnownSet* )s);
+#endif
+
+#ifdef CONTRACT_POST
+    ASSERT(s->size == size);
+#endif
+
     return (PICC_KnownSet*) s;
 }
 
+/**
+ * Free a knownset.
+ *
+ * @pre s != NULL
+ *
+ */
 void PICC_free_known_set(PICC_KnownSet *s) 
 {
+#ifdef CONTRACT_PRE
+    ASSERT(s != NULL);
+#endif
+
     if(s->type == TREE)
         PICC_free_known_set_tree((PICC_KnownSetTree *)s);
     else
         PICC_free_known_set_list((PICC_KnownSetList *)s);
 }
 
+/**
+ * Free a knownset of type tree
+ *
+ */
 void PICC_free_tree(PICC_Tree *tree)
 {
     if (tree != NULL) {
@@ -47,11 +89,20 @@ void PICC_free_tree(PICC_Tree *tree)
     }
 }
 
+/**
+ * Free a knownset tree
+ *
+ */
 void PICC_free_known_set_tree(PICC_KnownSetTree *s)
 {
     PICC_free_tree(s->tree);
     free(s);
 }
+
+/**
+ * Free a knownset list
+ *
+ */
 void PICC_free_known_set_list(PICC_KnownSetList *s)
 {
     if (s->liste != NULL) {
@@ -60,7 +111,15 @@ void PICC_free_known_set_list(PICC_KnownSetList *s)
     free(s);
 }
 
-bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownsState state)
+/**
+ * Add a GEN_VALUE element with PICC_KnownState state in a knownset tree.
+ *
+ * @param s knownset
+ * @param elem GEN_VALUE
+ * @param state PICC_KnownState
+ *
+ */
+bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownState state)
 {
     PICC_KnownSetTree* ss = (PICC_KnownSetTree*) s;
     int res;
@@ -102,7 +161,7 @@ bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownsState
     return true;
 }
 
-bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownsState state)
+bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownState state)
 {
     PICC_KnownSetList* ss = (PICC_KnownSetList*) s;
     ss->size++;
@@ -137,7 +196,7 @@ bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownsState
     return PICC_known_set_add_with_state(s, elem, PICC_KNOWN);    
 }
  
-bool PICC_known_set_add_with_state(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownsState state)
+bool PICC_known_set_add_with_state(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownState state)
 {
     if(s->type == TREE)
         return PICC_known_set_add_tree(s, elem, state);
@@ -376,7 +435,7 @@ GEN_VALUE *PICC_known_set_next(PICC_KnownSetIterator *it)
     }
 }
 
-PICC_KnownsState PICC_known_set_iterator_state(PICC_KnownSetIterator *it)
+PICC_KnownState PICC_known_set_iterator_state(PICC_KnownSetIterator *it)
 {
     if( it->set->type == LIST ){
         return PICC_known_set_list_iterator_state((PICC_KnownSetListIterator*) it);
@@ -385,7 +444,7 @@ PICC_KnownsState PICC_known_set_iterator_state(PICC_KnownSetIterator *it)
     }
 }
 
-void PICC_known_set_iterator_state_set(PICC_KnownSetIterator *it, PICC_KnownsState state)
+void PICC_known_set_iterator_state_set(PICC_KnownSetIterator *it, PICC_KnownState state)
 {
     if( it->set->type == LIST ){
         PICC_known_set_list_iterator_state_set((PICC_KnownSetListIterator*) it, state);
@@ -489,12 +548,12 @@ GEN_VALUE *PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool
     }
 }
 
-PICC_KnownsState PICC_known_set_tree_iterator_state(PICC_KnownSetTreeIterator *it) 
+PICC_KnownState PICC_known_set_tree_iterator_state(PICC_KnownSetTreeIterator *it) 
 {
     return it->current->known_val.state;
 }
 
-void PICC_known_set_tree_iterator_state_set(PICC_KnownSetTreeIterator *it, PICC_KnownsState state) 
+void PICC_known_set_tree_iterator_state_set(PICC_KnownSetTreeIterator *it, PICC_KnownState state) 
 {
     it->current->known_val.state = state;
 }
@@ -528,12 +587,12 @@ GEN_VALUE *PICC_known_set_list_iterator_next(PICC_KnownSetListIterator *it)
     return ret;
 }
 
-PICC_KnownsState PICC_known_set_list_iterator_state(PICC_KnownSetListIterator *it) 
+PICC_KnownState PICC_known_set_list_iterator_state(PICC_KnownSetListIterator *it) 
 {
     return it->set->liste[it->next - 1].state;
 }
 
-void PICC_known_set_list_iterator_state_set(PICC_KnownSetListIterator *it, PICC_KnownsState state)
+void PICC_known_set_list_iterator_state_set(PICC_KnownSetListIterator *it, PICC_KnownState state)
 {
     it->set->liste[it->next - 1].state = state;
 }
@@ -593,7 +652,7 @@ PICC_Knowns *PICC_create_knowns(GEN_VALUE *val, PICC_Error *error)
  * @param state state wanted
  * @param ks knownsSet fetched
  */
-PICC_KnownSet *PICC_knowns_set_search(PICC_KnownSet *ks, PICC_KnownsState state)
+PICC_KnownSet *PICC_knowns_set_search(PICC_KnownSet *ks, PICC_KnownState state)
 {
 
     #ifdef CONTRACT_PRE_INV
