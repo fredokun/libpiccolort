@@ -626,7 +626,7 @@ TestPingPong_Main_begin:
          
          PICC_Value* args[3];
          PICC_PiThread* child;
-         child = PICC_create_pithread( 4,  4,  4 );
+         child = PICC_create_pithread( 4,  2,  1 );
          PICC_copy_value( &  pt->val,  pt->env[0] );
          args[0] = pt->val;
          pt->val = PICC_create_no_value();
