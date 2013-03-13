@@ -54,7 +54,9 @@ void PICC_free_known_set_tree(PICC_KnownSetTree *s)
 }
 void PICC_free_known_set_list(PICC_KnownSetList *s)
 {
-    free(s->liste);
+    if (s->liste != NULL) {
+        free(s->liste);
+    }
     free(s);
 }
 
