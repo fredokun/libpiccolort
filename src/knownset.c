@@ -52,7 +52,7 @@ PICC_KnownSet* PICC_create_known_set(int size, PICC_Error* error)
 #endif
 
 #ifdef CONTRACT_POST
-    ASSERT(s->size == size);
+    ASSERT(s->size == 0);
 #endif
 
     return (PICC_KnownSet*) s;
