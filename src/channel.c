@@ -112,7 +112,7 @@ PICC_Channel *PICC_create_channel_cn(int incommit_size, int outcommit_size)
 /*     #endif */
 
 /*     PICC_ALLOC(knowns_set, PICC_KnownSet, error) { */
-/*         knowns_set->knowns = malloc(sizeof(PICC_Knowns) * size); */
+/*         knowns_set->knowns = malloc(sizeof(PICC_PiResource) * size); */
 /*         if (knowns_set->knowns == NULL) { */
 /*             NEW_ERROR(error, ERR_OUT_OF_MEMORY); */
 /*             free(knowns_set); */
