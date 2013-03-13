@@ -117,6 +117,7 @@ struct _float_value_t {
 
 struct _string_value_t {
     VALUE_HEADER;
+    int index_in_knownset;
     PICC_StringHandle *handle;
 };
 

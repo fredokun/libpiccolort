@@ -45,7 +45,7 @@ PICC_KnownSet* PICC_create_known_set(int size, PICC_Error* error)
     PICC_KnownSetList* s = malloc(sizeof(PICC_KnownSetList));
     s->size = 0;
     s->type = LIST;
-    s->liste = malloc(size * sizeof(PICC_Knowns));
+    s->liste = malloc(size * sizeof(PICC_PiResource));
 
 #ifdef CONTRACT_POST_INV
     PICC_KnownSet_inv((PICC_KnownSet* )s);
@@ -836,21 +836,21 @@ bool PICC_known_set_list_iterator_has_next(PICC_KnownSetListIterator *it)
  * @param error Error stack
  * @return Created knowns structure
  */
-PICC_Knowns *PICC_create_knowns(GEN_VALUE *val, PICC_Error *error)
+PICC_PiResource *PICC_create_knowns(GEN_VALUE *val, PICC_Error *error)
 {
     #ifdef CONTRACT_PRE
         //pre
         ASSERT(val != NULL );
     #endif
 
-    PICC_ALLOC(knowns, PICC_Knowns, error) {
+    PICC_ALLOC(knowns, PICC_PiResource, error) {
         knowns->val = val;
         knowns->state = PICC_KNOWN;
     }
 
     #ifdef CONTRACT_POST_INV
         //inv
-        PICC_Knowns_inv(knowns);
+        PICC_PiResource_inv(knowns);
     #endif
 
     #ifdef CONTRACT_POST
@@ -1079,7 +1079,7 @@ bool PICC_knowns_register_gen(PICC_KnownSet *ks, GEN_VALUE *val)
  *
  * @inv knowns->channel != NULL
  */
-void PICC_Knowns_inv(PICC_Knowns *knowns)
+void PICC_PiResource_inv(PICC_PiResource *knowns)
 {
     ASSERT(knowns->val != NULL);
 }

@@ -26,11 +26,11 @@ struct _PICC_CommitL
     PICC_CommitL* next;
 };
 
-typedef struct _PICC_KnownsList PICC_KnownsList;
-struct _PICC_KnownsList
+typedef struct _PICC_PiResourceList PICC_PiResourceList;
+struct _PICC_PiResourceList
 {
-    PICC_Knowns* val;
-    PICC_KnownsList* next;
+    PICC_PiResource* val;
+    PICC_PiResourceList* next;
 };
 
 typedef struct _PICC_Set
@@ -41,7 +41,7 @@ typedef struct _PICC_Set
     union
     {
         PICC_CommitL* commit;
-        PICC_KnownsList* knowns;
+        PICC_PiResourceList* knowns;
     } element;
 } PICC_Set;
 
@@ -52,21 +52,21 @@ typedef struct _PICC_SetElement
     union
     {
         PICC_Commit* c;
-        PICC_Knowns* k;
+        PICC_PiResource* k;
     } element;
 } PICC_SetElement;
 
 extern PICC_Commit* PICC_clone_commit(PICC_Commit* c);
-extern PICC_Knowns* PICC_clone_knowns(PICC_Knowns* k);
+extern PICC_PiResource* PICC_clone_knowns(PICC_PiResource* k);
 
 extern bool PICC_cmp_commit(PICC_Commit* c, PICC_Commit* c2, PICC_Error* err);
-extern bool PICC_cmp_knowns(PICC_Knowns* k, PICC_Knowns* k2, PICC_Error* err);
-extern bool PICC_set_mem_knowns(PICC_Set* s, PICC_Knowns* k, PICC_Error* err);
+extern bool PICC_cmp_knowns(PICC_PiResource* k, PICC_PiResource* k2, PICC_Error* err);
+extern bool PICC_set_mem_knowns(PICC_Set* s, PICC_PiResource* k, PICC_Error* err);
 extern bool PICC_set_mem_commit(PICC_Set* s, PICC_Commit* c, PICC_Error* err);
 extern void PICC_set_add_commit(PICC_Set* s, PICC_Commit* elem);
-extern void PICC_set_add_knowns(PICC_Set* s, PICC_Knowns* elem);
+extern void PICC_set_add_knowns(PICC_Set* s, PICC_PiResource* elem);
 extern void PICC_set_map_commit(PICC_Set* s, void (* func)(PICC_Commit*));
-extern void PICC_set_map_knowns(PICC_Set* s, void (* func)(PICC_Knowns*));
+extern void PICC_set_map_knowns(PICC_Set* s, void (* func)(PICC_PiResource*));
 //extern PICC_Set* PICC_set_inter_commit(PICC_Set* s1, PICC_Set* s2);
 
 extern PICC_Set* PICC_set_make(PICC_SetType type);
@@ -82,7 +82,7 @@ extern PICC_Set* PICC_set_inter_commit(PICC_Set* s1, PICC_Set* s2);
 extern PICC_Set* PICC_set_inter_knowns(PICC_Set* s1, PICC_Set* s2);
 extern PICC_Set* PICC_set_inter(PICC_Set* s1, PICC_Set* s2);
 extern void PICC_set_iter_commit(PICC_Set* s, void (*func)(PICC_Commit* arg));
-extern void PICC_set_iter_knowns(PICC_Set* s, void (*func)(PICC_Knowns* arg));
+extern void PICC_set_iter_knowns(PICC_Set* s, void (*func)(PICC_PiResource* arg));
 extern void PICC_set_iter(PICC_Set* s, void (*func)(void* arg));
 
 extern int PICC_test_generic_sets();

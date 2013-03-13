@@ -50,7 +50,7 @@ struct _PICC_Channel {
 /*  *\/ */
 /* struct _PICC_KnownSet { */
 /*     /\**@{*\/ */
-/*     PICC_Knowns **knowns; /\** A pointer to an array of knowns. */
+/*     PICC_PiResource **knowns; /\** A pointer to an array of knowns. */
 /*                             Contains all the data *\/ */
 /*     int size; /\**< The size of the set *\/ */
 /*     /\**@}*\/ */
