@@ -190,12 +190,13 @@ bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownState 
  */
 bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE *elem, PICC_KnownState state)
 {
+    PICC_KnownSetList* ss = (PICC_KnownSetList*) s;
+
 #ifdef CONTRACT_PRE
     ASSERT(s == NULL);
-    ASSERT(s->size >= 0);
+    ASSERT(ss->size >= 0);
 #endif
 
-    PICC_KnownSetList* ss = (PICC_KnownSetList*) s;
     ss->size++;
 
     // convert to tree
