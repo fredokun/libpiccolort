@@ -154,7 +154,7 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
 
     #ifdef CONTRACT_POST
         // captures
-        int size_at_pre = pt->commits->size;
+        int size_at_pre = ch->outcommits->size;
     #endif
 
     ALLOC_ERROR(sub_error);
@@ -172,6 +172,7 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
         ALLOC_ERROR(add_error);
         // TODO assert if ch belong to the environment of pt
         PICC_commit_list_add(ch->outcommits, commit, &add_error);
+        PICC_commit_list_add(pt->commits, commit, &add_error);
         if (HAS_ERROR(add_error)) {
             ADD_ERROR(&sub_error, add_error, ERR_REGISTER_IN_COMMIT);
             free(commit);
@@ -237,7 +238,7 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
 
     #ifdef CONTRACT_POST
         // captures
-        int size_at_pre = pt->commits->size;
+        int size_at_pre = ch->outcommits->size;
     #endif
 
     ALLOC_ERROR(sub_error);
@@ -253,6 +254,7 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
         ALLOC_ERROR(add_error);
         // TODO assert if ch belong to the environment of pt
         PICC_commit_list_add(ch->incommits, commit, &add_error);
+        PICC_commit_list_add(pt->commits, commit, &add_error);
         if (HAS_ERROR(add_error)) {
             ADD_ERROR(&sub_error, add_error, ERR_REGISTER_IN_COMMIT);
             free(commit);
