@@ -48,7 +48,7 @@ struct _PICC_Channel {
 /* /\** */
 /*  * The set of known channels */
 /*  *\/ */
-/* struct _PICC_KnownsSet { */
+/* struct _PICC_KnownSet { */
 /*     /\**@{*\/ */
 /*     PICC_Knowns **knowns; /\** A pointer to an array of knowns. */
 /*                             Contains all the data *\/ */
@@ -57,11 +57,11 @@ struct _PICC_Channel {
 /* }; */
 
 
-//extern PICC_KnownsSet *PICC_create_knowns_set(int length, PICC_Error *error);
+//extern PICC_KnownSet *PICC_create_knowns_set(int length, PICC_Error *error);
 extern void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error);
 extern void PICC_free_channel(PICC_Channel *channel);
 
 extern void PICC_Channel_inv(PICC_Channel *channel);
-//extern void PICC_KnownsSet_inv(PICC_KnownsSet *set);
+//extern void PICC_KnownSet_inv(PICC_KnownSet *set);
 
 #endif

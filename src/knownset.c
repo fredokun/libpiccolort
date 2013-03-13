@@ -579,7 +579,7 @@ PICC_Knowns *PICC_create_knowns(GEN_VALUE *val, PICC_Error *error)
     return knowns;
 }
 
-// Spec KnownsSet
+// Spec KnownSet
 /**
  * search within a knownsSet the knowns with a specific state
  *
@@ -737,10 +737,10 @@ void PICC_knowns_set_forget_all(PICC_KnownSet *ks)
 /**
  * Adds a channel to a knowns set.
  *
- * Looks for a channel in a PICC_KnownsSet
- * - if the channel is in the PICC_KnownsSet in KNOWN-STATE, it returns false
- * - if the channel is in the PICC_KnownsSet in FORGET-STATE, it switches it to KNOWN then  returns false
- * - else it add the channel in the PICC_KnownsSet (KNOWS-STATE) then returns true
+ * Looks for a channel in a PICC_KnownSet
+ * - if the channel is in the PICC_KnownSet in KNOWN-STATE, it returns false
+ * - if the channel is in the PICC_KnownSet in FORGET-STATE, it switches it to KNOWN then  returns false
+ * - else it add the channel in the PICC_KnownSet (KNOWS-STATE) then returns true
  *
  * @pre ks != NULL
  *

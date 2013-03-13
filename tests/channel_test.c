@@ -64,7 +64,7 @@ void test_global_reference(PICC_Error *error)
 }
 
 /**
- * Test : PICC_KnownsSet and PICC_Knowns creation \n
+ * Test : PICC_KnownSet and PICC_Knowns creation \n
    check if knownsSet is created with the right size and check if \n
     knowns type is created with PICC_UNKNOWN state
  */

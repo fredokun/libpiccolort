@@ -104,14 +104,14 @@ PICC_Channel *PICC_create_channel_cn(int incommit_size, int outcommit_size)
  * @param error Error stack
  * @return Created knowns set
  */
-/* PICC_KnownsSet *PICC_create_knowns_set(int size, PICC_Error *error) */
+/* PICC_KnownSet *PICC_create_knowns_set(int size, PICC_Error *error) */
 /* { */
 /*     #ifdef CONTRACT_PRE */
 /*         // pre */
 /*         ASSERT(size> 0); */
 /*     #endif */
 
-/*     PICC_ALLOC(knowns_set, PICC_KnownsSet, error) { */
+/*     PICC_ALLOC(knowns_set, PICC_KnownSet, error) { */
 /*         knowns_set->knowns = malloc(sizeof(PICC_Knowns) * size); */
 /*         if (knowns_set->knowns == NULL) { */
 /*             NEW_ERROR(error, ERR_OUT_OF_MEMORY); */
