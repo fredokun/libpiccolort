@@ -17,13 +17,20 @@
 
 typedef struct _PICC_KnownElement PICC_KnownElement;
 
+/**
+ * Abstraction of a managed value for the KnownSet
+ * implemented by the PICC_ChannelValue and PICC_StringValue for now
+ */
 struct _PICC_KnownValue
 {
     VALUE_HEADER;
     int index_in_knownset;
-    struct _PICC_Handle *handle;
+    struct _PICC_Handle *handle; // Defined in gc.h
 };
 
+/**
+ * Value wrapper used only by the set in his internal behavior
+ */
 struct _PICC_KnownElement{
     PICC_KnownState state;
     PICC_KnownValue* value;
