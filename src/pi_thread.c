@@ -48,8 +48,8 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
 	int i;
     PICC_ALLOC_CRASH(thread, PICC_PiThread) {
         ALLOC_ERROR(sub_error);
-        thread->chans = PICC_create_empty_known_set();
-        thread->knowns = PICC_create_known_set(knowns_length, &sub_error);
+        thread->chans = PICC_create_empty_knownset();
+        thread->knowns = PICC_create_knownset(knowns_length, &sub_error);
         if (HAS_ERROR(sub_error)) {
             CRASH(&sub_error);
         } else {

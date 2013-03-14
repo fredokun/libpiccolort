@@ -1,10 +1,12 @@
 /**
  * @file knownset.h
- * Data structures for knownsets.
+ * Data structures for known sets.
  *
  * This project is released under MIT License.
  *
  * @author Loïc Girault
+ * @author Maxence Wo
+ * @author Mickaël Menu
  */
 
 #ifndef KNOWNSET_H
@@ -39,20 +41,21 @@ typedef struct _PICC_KnownSet PICC_KnownSet;
  */
 typedef enum _PICC_KnownState PICC_KnownState;
 
-extern PICC_KnownSet *PICC_create_known_set(int init_max_size, PICC_Error* e);
-extern PICC_KnownSet *PICC_create_empty_known_set();
+// life cycle
+extern PICC_KnownSet *PICC_create_knownset(int init_max_size, PICC_Error* e);
+extern PICC_KnownSet *PICC_create_empty_knownset();
+extern void PICC_free_knownset(PICC_KnownSet *s);
 
-extern void PICC_free_known_set(PICC_KnownSet *s);
+extern bool PICC_knownset_register(PICC_KnownSet *ks, PICC_KnownValue *val);
+extern bool PICC_knownset_add(PICC_KnownSet *s, PICC_KnownValue *val);
+extern int PICC_knownset_size(PICC_KnownSet *s);
 
-extern bool PICC_known_set_add(PICC_KnownSet *s, PICC_KnownValue *val);
-extern int PICC_known_set_size(PICC_KnownSet *s);
+// subsets creation
+extern PICC_KnownSet *PICC_knownset_known(PICC_KnownSet *ks);
+extern PICC_KnownSet *PICC_knownset_forget(PICC_KnownSet *ks);
 
-extern PICC_KnownSet *PICC_known_know(PICC_KnownSet *ks);
-extern PICC_KnownSet *PICC_known_forget(PICC_KnownSet *ks);
+// state changes
+extern void PICC_knownset_forget_to_unknown(PICC_KnownSet *ks, PICC_KnownValue *val);
+extern void PICC_knownset_forget_all(PICC_KnownSet *ks);
 
-extern void PICC_known_forget_to_unknown_gen(PICC_KnownSet *ks, PICC_KnownValue *val);
-extern void PICC_known_forget_all(PICC_KnownSet *ks);
-
-extern bool PICC_known_register(PICC_KnownSet *ks, PICC_KnownValue *val);
-extern void PICC_known_set_inv(PICC_KnownSet *set);
 #endif

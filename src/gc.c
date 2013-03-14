@@ -29,7 +29,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
     }
 
     PICC_PiThread* candidates[1000];
-    PICC_KnownSet* chans = PICC_create_empty_known_set();
+    PICC_KnownSet* chans = PICC_create_empty_knownset();
 	candidates[0] = candidate;
     int candidates_size = 1;
 
@@ -44,8 +44,8 @@ bool PICC_GC2(PICC_SchedPool* sched)
 			commit = commitEl->commit;
 			PICC_Channel* chan = commit->channel;
 			int refs = 1;
-			
-			if(PICC_known_set_add(chans, 
+
+			if(PICC_knownset_add(chans,
 					      (PICC_KnownValue*)PICC_create_channel_value(chan))){
 				if(!(PICC_try_acquire(chan->lock))){
 					goto abandon_gc;
