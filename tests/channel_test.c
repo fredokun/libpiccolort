@@ -75,13 +75,12 @@ void test_knowsSet(PICC_Error *error)
     PICC_Channel* channel = PICC_create_channel();
 
     int i = 0;
-    PICC_Knowns *knowns;
-
+    PICC_KnownValue *kv;
     for (i=0;i<10;i++)
     {
-        knowns = PICC_create_knowns(PICC_create_channel_value(channel), error);
+	kv = (PICC_KnownValue*) PICC_create_channel_value(channel);
         ASSERT_NO_ERROR();
-        PICC_known_set_add(set, knowns->val);
+        PICC_known_set_add(set, kv);
     }
 }
 

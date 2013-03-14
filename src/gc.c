@@ -9,6 +9,7 @@
 
 
 #include <gc_repr.h>
+#include <knownset.h>
 #include <queue_repr.h>
 #include <concurrent.h>
 #include <channel.h>
@@ -39,11 +40,13 @@ bool PICC_GC2(PICC_SchedPool* sched)
 
 		PICC_Commit* commit = NULL;
 		PICC_CommitListElement* commitEl = candidate->commits->head;
-        while(commitEl){
+		while(commitEl){
 			commit = commitEl->commit;
 			PICC_Channel* chan = commit->channel;
 			int refs = 1;
-			if(PICC_known_set_add(chans, PICC_create_channel_value(chan))){
+			
+			if(PICC_known_set_add(chans, 
+					      (PICC_KnownValue*)PICC_create_channel_value(chan))){
 				if(!(PICC_try_acquire(chan->lock))){
 					goto abandon_gc;
 				}

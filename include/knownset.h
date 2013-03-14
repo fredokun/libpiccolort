@@ -4,7 +4,7 @@
  *
  * This project is released under MIT License.
  *
- * @author Maxence WO
+ * @author Loïc Girault
  */
 
 #ifndef KNOWNSET_H
@@ -27,28 +27,32 @@ enum _PICC_KnownState {
     PICC_FORGET
 };
 
-typedef struct _PICC_Known PICC_Known;
-typedef struct _PICC_Handle PICC_Handle;
+/**
+ * Abstraction of a managed value for the KnownSet
+ */
+typedef struct _PICC_KnownValue PICC_KnownValue;
+
+typedef struct _PICC_KnownSet PICC_KnownSet;
 
 /**
- * The known state of a channel
+ * The known state of a managed value
  */
 typedef enum _PICC_KnownState PICC_KnownState;
 
-extern PICC_Known *PICC_create_empty_known();
-extern PICC_Known *PICC_create_known(int size, int type);
+extern PICC_KnownSet *PICC_create_known_set(int init_max_size, PICC_Error* e);
+extern PICC_KnownSet *PICC_create_empty_known_set();
 
-extern void PICC_free_known(PICC_Known *s);
+extern void PICC_free_known_set(PICC_KnownSet *s);
 
-extern bool PICC_known_add(PICC_Known *s, PICC_Handle *elem);
-extern int PICC_known_size(PICC_Known *s);
+extern bool PICC_known_set_add(PICC_KnownSet *s, PICC_KnownValue *val);
+extern int PICC_known_set_size(PICC_KnownSet *s);
 
-extern PICC_Known *PICC_known_know(PICC_Known *ks);
-extern PICC_Known *PICC_known_forget(PICC_Known *ks);
+extern PICC_KnownSet *PICC_known_know(PICC_KnownSet *ks);
+extern PICC_KnownSet *PICC_known_forget(PICC_KnownSet *ks);
 
-extern void PICC_known_forget_to_unknown_gen(PICC_Known *ks, PICC_Handle *val);
-extern void PICC_known_forget_all(PICC_Known *ks);
+extern void PICC_known_forget_to_unknown_gen(PICC_KnownSet *ks, PICC_KnownValue *val);
+extern void PICC_known_forget_all(PICC_KnownSet *ks);
 
-extern bool PICC_known_register_gen(PICC_Known *ks, PICC_Handle *val);
-extern void PICC_Known_Inv(PICC_Known *set);
+extern bool PICC_known_register(PICC_KnownSet *ks, PICC_KnownValue *val);
+extern void PICC_known_set_inv(PICC_KnownSet *set);
 #endif

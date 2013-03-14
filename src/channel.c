@@ -66,6 +66,7 @@ PICC_Channel *PICC_create_channel_cn(int incommit_size, int outcommit_size)
     PICC_ALLOC(channel, PICC_Channel, &error) {
         channel->global_rc = 1;
         channel->lock = PICC_create_lock(&error);
+	channel->reclaim = (PICC_Reclaimer) PICC_reclaim_channel;
         channel->incommits = PICC_create_commit_list(&error);
         channel->incommits->size = incommit_size;
         channel->outcommits = PICC_create_commit_list(&error);
@@ -231,11 +232,6 @@ void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
     free(channel);
 }
 
-
-bool PICC_known_set_add_channel(PICC_KnownSet *s, PICC_Channel *c){
-    return PICC_known_set_add(s, (GEN_VALUE *) PICC_create_channel_value(c));
-}
-
 /**
  * Releases all the given channels.
  *
@@ -244,17 +240,11 @@ bool PICC_known_set_add_channel(PICC_KnownSet *s, PICC_Channel *c){
  */
 void PICC_release_all_channels(PICC_KnownSet *chans)
 {
-    PICC_KNOWNSET_FOREACH(PICC_Value, chv, chans, it);
-        RELEASE_CHANNEL(PICC_channel_of_channel_value(chv));
-    END_KNOWNSET_FOREACH;
-}
-
-void PICC_knowns_set_forget_to_unknown(PICC_KnownSet *ks, PICC_Channel *c) {
-    PICC_knowns_set_forget_to_unknown_gen(ks, PICC_create_channel_value(c));
-}
-
-bool PICC_knowns_register(PICC_KnownSet *ks, PICC_Channel *c) {
-    return PICC_knowns_register_gen(ks, PICC_create_channel_value(c));
+    // /!\ will release all the managed value (for now channel and string)
+    PICC_KnownValue *val;
+    PICC_KNOWNSET_FOREACH(chans, val){
+        RELEASE_CHANNEL(val->handle);
+    }
 }
 
 /**

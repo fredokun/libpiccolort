@@ -49,12 +49,12 @@ void test_knownset_creation(PICC_Error *error)
     PICC_KnownSet *ks;
 
     ks = PICC_create_empty_known_set();
-    PICC_KnownSet_inv(ks);
+    PICC_known_set_inv(ks);
 
     ks = PICC_create_known_set(5, error);
     ASSERT_NO_ERROR();
-    PICC_KnownSet_inv(ks);
-    ASSERT(((PICC_KnownSetList *)ks)->size == 5);
+    PICC_known_set_inv(ks);
+    ASSERT(ks->max_size == 5 && ks->current_size == 0);
 }
 
 void test_tree(PICC_Error *error)
