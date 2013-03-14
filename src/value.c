@@ -654,24 +654,6 @@ bool PICC_copy_channel(PICC_Value **to, PICC_ChannelValue *from){
     return true;
 }
 
-void PICC_channel_value_acquire(PICC_Value* channel){
-    #ifdef CONTRACT_PRE
-        ASSERT(IS_CHANNEL(channel));
-    #endif
-
-    PICC_Channel *c = (PICC_Channel*) ((PICC_ChannelValue*) channel)->channel;
-    PICC_acquire(c->lock);
-}
-
-int PICC_channel_value_global_rc(PICC_Value* channel){
-    #ifdef CONTRACT_PRE
-        ASSERT(IS_CHANNEL(channel));
-    #endif
-
-    PICC_Channel *c = (PICC_Channel*) ((PICC_ChannelValue*) channel)->channel;
-    return c->global_rc;
-}
-
 void PICC_ChannelValue_inv(PICC_ChannelValue *channel)
 {
     ASSERT(channel != NULL);

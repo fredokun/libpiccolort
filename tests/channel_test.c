@@ -9,6 +9,7 @@
  */
 
 #include <stdlib.h>
+#include <gc.h>
 #include <pi_thread_repr.h>
 #include <channel_repr.h>
 #include <value_repr.h>
@@ -44,23 +45,24 @@ void test_create_channel(PICC_Error *error)
 void test_global_reference(PICC_Error *error)
 {
     PICC_Channel* channel = PICC_create_channel();
+    PICC_Handle* handle = (PICC_Handle*) channel;
 
-    PICC_channel_incr_ref_count(channel);
-    PICC_channel_incr_ref_count(channel);
-    PICC_channel_incr_ref_count(channel);
+    PICC_handle_incr_ref_count(handle);
+    PICC_handle_incr_ref_count(handle);
+    PICC_handle_incr_ref_count(handle);
 
-    ASSERT(channel->global_rc == 4);
+    ASSERT(handle->global_rc == 4);
 
-    PICC_channel_dec_ref_count(&channel);
-    PICC_channel_dec_ref_count(&channel);
+    PICC_handle_dec_ref_count(&handle);
+    PICC_handle_dec_ref_count(&handle);
 
-    ASSERT(channel->global_rc == 2);
+    ASSERT(handle->global_rc == 2);
 
-    PICC_channel_dec_ref_count(&channel);
+    PICC_handle_dec_ref_count(&handle);
 
-    ASSERT(channel->global_rc == 1);
+    ASSERT(handle->global_rc == 1);
 
-    PICC_channel_dec_ref_count(&channel);
+    PICC_handle_dec_ref_count(&handle);
 }
 
 /**

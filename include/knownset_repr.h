@@ -55,6 +55,11 @@ struct _PICC_KnownSet
     	i < (s)->current_size && ((e) = (s)->content[i].value);	\
     	i++)
 
+//macro unsafe utilisé dans le code généré
+#define PICC_GET_HANDLE(val) ((PICC_KnownValue*) (val))->handle		
+#define PICC_ACQUIRE_HANDLE(val) LOCK_HANDLE(((PICC_KnownValue*) (val))->handle)
+#define PICC_HANDLE_GLOBALRC(val) ((PICC_KnownValue*) (val))->handle->global_rc
+
 /* #define PICC_CHANNEL_KNOWNSET_FOREACH(channel, set, it)              \ */
 /*         do{                              \ */
 /*         PICC_Channel* channel;                               \ */

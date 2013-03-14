@@ -8,4 +8,8 @@ typedef struct _PICC_Handle PICC_Handle;
 typedef void (*PICC_Reclaimer) (PICC_Handle *handled, PICC_Error *error);
 //see comments in gc_repr.h for more informations
 
+extern void PICC_handle_incr_ref_count(PICC_Handle *h);
+extern void PICC_handle_dec_ref_count(PICC_Handle **h);
+
+
 #endif

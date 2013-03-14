@@ -24,11 +24,8 @@ typedef struct _PICC_Channel PICC_Channel;
 
 extern PICC_Channel *PICC_create_channel();
 extern PICC_Channel *PICC_create_channel_cn(int incommit_size,int outcommit_size);
-extern void PICC_channel_incr_ref_count(PICC_Channel *ch);
-extern void PICC_channel_dec_ref_count(PICC_Channel **ch);
 
 extern void PICC_release_all_channels(PICC_KnownSet *chans);
-
 extern void PICC_Channel_inv(PICC_Channel *channel);
 
 #endif
