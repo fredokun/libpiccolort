@@ -12,35 +12,30 @@
 
 #include <knownset.h>
 #include <error.h>
+#include <value_repr.h>
 
 /**
  * The type of a channel with a known state
  */
 
-struct _PiResource
+struct _PICC_Handle
 {
-    int type;
-    PICC_KnownState state;
-
+    VALUE_HEADER;
     union
     {
-        PICC_ChannelValue* chan;
+        PICC_ChannelValue *chan;
         PICC_StringValue* str;
     } content;
 };
 
-struct _PICC_KnownSet
+struct _PICC_Known
 {
-    int size;
-    struct _PiResource* resource;
+    VALUE_HEADER;
+    int index_in_known;
+    struct _PICC_Handle *handle;
 };
 
-
-// knowns
-extern PICC_PiResource *PICC_create_knowns(GEN_VALUE *val, PICC_Error *error);
-
 // invariants
-extern void PICC_PiResource_inv(PICC_PiResource *knowns);
-extern void PICC_KnownSet_inv(PICC_KnownSet *ks);
+extern void PICC_Known_inv(PICC_Known *known);
 
 #endif

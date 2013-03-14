@@ -13,40 +13,42 @@
 #include <stdbool.h>
 #include <error.h>
 
+#define NOT_INDEXED -1
+
+/* #define IS_CHANNEL(header) (GET_VALUE_CTRL(value->header) == TAG_CHANNEL) */
+/* #define IS_STRING(header) (GET_VALUE_CTRL(value->header) == TAG_STRING) */
+
 /**
  * The known state of a channel
  */
 enum _PICC_KnownState {
-    PICC_UNKNOWN, /**< TODO see spec */
-    PICC_KNOWN, /**< TODO see spec */
-    PICC_FORGET /**< TODO see spec */
+    PICC_UNKNOWN,
+    PICC_KNOWN,
+    PICC_FORGET
 };
 
-
-typedef struct _PICC_Value GEN_VALUE;
-typedef struct _PICC_PiResource PICC_PiResource;
-typedef struct _PICC_KnownSet PICC_KnownSet;
-
+typedef struct _PICC_Known PICC_Known;
+typedef struct _PICC_Handle PICC_Handle;
 
 /**
  * The known state of a channel
  */
 typedef enum _PICC_KnownState PICC_KnownState;
 
-extern PICC_KnownSet *PICC_create_empty_known_set();
-extern PICC_KnownSet *PICC_create_known_set(int size, PICC_Error* error);
+extern PICC_Known *PICC_create_empty_known();
+extern PICC_Known *PICC_create_known(int size, int type);
 
-extern void PICC_free_known_set(PICC_KnownSet *s);
+extern void PICC_free_known(PICC_Known *s);
 
-extern bool PICC_known_set_add(PICC_KnownSet *s, GEN_VALUE *elem);
-extern int PICC_known_set_size(PICC_KnownSet *s);
+extern bool PICC_known_add(PICC_Known *s, PICC_Handle *elem);
+extern int PICC_known_size(PICC_Known *s);
 
-extern PICC_KnownSet *PICC_knowns_set_knows(PICC_KnownSet *ks);
-extern PICC_KnownSet *PICC_knowns_set_forget(PICC_KnownSet *ks);
+extern PICC_Known *PICC_known_know(PICC_Known *ks);
+extern PICC_Known *PICC_known_forget(PICC_Known *ks);
 
-extern void PICC_knowns_set_forget_to_unknown_gen(PICC_KnownSet *ks, GEN_VALUE *val);
-extern void PICC_knowns_set_forget_all(PICC_KnownSet *ks);
+extern void PICC_known_forget_to_unknown_gen(PICC_Known *ks, PICC_Handle *val);
+extern void PICC_known_forget_all(PICC_Known *ks);
 
-extern bool PICC_knowns_register_gen(PICC_KnownSet *ks, GEN_VALUE *val);
-extern void PICC_KnownSet_Inv(PICC_KnownSet *set);
+extern bool PICC_known_register_gen(PICC_Known *ks, PICC_Handle *val);
+extern void PICC_Known_Inv(PICC_Known *set);
 #endif
