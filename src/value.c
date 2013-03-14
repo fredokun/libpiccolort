@@ -492,6 +492,7 @@ PICC_StringValue *PICC_create_empty_string_value()
 {
     PICC_StringValue *val = malloc(sizeof(PICC_StringValue));
     val->header = MAKE_HEADER(TAG_STRING, 0);
+    val->index_in_knownset = -1;
     val->handle = NULL;
 
     #ifdef CONTRACT_POST_INV
@@ -576,6 +577,7 @@ PICC_ChannelValue *PICC_create_empty_channel_value( PICC_ChannelKind kind )
     PICC_ChannelValue *val = malloc(sizeof( PICC_ChannelValue));
     ASSERT(val != NULL);
     val->header = MAKE_HEADER(TAG_CHANNEL, kind);
+    val->index_in_knownset = -1;
 
     #ifdef CONTRACT_POST_INV
         int tag = GET_VALUE_TAG(val->header);
@@ -869,7 +871,7 @@ int compare_values(PICC_Value * value1, PICC_Value * value2)
 
 PICC_Value* PICC_free_value(PICC_Value *v)
 {
-    if (v==NULL) return NULL;
+    if (v == NULL) return NULL;
 
     #ifdef CONTRACT_PRE
         ASSERT(v != NULL);
