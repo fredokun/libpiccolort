@@ -13,7 +13,7 @@
 #include <error.h>
 
 static const char *PICC_error_messages[PICC_NB_ERRORS] = {
-    "Scheduler deadlock",
+    "Scheduler deadlock.",
 
     "Can't alloc a new queue cell.",
     "Can't push the PiThread on the ready queue.",
@@ -28,12 +28,26 @@ static const char *PICC_error_messages[PICC_NB_ERRORS] = {
     "Can't add the commit to given commit list.",
     "Can't register a new out commit.",
     "Can't register a new in commit.",
-    "Can't create the PiThread.",
     "Can't create the POSIX thread.",
+    "Can't yield the thread execution.",
+    "Can't create the PiThread.",
     "Can't create the scheduler pool.",
     "Can't create the clock.",
 
-    "Released a free mutex",
+    "The mutex is already unlocked.",
+    "Can't send the condition event.",
+    "Can't broadcast the condition event.",
+
+    "Null PiThread pointer.",
+    "Null channel pointer",
+    "Null commit pointer",
+    "Null commit list element pointer.",
+    "Null commit list pointer.",
+
+    "Channel global rc error.",
+    "Invalid commit.",
+    "Invalid value.",
+    "Invalid type.",
 
     "The known set element is in an invalid state"
 };
