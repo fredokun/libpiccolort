@@ -65,4 +65,9 @@ extern void PICC_KnownSet_inv(PICC_KnownSet *set);
 extern void PICC_KnownElement_inv(PICC_KnownElement *elem);
 extern void PICC_KnownValue_inv(PICC_KnownValue *val);
 
+//DO NOT DELETE - MACRO USED BY THE GENERATED CODE 
+#define PICC_GET_HANDLE(val) ((PICC_KnownValue*) (val))->handle
+#define PICC_ACQUIRE_HANDLE(val) LOCK_HANDLE(((PICC_KnownValue*) (val))->handle)
+#define PICC_HANDLE_GLOBALRC(val) ((PICC_KnownValue*) (val))->handle->global_rc 
+
 #endif

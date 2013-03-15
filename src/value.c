@@ -448,7 +448,7 @@ void PICC_Int_substract(PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
 
 void PICC_string_handle_reclaimer(PICC_StringHandle *handle, PICC_Error* e){
     free(handle->data);
-    PICC_lock_free(handle->lock);
+    //PICC_lock_free(handle->lock); see comment in gc.c - handle_dec_ref_count
     free(handle);
 }
 
@@ -474,12 +474,6 @@ PICC_StringHandle *PICC_create_string_handle(char *string)
     return val;
 }
 
-
-PICC_StringHandle *PICC_free_string_handle(PICC_StringHandle *handle)
-{
-    PICC_string_handle_reclaimer(handle, NULL);
-    return NULL;
-}
 
 void PICC_StringHandle_inv(PICC_StringHandle *handle)
 {
@@ -525,8 +519,9 @@ PICC_Value *PICC_create_string_value( char *string )
 
 PICC_StringValue *PICC_free_string( PICC_StringValue *string )
 {
-    if(string->handle != NULL)
-        PICC_free_string_handle(string->handle);
+    //the handle will is managed with dec_ref / incr_ref functions
+    /* if(string->handle != NULL) */
+    /*     PICC_free_string_handle(string->handle); */
     free(string);
     return (string = NULL);
 }

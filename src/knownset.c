@@ -244,7 +244,7 @@ bool PICC_knownset_register(PICC_KnownSet *ks, PICC_KnownValue *val)
  * @param ks Known set
  * @param val Known value
  */
-void PICC_knownset_add(PICC_KnownSet *ks, PICC_KnownValue *val)
+bool PICC_knownset_add(PICC_KnownSet *ks, PICC_KnownValue *val)
 {
     #ifdef CONTRACT_PRE_INV
         PICC_KnownSet_inv(ks);
@@ -257,11 +257,11 @@ void PICC_knownset_add(PICC_KnownSet *ks, PICC_KnownValue *val)
     #endif
 
     PICC_KnownElement *elem;
-
+    
+    bool new_add = false;
     elem = PICC_knownset_get_element(ks, val);
     if (elem == NULL) { // not in set, we need to add it
-
-        if (ks->current_size == ks->max_size) { // set full, we need to realloc
+	if (ks->current_size == ks->max_size) { // set full, we need to realloc
         	int new_max_size = ks->current_size + SET_INIT_MAXSIZE;
         	PICC_KnownElement *new_elts = realloc(ks->content, sizeof(PICC_KnownElement) * new_max_size);
         	if (new_elts == NULL) {
@@ -279,6 +279,7 @@ void PICC_knownset_add(PICC_KnownSet *ks, PICC_KnownValue *val)
 
         ks->content[ks->current_size].value = val;
         ks->current_size ++;
+	new_add= true;
     }
 
     #ifdef CONTRACT_POST
@@ -289,6 +290,7 @@ void PICC_knownset_add(PICC_KnownSet *ks, PICC_KnownValue *val)
         PICC_KnownSet_inv(ks);
         PICC_KnownValue_inv(val);
     #endif
+	return new_add;
 }
 
 /**
