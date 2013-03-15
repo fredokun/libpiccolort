@@ -227,7 +227,7 @@ void PICC_knownset_forget_to_unknown(PICC_KnownSet *ks, PICC_KnownValue *val)
 {
     PICC_KnownElement *elem;
     PICC_KNOWNSET_FOREACH_ELEM(ks, elem) {
-        if (elem->value == val)
+        if (elem->value == val && elem->state == PICC_FORGET)
             elem->state = PICC_UNKNOWN;
     }
 }
@@ -241,7 +241,8 @@ void PICC_knownset_forget_all(PICC_KnownSet *ks)
 {
     PICC_KnownElement *elem;
     PICC_KNOWNSET_FOREACH_ELEM(ks, elem) {
-    	elem->state = PICC_FORGET;
+        if (elem->state == PICC_KNOWN)
+        	elem->state = PICC_FORGET;
     }
 }
 
