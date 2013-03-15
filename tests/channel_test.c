@@ -9,6 +9,7 @@
  */
 
 #include <stdlib.h>
+#include <gc.h>
 #include <pi_thread_repr.h>
 #include <channel_repr.h>
 #include <value_repr.h>
@@ -44,44 +45,44 @@ void test_create_channel(PICC_Error *error)
 void test_global_reference(PICC_Error *error)
 {
     PICC_Channel* channel = PICC_create_channel();
+    PICC_Handle* handle = (PICC_Handle*) channel;
 
-    PICC_channel_incr_ref_count(channel);
-    PICC_channel_incr_ref_count(channel);
-    PICC_channel_incr_ref_count(channel);
+    PICC_handle_incr_ref_count(handle);
+    PICC_handle_incr_ref_count(handle);
+    PICC_handle_incr_ref_count(handle);
 
-    ASSERT(channel->global_rc == 4);
+    ASSERT(handle->global_rc == 4);
 
-    PICC_channel_dec_ref_count(&channel);
-    PICC_channel_dec_ref_count(&channel);
+    PICC_handle_dec_ref_count(&handle);
+    PICC_handle_dec_ref_count(&handle);
 
-    ASSERT(channel->global_rc == 2);
+    ASSERT(handle->global_rc == 2);
 
-    PICC_channel_dec_ref_count(&channel);
+    PICC_handle_dec_ref_count(&handle);
 
-    ASSERT(channel->global_rc == 1);
+    ASSERT(handle->global_rc == 1);
 
-    PICC_channel_dec_ref_count(&channel);
+    PICC_handle_dec_ref_count(&handle);
 }
 
 /**
- * Test : PICC_KnownsSet and PICC_Knowns creation \n
+ * Test : PICC_KnownSet and PICC_Knowns creation \n
    check if knownsSet is created with the right size and check if \n
     knowns type is created with PICC_UNKNOWN state
  */
 void test_knowsSet(PICC_Error *error)
 {
-    PICC_KnownSet *set = PICC_create_known_set(10, error);
+    PICC_KnownSet *set = PICC_create_knownset(10, error);
     ASSERT_NO_ERROR();
     PICC_Channel* channel = PICC_create_channel();
 
     int i = 0;
-    PICC_Knowns *knowns;
-
+    PICC_KnownValue *kv;
     for (i=0;i<10;i++)
     {
-        knowns = PICC_create_knowns(PICC_create_channel_value(channel), error);
+	kv = (PICC_KnownValue*) PICC_create_channel_value(channel);
         ASSERT_NO_ERROR();
-        PICC_known_set_add(set, knowns->val);
+        PICC_knownset_add(set, kv);
     }
 }
 

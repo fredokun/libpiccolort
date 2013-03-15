@@ -25,6 +25,10 @@ PICC_Lock *PICC_create_lock(PICC_Error *error)
     return lock;
 }
 
+void PICC_lock_free(PICC_Lock *l){
+    free(l);
+}
+
 /**
  * Initializes the given lock.
  *

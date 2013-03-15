@@ -16,3 +16,4 @@ extern void PICC_test_commit();
 extern void PICC_test_channel();
 extern void PICC_test_atomic();
 extern void PICC_test_value();
+extern void PICC_test_knownset();

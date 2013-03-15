@@ -1,10 +1,12 @@
 /**
  * @file knownset.h
- * Data structures for knownsets.
+ * Data structures for known sets.
  *
  * This project is released under MIT License.
  *
- * @author Maxence WO
+ * @author Loïc Girault
+ * @author Maxence Wo
+ * @author Mickaël Menu
  */
 
 #ifndef KNOWNSET_H
@@ -13,71 +15,47 @@
 #include <stdbool.h>
 #include <error.h>
 
-#define PICC_MAX_LIST 10
+#define NOT_INDEXED -1
 
-enum
-{
-    TREE,
-    LIST
-} KNOWNSET_TYPE;
+/* #define IS_CHANNEL(header) (GET_VALUE_CTRL(value->header) == TAG_CHANNEL) */
+/* #define IS_STRING(header) (GET_VALUE_CTRL(value->header) == TAG_STRING) */
 
 /**
  * The known state of a channel
  */
-enum _PICC_KnowsState {
-    PICC_UNKNOWN, /**< TODO see spec */
-    PICC_KNOWN, /**< TODO see spec */
-    PICC_FORGET /**< TODO see spec */
+enum _PICC_KnownState {
+    PICC_UNKNOWN,
+    PICC_KNOWN,
+    PICC_FORGET
 };
 
-
-typedef struct _PICC_Value GEN_VALUE;
 /**
- * The known state of a channel
+ * Abstraction of a managed value for the KnownSet
  */
-typedef enum _PICC_KnowsState PICC_KnownsState;
-typedef struct _Tree PICC_Tree;
-typedef struct _KnownSet PICC_KnownSet;
-typedef struct _KnownSetTree PICC_KnownSetTree;
-typedef struct _KnownSetList PICC_KnownSetList;
+typedef struct _PICC_KnownValue PICC_KnownValue;
 
-typedef struct _KnownSetIterator PICC_KnownSetIterator;
-typedef struct _KnownSetTreeIterator PICC_KnownSetTreeIterator;
-typedef struct _KnownSetListIterator PICC_KnownSetListIterator;
+typedef struct _PICC_KnownSet PICC_KnownSet;
 
+/**
+ * The known state of a managed value
+ */
+typedef enum _PICC_KnownState PICC_KnownState;
 
-extern PICC_KnownSet *PICC_create_empty_known_set();
-extern PICC_KnownSet *PICC_create_known_set(int size, PICC_Error* error);
+// life cycle
+extern PICC_KnownSet *PICC_create_knownset(int init_max_size, PICC_Error* e);
+extern PICC_KnownSet *PICC_create_empty_knownset();
+extern void PICC_free_knownset(PICC_KnownSet *s);
 
-extern bool PICC_known_set_add(PICC_KnownSet *s, GEN_VALUE *elem);
-extern int PICC_known_set_size(PICC_KnownSet *s);
-extern int PICC_equals(GEN_VALUE *v, GEN_VALUE *v2);
+extern bool PICC_knownset_register(PICC_KnownSet *ks, PICC_KnownValue *val);
+extern void PICC_knownset_add(PICC_KnownSet *s, PICC_KnownValue *val);
+extern int PICC_knownset_size(PICC_KnownSet *s);
 
-//tell if elem is in the set
-extern bool PICC_known_set_mem(PICC_KnownSet *s, GEN_VALUE *elem);
+// subsets creation
+extern PICC_KnownSet *PICC_knownset_known(PICC_KnownSet *ks);
+extern PICC_KnownSet *PICC_knownset_forget(PICC_KnownSet *ks);
 
-extern PICC_KnownSetIterator *PICC_create_known_set_iterator(PICC_KnownSet *s);
-extern PICC_KnownSetIterator *PICC_delete_known_set_iterator(PICC_KnownSetIterator *it);
-extern GEN_VALUE *PICC_known_set_next(PICC_KnownSetIterator *it);
-extern bool PICC_known_set_has_next(PICC_KnownSetIterator *it);
+// state changes
+extern void PICC_knownset_forget_to_unknown(PICC_KnownSet *ks, PICC_KnownValue *val);
+extern void PICC_knownset_forget_all(PICC_KnownSet *ks);
 
-#define PICC_KNOWNSET_FOREACH(type, current, set, it)		        \
-        do{								\
-        type* current;						        \
-        PICC_KnownSetIterator *it = PICC_create_known_set_iterator(set);	\
-        while(PICC_known_set_has_next(it)){				\
-	    current = (type*) PICC_known_set_next(it)	 // no ; will be add in the code
-
-#define END_KNOWNSET_FOREACH		        \
-        }					\
-	    PICC_delete_known_set_iterator(it); \
-        }while(0)  // no ; it's intended
-
-extern PICC_KnownSet *PICC_knowns_set_knows(PICC_KnownSet *ks);
-extern PICC_KnownSet *PICC_knowns_set_forget(PICC_KnownSet *ks);
-
-extern void PICC_knowns_set_forget_to_unknown_gen(PICC_KnownSet *ks, GEN_VALUE *val);
-extern void PICC_knowns_set_forget_all(PICC_KnownSet *ks);
-
-extern bool PICC_knowns_register_gen(PICC_KnownSet *ks, GEN_VALUE *val);
 #endif

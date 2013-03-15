@@ -9,11 +9,125 @@
 
 
 #include <gc_repr.h>
+#include <knownset.h>
 #include <queue_repr.h>
-#include <concurrent.h>
 #include <channel.h>
 #include <pi_thread_repr.h>
 #include <commit_repr.h>
+
+/**
+ * Increments the global reference count of a managed value
+ *
+ * @pre h != NULL
+ *
+ * @post h->global_rc = h->global_rc@pre + 1
+ *
+ * @param Handle to update
+ */
+void PICC_handle_incr_ref_count(PICC_Handle *h)
+{
+    /* #ifdef CONTRACT_PRE_INV */
+    /*     //inv */
+    /*     PICC_Channel_inv(channel); */
+    /* #endif */
+
+    #ifdef CONTRACT_PRE
+        //pre
+        ASSERT(h != NULL );
+    #endif
+
+    #ifdef CONTRACT_POST
+        // capture
+        int global_rc_at_pre = h->global_rc;
+    #endif
+
+    LOCK_HANDLE(h);
+    h->global_rc++;
+    RELEASE_HANDLE(h);
+
+    /* #ifdef CONTRACT_POST_INV */
+    /*     //inv */
+    /*     PICC_Channel_inv(channel); */
+    /* #endif */
+
+    /* #ifdef CONTRACT_POST */
+    /*     //post */
+    /*     ASSERT(channel->global_rc == global_rc_at_pre + 1 );  */
+    /*     // cannot be asserted ! as the lock is released we don't have any garanty */
+    /* #endif */
+}
+
+/**
+ * Decrements the global reference count of a managed value
+ *
+ * @pre h != NULL
+ *
+ * @post h->global_rc = h->global_rc@pre - 1
+ *
+ * @param Handle to update
+ */
+void PICC_handle_dec_ref_count(PICC_Handle **h)
+{
+    /* #ifdef CONTRACT_PRE_INV */
+    /*     //inv */
+    /*     PICC_Channel_inv(*channel); */
+    /* #endif */
+
+    #ifdef CONTRACT_PRE
+        //pre
+        ASSERT(*h != NULL );
+    #endif
+
+    #ifdef CONTRACT_POST
+        // capture
+        int global_rc_at_pre = (*h)->global_rc;
+    #endif
+
+	// I think there is a problem here: what happens if global_rc is equal to one
+	// and another thread was about to increment it but lost the race to acquire the lock ?
+	//
+	// moreover, for now the lock is alocated in the channel/handle with the previous
+	// case in mind we cannot free it in the reclaim
+	// I think a solution would be to have a pool of Lock witch contain the lock itself
+	// and the value it's suposed to lock
+	//
+	// kind of:
+	// struct{
+	//   atomic_int cpt;
+	//   void *content;
+        // }
+	//
+	// in the function lock_alloc we would keep track of all the locks and we could
+	// reuse the ones that have cpt == 0 && content == NULL
+	//
+
+    LOCK_HANDLE(*h);
+    (*h)->global_rc--;
+
+    if ((*h)->global_rc == 0) {
+	RELEASE_HANDLE(*h);
+
+	ALLOC_ERROR(reclaim_error);
+        (*h)->reclaim(*h, &reclaim_error);
+	*h = NULL;
+        if (HAS_ERROR(reclaim_error))
+            CRASH(&reclaim_error);
+    }
+    else{
+	RELEASE_HANDLE(*h);
+    }
+
+    /* #ifdef CONTRACT_POST_INV */
+    /*     if (*h != NULL) */
+    /*         PICC_Channel_inv(*channel); */
+    /* #endif */
+
+    /* #ifdef CONTRACT_POST */
+    /*     if(global_rc_at_pre > 1) */
+    /*         ASSERT((*channel)->global_rc == global_rc_at_pre - 1 ); */
+    //cannot be asserted see incr for the same comment
+    /* #endif */
+}
 
 bool PICC_GC2(PICC_SchedPool* sched)
 {
@@ -28,7 +142,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
     }
 
     PICC_PiThread* candidates[1000];
-    PICC_KnownSet* chans = PICC_create_empty_known_set();
+    PICC_KnownSet* chans = PICC_create_empty_knownset();
 	candidates[0] = candidate;
     int candidates_size = 1;
 
@@ -39,16 +153,14 @@ bool PICC_GC2(PICC_SchedPool* sched)
 
 		PICC_Commit* commit = NULL;
 		PICC_CommitListElement* commitEl = candidate->commits->head;
-        while(commitEl){
+		while(commitEl){
 			commit = commitEl->commit;
 			PICC_Channel* chan = commit->channel;
 			int refs = 1;
-			if(PICC_known_set_add(chans, PICC_create_channel_value(chan))){
-				if(!(PICC_try_acquire(chan->lock))){
-					goto abandon_gc;
-				}
-			} else {
-				continue;
+
+			PICC_knownset_add(chans, (PICC_KnownValue*)PICC_create_channel_value(chan));
+			if (!(PICC_try_acquire(chan->lock))) {
+				goto abandon_gc;
 			}
 			PICC_Commit *incommit = NULL;
 			do{

@@ -109,13 +109,12 @@ extern PICC_StringValue *PICC_create_empty_string_value();
 typedef struct _channel_value_t PICC_ChannelValue ;
 
 extern PICC_Value *PICC_create_channel_value(PICC_Channel* channel);
-
 extern PICC_Channel *PICC_channel_of_channel_value(PICC_Value* channel); 
-extern void PICC_channel_value_acquire(PICC_Value* channel);
-extern int PICC_channel_value_global_rc(PICC_Value* channel);
+
 //extern void PICC_channel_value_release(PICC_VALUE* channel); // never explicitly released ?
 
 extern void PICC_print_value_infos(PICC_Value * value);
+extern void PICC_print_value(PICC_Value * value);
 /**********************************
  * user defined immediate values  *
  **********************************/
