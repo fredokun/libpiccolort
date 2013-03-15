@@ -22,11 +22,9 @@ void test_knownset_creation(PICC_Error *error)
     PICC_KnownSet *ks;
 
     ks = PICC_create_empty_knownset();
-    PICC_knownset_inv(ks);
 
     ks = PICC_create_knownset(5, error);
     ASSERT_NO_ERROR();
-    PICC_knownset_inv(ks);
     ASSERT(ks->max_size == 5 && ks->current_size == 0);
 }
 

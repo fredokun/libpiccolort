@@ -22,6 +22,8 @@ typedef struct _PICC_KnownElement PICC_KnownElement;
 /**
  * Abstraction of a managed value for the KnownSet
  * implemented by the PICC_ChannelValue and PICC_StringValue for now
+ *
+ * @inv handle != null
  */
 struct _PICC_KnownValue
 {
@@ -40,13 +42,15 @@ struct _PICC_KnownElement{
 #define SET_INIT_MAXSIZE 10
 
 /**
- * inv: current_size <= max_size
+ * A set of known elements.
+ *
+ * @inv 0 <= current_size <= max_size
  */
 struct _PICC_KnownSet
 {
     int max_size;
     int current_size;
-    struct _PICC_KnownElement* content;
+    struct _PICC_KnownElement *content;
 };
 
 #define PICC_KNOWNSET_FOREACH(s, e) \
@@ -57,6 +61,8 @@ struct _PICC_KnownSet
 extern PICC_KnownElement *PICC_knownset_get_element(PICC_KnownSet *knownset, PICC_KnownValue *val);
 
 // invariants
-extern void PICC_knownset_inv(PICC_KnownSet *set);
+extern void PICC_KnownSet_inv(PICC_KnownSet *set);
+extern void PICC_KnownElement_inv(PICC_KnownElement *elem);
+extern void PICC_KnownValue_inv(PICC_KnownValue *val);
 
 #endif
