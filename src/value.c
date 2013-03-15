@@ -492,7 +492,6 @@ PICC_StringValue *PICC_create_empty_string_value()
 {
     PICC_StringValue *val = malloc(sizeof(PICC_StringValue));
     val->header = MAKE_HEADER(TAG_STRING, 0);
-    val->index_in_knownset = -1;
     val->handle = NULL;
 
     #ifdef CONTRACT_POST_INV
@@ -544,7 +543,7 @@ bool PICC_copy_string(PICC_Value **to, PICC_StringValue* from){
     *strto = PICC_create_empty_string_value();
     (*strto)->handle = from->handle;
 
-    
+
     #ifdef CONTRACT_POST_INV
         PICC_StringValue_inv(from);
         PICC_StringValue_inv(*strto);
@@ -577,7 +576,6 @@ PICC_ChannelValue *PICC_create_empty_channel_value( PICC_ChannelKind kind )
     PICC_ChannelValue *val = malloc(sizeof( PICC_ChannelValue));
     ASSERT(val != NULL);
     val->header = MAKE_HEADER(TAG_CHANNEL, kind);
-    val->index_in_knownset = -1;
 
     #ifdef CONTRACT_POST_INV
         int tag = GET_VALUE_TAG(val->header);
@@ -643,7 +641,7 @@ bool PICC_copy_channel(PICC_Value **to, PICC_ChannelValue *from){
     	*channel = PICC_create_empty_channel_value( PI_CHANNEL );
     	(*channel)->channel = from->channel;
 
-    
+
     #ifdef CONTRACT_POST_INV
         PICC_ChannelValue_inv(*channel);
         PICC_ChannelValue_inv(from);

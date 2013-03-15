@@ -30,7 +30,7 @@
  * @param error Error stack
  * @return Created known set
  */
-PICC_KnownSet *PICC_create_knownset(int init_max_size, PICC_Error* error)
+PICC_KnownSet *PICC_create_knownset(int init_max_size, PICC_Error *error)
 {
     PICC_ALLOC(knownset, PICC_KnownSet, error) {
         knownset->max_size = init_max_size;
@@ -82,14 +82,17 @@ void PICC_free_knownset(PICC_KnownSet *knownset)
  */
 PICC_KnownElement *PICC_knownset_get_element(PICC_KnownSet *knownset, PICC_KnownValue *val)
 {
-    PICC_KnownElement *elem = NULL;
-
-    if (val->index_in_knownset > -1) {
-        elem = knownset->content + val->index_in_knownset;
-        if (elem->value != val) {
-            CRASH_NEW_ERROR(ERR_INVALID_KNOWNSET_STATE);
+    PICC_KnownElement *elem;
+    bool found = false;
+    PICC_KNOWNSET_FOREACH_ELEM(knownset, elem) {
+        if (elem->value == val) {
+            found = true;
+            break;
         }
     }
+
+    if (!found)
+        elem = NULL;
 
     return elem;
 }
@@ -154,7 +157,6 @@ void PICC_knownset_add(PICC_KnownSet *ks, PICC_KnownValue *val)
         }
 
         ks->content[ks->current_size].value = val;
-        val->index_in_knownset = ks->current_size;
         ks->current_size ++;
     }
 }
@@ -165,7 +167,7 @@ void PICC_knownset_add(PICC_KnownSet *ks, PICC_KnownValue *val)
  * @param knownset Known set
  * @return Size of the known set
  */
-int PICC_known_size(PICC_KnownSet *knownset)
+int PICC_knownset_size(PICC_KnownSet *knownset)
 {
     return knownset->current_size;
 }
@@ -223,7 +225,11 @@ PICC_KnownSet *PICC_knownset_forget(PICC_KnownSet *ks)
  */
 void PICC_knownset_forget_to_unknown(PICC_KnownSet *ks, PICC_KnownValue *val)
 {
-    ks->content[val->index_in_knownset].state = PICC_FORGET;
+    PICC_KnownElement *elem;
+    PICC_KNOWNSET_FOREACH_ELEM(ks, elem) {
+        if (elem->value == val)
+            elem->state = PICC_UNKNOWN;
+    }
 }
 
 /**

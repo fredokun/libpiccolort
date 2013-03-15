@@ -118,13 +118,12 @@ struct _float_value_t {
 
 struct _string_value_t {
     VALUE_HEADER;
-    int index_in_knownset;
     PICC_StringHandle *handle;
 };
 
 struct _string_handle_t  //"implements PICC_KnownHandle"
 {
-    int global_rc; 
+    int global_rc;
     PICC_Lock *lock;
     PICC_Reclaimer reclaim;
     char *data;
@@ -159,7 +158,6 @@ typedef void PICC_ChannelHandle;
 
 struct _channel_value_t {
     VALUE_HEADER ;
-    int index_in_knownset;
     PICC_ChannelHandle *channel;
 };
 

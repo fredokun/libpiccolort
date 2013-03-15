@@ -26,7 +26,6 @@ typedef struct _PICC_KnownElement PICC_KnownElement;
 struct _PICC_KnownValue
 {
     VALUE_HEADER;
-    int index_in_knownset;
     struct _PICC_Handle *handle; // Defined in gc.h
 };
 
@@ -54,19 +53,6 @@ struct _PICC_KnownSet
     for(int i = 0; \
     	i < (s)->current_size && ((e) = (s)->content[i].value);	\
     	i++)
-
-//macro unsafe utilisé dans le code généré
-#define PICC_GET_HANDLE(val) ((PICC_KnownValue*) (val))->handle
-#define PICC_ACQUIRE_HANDLE(val) LOCK_HANDLE(((PICC_KnownValue*) (val))->handle)
-#define PICC_HANDLE_GLOBALRC(val) ((PICC_KnownValue*) (val))->handle->global_rc
-
-/* #define PICC_CHANNEL_KNOWNSET_FOREACH(channel, set, it)              \ */
-/*         do{                              \ */
-/*         PICC_Channel* channel;                               \ */
-/*         PICC_KnownSetIterator *it = PICC_create_knownset_iterator(set);  \ */
-/*         while(PICC_known_set_has_next(it)){              \ */
-/*      channel = PICC_channel_of_channel_value((PICC_Value*) PICC_known_set_next(it)) */
-
 
 extern PICC_KnownElement *PICC_knownset_get_element(PICC_KnownSet *knownset, PICC_KnownValue *val);
 
