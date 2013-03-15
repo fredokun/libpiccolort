@@ -271,7 +271,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
 		PICC_release(clique[i]->lock);
 	}
 
-	// releaseAllChannel -- TODO
+	PICC_release_all_channels(chans);
 	return false;
 
 }
