@@ -33,7 +33,9 @@ static const char *PICC_error_messages[PICC_NB_ERRORS] = {
     "Can't create the scheduler pool.",
     "Can't create the clock.",
 
-    "Released a free mutex"
+    "Released a free mutex",
+
+    "The known set element is in an invalid state"
 };
 
 /**

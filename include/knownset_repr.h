@@ -56,7 +56,7 @@ struct _PICC_KnownSet
     	i++)
 
 //macro unsafe utilisé dans le code généré
-#define PICC_GET_HANDLE(val) ((PICC_KnownValue*) (val))->handle		
+#define PICC_GET_HANDLE(val) ((PICC_KnownValue*) (val))->handle
 #define PICC_ACQUIRE_HANDLE(val) LOCK_HANDLE(((PICC_KnownValue*) (val))->handle)
 #define PICC_HANDLE_GLOBALRC(val) ((PICC_KnownValue*) (val))->handle->global_rc
 
@@ -67,6 +67,8 @@ struct _PICC_KnownSet
 /*         while(PICC_known_set_has_next(it)){              \ */
 /*      channel = PICC_channel_of_channel_value((PICC_Value*) PICC_known_set_next(it)) */
 
+
+extern PICC_KnownElement *PICC_knownset_get_element(PICC_KnownSet *knownset, PICC_KnownValue *val);
 
 // invariants
 extern void PICC_knownset_inv(PICC_KnownSet *set);
