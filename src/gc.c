@@ -16,7 +16,7 @@
 #include <commit_repr.h>
 
 /**
- * Increments the global reference count of a managed value 
+ * Increments the global reference count of a managed value
  *
  * @pre h != NULL
  *
@@ -83,14 +83,14 @@ void PICC_handle_dec_ref_count(PICC_Handle **h)
         int global_rc_at_pre = (*h)->global_rc;
     #endif
 
-	// I think there is a problem here: what happens if global_rc is equal to one 
+	// I think there is a problem here: what happens if global_rc is equal to one
 	// and another thread was about to increment it but lost the race to acquire the lock ?
 	//
 	// moreover, for now the lock is alocated in the channel/handle with the previous
 	// case in mind we cannot free it in the reclaim
 	// I think a solution would be to have a pool of Lock witch contain the lock itself
 	// and the value it's suposed to lock
-	// 
+	//
 	// kind of:
 	// struct{
 	//   atomic_int cpt;
@@ -100,7 +100,7 @@ void PICC_handle_dec_ref_count(PICC_Handle **h)
 	// in the function lock_alloc we would keep track of all the locks and we could
 	// reuse the ones that have cpt == 0 && content == NULL
 	//
-	
+
     LOCK_HANDLE(*h);
     (*h)->global_rc--;
 
@@ -158,13 +158,9 @@ bool PICC_GC2(PICC_SchedPool* sched)
 			PICC_Channel* chan = commit->channel;
 			int refs = 1;
 
-			if(PICC_knownset_add(chans,
-					      (PICC_KnownValue*)PICC_create_channel_value(chan))){
-				if(!(PICC_try_acquire(chan->lock))){
-					goto abandon_gc;
-				}
-			} else {
-				continue;
+			PICC_knownset_add(chans, (PICC_KnownValue*)PICC_create_channel_value(chan));
+			if (!(PICC_try_acquire(chan->lock))) {
+				goto abandon_gc;
 			}
 			PICC_Commit *incommit = NULL;
 			do{

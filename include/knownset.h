@@ -47,7 +47,7 @@ extern PICC_KnownSet *PICC_create_empty_knownset();
 extern void PICC_free_knownset(PICC_KnownSet *s);
 
 extern bool PICC_knownset_register(PICC_KnownSet *ks, PICC_KnownValue *val);
-extern bool PICC_knownset_add(PICC_KnownSet *s, PICC_KnownValue *val);
+extern void PICC_knownset_add(PICC_KnownSet *s, PICC_KnownValue *val);
 extern int PICC_knownset_size(PICC_KnownSet *s);
 
 // subsets creation
