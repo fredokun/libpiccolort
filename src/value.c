@@ -404,42 +404,118 @@ void PICC_Int_substract(PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
  * Tuples values  *
 ******************/
 
-/* PICC_TupleValue * PICC_create_tuple_value(int size) { */
+PICC_Value *PICC_create_tuple_value(int size) { 
 
-/*     #ifdef CONTRACT_PRE */
-/*         //pre */
-/* 		ASSERT(size >= 0); */
-/*     #endif */
+    #ifdef CONTRACT_PRE 
+       //pre 
+ 		ASSERT(size >= 0); 
+    #endif 
 
-/*     PICC_TupleValue * val = malloc(sizeof(PICC_TupleValue)); */
-/*     if (val == NULL) { */
-/*         abort_with_message("Cannot allocate tuple"); */
-/*     } */
-/*     val->header = MAKE_HEADER(TAG_TUPLE, size); */
-/*     val->elements = malloc(sizeof(PICC_Value *) * size); */
-/*     if (val->elements == NULL) { */
-/*         abort_with_message("Cannot allocate tuple elements"); */
-/*     } */
+    PICC_ALLOC_CRASH(val, PICC_TupleValue) {
+        val->header = MAKE_HEADER(TAG_TUPLE, size);
+        val->elements = malloc(sizeof(PICC_Value *)*size);
+        val->size = size;
+    }
 
-/*     #ifdef CONTRACT_POST_INV */
-/*         PICC_TupleValue_inv(val); */
-/*     #endif */
 
-/*     return val; */
-/* } */
+    #ifdef CONTRACT_POST_INV 
+        PICC_TupleValue_inv(val); 
+    #endif 
 
-/* PICC_TupleValue * free_tuple(PICC_TupleValue * tup) { */
-/*   free(tup->elements); */
-/*   free(tup); */
-/*   return NULL; */
-/* } */
+    #ifdef CONTRACT_POST
+        ASSERT(val->size == size)
+    #endif 
 
-/* void PICC_TupleValue_inv(PICC_TupleValue *tuple) */
-/* { */
-/*     ASSERT(tuple != NULL ); */
-/*     int tag = GET_VALUE_TAG(tuple->header); */
-/*     ASSERT(tag == TAG_TUPLE ) */
-/* } */
+    return (PICC_Value *)val; 
+} 
+
+PICC_TupleValue * PICC_free_tuple_value(PICC_TupleValue * tup) {
+   free(tup->elements); 
+   free(tup); 
+   return NULL; 
+}
+
+void PICC_TupleValue_inv(PICC_TupleValue *tuple)
+{ 
+    ASSERT(tuple != NULL ); 
+    int tag = GET_VALUE_TAG(tuple->header); 
+    ASSERT(tag == TAG_TUPLE );
+    ASSERT(tuple->size >=0);
+    if(tuple->size >0)
+        ASSERT(tuple->elements !=NULL);
+}
+
+void PICC_set_tuple_elements(PICC_Value *val, PICC_Value **values)
+{
+    PICC_TupleValue * tuple = (PICC_TupleValue*) val;
+
+    #ifdef CONTRACT_PRE_INV
+        PICC_TupleValue_inv(tuple);
+
+    #endif
+
+    #ifdef CONTRACT_PRE
+        ASSERT(values!= NULL);
+    #endif
+
+    tuple->elements = values;
+    
+    #ifdef CONTRACT_POST_INV 
+        PICC_TupleValue_inv(tuple); 
+    #endif 
+}
+
+PICC_Value *PICC_get_tuple_element(PICC_Value *val, int index)
+{
+    PICC_TupleValue * tuple = (PICC_TupleValue*) val;
+
+    #ifdef CONTRACT_PRE_INV
+        PICC_TupleValue_inv(tuple);
+    #endif
+
+    #ifdef CONTRACT_PRE
+        ASSERT(index>=0);
+        ASSERT(index<tuple->size);
+    #endif
+    
+    #ifdef CONTRACT_POST_INV 
+        PICC_TupleValue_inv(tuple); 
+    #endif
+
+    return tuple->elements[index];
+}
+
+bool PICC_copy_tuple(PICC_Value **to, PICC_TupleValue* from){
+
+    #ifdef CONTRACT_PRE_INV
+        PICC_TupleValue_inv(from);
+    #endif
+
+    PICC_TupleValue **tuple = (PICC_TupleValue**) to;
+
+    *to = PICC_create_tuple_value(from->size);
+
+    int i;
+    for(i=0;i<from->size;i++)
+    {
+        (*tuple)->elements[i] = from->elements[i];
+    }
+    
+    #ifdef CONTRACT_PRE_INV
+        PICC_TupleValue_inv(from);
+        PICC_TupleValue_inv(*tuple);
+    #endif
+
+    #ifdef CONTRACT_POST
+        ASSERT((*tuple)->size == from->size );
+        for(i=0;i<from->size;i++)
+        {
+            ASSERT((*tuple)->elements[i] == from->elements[i]);
+        }
+    #endif
+
+    return true;
+}
 
 /******************
  * String values  *
@@ -585,6 +661,11 @@ void PICC_StringValue_inv(PICC_StringValue *string)
 
 PICC_ChannelValue *PICC_create_empty_channel_value( PICC_ChannelKind kind )
 {
+
+    #ifdef CONTRACT_PRE
+        ASSERT(kind != NULL);
+    #endif
+
     PICC_ChannelValue *val = malloc(sizeof( PICC_ChannelValue));
     ASSERT(val != NULL);
     val->header = MAKE_HEADER(TAG_CHANNEL, kind);
@@ -676,6 +757,11 @@ void PICC_channel_value_acquire(PICC_Value* channel){
 }
 
 int PICC_channel_value_global_rc(PICC_Value* channel){
+
+    #ifdef CONTRACT_PRE_INV
+        PICC_ChannelValue_inv(channel);
+    #endif
+
     #ifdef CONTRACT_PRE
         ASSERT(IS_CHANNEL(channel));
     #endif
@@ -910,18 +996,16 @@ PICC_Value* PICC_free_value(PICC_Value *v)
         case TAG_NOVALUE:
         case TAG_BOOLEAN:
     	    return NULL;
-
         case TAG_INTEGER:
     	    return (PICC_Value*) PICC_free_int((PICC_IntValue*) v);
-
         case TAG_STRING:
     	    return (PICC_Value*) PICC_free_string((PICC_StringValue*) v);
-
         case TAG_CHANNEL:
         	return (PICC_Value*) PICC_free_channel_value((PICC_ChannelValue*) v);
-    	/*TODO*/
-        case TAG_FLOAT:
         case TAG_TUPLE:
+            return (PICC_Value*) PICC_free_tuple_value((PICC_TupleValue*) v);
+        /*TODO*/
+        case TAG_FLOAT:
         case TAG_USER_DEFINED_IMMEDIATE:
         case TAG_USER_DEFINED_MANAGED:
     	return NULL;
@@ -959,9 +1043,12 @@ bool PICC_copy_value(PICC_Value **to, PICC_Value *from) {
         case TAG_CHANNEL:
         	PICC_copy_channel(to,(PICC_ChannelValue *)from);
             return true;
+        case TAG_TUPLE:
+            PICC_copy_tuple(to,(PICC_TupleValue *)from);
+            return true;
     	/*TODO*/
         case TAG_FLOAT:
-        case TAG_TUPLE:
+        
         case TAG_USER_DEFINED_IMMEDIATE:
         case TAG_USER_DEFINED_MANAGED:
     	return true;
@@ -1003,17 +1090,16 @@ void PICC_print_value_infos(PICC_Value * value)
             }
             break;
         }
-        /* case TAG_TUPLE: { */
-        /*   printf("Type: tuple\n"); */
-        /*   PICC_TupleValue *tup = (PICC_TupleValue *) value; */
-        /*   for(int i=0;i<ctrl;i++) { */
-        /*     printf("%d-th element>>>>>>>>>\n",i); */
-        /*     print_value_infos(tup->elements[i]); */
-        /*     printf("<<<<<<<<<<<\n"); */
-        /*   } */
-        /*   break; */
-        /* } */
-
+        case TAG_TUPLE: { 
+            printf("Type: tuple\n");
+            PICC_TupleValue *tup = (PICC_TupleValue *) value;
+            for(int i=0;i<ctrl;i++) { 
+                printf("%d-th element>>>>>>>>>\n",i); 
+                PICC_print_value_infos(tup->elements[i]); 
+                printf("<<<<<<<<<<<\n");
+            }
+            break;
+        } 
         case TAG_STRING:
             printf("%s\n", ((PICC_StringValue *)value)->handle->data );
             break;

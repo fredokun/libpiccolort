@@ -88,9 +88,9 @@ extern void PICC_Int_substract(PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
 
 typedef struct _tuple_value_t PICC_TupleValue ;
 
-/* extern PICC_TupleValue *PICC_create_tuple_value(int arity); */
-/* extern PICC_TupleValue *PICC_free_tuple(PICC_TupleValue *tuple); */
-/* extern void PICC_TupleValue_inv(PICC_TupleValue *tuple); */
+extern PICC_Value *PICC_create_tuple_value(int size); 
+extern PICC_TupleValue *PICC_free_tuple(PICC_TupleValue *tuple);
+
 
 /******************
  * String values  *
