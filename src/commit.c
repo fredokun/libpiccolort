@@ -154,7 +154,7 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
 
     #ifdef CONTRACT_POST
         // captures
-        int size_at_pre = pt->commits->size;
+        int size_at_pre = ch->outcommits->size;
     #endif
 
     ALLOC_ERROR(sub_error);
@@ -170,6 +170,8 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
         commit->type = PICC_OUT_COMMIT;
 
         ALLOC_ERROR(add_error);
+        // TODO assert if ch belong to the environment of pt
+        PICC_commit_list_add(ch->outcommits, commit, &add_error);
         PICC_commit_list_add(pt->commits, commit, &add_error);
         if (HAS_ERROR(add_error)) {
             ADD_ERROR(&sub_error, add_error, ERR_REGISTER_IN_COMMIT);
@@ -189,12 +191,12 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
 
     #ifdef CONTRACT_POST
         //post
-        ASSERT(pt->commits->size == (size_at_pre + 1));
-        ASSERT(pt->commits->head->commit->type == PICC_OUT_COMMIT);
-        ASSERT(pt->commits->head->commit->content.out->eval_func == eval);
-        ASSERT(pt->commits->head->commit->thread == pt);
-        ASSERT(pt->commits->head->commit->channel == ch);
-        ASSERT(pt->commits->head->commit->cont_pc == cont_pc);
+        ASSERT(ch->outcommits->size == (size_at_pre + 1));
+        ASSERT(ch->outcommits->head->commit->type == PICC_OUT_COMMIT);
+        ASSERT(ch->outcommits->head->commit->content.out->eval_func == eval);
+        ASSERT(ch->outcommits->head->commit->thread == pt);
+        ASSERT(ch->outcommits->head->commit->channel == ch);
+        ASSERT(ch->outcommits->head->commit->cont_pc == cont_pc);
     #endif
 }
 /**
@@ -236,7 +238,7 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
 
     #ifdef CONTRACT_POST
         // captures
-        int size_at_pre = pt->commits->size;
+        int size_at_pre = ch->outcommits->size;
     #endif
 
     ALLOC_ERROR(sub_error);
@@ -250,6 +252,8 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
         commit->type = PICC_IN_COMMIT;
 
         ALLOC_ERROR(add_error);
+        // TODO assert if ch belong to the environment of pt
+        PICC_commit_list_add(ch->incommits, commit, &add_error);
         PICC_commit_list_add(pt->commits, commit, &add_error);
         if (HAS_ERROR(add_error)) {
             ADD_ERROR(&sub_error, add_error, ERR_REGISTER_IN_COMMIT);
@@ -270,12 +274,12 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
 
     #ifdef CONTRACT_POST
         //post
-		ASSERT(pt->commits->size == (size_at_pre + 1));
-		ASSERT(pt->commits->head->commit->type == PICC_IN_COMMIT);
-		ASSERT(pt->commits->head->commit->content.in->refvar == refvar);
-		ASSERT(pt->commits->head->commit->thread == pt);
-		ASSERT(pt->commits->head->commit->channel == ch);
-		ASSERT(pt->commits->head->commit->cont_pc == cont_pc);
+		ASSERT(ch->incommits->size == (size_at_pre + 1));
+		ASSERT(ch->incommits->head->commit->type == PICC_IN_COMMIT);
+		ASSERT(ch->incommits->head->commit->content.in->refvar == refvar);
+		ASSERT(ch->incommits->head->commit->thread == pt);
+		ASSERT(ch->incommits->head->commit->channel == ch);
+		ASSERT(ch->incommits->head->commit->cont_pc == cont_pc);
     #endif
 
 }

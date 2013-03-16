@@ -19,6 +19,7 @@ typedef pthread_mutex_t PICC_Lock;
 typedef pthread_cond_t PICC_Condition;
 
 extern PICC_Lock *PICC_create_lock(PICC_Error *error);
+extern void PICC_lock_free(PICC_Lock *lock);
 extern void PICC_init_lock(PICC_Lock *lock);
 extern void PICC_init_condition(PICC_Condition *cond);
 extern bool PICC_try_acquire(PICC_Lock *lock);

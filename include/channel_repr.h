@@ -13,6 +13,7 @@
 #ifndef CHANNEL_REPR_H
 #define CHANNEL_REPR_H
 
+#include <gc.h>
 #include <stdbool.h>
 #include <commit.h>
 #include <channel.h>
@@ -32,15 +33,19 @@
 /**
  * The type of the pi-thread channels
  */
-struct _PICC_Channel {
+struct _PICC_Channel 
+{ //"implements PICC_Handle" cf gc_repr.h
     /**@{*/
-    PICC_CommitList* incommits; /**< The input commits list */
-    PICC_CommitList* outcommits; /**< The output commits list */
+    //global_rc and lock have to be first for PICC_channel to be "castable" as a PICC_KnownHandle
     int global_rc; /** The number of commitments to that reference
 
                     this channel (TODO see spec)*/
     PICC_Lock *lock; /** This channel lock to protect from concurrent
                         accesses*/
+    PICC_Reclaimer reclaim;
+
+    PICC_CommitList* incommits; /**< The input commits list */
+    PICC_CommitList* outcommits; /**< The output commits list */
     /**@}*/
 };
 
@@ -48,20 +53,20 @@ struct _PICC_Channel {
 /* /\** */
 /*  * The set of known channels */
 /*  *\/ */
-/* struct _PICC_KnownsSet { */
+/* struct _PICC_KnownSet { */
 /*     /\**@{*\/ */
-/*     PICC_Knowns **knowns; /\** A pointer to an array of knowns. */
+/*     PICC_PiResource **knowns; /\** A pointer to an array of knowns. */
 /*                             Contains all the data *\/ */
 /*     int size; /\**< The size of the set *\/ */
 /*     /\**@}*\/ */
 /* }; */
 
 
-//extern PICC_KnownsSet *PICC_create_knowns_set(int length, PICC_Error *error);
+//extern PICC_KnownSet *PICC_create_knowns_set(int length, PICC_Error *error);
 extern void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error);
 extern void PICC_free_channel(PICC_Channel *channel);
 
 extern void PICC_Channel_inv(PICC_Channel *channel);
-//extern void PICC_KnownsSet_inv(PICC_KnownsSet *set);
+//extern void PICC_KnownSet_inv(PICC_KnownSet *set);
 
 #endif

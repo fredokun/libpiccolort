@@ -143,8 +143,6 @@ void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt)
     if (HAS_ERROR(error))
         CRASH(&error);
 
-    RELEASE_QUEUE(rq);
-
     #ifdef CONTRACT_POST_INV
         // inv@post
         PICC_ReadyQueue_inv(rq);
@@ -168,6 +166,8 @@ void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt)
         // post: rq.head.thread == pt
         ASSERT(rq->q.head->thread == pt);
     #endif
+
+    RELEASE_QUEUE(rq);
 }
 
 /**
@@ -236,8 +236,6 @@ void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt)
         rq->q.size++;
     }
 
-    RELEASE_QUEUE(rq);
-
     if (HAS_ERROR(error))
         CRASH(&error);
 
@@ -264,6 +262,8 @@ void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt)
         // post: rq.tail.thread == pt
         ASSERT(rq->q.tail->thread == pt);
     #endif
+
+    RELEASE_QUEUE(rq);
 }
 
 /**
@@ -309,8 +309,6 @@ PICC_PiThread *PICC_ready_queue_pop(PICC_ReadyQueue *rq)
             rq->q.tail = NULL;
     }
 
-    RELEASE_QUEUE(rq);
-
     #ifdef CONTRACT_POST_INV
         // inv@post
         PICC_ReadyQueue_inv(rq);
@@ -328,6 +326,7 @@ PICC_PiThread *PICC_ready_queue_pop(PICC_ReadyQueue *rq)
         }
     #endif
 
+    RELEASE_QUEUE(rq);
     return popped_thread;
 }
 
@@ -352,7 +351,6 @@ int PICC_ready_queue_size(PICC_ReadyQueue *rq)
 
     LOCK_QUEUE(rq);
     int size = rq->q.size;
-    RELEASE_QUEUE(rq);
 
     #ifdef CONTRACT_POST_INV
         // inv@post
@@ -370,6 +368,7 @@ int PICC_ready_queue_size(PICC_ReadyQueue *rq)
         ASSERT(size == count);
     #endif
 
+    RELEASE_QUEUE(rq);
     return size;
 }
 
@@ -485,8 +484,6 @@ void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt)
         wq->active.size++;
     }
 
-    RELEASE_QUEUE(wq);
-
     if (HAS_ERROR(error))
         CRASH(&error);
 
@@ -516,6 +513,8 @@ void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt)
         // post: wq.active.head.thread == pt
         ASSERT(wq->active.head->thread == pt);
     #endif
+
+    RELEASE_QUEUE(wq);
 }
 
 
@@ -621,8 +620,6 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
             zone = OLD;
     }
 
-    RELEASE_QUEUE(wq);
-
     #ifdef CONTRACT_POST_INV
         // inv@post
         PICC_WaitQueue_inv(wq);
@@ -670,6 +667,7 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
         }
     #endif
 
+    RELEASE_QUEUE(wq);
     return result;
 }
 
@@ -754,8 +752,6 @@ void PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error 
         wq->old.size++;
     }
 
-    RELEASE_QUEUE(wq);
-
     #ifdef CONTRACT_POST_INV
         // inv@post
         PICC_WaitQueue_inv(wq);
@@ -782,8 +778,9 @@ void PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error 
             ASSERT(wq->old.head->next->thread == head_at_pre);
         // post: wq.old.size == wq.old.size@pre + 1
         ASSERT(wq->old.size == size_at_pre + 1);
-
     #endif
+
+    RELEASE_QUEUE(wq);
 }
 
 /**
@@ -841,8 +838,6 @@ PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq)
         wq->old.size--;
     }
 
-    RELEASE_QUEUE(wq);
-
     #ifdef CONTRACT_POST_INV
         // inv@post
         PICC_WaitQueue_inv(wq);
@@ -860,6 +855,7 @@ PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq)
         }
     #endif
 
+    RELEASE_QUEUE(wq);
     return popped_thread;
 }
 
@@ -885,7 +881,6 @@ int PICC_wait_queue_size(PICC_WaitQueue *wq)
     LOCK_QUEUE(wq);
     int size = wq->active.size;
     size += wq->old.size;
-    RELEASE_QUEUE(wq);
 
     #ifdef CONTRACT_POST_INV
         // inv@post
@@ -910,6 +905,7 @@ int PICC_wait_queue_size(PICC_WaitQueue *wq)
         ASSERT(size == count);
     #endif
 
+    RELEASE_QUEUE(wq);
     return size;
 }
 
@@ -935,7 +931,6 @@ int PICC_wait_queue_max_active(PICC_WaitQueue *wq)
     ASSERT(wq != NULL);
     LOCK_QUEUE(wq);
     int size = wq->active.size;
-    RELEASE_QUEUE(wq);
 
     #ifdef CONTRACT_POST_INV
         // inv@post
@@ -955,6 +950,7 @@ int PICC_wait_queue_max_active(PICC_WaitQueue *wq)
         ASSERT(size == count);
     #endif
 
+    RELEASE_QUEUE(wq);
     return size;
 }
 
@@ -997,8 +993,6 @@ void PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq)
     wq->active.head = NULL;
     wq->active.tail = NULL;
 
-    RELEASE_QUEUE(wq);
-
     #ifdef CONTRACT_POST_INV
         // inv@post
         PICC_WaitQueue_inv(wq);
@@ -1015,6 +1009,8 @@ void PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq)
         // post: wq.old.head == wq.active.head@pre
         ASSERT(wq->old.head->thread == active_head_at_pre);
     #endif
+
+    RELEASE_QUEUE(wq);
 }
 
 // Queue structure invariants //////////////////////////////////////////////////

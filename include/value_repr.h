@@ -13,6 +13,7 @@
 #define VALUE_REPR_H
 
 #include <value.h>
+#include <gc.h>
 #include <channel.h>
 #include <atomic.h>
 #include <atomic_repr.h>
@@ -120,9 +121,11 @@ struct _string_value_t {
     PICC_StringHandle *handle;
 };
 
-struct _string_handle_t
+struct _string_handle_t  //"implements PICC_KnownHandle"
 {
-    PICC_AtomicInt *refcount;
+    int global_rc;
+    PICC_Lock *lock;
+    PICC_Reclaimer reclaim;
     char *data;
 };
 
@@ -157,11 +160,14 @@ typedef enum {
     PI_CHANNEL =0
 }PICC_ChannelKind;
 
+typedef void PICC_ChannelHandle;
+
 struct _channel_value_t {
     VALUE_HEADER ;
-    void *channel;
+    PICC_ChannelHandle *channel;
 };
 
+extern PICC_ChannelValue *PICC_create_empty_channel_value( PICC_ChannelKind kind );
 extern void PICC_ChannelValue_inv(PICC_ChannelValue *channel);
 extern PICC_ChannelValue *PICC_free_channel_value( PICC_ChannelValue *channel);
 

@@ -7,9 +7,12 @@
 # @author Dany SIRIPHOL
 
 CC=gcc
+LCC=ar -rs
 CFLAGS=-g -Wall -std=c99 -I\include -I\tests
 OFLAGS= -lpthread
 NAME=run_tests
+LIB_NAME=pirt
+FULL_LIB_NAME=lib$(LIB_NAME).a
 BIN=bin
 LIB=lib
 INCLUDE=include
@@ -18,12 +21,13 @@ TESTS=tests
 
 SRCFILES=$(wildcard $(SRC)/*.c)
 TARG1=$(subst .c,.o, $(SRCFILES))
+LIB_OBJ=$(subst $(SRC), $(LIB), $(TARG1))
 TESTSFILES=$(wildcard $(TESTS)/*.c)
 TARG2=$(subst .c,.o, $(TESTSFILES))
-OBJ=$(subst $(SRC), $(LIB), $(TARG1)) $(subst $(TESTS), $(LIB), $(TARG2))
+OBJ=$(LIB_OBJ) $(subst $(TESTS), $(LIB), $(TARG2))
 
 
-all : clean init $(BIN)/$(NAME)
+all : clean init $(BIN)/$(NAME) $(LIB)/$(FULL_LIB_NAME)
 
 init :
 	mkdir -p $(LIB)
@@ -39,6 +43,8 @@ $(LIB)/%.o: $(TESTS)/%.c $(DEPS)
 $(BIN)/$(NAME): $(OBJ)
 	$(CC) -o $@ $^ $(OFLAGS)
 
+$(LIB)/$(FULL_LIB_NAME): $(LIB_OBJ)
+	$(LCC) $@ $^
 
 clean:
 	rm -f bin/* lib/*

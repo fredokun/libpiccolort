@@ -522,6 +522,11 @@ bool PICC_copy_tuple(PICC_Value **to, PICC_TupleValue* from){
  ******************/
 
 
+void PICC_string_handle_reclaimer(PICC_StringHandle *handle, PICC_Error* e){
+    free(handle->data);
+    //PICC_lock_free(handle->lock); see comment in gc.c - handle_dec_ref_count
+    free(handle);
+}
 
 PICC_StringHandle *PICC_create_string_handle(char *string)
 {
@@ -531,8 +536,9 @@ PICC_StringHandle *PICC_create_string_handle(char *string)
     #endif
 
     PICC_ALLOC_CRASH(val, PICC_StringHandle) {
-        val->refcount = PICC_create_atomic_int(0, NULL);
-        PICC_atomic_int_get_and_set(val->refcount, 1);
+        val->global_rc = 1;
+	val->lock = PICC_create_lock(NULL);
+	val->reclaim= (PICC_Reclaimer)PICC_string_handle_reclaimer;
         val->data = malloc(sizeof(char)*strlen(string) +1);
         strcpy(val->data, string);
     }
@@ -545,25 +551,10 @@ PICC_StringHandle *PICC_create_string_handle(char *string)
 }
 
 
-PICC_StringHandle *PICC_free_string_handle(PICC_StringHandle *handle)
-{
-
-    PICC_AtomicInt *at_int=handle->refcount;
-    PICC_atomic_int_get_and_decrement(at_int);
-
-    if (at_int == 0) { //!\ same test in copy, if = 0 -> failure
-    	free(handle->data);
-    	PICC_free_atomic_int(handle->refcount);
-    	free(handle);
-    }
-
-    return (handle = NULL);
-}
-
 void PICC_StringHandle_inv(PICC_StringHandle *handle)
 {
     ASSERT(handle != NULL);
-    ASSERT(handle->refcount >= 0);
+    ASSERT(handle->global_rc >= 0);
 }
 
 
@@ -604,8 +595,9 @@ PICC_Value *PICC_create_string_value( char *string )
 
 PICC_StringValue *PICC_free_string( PICC_StringValue *string )
 {
-    if(string->handle != NULL)
-        PICC_free_string_handle(string->handle);
+    //the handle will is managed with dec_ref / incr_ref functions
+    /* if(string->handle != NULL) */
+    /*     PICC_free_string_handle(string->handle); */
     free(string);
     return (string = NULL);
 }
@@ -613,24 +605,16 @@ PICC_StringValue *PICC_free_string( PICC_StringValue *string )
 bool PICC_copy_string(PICC_Value **to, PICC_StringValue* from){
 
 
-    PICC_AtomicInt *at_int=from->handle->refcount;
-
     #ifdef CONTRACT_PRE_INV
         PICC_StringValue_inv(from);
     #endif
-
-    #ifdef CONTRACT_POST
-        int refcount_at_pre = PICC_atomic_int_get(at_int);
-    #endif
-    
-    PICC_atomic_int_get_and_increment(at_int);
 
     PICC_StringValue** strto = (PICC_StringValue**) to;
 
     *strto = PICC_create_empty_string_value();
     (*strto)->handle = from->handle;
 
-    
+
     #ifdef CONTRACT_POST_INV
         PICC_StringValue_inv(from);
         PICC_StringValue_inv(*strto);
@@ -638,7 +622,6 @@ bool PICC_copy_string(PICC_Value **to, PICC_StringValue* from){
 
     #ifdef CONTRACT_POST
         ASSERT(strcmp(from->handle->data, (*strto)->handle->data) == 0 );
-        ASSERT(PICC_atomic_int_get(at_int) == (refcount_at_pre + 1) );
     #endif
 
     return true;
@@ -661,10 +644,6 @@ void PICC_StringValue_inv(PICC_StringValue *string)
 
 PICC_ChannelValue *PICC_create_empty_channel_value( PICC_ChannelKind kind )
 {
-
-    #ifdef CONTRACT_PRE
-        ASSERT(kind != NULL);
-    #endif
 
     PICC_ChannelValue *val = malloc(sizeof( PICC_ChannelValue));
     ASSERT(val != NULL);
@@ -734,7 +713,7 @@ bool PICC_copy_channel(PICC_Value **to, PICC_ChannelValue *from){
     	*channel = PICC_create_empty_channel_value( PI_CHANNEL );
     	(*channel)->channel = from->channel;
 
-    
+
     #ifdef CONTRACT_POST_INV
         PICC_ChannelValue_inv(*channel);
         PICC_ChannelValue_inv(from);
@@ -747,28 +726,6 @@ bool PICC_copy_channel(PICC_Value **to, PICC_ChannelValue *from){
     return true;
 }
 
-void PICC_channel_value_acquire(PICC_Value* channel){
-    #ifdef CONTRACT_PRE
-        ASSERT(IS_CHANNEL(channel));
-    #endif
-
-    PICC_Channel *c = (PICC_Channel*) ((PICC_ChannelValue*) channel)->channel;
-    PICC_acquire(c->lock);
-}
-
-int PICC_channel_value_global_rc(PICC_Value* channel){
-
-    #ifdef CONTRACT_PRE_INV
-        PICC_ChannelValue_inv(channel);
-    #endif
-
-    #ifdef CONTRACT_PRE
-        ASSERT(IS_CHANNEL(channel));
-    #endif
-
-    PICC_Channel *c = (PICC_Channel*) ((PICC_ChannelValue*) channel)->channel;
-    return c->global_rc;
-}
 
 void PICC_ChannelValue_inv(PICC_ChannelValue *channel)
 {
@@ -776,8 +733,9 @@ void PICC_ChannelValue_inv(PICC_ChannelValue *channel)
     int tag = GET_VALUE_TAG(channel->header);
     int ctrl = GET_VALUE_CTRL(channel->header);
     ASSERT(tag == TAG_CHANNEL );
-    if(ctrl == PI_CHANNEL)
-        PICC_Channel_inv(channel->channel);
+    if(channel->channel != NULL)
+        if(ctrl == PI_CHANNEL)
+            PICC_Channel_inv(channel->channel);
 }
 
 /**********************************
