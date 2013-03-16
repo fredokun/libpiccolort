@@ -14,7 +14,7 @@
 #include <channel.h>
 #include <pi_thread_repr.h>
 #include <commit_repr.h>
-
+#include <stdio.h>
 /**
  * Increments the global reference count of a managed value
  *
@@ -103,7 +103,7 @@ void PICC_handle_dec_ref_count(PICC_Handle **h)
 
     LOCK_HANDLE(*h);
     (*h)->global_rc--;
-
+    
     if ((*h)->global_rc == 0) {
 	RELEASE_HANDLE(*h);
 
@@ -134,7 +134,8 @@ bool PICC_GC2(PICC_SchedPool* sched)
     PICC_PiThread* clique[1000];
     int clique_size = 0;
     PICC_PiThread* candidate = PICC_wait_queue_pop_old(sched->wait);
-
+    
+    printf("PICC_GC2 - GO !!\n");
     if(!(PICC_try_acquire(candidate->lock)))
     {
         PICC_wait_queue_push(sched->wait, candidate);
@@ -254,6 +255,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
 		// reclaim clique[i]	-- TODO
 	}
 
+    printf("GC don't release !!\n");
     return true;
 
     abandon_gc:
@@ -266,8 +268,9 @@ bool PICC_GC2(PICC_SchedPool* sched)
 		PICC_wait_queue_push(sched->wait, clique[i]);
 		PICC_release(clique[i]->lock);
 	}
-
-	PICC_release_all_channels(chans);
+	
+	printf("GC release all !!\n");
+	PICC_release_all_channels(chans); //-> released one by one in the loop
 	return false;
 
 }
