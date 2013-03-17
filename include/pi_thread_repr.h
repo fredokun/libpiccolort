@@ -106,5 +106,6 @@ extern PICC_Clock *PICC_create_clock(PICC_Error *error);
 extern void PICC_reclaim_clock(PICC_Clock *clock);
 
 extern void PICC_PiThread_inv(PICC_PiThread *pt);
+extern void PICC_reclaim_pi_thread(PICC_PiThread *pt);
 
 #endif

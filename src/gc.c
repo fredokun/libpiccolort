@@ -15,6 +15,7 @@
 #include <pi_thread_repr.h>
 #include <commit_repr.h>
 #include <stdio.h>
+#include <tools.h>
 /**
  * Increments the global reference count of a managed value
  *
@@ -248,11 +249,10 @@ bool PICC_GC2(PICC_SchedPool* sched)
 
 
     }
-    //while(candidates[i]->nb_slaves > 0); -- Maxence version, dunno WTF he is trying to do
     while(candidates_size > 0);
 
     for(int i = 0; i < clique_size; i++){
-		// reclaim clique[i]	-- TODO
+        PICC_reclaim_pi_thread(clique[i]);
 	}
 
     printf("GC don't release !!\n");
