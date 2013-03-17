@@ -68,6 +68,9 @@ extern void PICC_Int_multiply (PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
 extern void PICC_Int_divide   (PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
 extern void PICC_Int_substract(PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
 
+extern void PICC_Int_less_than(PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
+extern void PICC_Int_modulo(PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
+
 /******************************
  * Immediate values : float *
  ******************************/

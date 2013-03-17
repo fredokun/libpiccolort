@@ -373,6 +373,68 @@ void PICC_Int_substract(PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
     #endif
 }
 
+void PICC_Int_less_than(PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
+{
+    PICC_IntValue * iv1 = (PICC_IntValue*) v1;
+    PICC_IntValue * iv2 = (PICC_IntValue*) v2;
+
+    #ifdef CONTRACT_PRE_INV
+        PICC_IntValue_inv(iv1);
+        PICC_IntValue_inv(iv2);
+    #endif
+
+    #ifdef CONTRACT_POST
+        //capture
+        int value1_at_pre = iv1->data;
+        int value2_at_pre = iv2->data;
+    #endif
+
+    int r = iv1->data < iv2->data;
+
+    PICC_INIT_BOOL_VALUE(res, r);
+    
+    #ifdef CONTRACT_POST_INV
+        PICC_IntValue_inv(iv1);
+        PICC_IntValue_inv(iv2);
+    #endif
+
+    #ifdef CONTRACT_POST
+        //post
+        ASSERT(PICC_BOOL_OF_BOOL_VALUE(res) == (value1_at_pre < value2_at_pre) );
+    #endif
+}
+
+void PICC_Int_modulo(PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
+{
+    PICC_IntValue * iv1 = (PICC_IntValue*) v1;
+    PICC_IntValue * iv2 = (PICC_IntValue*) v2;
+
+    #ifdef CONTRACT_PRE_INV
+        PICC_IntValue_inv(iv1);
+        PICC_IntValue_inv(iv2);
+    #endif
+
+    #ifdef CONTRACT_POST
+        //capture
+        int value1_at_pre = iv1->data;
+        int value2_at_pre = iv2->data;
+    #endif
+
+    int r = iv1->data % iv2->data;
+
+    PICC_INIT_INT_VALUE(res, r);
+    
+    #ifdef CONTRACT_POST_INV
+        PICC_IntValue_inv(iv1);
+        PICC_IntValue_inv(iv2);
+    #endif
+
+    #ifdef CONTRACT_POST
+        //post
+  	ASSERT(((PICC_IntValue*)res)->data == value1_at_pre % value2_at_pre);
+  #endif
+}
+
 /******************************
  * Immediate values : float *
  ******************************/
