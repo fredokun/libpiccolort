@@ -27,7 +27,12 @@
 #define ASSERT_NO_ERROR() \
  ASSERT(!HAS_ERROR((*error)))
 
-PICC_Value* func(PICC_PiThread* a) { printf("my eval func !\n"); return NULL; };
+PICC_Value func(PICC_PiThread* a) { 
+    printf("my eval func !\n"); 
+    PICC_Value v; 
+    PICC_INIT_NO_VALUE(&v);
+    return v; 
+};
 
 void test_register_outcommits(PICC_Error* error)
 {
