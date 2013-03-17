@@ -738,8 +738,8 @@ void PICC_ChannelValue_inv(PICC_ChannelValue *channel)
  *******************************/
 void PICC_equals(PICC_Value *res, PICC_Value * value1, PICC_Value * value2){
     int c = PICC_compare_values(value1, value2);
-    if (c != 0)
-	c = 1;
+    if (c == 0) c = 1; 
+    else c = 0;
 
     PICC_INIT_BOOL_VALUE(res, c);
 }
@@ -968,6 +968,9 @@ void PICC_print_value_infos(PICC_Value * value)
         case TAG_STRING:
             printf("%s\n", ((PICC_StringValue *)value)->data->data );
             break;
+	case TAG_CHANNEL:
+	    printf("Channel gloabl_rc = %d\n", ((PICC_Channel *) value->data)->global_rc);
+	    break;
         case TAG_FLOAT:
         case TAG_USER_DEFINED_IMMEDIATE:
         case TAG_USER_DEFINED_MANAGED:

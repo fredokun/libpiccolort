@@ -124,7 +124,7 @@ struct _bool_value_t {
 #define PICC_INIT_BOOL_TRUE(val) PICC_INIT_BOOL_VALUE(val, 1)
 #define PICC_INIT_BOOL_FALSE(val) PICC_INIT_BOOL_VALUE(val, 0)
 
-#define PICC_BOOL_OF_BOOL_VALUE(val) GET_VALUE_CTRL(val.header)
+#define PICC_BOOL_OF_BOOL_VALUE(val) GET_VALUE_CTRL((val)->header)
 
 /* #define MAKE_TRUE_VALUE ((PICC_BoolValue)  { MAKE_HEADER(TAG_BOOLEAN,1) }) */
 /* #define MAKE_FALSE_VALUE ((PICC_BoolValue)  { MAKE_HEADER(TAG_BOOLEAN,0) }) */
