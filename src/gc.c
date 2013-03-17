@@ -145,9 +145,9 @@ bool PICC_GC2(PICC_SchedPool* sched)
     PICC_PiThread* candidates[1000];
     PICC_KnownSet* chans = PICC_create_empty_knownset();
 	candidates[0] = candidate;
-    int candidates_size = 1;
+    int candidates_size = candidate != NULL;
 
-    do
+    while(candidates_size > 0)
     {
 		// arbitrary choice of a piThread, here the first piThread of candidates
 	    candidate = candidates[0];
@@ -247,9 +247,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
 		}
 
 
-    }
-    //while(candidates[i]->nb_slaves > 0); -- Maxence version, dunno WTF he is trying to do
-    while(candidates_size > 0);
+    }    
 
     for(int i = 0; i < clique_size; i++){
 		// reclaim clique[i]	-- TODO
