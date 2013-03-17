@@ -116,9 +116,9 @@ void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
 void PICC_release_all_channels(PICC_KnownSet *chans)
 {
     // /!\ will release all the managed value (for now channel and string)
-    PICC_KnownValue *val;
+    PICC_KnownValue val;
     PICC_KNOWNSET_FOREACH(chans, val){
-        RELEASE_CHANNEL(val->handle);
+        RELEASE_CHANNEL(val.handle);
     }
 }
 

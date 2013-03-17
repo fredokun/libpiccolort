@@ -16,7 +16,7 @@
 #include <scheduler.h>
 #include <channel.h>
 #include <commit.h>
-#include <value.h>
+#include <value_repr.h>
 #include <concurrent.h>
 #include <atomic.h>
 #include <error.h>
@@ -84,7 +84,7 @@ struct _PICC_PiThread {
                               thread */
     PICC_KnownSet *knowns; /** The channels known by this
                                         thread */
-    PICC_Value **env; /**< The local pi-thread variables */
+    PICC_Value *env; /**< The local pi-thread variables */
     int env_length; /**< The number of variables in the environment */
     PICC_Commit *commit; /** The last commitment of the
                                     pi-thread */
@@ -93,8 +93,7 @@ struct _PICC_PiThread {
     PICC_PiThreadProc *proc; /** The pi-thread procedure to execute */
     PICC_Label pc; /** The label to the execution point of the
                         pi-thread procedure */
-    PICC_Value *val; /** The last transmited value over the
-                                current channel */
+    PICC_Value val; /** Buffer used as a worskpace in the generated code  */
     PICC_Clock *clock; /** The pi-thread clock. TODO see
                                 spec */
     int fuel; /** Number of iterations of the pi-thread execution after

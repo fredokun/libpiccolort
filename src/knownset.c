@@ -22,11 +22,6 @@
     i++)
 
 
-PICC_KnownValue *PICC_known_value_create(PICC_KnownValue *stored){
-    PICC_KnownValue *val= malloc(sizeof(*val));
-    *val = *stored;
-    return val;
-}
 // Life cycle //////////////////////////////////////////////////////////////////
 
 /**
