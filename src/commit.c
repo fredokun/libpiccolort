@@ -398,7 +398,7 @@ void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Erro
 }
 
 /**
- * Adds the given element at the end of the commit list.
+ * Removes the given element from the commit list.
  *
  *
  * @param clist Commit list
@@ -569,6 +569,8 @@ PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
         while (current != NULL) {
             if (PICC_is_valid_commit(current)) {
                 return current;
+            } else {
+                PICC_commit_list_remove(current->thread->commits, current);
             }
     	    current = PICC_commit_list_fetch(ch->incommits);
         }
@@ -614,6 +616,8 @@ PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
             if (PICC_is_valid_commit(current)) {
                 fetched = current;
                 break;
+            } else {
+                PICC_commit_list_remove(current->thread->commits, current);
             }
             current = PICC_commit_list_fetch(ch->outcommits);
         }

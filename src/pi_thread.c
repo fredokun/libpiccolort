@@ -107,6 +107,23 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
 }
 
 /**
+ * Reclaims the given PiThread.
+ *
+ * @param pt PiThread to reclaim
+ */
+void PICC_reclaim_pi_thread(PICC_PiThread *pt)
+{
+    free(pt->enabled);
+    PICC_free_knownset(pt->knowns);
+    PICC_free_knownset(pt->chans);
+    free(pt->env);
+    free(pt->clock);
+    free(pt->commits);
+    PICC_lock_free(pt->lock);
+}
+
+
+/**
  * Returns whether a PiThread can be awaken with the given commit.
  *
  * @pre PICC_PiThread_inv(pt) must pass
@@ -209,6 +226,7 @@ void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Commit *commit)
     PICC_wait_queue_fetch(sched->wait, pt);
     pt->commit = NULL;
     pt->pc = commit->cont_pc;
+    PICC_commit_list_remove(pt->commits, commit);
     pt->status = PICC_STATUS_RUN;
     PICC_ready_queue_push(sched->ready, pt);
 

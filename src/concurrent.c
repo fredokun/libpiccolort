@@ -26,6 +26,7 @@ PICC_Lock *PICC_create_lock(PICC_Error *error)
 }
 
 void PICC_lock_free(PICC_Lock *l){
+    pthread_mutex_destroy(l);
     free(l);
 }
 
