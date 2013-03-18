@@ -1,6 +1,6 @@
 /**
  * @file knownset_test.c
- * Unit testing of known set
+ * Unit testing of known sets
  *
  * This project is released under MIT License.
  *
@@ -8,57 +8,163 @@
  */
 
 #include <stdlib.h>
+#include <value_repr.h>
+#include <channel_repr.h>
 #include <knownset_repr.h>
 #include <error.h>
 
 #define ASSERT_NO_ERROR() \
  ASSERT(!HAS_ERROR((*error)))
 
-/*
-PICC_KnownSet* PICC_create_empty_known_set();
-PICC_KnownSet* PICC_create_known_set(int size, PICC_Error* error);
-*
-bool PICC_known_set_add_tree(PICC_KnownSet *s, GEN_VALUE elem);
-bool PICC_known_set_add_list(PICC_KnownSet *s, GEN_VALUE elem);
-bool PICC_known_set_add(PICC_KnownSet *s, GEN_VALUE elem);
-bool PICC_known_set_mem_tree(PICC_KnownSet *ss, GEN_VALUE elem);
-bool PICC_known_set_mem_list(PICC_KnownSet *ss, GEN_VALUE elem);
-bool PICC_known_set_mem(PICC_KnownSet *s, GEN_VALUE elem);
-int PICC_known_set_size_tree(PICC_KnownSet *ss);
-int PICC_known_set_size_list(PICC_KnownSet *ss);
-int PICC_known_set_size(PICC_KnownSet *s);
-bool PICC_known_set_compare_tree(PICC_KnownSet *s, PICC_KnownSet *s2);
-bool PICC_known_set_compare_list(PICC_KnownSet *s, PICC_KnownSet *s2);
-bool PICC_known_set_compare(PICC_KnownSet *s, PICC_KnownSet *s2);
-PICC_KnownSetIterator *PICC_create_known_set_iterator(PICC_KnownSet *s);
-PICC_KnownSetIterator *PICC_delete_known_set_iterator(PICC_KnownSetIterator *it);
-GEN_VALUE PICC_known_set_next(PICC_KnownSetIterator *it);
-bool PICC_known_set_has_next(PICC_KnownSetIterator *it);
-PICC_KnownSetTreeIterator *PICC_create_known_set_tree_iterator(PICC_KnownSetTree *s);
-PICC_KnownSetTreeIterator *PICC_delete_known_set_tree_iterator(PICC_KnownSetTreeIterator *it);
-GEN_VALUE PICC_known_set_tree_iterator_next(PICC_KnownSetTreeIterator *it, bool check);
-bool PICC_known_set_tree_iterator_has_next(PICC_KnownSetTreeIterator *it);
-PICC_KnownSetListIterator *PICC_create_known_set_list_iterator(PICC_KnownSetList *s);
-PICC_KnownSetListIterator *PICC_delete_known_set_list_iterator(PICC_KnownSetListIterator *it);
-GEN_VALUE PICC_known_set_list_iterator_next(PICC_KnownSetListIterator *it);
-bool PICC_known_set_list_iterator_has_next(PICC_KnownSetListIterator *it);
-*/
 
 void test_knownset_creation(PICC_Error *error)
 {
     PICC_KnownSet *ks;
 
-    ks = PICC_create_empty_known_set();
-    PICC_KnownSet_inv(ks);
+    ks = PICC_create_empty_knownset();
 
-    ks = PICC_create_known_set(5, error);
+    ks = PICC_create_knownset(5, error);
     ASSERT_NO_ERROR();
-    PICC_KnownSet_inv(ks);
-    ASSERT(((PICC_KnownSetList *)ks)->size == 5);
+    ASSERT(ks->max_size == 5 && ks->current_size == 0);
 }
 
-void test_tree(PICC_Error *error)
+void test_register(PICC_Error *error)
 {
+    PICC_KnownSet *ks = PICC_create_empty_knownset();
+    PICC_KnownValue *val = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+    PICC_KnownElement *elem;
+
+    ASSERT(PICC_knownset_register(ks, val) == true);
+    elem = PICC_knownset_get_element(ks, val);
+    ASSERT(elem->state == PICC_KNOWN);
+    ASSERT(PICC_knownset_register(ks, val) == false);
+    ASSERT(elem->state == PICC_KNOWN);
+
+    elem->state = PICC_FORGET;
+    ASSERT(PICC_knownset_register(ks, val) == false);
+    ASSERT(elem->state == PICC_KNOWN);
+
+    elem->state = PICC_UNKNOWN;
+    ASSERT(PICC_knownset_register(ks, val) == false);
+    ASSERT(elem->state == PICC_UNKNOWN);
+}
+
+void test_add(PICC_Error *error)
+{
+    PICC_KnownSet *ks = PICC_create_empty_knownset();
+    PICC_KnownValue *val = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+
+    ASSERT(PICC_knownset_size(ks) == 0);
+    PICC_knownset_add(ks, val);
+    ASSERT(PICC_knownset_size(ks) == 1);
+    PICC_knownset_add(ks, val);
+    ASSERT(PICC_knownset_size(ks) == 1);
+    val = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+    PICC_knownset_add(ks, val);
+    ASSERT(PICC_knownset_size(ks) == 2);
+}
+
+void test_known_subset(PICC_Error *error)
+{
+    PICC_KnownSet *ks = PICC_create_empty_knownset();
+    PICC_KnownValue *val_forget = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+    PICC_KnownValue *val_unknown = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+    PICC_KnownValue *val_known1 = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+    PICC_KnownValue *val_known2 = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+    PICC_KnownElement *elem;
+
+    PICC_knownset_add(ks, val_forget);
+    PICC_knownset_add(ks, val_unknown);
+    PICC_knownset_add(ks, val_known1);
+    PICC_knownset_add(ks, val_known2);
+
+    ASSERT(PICC_knownset_size(ks) == 4);
+    elem = PICC_knownset_get_element(ks, val_forget);
+    elem->state = PICC_FORGET;
+    elem = PICC_knownset_get_element(ks, val_unknown);
+    elem->state = PICC_UNKNOWN;
+    elem = PICC_knownset_get_element(ks, val_known1);
+    elem->state = PICC_KNOWN;
+    elem = PICC_knownset_get_element(ks, val_known2);
+    elem->state = PICC_KNOWN;
+
+    PICC_KnownSet *subset = PICC_knownset_known(ks);
+    ASSERT(PICC_knownset_size(subset) == 2);
+    ASSERT(PICC_knownset_get_element(subset, val_forget) == NULL);
+    ASSERT(PICC_knownset_get_element(subset, val_unknown) == NULL);
+    ASSERT(PICC_knownset_get_element(subset, val_known1)->value.handle == val_known1->handle);
+    ASSERT(PICC_knownset_get_element(subset, val_known2)->value.handle == val_known2->handle);
+}
+
+void test_forget_subset(PICC_Error *error)
+{
+    PICC_KnownSet *ks = PICC_create_empty_knownset();
+    PICC_KnownValue *val_unknown = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+    PICC_KnownValue *val_known = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+    PICC_KnownValue *val_forget1 = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+    PICC_KnownValue *val_forget2 = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+    PICC_KnownElement *elem;
+
+    PICC_knownset_add(ks, val_unknown);
+    PICC_knownset_add(ks, val_known);
+    PICC_knownset_add(ks, val_forget1);
+    PICC_knownset_add(ks, val_forget2);
+
+    ASSERT(PICC_knownset_size(ks) == 4);
+    elem = PICC_knownset_get_element(ks, val_unknown);
+    elem->state = PICC_UNKNOWN;
+    elem = PICC_knownset_get_element(ks, val_known);
+    elem->state = PICC_KNOWN;
+    elem = PICC_knownset_get_element(ks, val_forget1);
+    elem->state = PICC_FORGET;
+    elem = PICC_knownset_get_element(ks, val_forget2);
+    elem->state = PICC_FORGET;
+
+    PICC_KnownSet *subset = PICC_knownset_forget(ks);
+    ASSERT(PICC_knownset_size(subset) == 2);
+    ASSERT(PICC_knownset_get_element(subset, val_unknown) == NULL);
+    ASSERT(PICC_knownset_get_element(subset, val_known) == NULL);
+    ASSERT(PICC_knownset_get_element(subset, val_forget1)->value.handle == val_forget1->handle);
+    ASSERT(PICC_knownset_get_element(subset, val_forget2)->value.handle == val_forget2->handle);
+}
+
+void test_state_changes(PICC_Error *error)
+{
+    PICC_KnownSet *ks = PICC_create_empty_knownset();
+    PICC_KnownValue *val_known1 = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+    PICC_KnownValue *val_known2 = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+    PICC_KnownValue *val_forget1 = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+    PICC_KnownValue *val_forget2 = (PICC_KnownValue *)PICC_create_channel_value(PICC_create_channel());
+    PICC_KnownElement *elem;
+
+    PICC_knownset_add(ks, val_known1);
+    PICC_knownset_add(ks, val_known2);
+    PICC_knownset_add(ks, val_forget1);
+    PICC_knownset_add(ks, val_forget2);
+
+    ASSERT(PICC_knownset_size(ks) == 4);
+    elem = PICC_knownset_get_element(ks, val_known1);
+    elem->state = PICC_KNOWN;
+    elem = PICC_knownset_get_element(ks, val_known2);
+    elem->state = PICC_KNOWN;
+    elem = PICC_knownset_get_element(ks, val_forget1);
+    elem->state = PICC_FORGET;
+    elem = PICC_knownset_get_element(ks, val_forget2);
+    elem->state = PICC_FORGET;
+
+
+    // forget to unknown
+    PICC_knownset_forget_to_unknown(ks, val_forget1);
+    ASSERT(PICC_knownset_get_element(ks, val_forget1)->state == PICC_UNKNOWN);
+    PICC_knownset_forget_to_unknown(ks, val_known1);
+    ASSERT(PICC_knownset_get_element(ks, val_known1)->state == PICC_KNOWN);
+
+    // forget all
+    PICC_knownset_forget_all(ks);
+    ASSERT(PICC_knownset_get_element(ks, val_known1)->state == PICC_FORGET);
+    ASSERT(PICC_knownset_get_element(ks, val_known2)->state == PICC_FORGET);
+    ASSERT(PICC_knownset_get_element(ks, val_forget1)->state == PICC_UNKNOWN);
+    ASSERT(PICC_knownset_get_element(ks, val_forget2)->state == PICC_FORGET);
 }
 
 /**
@@ -68,7 +174,11 @@ void PICC_test_knownset()
 {
     ALLOC_ERROR(error);
     test_knownset_creation(&error);
-    test_tree(&error);
+    test_register(&error);
+    test_add(&error);
+    test_known_subset(&error);
+    test_forget_subset(&error);
+    test_state_changes(&error);
 
     if (HAS_ERROR(error))
         PRINT_ERROR(&error);

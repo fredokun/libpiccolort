@@ -57,6 +57,8 @@ typedef enum _PICC_ErrorId {
     ERR_INVALID_VALUE,
     ERR_INVALID_TYPE,
 
+    ERR_INVALID_KNOWNSET_STATE,
+
 } PICC_ErrorId;
 
 #endif

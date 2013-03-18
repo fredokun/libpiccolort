@@ -28,26 +28,17 @@
 }*/
 
 /**
- * Second generation garbage collector.
- *
- * @param schedpool The schedpool to clean
- * @param error Error stack
- * @return ? ????????????????
- */
-/*int PICC_GC2(PICC_SchedPool *sp, PICC_Error *error)
-{
-    NEW_ERROR(error, ERR_NOT_IMPLEMENTED);
-    return 0;
-    }*/
-
-/**
  * The entry point of the Runtime library. Initialises the real running
  * threads and starts the scheduler
  *
  * @param nb_core_threads Maximum number of core threads that can run at the same time
  * @param entrypoint Entry procedure the for the first thread
+ * @param std_gc_fuel the number of time a pi thread can continuessely execute without the need of the garbege collection
+ * @param quick_gc_fuel in case of an unsuccessful garbege collection replaces std_gc_fuel until the next garbege collection atempt
+ * @param active_factor the ratio between the total waiting threads and the active waiting threads that when exceded involves a garbege collection
  */
-void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint,
+void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint, 
+                int std_gc_fuel, int quick_gc_fuel, int active_factor,
                 int entry_env_length, int entry_knowns_length, int entry_enabled_length)
 {
     // defining word size, 32bit by default
@@ -95,6 +86,6 @@ void PICC_main(int nb_core_threads, PICC_PiThreadProc entrypoint,
 
     PICC_ready_queue_push(sched_pool->ready, init_thread);
 
-    PICC_sched_pool_master(sched_pool, 2, 2, 2, &error);
+    PICC_sched_pool_master(sched_pool, std_gc_fuel, quick_gc_fuel, active_factor, &error);
     if (HAS_ERROR(error)) CRASH(&error);
 }

@@ -6,6 +6,7 @@
  *
  * @author Mickaël MENU
  * @author Dany SIRIPHOL
+ * @author Loïc Girault
  */
 
 #ifndef VALUE_H
@@ -22,7 +23,9 @@ typedef struct _PICC_Value PICC_Value ;
 
 PICC_Value* PICC_free_value(PICC_Value *v);
 bool PICC_copy_value(PICC_Value **to, PICC_Value *from);
-int compare_values(PICC_Value * value1, PICC_Value * value2);
+int PICC_compare_values(PICC_Value * value1, PICC_Value * value2);
+
+void PICC_equals(PICC_Value *res, PICC_Value * value1, PICC_Value * value2);
 
 /******************************
  * Immediate values : No value *
@@ -64,6 +67,9 @@ extern void PICC_Int_add      (PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
 extern void PICC_Int_multiply (PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
 extern void PICC_Int_divide   (PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
 extern void PICC_Int_substract(PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
+
+extern void PICC_Int_less_than(PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
+extern void PICC_Int_modulo(PICC_Value *res, PICC_Value *v1, PICC_Value *v2);
 
 /******************************
  * Immediate values : float *
@@ -109,10 +115,8 @@ extern PICC_StringValue *PICC_create_empty_string_value();
 typedef struct _channel_value_t PICC_ChannelValue ;
 
 extern PICC_Value *PICC_create_channel_value(PICC_Channel* channel);
-
 extern PICC_Channel *PICC_channel_of_channel_value(PICC_Value* channel); 
-extern void PICC_channel_value_acquire(PICC_Value* channel);
-extern int PICC_channel_value_global_rc(PICC_Value* channel);
+
 //extern void PICC_channel_value_release(PICC_VALUE* channel); // never explicitly released ?
 
 extern void PICC_print_value_infos(PICC_Value * value);

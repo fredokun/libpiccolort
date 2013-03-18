@@ -48,12 +48,12 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
 	int i;
     PICC_ALLOC_CRASH(thread, PICC_PiThread) {
         ALLOC_ERROR(sub_error);
-        thread->chans = PICC_create_empty_known_set();
-        thread->knowns = PICC_create_known_set(knowns_length, &sub_error);
+        thread->chans = PICC_create_empty_knownset();
+        thread->knowns = PICC_create_knownset(knowns_length, &sub_error);
         if (HAS_ERROR(sub_error)) {
             CRASH(&sub_error);
         } else {
-            PICC_ALLOC_N_CRASH(env, PICC_Value*, env_length) {
+            PICC_ALLOC_N_CRASH(env, PICC_Value, env_length) {
                 thread->clock = PICC_create_clock(&sub_error);
                 if (HAS_ERROR(sub_error)) {
                     CRASH(&sub_error);
@@ -74,7 +74,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
                             thread->proc = NULL;
                             thread->pc = PICC_DEFAULT_ENTRY_LABEL;
                             thread->fuel = PICC_FUEL_INIT;
-                            thread->val = PICC_create_no_value();
+                            PICC_INIT_NO_VALUE(&thread->val);
                             thread->lock = PICC_create_lock(&sub_error);
                             thread->status = PICC_STATUS_RUN;
                             if (HAS_ERROR(sub_error)) {
@@ -100,11 +100,28 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
         ASSERT(thread->proc == NULL);
         ASSERT(thread->pc == PICC_DEFAULT_ENTRY_LABEL);
         ASSERT(thread->fuel == PICC_FUEL_INIT);
-        ASSERT(thread->val == PICC_create_no_value());
+        ASSERT(thread->val.header == MAKE_HEADER(TAG_NOVALUE,0));
     #endif
 
     return thread;
 }
+
+/**
+ * Reclaims the given PiThread.
+ *
+ * @param pt PiThread to reclaim
+ */
+void PICC_reclaim_pi_thread(PICC_PiThread *pt)
+{
+    free(pt->enabled);
+    PICC_free_knownset(pt->knowns);
+    PICC_free_knownset(pt->chans);
+    free(pt->env);
+    free(pt->clock);
+    free(pt->commits);
+    PICC_lock_free(pt->lock);
+}
+
 
 /**
  * Returns whether a PiThread can be awaken with the given commit.
@@ -209,6 +226,7 @@ void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Commit *commit)
     PICC_wait_queue_fetch(sched->wait, pt);
     pt->commit = NULL;
     pt->pc = commit->cont_pc;
+    PICC_commit_list_remove(pt->commits, commit);
     pt->status = PICC_STATUS_RUN;
     PICC_ready_queue_push(sched->ready, pt);
 

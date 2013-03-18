@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <tests.h>
 
 int main(int argc, char **argv)
@@ -33,11 +34,12 @@ int main(int argc, char **argv)
 
     printf("Run value tests...\n");
     PICC_test_value();
-    
-    printf("Run runtime tests...\n");
-    printf("Infinite loop, press Ctrl-C to exit\n");
-    sleep(5);
-    PICC_test_runtime();
+
+    printf("Run known set tests...\n");
+    PICC_test_knownset();
+
+    /* printf("Run runtime tests...\n"); */
+    /* PICC_test_runtime(); */
 
     return 0;
 }
