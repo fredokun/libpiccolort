@@ -32,14 +32,11 @@ int main(int argc, char **argv)
     printf("Run atomic tests...\n");
     PICC_test_atomic();
 
-    printf("Run value tests...\n");
-    PICC_test_value();
+    //printf("Run value tests...\n");
+    //PICC_test_value();
 
     printf("Run known set tests...\n");
     PICC_test_knownset();
-
-    /* printf("Run runtime tests...\n"); */
-    /* PICC_test_runtime(); */
 
     return 0;
 }

@@ -39,7 +39,7 @@ void PICC_handle_incr_ref_count(PICC_Handle *h)
 
     #ifdef CONTRACT_POST
         // capture
-        int global_rc_at_pre = h->global_rc;
+        // int global_rc_at_pre = h->global_rc;
     #endif
 
     LOCK_HANDLE(h);
@@ -81,7 +81,7 @@ void PICC_handle_dec_ref_count(PICC_Handle **h)
 
     #ifdef CONTRACT_POST
         // capture
-        int global_rc_at_pre = (*h)->global_rc;
+        // int global_rc_at_pre = (*h)->global_rc;
     #endif
 
 	// I think there is a problem here: what happens if global_rc is equal to one
@@ -104,7 +104,7 @@ void PICC_handle_dec_ref_count(PICC_Handle **h)
 
     LOCK_HANDLE(*h);
     (*h)->global_rc--;
-    
+
     if ((*h)->global_rc == 0) {
 	RELEASE_HANDLE(*h);
 
@@ -135,7 +135,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
     PICC_PiThread* clique[1000];
     int clique_size = 0;
     PICC_PiThread* candidate = PICC_wait_queue_pop_old(sched->wait);
-    
+
     printf("PICC_GC2 - GO !!\n");
     if(!(PICC_try_acquire(candidate->lock)))
     {
@@ -155,7 +155,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
 
 		PICC_Commit* commit = NULL;
 		PICC_CommitListElement* commitEl = candidate->commits->head;
-		while(commitEl){            
+		while(commitEl){
 			commit = commitEl->commit;
 			if(PICC_is_valid_commit(commit)){
                 PICC_Channel* chan = commit->channel;
@@ -166,7 +166,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
                     goto abandon_gc;
                 }
                 PICC_Commit *incommit = PICC_fetch_input_commitment(chan);
-                while(incommit) {				
+                while(incommit) {
                     if(PICC_is_valid_commit(incommit)){
                         if(incommit->thread->status != PICC_STATUS_WAIT){
                             goto abandon_gc;
@@ -177,7 +177,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
                             PICC_wait_queue_push(sched->wait, incommit->thread);
                             goto abandon_gc;
                         }
-					
+
                         int can_add = 1;
                         for(int i = 0; i < candidates_size; i++){
                             if(candidates[i] == incommit->thread){
@@ -197,11 +197,11 @@ bool PICC_GC2(PICC_SchedPool* sched)
                 }
 
                 PICC_Commit *outcommit = PICC_fetch_output_commitment(chan);
-                while(outcommit){				
+                while(outcommit){
                     if(PICC_is_valid_commit(outcommit)){
                         if(outcommit->thread->status != PICC_STATUS_WAIT){
                             goto abandon_gc;
-                        }					
+                        }
                         PICC_wait_queue_fetch(sched->wait, outcommit->thread);
 
                         if(!(PICC_try_acquire(outcommit->thread->lock))){
@@ -246,7 +246,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
 			clique_size++;
 		}
     }
-    
+
     for(int i = 0; i < clique_size; i++){
         PICC_reclaim_pi_thread(clique[i]);
 	}
@@ -264,7 +264,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
 		PICC_wait_queue_push(sched->wait, clique[i]);
 		PICC_release(clique[i]->lock);
 	}
-	
+
 	printf("GC release all !!\n");
 	PICC_release_all_channels(chans); //-> released one by one in the loop
 	return false;

@@ -1,14 +1,9 @@
-libpirt
-=======
+libpirt — the (parallel) pi-calculus runtime library
+======================================
 
-multithreaded runtime environment for the pi compiler
+To build the library, use make. It will build lib/libpirt.a and the unit tests suite.
 
-Authors
-=======
-- Mickaël Menu (mickael.menu@gmail.com)
-- Maxence WO (darkmaxounet@gmail.com)
-- Dany Siriphol (dany.siriphol@gmail.com)
-- Loïc Girault (loic.girault@gmail.com)
-- Joël Hing (hing.joel@gmail.com)
-- Florian Thibord (florian.thibord@gmail.com)
-- Sergiu Tiganu (postaserg@gmail.com)
+You can run the unit tests with :
+
+	bin/run_tests
+
