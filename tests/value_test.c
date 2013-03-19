@@ -4,6 +4,7 @@
  *
  * This project is released under MIT License.
  *
+ * @author Loïc Girault
  * @author Dany SIRIPHOL
  */
 
@@ -12,32 +13,66 @@
 #include <value_repr.h>
 
 
+#define WITH_TRACE 1
+
 void test_int(PICC_Error *error)
 {
-    PICC_Value *i = PICC_create_int_value(3);
-    PICC_Value *i2 = PICC_create_int_value(4);
-    PICC_Value *result = PICC_create_int_value(0);
-    PICC_Int_add(result,i,i2);
-    PICC_Int_multiply(result,i,i2);
-    PICC_Int_divide(result,i,i2);
-    PICC_Int_substract(result,i,i2);
-
-    PICC_free_int((PICC_IntValue *)i);
-    PICC_free_value(i2);
+    PICC_Value v, v2, vresult;
+    PICC_IntValue *i, *i2, *r;
     
-    i = PICC_create_int_value(-3);
-    i2 = PICC_create_int_value(-12);
+    i=(PICC_IntValue *)&v;
+    i2=(PICC_IntValue *)&v2;
+    r=(PICC_IntValue *)&vresult;
 
-    PICC_Int_add(result,i,i2);
-    PICC_Int_multiply(result,i,i2);
-    PICC_Int_divide(result,i,i2);
-    PICC_Int_substract(result,i,i2);
+    PICC_INIT_INT_VALUE(&v, 3);
+    PICC_INIT_INT_VALUE(&v2, 4);
+    PICC_INIT_INT_VALUE(&vresult, 0);
 
-    ASSERT( PICC_copy_value(&i2, i));
+
+#ifdef WITH_TRACE
+    printf("v = %d , v2 = %d, vresult = %d \n", i->data, i2->data, r->data);
+#endif
+
+    v=v2;
+
+    ASSERT(i->data == i2->data)
+
+#ifdef WITH_TRACE
+    printf("v = %d , v2 = %d, vresult = %d \n", i->data, i2->data, r->data);
+#endif
     
-    PICC_Int_multiply(result,i,i2);
+    
+    PICC_Int_add(&vresult,&v,&v2);
 
-    ASSERT( PICC_copy_value(&i, result));
+    PICC_Int_multiply(&vresult,&v,&v2);
+
+    PICC_Int_divide(&vresult,&v,&v2);
+
+    PICC_Int_substract(&vresult,&v,&v2);
+
+    PICC_equals(&vresult, &v, &v2);
+
+    ASSERT(PICC_BOOL_OF_BOOL_VALUE(&vresult) == true);
+
+    PICC_INIT_INT_VALUE(&v2, 12);
+        
+    PICC_equals(&vresult, &v, &v2);
+
+    ASSERT(PICC_BOOL_OF_BOOL_VALUE(&vresult) == false);
+
+    /* i = PICC_create_int_value(-3); */
+    /* i2 = PICC_create_int_value(-12); */
+
+    /* PICC_Int_add(result,i,i2); */
+    /* PICC_Int_multiply(result,i,i2); */
+    /* PICC_Int_divide(result,i,i2); */
+    /* PICC_Int_substract(result,i,i2); */
+
+    /* ASSERT( PICC_copy_value(&i2, i)); */
+    
+    /* PICC_Int_multiply(result,i,i2); */
+
+    /* ASSERT( PICC_copy_value(&i, result)); */
 }
 
 void test_bool(PICC_Error *error)

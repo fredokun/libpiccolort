@@ -11,7 +11,7 @@
 #include <concurrent.h>
 #include <pthread.h>
 #include <tools.h>
-
+#include <stdio.h>
 /**
  * Creates a new lock.
  *
@@ -26,6 +26,7 @@ PICC_Lock *PICC_create_lock(PICC_Error *error)
 }
 
 void PICC_lock_free(PICC_Lock *l){
+    pthread_mutex_destroy(l);
     free(l);
 }
 
@@ -70,7 +71,6 @@ void PICC_acquire(PICC_Lock *lock)
     #ifdef CONTRACT_PRE
         ASSERT(lock != NULL);
     #endif
-
     pthread_mutex_lock(lock);
 }
 

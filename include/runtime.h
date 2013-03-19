@@ -15,6 +15,7 @@
 #include <error.h>
 
 extern void PICC_main(int nb_core_threads, PICC_PiThreadProc *entrypoint,
+                int std_gc_fuel, int quick_gc_fuel, int active_factor,
                 int entry_env_length, int entry_knowns_length, int entry_enabled_length);
 
 #endif

@@ -21,6 +21,7 @@
     i < (s)->current_size && (e = &((s)->content[i])); \
     i++)
 
+
 // Life cycle //////////////////////////////////////////////////////////////////
 
 /**
@@ -51,7 +52,8 @@ PICC_KnownSet *PICC_create_knownset(int init_max_size, PICC_Error *error)
         } else {
             for (int i = 0; i < init_max_size; i++) {
                 elts[i].state = PICC_UNKNOWN;
-                elts[i].value = NULL;
+                elts[i].value.header = MAKE_HEADER(TAG_NOVALUE, 0);
+		elts[i].value.handle = NULL;
             }
             knownset->content = elts;
         }
@@ -67,7 +69,8 @@ PICC_KnownSet *PICC_create_knownset(int init_max_size, PICC_Error *error)
         for (int i = 0; i < knownset->max_size; i++) {
             elem = &(knownset->content[i]);
             ASSERT(elem->state == PICC_UNKNOWN);
-            ASSERT(elem->value == NULL);
+            ASSERT(elem->value.header == MAKE_HEADER(TAG_NOVALUE, 0));
+	    ASSERT(elem->value.handle == NULL);
         }
     #endif
 
@@ -137,7 +140,7 @@ PICC_KnownElement *PICC_knownset_get_element(PICC_KnownSet *knownset, PICC_Known
     PICC_KnownElement *elem;
     bool found = false;
     PICC_KNOWNSET_FOREACH_ELEM(knownset, elem) {
-        if (elem->value == val) {
+        if (elem->value.handle == val->handle) {
             found = true;
             break;
         }
@@ -148,7 +151,7 @@ PICC_KnownElement *PICC_knownset_get_element(PICC_KnownSet *knownset, PICC_Known
 
     #ifdef CONTRACT_POST
         if (found) {
-            ASSERT(elem->value == val);
+            ASSERT(elem->value.handle == val->handle);
         } else {
             ASSERT(elem == NULL);
         }
@@ -243,8 +246,9 @@ bool PICC_knownset_register(PICC_KnownSet *ks, PICC_KnownValue *val)
  * @post val in ks
  * @param ks Known set
  * @param val Known value
+ * @return Whether the value has been added in the set
  */
-void PICC_knownset_add(PICC_KnownSet *ks, PICC_KnownValue *val)
+bool PICC_knownset_add(PICC_KnownSet *ks, PICC_KnownValue *val)
 {
     #ifdef CONTRACT_PRE_INV
         PICC_KnownSet_inv(ks);
@@ -258,27 +262,29 @@ void PICC_knownset_add(PICC_KnownSet *ks, PICC_KnownValue *val)
 
     PICC_KnownElement *elem;
 
+    bool new_add = false;
     elem = PICC_knownset_get_element(ks, val);
     if (elem == NULL) { // not in set, we need to add it
-
         if (ks->current_size == ks->max_size) { // set full, we need to realloc
-        	int new_max_size = ks->current_size + SET_INIT_MAXSIZE;
-        	PICC_KnownElement *new_elts = realloc(ks->content, sizeof(PICC_KnownElement) * new_max_size);
-        	if (new_elts == NULL) {
-                CRASH_NEW_ERROR(ERR_OUT_OF_MEMORY);
-            }
+	    int new_max_size = ks->current_size + SET_INIT_MAXSIZE;
+	    PICC_KnownElement *new_elts = realloc(ks->content, sizeof(PICC_KnownElement) * new_max_size);
+	    if (new_elts == NULL) {
+		CRASH_NEW_ERROR(ERR_OUT_OF_MEMORY);
+	    }
 
-        	for (int i = ks->current_size; i < ks->max_size; i++) {
+	    for (int i = ks->current_size; i < ks->max_size; i++) {
                 new_elts[i].state = PICC_UNKNOWN;
-                new_elts[i].value = NULL;
-        	}
+                new_elts[i].value.header = MAKE_HEADER(TAG_NOVALUE, 0);
+		new_elts[i].value.handle = NULL;
+          }
 
             ks->max_size = new_max_size;
-        	ks->content = new_elts;
+	    ks->content = new_elts;
         }
 
-        ks->content[ks->current_size].value = val;
+        ks->content[ks->current_size].value = *val;
         ks->current_size ++;
+        new_add= true;
     }
 
     #ifdef CONTRACT_POST
@@ -289,6 +295,8 @@ void PICC_knownset_add(PICC_KnownSet *ks, PICC_KnownValue *val)
         PICC_KnownSet_inv(ks);
         PICC_KnownValue_inv(val);
     #endif
+
+    return new_add;
 }
 
 /**
@@ -337,7 +345,7 @@ PICC_KnownSet *PICC_knownset_known(PICC_KnownSet *ks)
     PICC_KnownElement *elem;
     PICC_KNOWNSET_FOREACH_ELEM(ks, elem) {
     	if (elem->state == PICC_KNOWN)
-    	    PICC_knownset_add(known_subset, elem->value);
+    	    PICC_knownset_add(known_subset, &(elem->value));
     }
 
     #ifdef CONTRACT_POST
@@ -379,7 +387,7 @@ PICC_KnownSet *PICC_knownset_forget(PICC_KnownSet *ks)
     PICC_KnownElement *elem;
     PICC_KNOWNSET_FOREACH_ELEM(ks, elem) {
     	if(elem->state == PICC_FORGET)
-    	    PICC_knownset_add(forget_subset, elem->value);
+    	    PICC_knownset_add(forget_subset, &(elem->value));
     }
 
     #ifdef CONTRACT_POST
@@ -428,7 +436,8 @@ void PICC_knownset_forget_to_unknown(PICC_KnownSet *ks, PICC_KnownValue *val)
 
     PICC_KnownElement *elem;
     PICC_KNOWNSET_FOREACH_ELEM(ks, elem) {
-        if (elem->value == val && elem->state == PICC_FORGET)
+        if (elem->value.handle == val->handle
+	    && elem->state == PICC_FORGET)
             elem->state = PICC_UNKNOWN;
     }
 
