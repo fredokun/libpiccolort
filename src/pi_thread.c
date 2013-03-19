@@ -275,7 +275,6 @@ PICC_Clock *PICC_create_clock(PICC_Error *error)
             ADD_ERROR(error, sub_error, ERR_CLOCK_CREATE);
             free(clock);
             clock = NULL;
-            printf("lol");
         }
     }
     return clock;
