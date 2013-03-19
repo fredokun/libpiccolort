@@ -92,8 +92,8 @@ void test_known_subset(PICC_Error *error)
     ASSERT(PICC_knownset_size(subset) == 2);
     ASSERT(PICC_knownset_get_element(subset, val_forget) == NULL);
     ASSERT(PICC_knownset_get_element(subset, val_unknown) == NULL);
-    ASSERT(PICC_knownset_get_element(subset, val_known1)->value == val_known1);
-    ASSERT(PICC_knownset_get_element(subset, val_known2)->value == val_known2);
+    ASSERT(PICC_knownset_get_element(subset, val_known1)->value.handle == val_known1->handle);
+    ASSERT(PICC_knownset_get_element(subset, val_known2)->value.handle == val_known2->handle);
 }
 
 void test_forget_subset(PICC_Error *error)
@@ -124,8 +124,8 @@ void test_forget_subset(PICC_Error *error)
     ASSERT(PICC_knownset_size(subset) == 2);
     ASSERT(PICC_knownset_get_element(subset, val_unknown) == NULL);
     ASSERT(PICC_knownset_get_element(subset, val_known) == NULL);
-    ASSERT(PICC_knownset_get_element(subset, val_forget1)->value == val_forget1);
-    ASSERT(PICC_knownset_get_element(subset, val_forget2)->value == val_forget2);
+    ASSERT(PICC_knownset_get_element(subset, val_forget1)->value.handle == val_forget1->handle);
+    ASSERT(PICC_knownset_get_element(subset, val_forget2)->value.handle == val_forget2->handle);
 }
 
 void test_state_changes(PICC_Error *error)

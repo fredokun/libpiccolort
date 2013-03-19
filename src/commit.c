@@ -307,11 +307,11 @@ bool PICC_is_valid_commit(PICC_Commit *commit)
     #endif
 
     bool valid = false;
-    LOCK_CLOCK(commit);
+    //LOCK_CLOCK(commit);
     if (commit->clock == commit->thread->clock
-    && commit->clockval == commit->thread->clock->val)
+    && commit->clockval == PICC_atomic_int_get(commit->thread->clock->val))
         valid = true;
-    RELEASE_CLOCK(commit);
+    //RELEASE_CLOCK(commit);
 
 
     #ifdef CONTRACT_POST_INV
@@ -340,7 +340,7 @@ bool PICC_is_valid_commit(PICC_Commit *commit)
  * @pre commit != NULL
  *
  * @post clist->size = clist_at_pre->size + 1
- * @post clist->tail->commit = commit
+ * @post clist->head->commit = commit
  * @post clist->tail->next = NULL
  *
  * @param clist Commit list
@@ -364,6 +364,9 @@ void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Erro
     #ifdef CONTRACT_POST
 		// capture
 		int size_at_pre = clist->size;
+		int both_null = 0;
+		if(clist->head == NULL && clist->tail == NULL) 
+			both_null = 1;
     #endif
 
     ALLOC_ERROR(create_error);
@@ -372,9 +375,11 @@ void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Erro
         ADD_ERROR(error, create_error, ERR_ADD_COMMIT_TO_LIST);
     } else {
         if(clist->head != NULL && clist->tail != NULL){
-            clist->tail->next = clist_elem;
-            clist->tail = clist_elem;
+			PICC_CommitListElement *tmp = clist->head;
+            clist_elem->next = tmp;
+            clist->head = clist_elem;
             clist->size++;
+           
         }
         else{
             clist->head = clist_elem;
@@ -391,14 +396,19 @@ void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Erro
 
     #ifdef CONTRACT_POST
         //post
+        if(both_null)
+        {
+				ASSERT(clist->tail == clist->head);
+				ASSERT(clist->tail->commit == commit);
+		}
 		ASSERT(clist->size == size_at_pre + 1);
-		ASSERT(clist->tail->commit == commit);
+		ASSERT(clist->head->commit == commit);
 		ASSERT(clist->tail->next == NULL);
     #endif
 }
 
 /**
- * Adds the given element at the end of the commit list.
+ * Removes the given element from the commit list.
  *
  *
  * @param clist Commit list
@@ -409,7 +419,7 @@ void PICC_commit_list_remove(PICC_CommitList* clist, PICC_Commit *c){
 	PICC_CommitListElement* prev = clist->head;
 	while(commitEl){
 		if(commitEl->commit == c){
-			if(commitEl == prev){
+			if(commitEl == clist->head){
 				clist->head = commitEl->next;
 			} else {
 				prev->next = commitEl->next;
@@ -418,6 +428,7 @@ void PICC_commit_list_remove(PICC_CommitList* clist, PICC_Commit *c){
 				clist->tail = prev;
 			}
 			free(commitEl);
+			clist->size--;
 			break;
 		}
 		prev = commitEl;
@@ -612,8 +623,7 @@ PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
         current = PICC_commit_list_fetch(ch->outcommits);
         while (current != NULL) {
             if (PICC_is_valid_commit(current)) {
-                fetched = current;
-                break;
+                return current;
             }
             current = PICC_commit_list_fetch(ch->outcommits);
         }

@@ -36,7 +36,7 @@ struct _PICC_KnownValue
  */
 struct _PICC_KnownElement{
     PICC_KnownState state;
-    PICC_KnownValue* value;
+    PICC_KnownValue value;
 };
 
 #define SET_INIT_MAXSIZE 10
@@ -53,11 +53,6 @@ struct _PICC_KnownSet
     struct _PICC_KnownElement *content;
 };
 
-#define PICC_KNOWNSET_FOREACH(s, e) \
-    for(int i = 0; \
-    	i < (s)->current_size && ((e) = (s)->content[i].value);	\
-    	i++)
-
 extern PICC_KnownElement *PICC_knownset_get_element(PICC_KnownSet *knownset, PICC_KnownValue *val);
 
 // invariants
@@ -69,5 +64,13 @@ extern void PICC_KnownValue_inv(PICC_KnownValue *val);
 #define PICC_GET_HANDLE(val) ((PICC_KnownValue*) (val))->handle
 #define PICC_ACQUIRE_HANDLE(val) LOCK_HANDLE(((PICC_KnownValue*) (val))->handle)
 #define PICC_HANDLE_GLOBALRC(val) ((PICC_KnownValue*) (val))->handle->global_rc 
+
+
+#define PICC_KNOWNSET_FOREACH(s, e)					\
+    for(int i = 0; i < (s)->current_size				\
+	    && ( (e).header = (s)->content[i].value.header,		\
+		 (e).handle = (s)->content[i].value.handle );		\
+	i++)
+
 
 #endif

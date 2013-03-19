@@ -69,8 +69,9 @@ struct _PICC_Commit {
                                     commit */
     PICC_Clock *clock; /** The time when the commitment has
                                 been made */
-    PICC_AtomicInt *clockval; /**< TODO see spec */
-    PICC_Label cont_pc; /**< TODO see spec */
+    PICC_AtomicInt *clockval; /**< The initial value of the clock */
+    PICC_Label cont_pc; /** The label where the commit's thread will 
+                            execute after it's treatment */
     PICC_Channel *channel; /**< The channel of this commitment */
     /**@}*/
     /**

@@ -21,23 +21,15 @@
 /**
  * Creates a channel which contains 10 commitments.
  *
- * @post channel->incommits->size == DEFAULT_CHANNEL_COMMIT_SIZE
- * @post channel->outcommits->size == DEFAULT_CHANNEL_COMMIT_SIZE
  * @return Created channel
  */
 PICC_Channel *PICC_create_channel()
 {
-    PICC_Channel *channel = PICC_create_channel_cn(0, 0);
+    PICC_Channel *channel = PICC_create_channel_cn();
 
      #ifdef CONTRACT_POST_INV
         // inv
         PICC_Channel_inv(channel);
-    #endif
-
-    #ifdef CONTRACT_POST
-        //post
-        ASSERT(channel->incommits->size == 0);
-        ASSERT(channel->outcommits->size == 0);
     #endif
 
     return channel;
@@ -47,30 +39,17 @@ PICC_Channel *PICC_create_channel()
 /**
  * Creates a channel which contains <intcommit_size> in commitments and <outcommit_size> out commitments.
  *
- * @pre incommit_size >= 0
- * @pre outcommit_size >= 0
- *
- * @post channel->incommits->size == incommit_size
- * @post channel->outcommits->size == outcommit_size
  * @return Created channel
  */
-PICC_Channel *PICC_create_channel_cn(int incommit_size, int outcommit_size)
+PICC_Channel *PICC_create_channel_cn()
 {
-    #ifdef CONTRACT_PRE
-        // pre
-        ASSERT(incommit_size >= 0);
-        ASSERT(outcommit_size >= 0);
-    #endif
-
     ALLOC_ERROR(error);
     PICC_ALLOC(channel, PICC_Channel, &error) {
         channel->global_rc = 1;
         channel->lock = PICC_create_lock(&error);
 	channel->reclaim = (PICC_Reclaimer) PICC_reclaim_channel;
         channel->incommits = PICC_create_commit_list(&error);
-        channel->incommits->size = incommit_size;
         channel->outcommits = PICC_create_commit_list(&error);
-        channel->outcommits->size = outcommit_size;
         if (channel->incommits == NULL || channel->outcommits == NULL) {
             NEW_ERROR(&error, ERR_OUT_OF_MEMORY);
             free(channel);
@@ -84,12 +63,6 @@ PICC_Channel *PICC_create_channel_cn(int incommit_size, int outcommit_size)
     #ifdef CONTRACT_POST_INV
         // inv
         PICC_Channel_inv(channel);
-    #endif
-
-    #ifdef CONTRACT_POST
-        //post
-        ASSERT(channel->incommits->size == incommit_size );
-        ASSERT(channel->outcommits->size == outcommit_size );
     #endif
 
     return channel;
@@ -116,9 +89,9 @@ void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
 void PICC_release_all_channels(PICC_KnownSet *chans)
 {
     // /!\ will release all the managed value (for now channel and string)
-    PICC_KnownValue *val;
+    PICC_KnownValue val;
     PICC_KNOWNSET_FOREACH(chans, val){
-        RELEASE_CHANNEL(val->handle);
+        RELEASE_CHANNEL(val.handle);
     }
 }
 

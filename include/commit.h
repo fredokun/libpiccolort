@@ -22,7 +22,8 @@ struct _PICC_Value;
 /**
  * TODO see spec
  */
-typedef struct _PICC_Value *(*PICC_EvalFunction)(struct _PICC_PiThread *);
+typedef struct _PICC_Value (*PICC_EvalFunction)(struct _PICC_PiThread *);
+//typedef struct _PICC_Value *(*PICC_EvalFunction)(struct _PICC_PiThread *);
 
 /**
  * The type of the commitment
@@ -71,7 +72,7 @@ extern PICC_Commit *PICC_fetch_output_commitment(struct _PICC_Channel *ch);
 
 extern PICC_EvalFunction PICC_eval_func_of_output_commitment(PICC_Commit *ch);
 
-#define CHANNEL_OF_CHANNEL_VALUE(val) (PICC_Channel*)((PICC_ChannelValue *)(val))->channel
+#define CHANNEL_OF_CHANNEL_VALUE(val) (PICC_Channel*)((PICC_ChannelValue *)(val))->data
 #define OUTCOMMITS_LIST_OF_VALUE(val) (CHANNEL_OF_CHANNEL_VALUE(val))->outcommits
 #define INCOMMITS_LIST_OF_VALUE(val) (CHANNEL_OF_CHANNEL_VALUE(val))->incommits
 

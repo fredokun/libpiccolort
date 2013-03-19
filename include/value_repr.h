@@ -7,6 +7,7 @@
  * @author Mickaël MENU
  * @author Maxence WO
  * @author Dany SIRIPHOL
+ * @author Loïc Girault
  */
 
 #ifndef VALUE_REPR_H
@@ -61,7 +62,8 @@ typedef enum { TAG_RESERVED               =0x00,
  *******************************/
 
 struct _PICC_Value {
-  VALUE_HEADER ;
+    VALUE_HEADER ;
+    void* data; //dummy value so all the value structures have the same size
 };
 
 /******************************
@@ -70,9 +72,17 @@ struct _PICC_Value {
 
 struct _no_value_t {
     VALUE_HEADER ;
+    void* data;
 };
 
-#define MAKE_NO_VALUE ((PICC_NoValue)  { MAKE_HEADER(TAG_NOVALUE,0) })
+#define PICC_INIT_NO_VALUE(val)						\
+    do{									\
+	(val)->header = MAKE_HEADER(TAG_NOVALUE,0);			\
+	(val)->data = 0;						\
+    }while(0)
+
+
+/* #define MAKE_NO_VALUE ((PICC_NoValue)  { MAKE_HEADER(TAG_NOVALUE,0) }) */
 extern void PICC_NoValue_inv(PICC_NoValue *val);
 
 /******************************
@@ -85,7 +95,14 @@ struct _int_value_t {
     int data;
 };
 
-#define MAKE_INT_VALUE(data) ((PICC_IntValue)  { MAKE_HEADER(TAG_INTEGER,0), ((int) (data)) })
+#define PICC_INIT_INT_VALUE(val, i)					\
+    do{									\
+	(val)->header = MAKE_HEADER(TAG_INTEGER,0);			\
+	((PICC_IntValue*) (val))->data = (i);				\
+    }while(0)
+
+
+/* #define MAKE_INT_VALUE(data) ((PICC_IntValue)  { MAKE_HEADER(TAG_INTEGER,0), ((int) (data)) }) */
 extern void PICC_IntValue_inv(PICC_IntValue *val);
 extern PICC_IntValue *PICC_free_int(PICC_IntValue *val);
 
@@ -94,11 +111,23 @@ extern PICC_IntValue *PICC_free_int(PICC_IntValue *val);
  ******************************/
 
 struct _bool_value_t {
-  VALUE_HEADER;
+    VALUE_HEADER;
+    void* data;
 };
 
-#define MAKE_TRUE_VALUE ((PICC_BoolValue)  { MAKE_HEADER(TAG_BOOLEAN,1) })
-#define MAKE_FALSE_VALUE ((PICC_BoolValue)  { MAKE_HEADER(TAG_BOOLEAN,0) })
+#define PICC_INIT_BOOL_VALUE(val, i)					\
+    do{									\
+	(val)->header = MAKE_HEADER(TAG_BOOLEAN,(i));			\
+	((PICC_BoolValue*) (val))->data = 0;						\
+    }while(0)
+
+#define PICC_INIT_BOOL_TRUE(val) PICC_INIT_BOOL_VALUE(val, 1)
+#define PICC_INIT_BOOL_FALSE(val) PICC_INIT_BOOL_VALUE(val, 0)
+
+#define PICC_BOOL_OF_BOOL_VALUE(val) GET_VALUE_CTRL((val)->header)
+
+/* #define MAKE_TRUE_VALUE ((PICC_BoolValue)  { MAKE_HEADER(TAG_BOOLEAN,1) }) */
+/* #define MAKE_FALSE_VALUE ((PICC_BoolValue)  { MAKE_HEADER(TAG_BOOLEAN,0) }) */
 extern void PICC_BoolValue_inv(PICC_BoolValue *val);
 
 /******************************
@@ -107,10 +136,10 @@ extern void PICC_BoolValue_inv(PICC_BoolValue *val);
 
 struct _float_value_t {
   VALUE_HEADER;
-  double data;
-} ;
+  double* data;
+};
 
-#define MAKE_FLOAT_VALUE(data) ((PICC_FloatValue)  { MAKE_HEADER(TAG_FLOAT,0), ((double) (data)) })
+//#define MAKE_FLOAT_VALUE(data) ((PICC_FloatValue)  { MAKE_HEADER(TAG_FLOAT,0), ((double) (data)) })
 
 /******************
  * String values  *
@@ -118,8 +147,14 @@ struct _float_value_t {
 
 struct _string_value_t {
     VALUE_HEADER;
-    PICC_StringHandle *handle;
+    PICC_StringHandle *data;
 };
+
+#define PICC_INIT_STRING_VALUE(val, h)					\
+    do{									\
+	(val)->header = MAKE_HEADER(TAG_STRING,0);			\
+	((PICC_StringValue*) (val))->data = (h);			\
+    }while(0)
 
 struct _string_handle_t  //"implements PICC_KnownHandle"
 {
@@ -128,6 +163,7 @@ struct _string_handle_t  //"implements PICC_KnownHandle"
     PICC_Reclaimer reclaim;
     char *data;
 };
+
 
 extern void PICC_StringValue_inv(PICC_StringValue *string);
 
@@ -164,12 +200,21 @@ typedef void PICC_ChannelHandle;
 
 struct _channel_value_t {
     VALUE_HEADER ;
-    PICC_ChannelHandle *channel;
+    PICC_ChannelHandle *data;
 };
 
+
 extern PICC_ChannelValue *PICC_create_empty_channel_value( PICC_ChannelKind kind );
+
+#define PICC_INIT_CHANNEL_VALUE(val, h)					\
+    do{									\
+	(val)->header = MAKE_HEADER(TAG_CHANNEL,PI_CHANNEL);		\
+	((PICC_ChannelValue*) (val))->data = (h);			\
+    }while(0)
+
+
 extern void PICC_ChannelValue_inv(PICC_ChannelValue *channel);
-extern PICC_ChannelValue *PICC_free_channel_value( PICC_ChannelValue *channel);
+/* extern PICC_ChannelValue *PICC_free_channel_value( PICC_ChannelValue *channel); */
 
 /**********************************
  * user defined immediate values  *
@@ -177,16 +222,16 @@ extern PICC_ChannelValue *PICC_free_channel_value( PICC_ChannelValue *channel);
 
 struct _user_immediate_value_t {
     VALUE_HEADER ;
-    int *data;
+    int data;
 };
 
 /**********************************
  * user defined managed values  *
  **********************************/
 
-struct _user_managed_channel_value_t {
+struct _user_managed_value_t {
     VALUE_HEADER ;
-    int* data;
+    PICC_Handle* data;
 };
 
 extern PICC_ChannelValue *PICC_create_pi_channel_value();
