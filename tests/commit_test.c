@@ -171,24 +171,24 @@ void test_commitlists(PICC_Error *error)
 
     PICC_commit_list_add(clist, c2, error);
     ASSERT_NO_ERROR();
-    ASSERT(clist->head->commit == c);
-    ASSERT(clist->head->next->commit == c2);
-    ASSERT(clist->tail->commit == c2);
+    ASSERT(clist->tail->commit == c);
+    ASSERT(clist->head->next->commit == c);
+    ASSERT(clist->head->commit == c2);
     ASSERT(clist->size == 2);
 
     PICC_commit_list_add(clist, c3, error);
     ASSERT_NO_ERROR();
-    ASSERT(clist->head->commit == c);
+    ASSERT(clist->tail->commit == c);
     ASSERT(clist->head->next->commit == c2);
-    ASSERT(clist->head->next->next->commit == c3);
-    ASSERT(clist->tail->commit == c3);
+    ASSERT(clist->head->next->next->commit == c);
+    ASSERT(clist->head->commit == c3);
     ASSERT(clist->size == 3);
 
     ASSERT(clist->head != NULL);
     ASSERT(clist->tail != NULL);
-    ASSERT(clist->head->commit->cont_pc == 1);
+    ASSERT(clist->head->commit->cont_pc == 3);
     ASSERT(clist->head->next->commit->cont_pc == 2);
-    ASSERT(clist->tail->commit->cont_pc == 3);
+    ASSERT(clist->tail->commit->cont_pc == 1);
 
 
     // MODIFYING CHANNEL TO TEST FETCHING

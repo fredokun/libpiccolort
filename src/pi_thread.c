@@ -50,11 +50,12 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
         ALLOC_ERROR(sub_error);
         thread->chans = PICC_create_empty_knownset();
         thread->knowns = PICC_create_knownset(knowns_length, &sub_error);
+        thread->clock = PICC_create_clock(&sub_error);
         if (HAS_ERROR(sub_error)) {
             CRASH(&sub_error);
         } else {
             PICC_ALLOC_N_CRASH(env, PICC_Value, env_length) {
-                thread->clock = PICC_create_clock(&sub_error);
+                
                 if (HAS_ERROR(sub_error)) {
                     CRASH(&sub_error);
                 } else {
