@@ -42,7 +42,7 @@ PICC_Commit *PICC_create_commitment(PICC_Error *error)
         commit->channel = NULL;
     }
 
-    #ifdef CONTRACT_POSt
+    #ifdef CONTRACT_POST
         // post
         ASSERT(commit != NULL);
     #endif
@@ -192,11 +192,11 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
     #ifdef CONTRACT_POST
         //post
         ASSERT(ch->outcommits->size == (size_at_pre + 1));
-        ASSERT(ch->outcommits->head->commit->type == PICC_OUT_COMMIT);
-        ASSERT(ch->outcommits->head->commit->content.out->eval_func == eval);
-        ASSERT(ch->outcommits->head->commit->thread == pt);
-        ASSERT(ch->outcommits->head->commit->channel == ch);
-        ASSERT(ch->outcommits->head->commit->cont_pc == cont_pc);
+        ASSERT(ch->outcommits->tail->commit->type == PICC_OUT_COMMIT);
+        ASSERT(ch->outcommits->tail->commit->content.out->eval_func == eval);
+        ASSERT(ch->outcommits->tail->commit->thread == pt);
+        ASSERT(ch->outcommits->tail->commit->channel == ch);
+        ASSERT(ch->outcommits->tail->commit->cont_pc == cont_pc);
     #endif
 }
 /**
@@ -275,11 +275,11 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
     #ifdef CONTRACT_POST
         //post
 		ASSERT(ch->incommits->size == (size_at_pre + 1));
-		ASSERT(ch->incommits->head->commit->type == PICC_IN_COMMIT);
-		ASSERT(ch->incommits->head->commit->content.in->refvar == refvar);
-		ASSERT(ch->incommits->head->commit->thread == pt);
-		ASSERT(ch->incommits->head->commit->channel == ch);
-		ASSERT(ch->incommits->head->commit->cont_pc == cont_pc);
+		ASSERT(ch->incommits->tail->commit->type == PICC_IN_COMMIT);
+		ASSERT(ch->incommits->tail->commit->content.in->refvar == refvar);
+		ASSERT(ch->incommits->tail->commit->thread == pt);
+		ASSERT(ch->incommits->tail->commit->channel == ch);
+		ASSERT(ch->incommits->tail->commit->cont_pc == cont_pc);
     #endif
 
 }

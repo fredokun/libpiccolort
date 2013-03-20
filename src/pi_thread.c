@@ -233,8 +233,8 @@ void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Commit *commit)
     #ifdef CONTRACT_POST_INV
         // inv
         PICC_PiThread_inv(pt);
-        PICC_WaitQueue_inv(sched->wait);
-        PICC_ReadyQueue_inv(sched->ready);
+        //PICC_WaitQueue_inv(sched->wait); // problems when more then one real thread
+        //PICC_ReadyQueue_inv(sched->ready); // problems when more then one real thread
     #endif
 
     #ifdef CONTRACT_POST

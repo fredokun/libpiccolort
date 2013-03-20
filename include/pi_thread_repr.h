@@ -26,7 +26,7 @@ static const PICC_Label PICC_DEFAULT_ENTRY_LABEL = 0;
 /**
  * The maximum number of iterations a thread can execute without being scheduled.
  */
-static const int PICC_FUEL_INIT = 358;
+static const int PICC_FUEL_INIT = 10;//358;
 
 /**
  * Invalid position in the program counter.
