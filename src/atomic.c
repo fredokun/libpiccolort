@@ -197,7 +197,6 @@ PICC_AtomicInt *PICC_create_atomic_int(int value, PICC_Error *error)
     PICC_ALLOC(atomic_int, PICC_AtomicInt, error) {
         atomic_int->val = value;
         pthread_mutex_init(&(atomic_int->lock), NULL);
-        printf("rofl");
     }
     return atomic_int;
 }

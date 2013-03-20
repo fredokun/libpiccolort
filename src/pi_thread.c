@@ -48,7 +48,7 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
 	int i;
     PICC_ALLOC_CRASH(thread, PICC_PiThread) {
         ALLOC_ERROR(sub_error);
-        thread->chans = PICC_create_empty_knownset();
+        /* thread->chans = PICC_create_empty_knownset(); */
         thread->knowns = PICC_create_knownset(knowns_length, &sub_error);
         thread->clock = PICC_create_clock(&sub_error);
         if (HAS_ERROR(sub_error)) {
@@ -116,7 +116,7 @@ void PICC_reclaim_pi_thread(PICC_PiThread *pt)
 {
     free(pt->enabled);
     PICC_free_knownset(pt->knowns);
-    PICC_free_knownset(pt->chans);
+    /* PICC_free_knownset(pt->chans); */
     free(pt->env);
     free(pt->clock);
     free(pt->commits);

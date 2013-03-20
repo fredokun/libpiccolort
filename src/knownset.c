@@ -511,6 +511,6 @@ void PICC_KnownElement_inv(PICC_KnownElement *elem)
 
 void PICC_KnownValue_inv(PICC_KnownValue *val)
 {
-	ASSERT(val != NULL);
+    ASSERT(val != NULL);
     ASSERT(val->handle != NULL);
 }
