@@ -309,7 +309,7 @@ bool PICC_is_valid_commit(PICC_Commit *commit)
     bool valid = false;
     //LOCK_CLOCK(commit);
     if (commit->clock == commit->thread->clock
-    && commit->clockval == PICC_atomic_int_get(commit->thread->clock->val))
+            && commit->clockval == PICC_atomic_int_get(commit->thread->clock->val))
         valid = true;
     //RELEASE_CLOCK(commit);
 

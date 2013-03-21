@@ -21,7 +21,7 @@
     commit->thread = pt; \
     commit->cont_pc = pc; \
     commit->clock = pt->clock; \
-    commit->clockval = pt->clock->val; \
+    commit->clockval = PICC_atomic_int_get(pt->clock->val); \
     commit->channel = ch;
 
 #define ASSERT_NO_ERROR() \

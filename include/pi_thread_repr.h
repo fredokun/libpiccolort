@@ -80,8 +80,8 @@ struct _PICC_PiThread {
                         may or may not be followed */
     int enabled_length; /** Length of enabeled choices at the next
                             step */
-    PICC_KnownSet *chans; /** The channels curently acquired by this 
-                              thread */
+    /* PICC_KnownSet *chans; /\** The channels curently acquired by this  */
+    /*                           thread *\/ */
     PICC_KnownSet *knowns; /** The channels known by this
                                         thread */
     PICC_Value *env; /**< The local pi-thread variables */

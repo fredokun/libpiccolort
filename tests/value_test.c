@@ -176,7 +176,7 @@ void test_channels(PICC_Error *error)
 {
     PICC_Channel *channel= PICC_create_channel_cn(50,20);
     PICC_Value *cv = PICC_create_channel_value(channel);
-    PICC_Value *cv2= PICC_create_empty_channel_value(PI_CHANNEL);
+    PICC_Value *cv2= (PICC_Value *)PICC_create_empty_channel_value(PI_CHANNEL);
 
     PICC_Value *cv3;
 
