@@ -1017,6 +1017,9 @@ void PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq)
     wq->old.size = wq->old.size + wq->active.size;
     wq->active.size = 0;
     wq->old.head = wq->active.head;
+    if (wq->old.tail == NULL) {
+        wq->old.tail = wq->old.head;
+    }
     wq->active.head = NULL;
     wq->active.tail = NULL;
 

@@ -143,14 +143,16 @@ void PICC_sched_pool_master(PICC_SchedPool *sp, int std_gc_fuel, int quick_gc_fu
             gc_fuel--;
             if(gc_fuel == 0){
                 int max_active = PICC_wait_queue_max_active(sp->wait);
-                if ( PICC_wait_queue_size(sp->wait) > max_active * active_factor){
-                    PICC_wait_queue_max_active_reset(sp->wait);
+                PICC_wait_queue_max_active_reset(sp->wait);
+                if ( PICC_wait_queue_size(sp->wait) > max_active * active_factor){                    
                     bool gc_ok = PICC_GC2(sp);
 		    
                     if (!gc_ok || PICC_wait_queue_size(sp->wait) > max_active * active_factor )
                         gc_fuel = quick_gc_fuel;
                     else
                         gc_fuel = std_gc_fuel;
+                } else {
+                    gc_fuel = std_gc_fuel;
                 }
             }
         }

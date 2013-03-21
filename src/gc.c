@@ -168,27 +168,29 @@ bool PICC_GC2(PICC_SchedPool* sched)
                 PICC_Commit *incommit = PICC_fetch_input_commitment(chan);
                 while(incommit) {
                     if(PICC_is_valid_commit(incommit)){
-                        if(incommit->thread->status != PICC_STATUS_WAIT){
-                            goto abandon_gc;
-                        }
-                        PICC_wait_queue_fetch(sched->wait, incommit->thread);
-
-                        if(!(PICC_try_acquire(incommit->thread->lock))){
-                            PICC_wait_queue_push(sched->wait, incommit->thread);
-                            goto abandon_gc;
-                        }
-
-                        int can_add = 1;
-                        for(int i = 0; i < candidates_size; i++){
-                            if(candidates[i] == incommit->thread){
-                                can_add = 0;
-                                break;
+                        if (incommit->thread != candidate) {
+                            if(incommit->thread->status != PICC_STATUS_WAIT){
+                                goto abandon_gc;
                             }
-                        }
-                        if(can_add){
-                            refs++;
-                            candidates[candidates_size] = incommit->thread;
-                            candidates_size++;
+                            PICC_wait_queue_fetch(sched->wait, incommit->thread);
+
+                            if(!(PICC_try_acquire(incommit->thread->lock))){
+                                PICC_wait_queue_push(sched->wait, incommit->thread);
+                                goto abandon_gc;
+                            }
+
+                            int can_add = 1;
+                            for(int i = 0; i < candidates_size; i++){
+                                if(candidates[i] == incommit->thread){
+                                    can_add = 0;
+                                    break;
+                                }
+                            }
+                            if(can_add){
+                                refs++;
+                                candidates[candidates_size] = incommit->thread;
+                                candidates_size++;
+                            }
                         }
                     } else {
                         PICC_commit_list_remove(chan->incommits, incommit);
@@ -199,27 +201,29 @@ bool PICC_GC2(PICC_SchedPool* sched)
                 PICC_Commit *outcommit = PICC_fetch_output_commitment(chan);
                 while(outcommit){
                     if(PICC_is_valid_commit(outcommit)){
-                        if(outcommit->thread->status != PICC_STATUS_WAIT){
-                            goto abandon_gc;
-                        }
-                        PICC_wait_queue_fetch(sched->wait, outcommit->thread);
-
-                        if(!(PICC_try_acquire(outcommit->thread->lock))){
-                            PICC_wait_queue_push(sched->wait, outcommit->thread);
-                            goto abandon_gc;
-                        }
-
-                        int can_add = 1;
-                        for(int i = 0; i < candidates_size; i++){
-                            if(candidates[i] == outcommit->thread){
-                                can_add = 0;
-                                break;
+                        if (outcommit->thread != candidate) {
+                            if(outcommit->thread->status != PICC_STATUS_WAIT){
+                                goto abandon_gc;
                             }
-                        }
-                        if(can_add){
-                            refs++;
-                            candidates[candidates_size] = outcommit->thread;
-                            candidates_size++;
+                            PICC_wait_queue_fetch(sched->wait, outcommit->thread);
+
+                            if(!(PICC_try_acquire(outcommit->thread->lock))){
+                                PICC_wait_queue_push(sched->wait, outcommit->thread);
+                                goto abandon_gc;
+                            }
+
+                            int can_add = 1;
+                            for(int i = 0; i < candidates_size; i++){
+                                if(candidates[i] == outcommit->thread){
+                                    can_add = 0;
+                                    break;
+                                }
+                            }
+                            if(can_add){
+                                refs++;
+                                candidates[candidates_size] = outcommit->thread;
+                                candidates_size++;
+                            }
                         }
                     } else {
                         PICC_commit_list_remove(chan->outcommits, outcommit);
@@ -261,8 +265,8 @@ bool PICC_GC2(PICC_SchedPool* sched)
 	}
 
 	for(int i = 0; i < candidates_size; i++){
-		PICC_wait_queue_push(sched->wait, clique[i]);
-		PICC_release(clique[i]->lock);
+		PICC_wait_queue_push(sched->wait, candidates[i]);
+		PICC_release(candidates[i]->lock);
 	}
 
 	printf("GC release all !!\n");
