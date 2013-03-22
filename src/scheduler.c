@@ -88,8 +88,7 @@ void PICC_sched_pool_slave(PICC_Args *args)
     PICC_PiThread *current;
 
     while(sched_pool->running) {
-        while(PICC_ready_queue_size(sched_pool->ready)) {
-            current = PICC_ready_queue_pop(sched_pool->ready);
+        while(current = PICC_ready_queue_pop(sched_pool->ready)) {            
             do {
                 current->proc(sched_pool, current);
             } while(current->status == PICC_STATUS_CALL);
@@ -122,8 +121,7 @@ void PICC_sched_pool_master(PICC_SchedPool *sp, int std_gc_fuel, int quick_gc_fu
     int gc_fuel = std_gc_fuel;
     
     while(sp->running) {
-        while(PICC_ready_queue_size(sp->ready)) {
-            current = PICC_ready_queue_pop(sp->ready);
+        while(current = PICC_ready_queue_pop(sp->ready)) {
 
             if (PICC_ready_queue_size(sp->ready) >= 1 && sp->nb_waiting_slaves > 0) {
                 LOCK_SCHED_POOL(sp);

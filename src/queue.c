@@ -194,13 +194,7 @@ void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt)
     #endif
 
     LOCK_QUEUE(rq);
-
-    #ifdef CONTRACT_PRE_INV
-        // inv@pre
-        PICC_ReadyQueue_inv(rq);
-        PICC_PiThread_inv(pt);
-    #endif
-
+    
     #ifdef CONTRACT_PRE
         // pre: pt != null        
         ASSERT(pt != NULL);
@@ -216,6 +210,12 @@ void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt)
             c = c->next;
         }
         ASSERT(found == false);
+    #endif
+    
+    #ifdef CONTRACT_PRE_INV
+        // inv@pre
+        PICC_ReadyQueue_inv(rq);
+        PICC_PiThread_inv(pt);
     #endif
 
     #ifdef CONTRACT_POST
@@ -332,6 +332,7 @@ PICC_PiThread *PICC_ready_queue_pop(PICC_ReadyQueue *rq)
         } else if (size_at_pre > 0) {
             // post: if (rq@pre.size > 0) then rq@pre.head.thread
             ASSERT(popped_thread == head_at_pre);
+            ASSERT(popped_thread != NULL);
             // post if (rq@pre.size > 0) then rq.size == rq@pre.size - 1
             ASSERT(rq->q.size == size_at_pre - 1);
         }
