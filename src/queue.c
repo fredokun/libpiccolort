@@ -1016,7 +1016,9 @@ void PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq)
 
     wq->old.size = wq->old.size + wq->active.size;
     wq->active.size = 0;
-    wq->old.head = wq->active.head;
+    if (wq->active.head != NULL) {
+        wq->old.head = wq->active.head;
+    }
     if (wq->old.tail == NULL) {
         wq->old.tail = wq->active.tail;
     }
@@ -1036,8 +1038,8 @@ void PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq)
         // post: wq.active.head == wq.active.tail == null
         ASSERT(wq->active.head == NULL);
         ASSERT(wq->active.tail == NULL);
-        // post: wq.old.head == wq.active.head@pre
-        ASSERT(wq->old.head->thread == active_head_at_pre);
+        // post: wq.old.head == wq.active.head@pre if wq.active.size > 0
+        ASSERT(active_head_at_pre ? wq->old.head->thread == active_head_at_pre : true);
     #endif
 
     RELEASE_QUEUE(wq);

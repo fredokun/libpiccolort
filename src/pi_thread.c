@@ -229,7 +229,7 @@ void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Commit *commit)
     pt->pc = commit->cont_pc;
     PICC_commit_list_remove(pt->commits, commit);
     pt->status = PICC_STATUS_RUN;
-    PICC_ready_queue_push(sched->ready, pt);
+    PICC_ready_queue_add(sched->ready, pt);
 
     #ifdef CONTRACT_POST_INV
         // inv

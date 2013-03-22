@@ -38,6 +38,15 @@
     if (var == NULL && size != 0) { \
         CRASH_NEW_ERROR(ERR_OUT_OF_MEMORY); \
     } else
+    
+#define PICC_REALLOC_N_CRASH(var, type, size) \
+    var = realloc(var, sizeof(type) * (size)); \
+    if (size == 0) { \
+        var = NULL; \
+    } \
+    if (var == NULL && size != 0) { \
+        CRASH_NEW_ERROR(ERR_OUT_OF_MEMORY); \
+    } else
 
 #define PICC_FREE_MUTEX(m) \
     pthread_mutex_destroy(&m);
