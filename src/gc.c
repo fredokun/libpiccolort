@@ -152,6 +152,10 @@ bool PICC_GC2(PICC_SchedPool* sched)
     {
 		// arbitrary choice of a piThread, here the first piThread of candidates
 	    candidate = candidates[0];
+        --candidates_size;
+        for (int i = 0; i < candidates_size; ++i) {
+            candidates[i] = candidates[i + 1];
+        }        
 
 		PICC_Commit* commit = NULL;
 		PICC_CommitListElement* commitEl = candidate->commits->head;
