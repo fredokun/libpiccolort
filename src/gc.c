@@ -136,10 +136,14 @@ bool PICC_GC2(PICC_SchedPool* sched)
     PICC_ALLOC_N_CRASH(clique, PICC_PiThread*, clique_max_size) {
         int clique_size = 0;
         PICC_PiThread* candidate = PICC_wait_queue_pop_old(sched->wait);
-
-        printf("PICC_GC2 - GO !!\n");
+        if (candidate == NULL) {
+            free(clique);
+            return false;
+        }
+        
         if(!(PICC_try_acquire(candidate->lock)))
         {
+            printf("1. GC pushed in wait queue: %p\n", candidate);
             PICC_wait_queue_push(sched->wait, candidate);
             free(clique);
             return false;
@@ -162,16 +166,17 @@ bool PICC_GC2(PICC_SchedPool* sched)
 
                 PICC_Commit* commit = NULL;
                 PICC_CommitListElement* commitEl = candidate->commits->head;
+                printf("Commits size %d\n", candidate->commits->size);
                 while(commitEl){
                     commit = commitEl->commit;
                     if(PICC_is_valid_commit(commit)){
                         PICC_Channel* chan = commit->channel;
                         int refs = 1;
-
-                        PICC_knownset_add(chans, (PICC_KnownValue*)PICC_create_channel_value(chan));
+                        
                         if (!(PICC_try_acquire(chan->lock))) {
                             goto abandon_gc;
                         }
+                        PICC_knownset_add(chans, (PICC_KnownValue*)PICC_create_channel_value(chan));
                         PICC_CommitListElement* incommitEl = chan->incommits->head;
                         PICC_Commit *incommit = NULL;
                         while(incommitEl) {
@@ -180,13 +185,12 @@ bool PICC_GC2(PICC_SchedPool* sched)
                                 if (incommit->thread != candidate) {
                                     if(incommit->thread->status != PICC_STATUS_WAIT){
                                         goto abandon_gc;
-                                    }
-                                    PICC_wait_queue_fetch(sched->wait, incommit->thread);
+                                    }                                    
     
-                                    if(!(PICC_try_acquire(incommit->thread->lock))){
-                                        PICC_wait_queue_push(sched->wait, incommit->thread);
+                                    if(!(PICC_try_acquire(incommit->thread->lock))){                                        
                                         goto abandon_gc;
                                     }
+                                    PICC_wait_queue_fetch(sched->wait, incommit->thread);
 
                                     int can_add = 1;
                                     for(int i = 0; i < candidates_size; i++){
@@ -219,13 +223,12 @@ bool PICC_GC2(PICC_SchedPool* sched)
                                 if (outcommit->thread != candidate) {
                                     if(outcommit->thread->status != PICC_STATUS_WAIT){
                                         goto abandon_gc;
-                                    }
-                                    PICC_wait_queue_fetch(sched->wait, outcommit->thread);
+                                    }                                    
 
                                     if(!(PICC_try_acquire(outcommit->thread->lock))){
-                                        PICC_wait_queue_push(sched->wait, outcommit->thread);
                                         goto abandon_gc;
                                     }
+                                    PICC_wait_queue_fetch(sched->wait, outcommit->thread);
 
                                     int can_add = 1;
                                     for(int i = 0; i < candidates_size; i++){
@@ -275,6 +278,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
             }
 
             for(int i = 0; i < clique_size; i++){
+                printf("inserted in clique: %p\n", clique[i]);
                 PICC_reclaim_pi_thread(clique[i]);
             }
 
@@ -285,15 +289,17 @@ bool PICC_GC2(PICC_SchedPool* sched)
 
             abandon_gc:
             for(int i = 0; i < clique_size; i++){
+                printf("2. GC pushed in wait queue: %p\n", clique[i]);
                 PICC_wait_queue_push(sched->wait, clique[i]);
                 PICC_release(clique[i]->lock);
             }
 
             for(int i = 0; i < candidates_size; i++){
+                printf("3. GC pushed in wait queue: %p\n", candidates[i]);
                 PICC_wait_queue_push(sched->wait, candidates[i]);
                 PICC_release(candidates[i]->lock);
             }
-    
+            printf("4. GC pushed in wait queue: %p\n", candidate);
             PICC_wait_queue_push(sched->wait, candidate);
             PICC_release(candidate->lock);
 

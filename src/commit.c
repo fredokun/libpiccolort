@@ -523,6 +523,8 @@ PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
     PICC_Commit *fetched = NULL;
     if (!PICC_commit_list_is_empty(clist)) {
         PICC_CommitListElement *commit_list_element = clist->head;
+        fetched  = commit_list_element->commit;
+        PICC_acquire(fetched->thread->lock);
         if(clist->size == 1){
             clist->head = NULL;
             clist->tail = NULL;
@@ -531,11 +533,10 @@ PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
             clist->head = commit_list_element->next;
         }
         clist->size--;
-        fetched  = commit_list_element->commit;
         commit_list_element->next = NULL;
         commit_list_element->commit = NULL;
         free(commit_list_element);
-
+        PICC_release(fetched->thread->lock);
         //if(fetched == NULL) printf("FETCHED NULL\n");
         //if(head_at_pre == NULL) printf("HEAD AT PRE commit NULL\n");
     }
@@ -584,8 +585,6 @@ PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
         while (current != NULL) {
             if (PICC_is_valid_commit(current)) {
                 return current;
-            } else {
-                PICC_commit_list_remove(current->thread->commits, current);
             }
     	    current = PICC_commit_list_fetch(ch->incommits);
         }
@@ -630,8 +629,6 @@ PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
         while (current != NULL) {
             if (PICC_is_valid_commit(current)) {
                 return current;
-            } else {
-                PICC_commit_list_remove(current->thread->commits, current);
             }
             current = PICC_commit_list_fetch(ch->outcommits);
         }
