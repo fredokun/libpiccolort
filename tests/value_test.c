@@ -12,36 +12,14 @@
 #include <stdio.h>
 #include <value_repr.h>
 
-
-#define WITH_TRACE 1
-
 void test_int(PICC_Error *error)
 {
     PICC_Value v, v2, vresult;
-    PICC_IntValue *i, *i2, *r;
-    
-    i=(PICC_IntValue *)&v;
-    i2=(PICC_IntValue *)&v2;
-    r=(PICC_IntValue *)&vresult;
 
     PICC_INIT_INT_VALUE(&v, 3);
     PICC_INIT_INT_VALUE(&v2, 4);
     PICC_INIT_INT_VALUE(&vresult, 0);
 
-
-#ifdef WITH_TRACE
-    printf("v = %d , v2 = %d, vresult = %d \n", i->data, i2->data, r->data);
-#endif
-
-    v=v2;
-
-    ASSERT(i->data == i2->data)
-
-#ifdef WITH_TRACE
-    printf("v = %d , v2 = %d, vresult = %d \n", i->data, i2->data, r->data);
-#endif
-    
-    
     PICC_Int_add(&vresult,&v,&v2);
 
     PICC_Int_multiply(&vresult,&v,&v2);
@@ -52,33 +30,13 @@ void test_int(PICC_Error *error)
 
     PICC_equals(&vresult, &v, &v2);
 
-    ASSERT(PICC_BOOL_OF_BOOL_VALUE(&vresult) == true);
-
-    PICC_INIT_INT_VALUE(&v2, 12);
-        
-    PICC_equals(&vresult, &v, &v2);
-
     ASSERT(PICC_BOOL_OF_BOOL_VALUE(&vresult) == false);
 
-    /* i = PICC_create_int_value(-3); */
-    /* i2 = PICC_create_int_value(-12); */
+    PICC_INIT_INT_VALUE(&v2, 3);
 
-    /* PICC_Int_add(result,i,i2); */
-    /* PICC_Int_multiply(result,i,i2); */
-    /* PICC_Int_divide(result,i,i2); */
-    /* PICC_Int_substract(result,i,i2); */
+    PICC_equals(&vresult, &v, &v2);
 
-    /* ASSERT( PICC_copy_value(&i2, i)); */
-    
-    /* PICC_Int_multiply(result,i,i2); */
-
-    /*
-    ASSERT( PICC_copy_value(&i, result));
-
-    PICC_free_value(i);
-    PICC_free_value(result);
-    */
-
+    ASSERT(PICC_BOOL_OF_BOOL_VALUE(&vresult) == true);
 }
 
 void test_bool(PICC_Error *error)
@@ -108,7 +66,7 @@ void test_bool(PICC_Error *error)
     PICC_Bool_not(result,b);
 
     ASSERT( PICC_copy_value(&b, b2));
-    
+
     PICC_Bool_not(result,b);
 
     ASSERT( PICC_copy_value(&b, result));
@@ -119,15 +77,12 @@ void test_string(PICC_Error *error)
     PICC_Value *s = PICC_create_string_value("test");
     PICC_Value *s2 = PICC_create_string_value("test2");
     PICC_Value *result = (PICC_Value *) PICC_create_empty_string_value();
-    PICC_Value *result2;
 
     ASSERT( PICC_copy_value(&result, s2));
     ASSERT( PICC_copy_value(&result, s));
-    ASSERT( PICC_copy_value(&result2, s));
 
     result = (PICC_Value *) PICC_create_empty_string_value();
     PICC_free_value(result);
-    PICC_free_value(result2);
 }
 
 void test_tuples(PICC_Error *error)
@@ -178,14 +133,10 @@ void test_channels(PICC_Error *error)
     PICC_Value *cv = PICC_create_channel_value(channel);
     PICC_Value *cv2= (PICC_Value *)PICC_create_empty_channel_value(PI_CHANNEL);
 
-    PICC_Value *cv3;
+    ASSERT( PICC_copy_value(&cv2, cv));
 
-    ASSERT( PICC_copy_value(&cv3, cv));
-    ASSERT( PICC_copy_value(&cv3, cv2));
-  
     PICC_free_value(cv);
     PICC_free_value(cv2);
-    PICC_free_value(cv3);
 }
 
 /**

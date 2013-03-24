@@ -88,7 +88,7 @@ void PICC_sched_pool_slave(PICC_Args *args)
     PICC_PiThread *current;
 
     while(sched_pool->running) {
-        while(current = PICC_ready_queue_pop(sched_pool->ready)) {            
+        while((current = PICC_ready_queue_pop(sched_pool->ready))) {
             do {
                 current->proc(sched_pool, current);
             } while(current->status == PICC_STATUS_CALL);
@@ -119,9 +119,9 @@ void PICC_sched_pool_master(PICC_SchedPool *sp, int std_gc_fuel, int quick_gc_fu
 {
     PICC_PiThread *current;
     int gc_fuel = std_gc_fuel;
-    
+
     while(sp->running) {
-        while(current = PICC_ready_queue_pop(sp->ready)) {
+        while((current = PICC_ready_queue_pop(sp->ready))) {
 
             if (PICC_ready_queue_size(sp->ready) >= 1 && sp->nb_waiting_slaves > 0) {
                 LOCK_SCHED_POOL(sp);
@@ -134,17 +134,17 @@ void PICC_sched_pool_master(PICC_SchedPool *sp, int std_gc_fuel, int quick_gc_fu
                 current->proc(sp, current);
             } while(current->status == PICC_STATUS_CALL);
 //	    printf("PICC_sched_pool_master :- current->status != PICC_STATUS_CALL\n");
-                
+
             if (current->status == PICC_STATUS_BLOCKED) // && safe_choice
                 NEW_ERROR(error, ERR_DEADLOCK);
-        
+
             gc_fuel--;
             if(gc_fuel == 0){
                 int max_active = PICC_wait_queue_max_active(sp->wait);
                 PICC_wait_queue_max_active_reset(sp->wait);
-                if ( PICC_wait_queue_size(sp->wait) > max_active * active_factor){                    
+                if ( PICC_wait_queue_size(sp->wait) > max_active * active_factor){
                     bool gc_ok = PICC_GC2(sp);
-		    
+
                     if (!gc_ok || PICC_wait_queue_size(sp->wait) > max_active * active_factor )
                         gc_fuel = quick_gc_fuel;
                     else
@@ -154,7 +154,7 @@ void PICC_sched_pool_master(PICC_SchedPool *sp, int std_gc_fuel, int quick_gc_fu
                 }
             }
         }
-	
+
         LOCK_SCHED_POOL(sp);
         if (sp->nb_waiting_slaves == sp->nb_slaves) {
             sp->running = false;

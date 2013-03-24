@@ -94,9 +94,9 @@ void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt)
         // pre: rq != null
         ASSERT(rq != NULL);
     #endif
-    
+
     LOCK_QUEUE(rq);
-    
+
     #ifdef CONTRACT_PRE_INV
         // inv@pre
         PICC_ReadyQueue_inv(rq);
@@ -195,9 +195,9 @@ void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt)
     #endif
 
     LOCK_QUEUE(rq);
-    
+
     #ifdef CONTRACT_PRE
-        // pre: pt != null        
+        // pre: pt != null
         ASSERT(pt != NULL);
 
         // pre: pt not in rq
@@ -212,7 +212,7 @@ void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt)
         }
         ASSERT(found == false);
     #endif
-    
+
     #ifdef CONTRACT_PRE_INV
         // inv@pre
         PICC_ReadyQueue_inv(rq);
@@ -223,7 +223,7 @@ void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt)
         // captures
         int size_at_pre = rq->q.size;
     #endif
-    
+
     ALLOC_ERROR(error);
 
     // create queue cell
@@ -300,7 +300,7 @@ PICC_PiThread *PICC_ready_queue_pop(PICC_ReadyQueue *rq)
         // inv@pre
         PICC_ReadyQueue_inv(rq);
     #endif
-    
+
     #ifdef CONTRACT_POST
         // captures
         int size_at_pre = rq->q.size;
@@ -356,14 +356,14 @@ int PICC_ready_queue_size(PICC_ReadyQueue *rq)
         // pre: rq != null
         ASSERT(rq != NULL);
     #endif
-        
+
     LOCK_QUEUE(rq);
-    
+
     #ifdef CONTRACT_PRE_INV
         // inv@pre
         PICC_ReadyQueue_inv(rq);
     #endif
-    
+
     int size = rq->q.size;
 
     #ifdef CONTRACT_POST_INV
@@ -436,9 +436,9 @@ void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt)
         // pre: wq != null
         ASSERT(wq != NULL);
     #endif
-    
+
     LOCK_QUEUE(wq);
-    
+
     #ifdef CONTRACT_PRE_INV
         // inv@pre
         PICC_WaitQueue_inv(wq);
@@ -480,7 +480,7 @@ void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt)
         // captures
         int size_at_pre = wq->active.size;
     #endif
-    
+
     ALLOC_ERROR(error);
 
     // create queue cell
@@ -553,9 +553,9 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
         // pre: wq != null
         ASSERT(wq != NULL);
     #endif
-    
+
     LOCK_QUEUE(wq);
-    
+
     #ifdef CONTRACT_PRE_INV
         // inv@pre
         PICC_WaitQueue_inv(wq);
@@ -563,7 +563,7 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
     #endif
 
     #ifdef CONTRACT_PRE
-        // pre: pt != null        
+        // pre: pt != null
         ASSERT(pt != NULL);
 
         // captures
@@ -590,7 +590,7 @@ PICC_PiThread *PICC_wait_queue_fetch(PICC_WaitQueue *wq, PICC_PiThread *pt)
         bool pt_in_wq_at_pre = pt_in_active_at_pre || pt_in_old_at_pre;
         int active_size_at_pre = wq->active.size;
         int old_size_at_pre = wq->old.size;
-    #endif    
+    #endif
 
     PICC_PiThread *result = NULL;
     int zone = ACTIVE;
@@ -713,9 +713,9 @@ void PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error 
         // pre: wq != null
         ASSERT(wq != NULL);
     #endif
-    
+
     LOCK_QUEUE(wq);
-    
+
     #ifdef CONTRACT_PRE_INV
         // inv@pre
         PICC_WaitQueue_inv(wq);
@@ -754,7 +754,7 @@ void PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error 
         PICC_PiThread *head_at_pre = NULL;
         if (wq->old.head != NULL)
             head_at_pre = wq->old.head->thread;
-    #endif    
+    #endif
 
     // create queue cell
     ALLOC_ERROR(cell_error);
@@ -822,14 +822,14 @@ void PICC_wait_queue_push_old(PICC_WaitQueue *wq, PICC_PiThread *pt, PICC_Error 
  * @param wq Wait queue
  */
 PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq)
-{    
+{
     #ifdef CONTRACT_PRE
         // pre: wq != null
         ASSERT(wq != NULL);
     #endif
 
     LOCK_QUEUE(wq);
-    
+
     #ifdef CONTRACT_PRE_INV
         // inv@pre
         PICC_WaitQueue_inv(wq);
@@ -842,7 +842,7 @@ PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq)
         if (wq->old.tail != NULL)
             tail_at_pre = wq->old.tail->thread;
     #endif
-    
+
     PICC_PiThread *popped_thread = NULL;
 
     if (wq->old.size > 0) {
@@ -900,9 +900,9 @@ int PICC_wait_queue_size(PICC_WaitQueue *wq)
         // pre: wq != null
         ASSERT(wq != NULL);
     #endif
- 
+
     LOCK_QUEUE(wq);
-    
+
     #ifdef CONTRACT_PRE_INV
         // inv@pre
         PICC_WaitQueue_inv(wq);
@@ -953,7 +953,7 @@ int PICC_wait_queue_max_active(PICC_WaitQueue *wq)
     #endif
 
     LOCK_QUEUE(wq);
-        
+
     #ifdef CONTRACT_PRE_INV
         // inv@pre
         PICC_WaitQueue_inv(wq);
@@ -1000,8 +1000,8 @@ void PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq)
         ASSERT(wq != NULL);
     #endif
 
-    LOCK_QUEUE(wq);    
-    
+    LOCK_QUEUE(wq);
+
     #ifdef CONTRACT_PRE_INV
         // inv@pre
         PICC_WaitQueue_inv(wq);

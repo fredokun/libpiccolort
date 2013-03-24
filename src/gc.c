@@ -140,7 +140,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
             free(clique);
             return false;
         }
-        
+
         if(!(PICC_try_acquire(candidate->lock)))
         {
             //printf("1. GC pushed in wait queue: %p\n", candidate);
@@ -162,7 +162,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
                 --candidates_size;
                 for (int i = 0; i < candidates_size; ++i) {
                     candidates[i] = candidates[i + 1];
-                }        
+                }
 
                 PICC_Commit* commit = NULL;
                 PICC_CommitListElement* commitEl = candidate->commits->head;
@@ -172,7 +172,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
                     if(PICC_is_valid_commit(commit)){
                         PICC_Channel* chan = commit->channel;
                         int refs = 1;
-                        
+
                         if (!(PICC_try_acquire(chan->lock))) {
                             goto abandon_gc;
                         }
@@ -185,9 +185,9 @@ bool PICC_GC2(PICC_SchedPool* sched)
                                 if (incommit->thread != candidate) {
                                     if(incommit->thread->status != PICC_STATUS_WAIT){
                                         goto abandon_gc;
-                                    }                                    
-    
-                                    if(!(PICC_try_acquire(incommit->thread->lock))){                                        
+                                    }
+
+                                    if(!(PICC_try_acquire(incommit->thread->lock))){
                                         goto abandon_gc;
                                     }
                                     PICC_wait_queue_fetch(sched->wait, incommit->thread);
@@ -223,7 +223,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
                                 if (outcommit->thread != candidate) {
                                     if(outcommit->thread->status != PICC_STATUS_WAIT){
                                         goto abandon_gc;
-                                    }                                    
+                                    }
 
                                     if(!(PICC_try_acquire(outcommit->thread->lock))){
                                         goto abandon_gc;
@@ -241,10 +241,10 @@ bool PICC_GC2(PICC_SchedPool* sched)
                                         refs++;
                                         if (candidates_size >= candidates_max_size) {
                                             candidates_max_size *= 2;
-                                            PICC_REALLOC_N_CRASH(candidates, PICC_PiThread*, candidates_max_size) { }                                                
+                                            PICC_REALLOC_N_CRASH(candidates, PICC_PiThread*, candidates_max_size) { }
                                         }
                                         candidates[candidates_size] = outcommit->thread;
-                                        candidates_size++;                                            
+                                        candidates_size++;
                                     }
                                 }
                             } else {
@@ -310,4 +310,6 @@ bool PICC_GC2(PICC_SchedPool* sched)
             return false;
         }
     }
+
+    return true;
 }

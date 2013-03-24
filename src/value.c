@@ -147,7 +147,7 @@ void PICC_Bool_or ( PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
 
     PICC_INIT_BOOL_VALUE(res, bres);
 
-    
+
     #ifdef CONTRACT_POST_INV
         PICC_BoolValue_inv(bv1);
         PICC_BoolValue_inv(bv2);
@@ -203,7 +203,7 @@ void PICC_Bool_not( PICC_Value *res, PICC_Value *v)
     int bres = ! GET_VALUE_CTRL(bv->header);
 
     PICC_INIT_BOOL_VALUE(res, bres);
-    
+
     #ifdef CONTRACT_POST_INV
         PICC_BoolValue_inv(bv);
         PICC_BoolValue_inv((PICC_BoolValue *)res);
@@ -361,7 +361,7 @@ void PICC_Int_substract(PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
     int r = iv1->data - iv2->data;
 
     PICC_INIT_INT_VALUE(res, r);
-    
+
     #ifdef CONTRACT_POST_INV
         PICC_IntValue_inv(iv1);
         PICC_IntValue_inv(iv2);
@@ -392,7 +392,7 @@ void PICC_Int_less_than(PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
     int r = iv1->data < iv2->data;
 
     PICC_INIT_BOOL_VALUE(res, r);
-    
+
     #ifdef CONTRACT_POST_INV
         PICC_IntValue_inv(iv1);
         PICC_IntValue_inv(iv2);
@@ -423,7 +423,7 @@ void PICC_Int_modulo(PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
     int r = iv1->data % iv2->data;
 
     PICC_INIT_INT_VALUE(res, r);
-    
+
     #ifdef CONTRACT_POST_INV
         PICC_IntValue_inv(iv1);
         PICC_IntValue_inv(iv2);
@@ -445,12 +445,12 @@ void PICC_Int_modulo(PICC_Value *res, PICC_Value *v1, PICC_Value *v2)
  * Tuples values  *
 ******************/
 
-PICC_Value *PICC_create_tuple_value(int size) { 
+PICC_Value *PICC_create_tuple_value(int size) {
 
-    #ifdef CONTRACT_PRE 
-       //pre 
- 		ASSERT(size >= 0); 
-    #endif 
+    #ifdef CONTRACT_PRE
+       //pre
+ 		ASSERT(size >= 0);
+    #endif
 
     PICC_ALLOC_CRASH(val, PICC_TupleValue) {
         val->header = MAKE_HEADER(TAG_TUPLE, size);
@@ -459,27 +459,27 @@ PICC_Value *PICC_create_tuple_value(int size) {
     }
 
 
-    #ifdef CONTRACT_POST_INV 
-        PICC_TupleValue_inv(val); 
-    #endif 
+    #ifdef CONTRACT_POST_INV
+        PICC_TupleValue_inv(val);
+    #endif
 
     #ifdef CONTRACT_POST
         ASSERT(val->size == size)
-    #endif 
+    #endif
 
-    return (PICC_Value *)val; 
-} 
+    return (PICC_Value *)val;
+}
 
 PICC_TupleValue * PICC_free_tuple_value(PICC_TupleValue * tup) {
-   free(tup->elements); 
-   free(tup); 
-   return NULL; 
+   free(tup->elements);
+   free(tup);
+   return NULL;
 }
 
 void PICC_TupleValue_inv(PICC_TupleValue *tuple)
-{ 
-    ASSERT(tuple != NULL ); 
-    int tag = GET_VALUE_TAG(tuple->header); 
+{
+    ASSERT(tuple != NULL );
+    int tag = GET_VALUE_TAG(tuple->header);
     ASSERT(tag == TAG_TUPLE );
     ASSERT(tuple->size >=0);
     if(tuple->size >0)
@@ -500,10 +500,10 @@ void PICC_set_tuple_elements(PICC_Value *val, PICC_Value **values)
     #endif
 
     tuple->elements = values;
-    
-    #ifdef CONTRACT_POST_INV 
-        PICC_TupleValue_inv(tuple); 
-    #endif 
+
+    #ifdef CONTRACT_POST_INV
+        PICC_TupleValue_inv(tuple);
+    #endif
 }
 
 PICC_Value *PICC_get_tuple_element(PICC_Value *val, int index)
@@ -518,9 +518,9 @@ PICC_Value *PICC_get_tuple_element(PICC_Value *val, int index)
         ASSERT(index>=0);
         ASSERT(index<tuple->size);
     #endif
-    
-    #ifdef CONTRACT_POST_INV 
-        PICC_TupleValue_inv(tuple); 
+
+    #ifdef CONTRACT_POST_INV
+        PICC_TupleValue_inv(tuple);
     #endif
 
     return tuple->elements[index];
@@ -541,7 +541,7 @@ bool PICC_copy_tuple(PICC_Value **to, PICC_TupleValue* from){
     {
         (*tuple)->elements[i] = from->elements[i];
     }
-    
+
     #ifdef CONTRACT_PRE_INV
         PICC_TupleValue_inv(from);
         PICC_TupleValue_inv(*tuple);
@@ -880,7 +880,7 @@ void PICC_ChannelValue_inv(PICC_ChannelValue *channel)
  *******************************/
 void PICC_equals(PICC_Value *res, PICC_Value * value1, PICC_Value * value2){
     int c = PICC_compare_values(value1, value2);
-    if (c == 0) c = 1; 
+    if (c == 0) c = 1;
     else c = 0;
 
     PICC_INIT_BOOL_VALUE(res, c);
@@ -994,10 +994,6 @@ PICC_Value* PICC_free_value(PICC_Value *v)
 {
     if (v==NULL) return NULL;
 
-    #ifdef CONTRACT_PRE
-        ASSERT(v != NULL);
-    #endif
-
     switch(GET_VALUE_TAG(v->header)) {
         case TAG_RESERVED:
         case TAG_NOVALUE:
@@ -1055,7 +1051,7 @@ bool PICC_copy_value(PICC_Value **to, PICC_Value *from) {
             return true;
     	/*TODO*/
         case TAG_FLOAT:
-        
+
         case TAG_USER_DEFINED_IMMEDIATE:
         case TAG_USER_DEFINED_MANAGED:
     	return true;
@@ -1098,12 +1094,12 @@ void PICC_print_value_infos(PICC_Value * value)
             break;
         }
 
-        case TAG_TUPLE: { 
+        case TAG_TUPLE: {
             printf("Type: tuple\n");
             PICC_TupleValue *tup = (PICC_TupleValue *) value;
-            for(int i=0;i<ctrl;i++) { 
-                printf("%d-th element>>>>>>>>>\n",i); 
-                PICC_print_value_infos(tup->elements[i]); 
+            for(int i=0;i<ctrl;i++) {
+                printf("%d-th element>>>>>>>>>\n",i);
+                PICC_print_value_infos(tup->elements[i]);
                 printf("<<<<<<<<<<<\n");
 			}
 		}
@@ -1146,7 +1142,7 @@ void PICC_print_value(PICC_Value * value)
                 abort();
             }
             break;
-        } 
+        }
         case TAG_STRING:
             printf("%s", ((PICC_StringValue *)value)->data->data );
             break;
