@@ -879,9 +879,7 @@ PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq)
             // post: if (wq.old@pre.size > 0) then wq.old@pre.tail.thread
             ASSERT(popped_thread == tail_at_pre);
             // post: if (wq.old@pre.size > 0) then wq.old.size == wq.old.size@pre - 1
-            ASSERT(wq->old.size == size_at_pre - 1);
-            // post: popped_thread.commits > 0
-            ASSERT(popped_thread->commits->size > 0);            
+            ASSERT(wq->old.size == size_at_pre - 1);            
         }
     #endif
 

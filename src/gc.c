@@ -143,7 +143,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
         
         if(!(PICC_try_acquire(candidate->lock)))
         {
-            printf("1. GC pushed in wait queue: %p\n", candidate);
+            //printf("1. GC pushed in wait queue: %p\n", candidate);
             PICC_wait_queue_push(sched->wait, candidate);
             free(clique);
             return false;
@@ -166,7 +166,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
 
                 PICC_Commit* commit = NULL;
                 PICC_CommitListElement* commitEl = candidate->commits->head;
-                printf("Commits size %d\n", candidate->commits->size);
+                //printf("Commits size %d\n", candidate->commits->size);
                 while(commitEl){
                     commit = commitEl->commit;
                     if(PICC_is_valid_commit(commit)){
@@ -278,32 +278,32 @@ bool PICC_GC2(PICC_SchedPool* sched)
             }
 
             for(int i = 0; i < clique_size; i++){
-                printf("inserted in clique: %p\n", clique[i]);
+                //printf("inserted in clique: %p\n", clique[i]);
                 PICC_reclaim_pi_thread(clique[i]);
             }
 
             free(clique);
             free(candidates);
-            printf("<GC clique found and freed>\n");
+            //printf("<GC clique found and freed>\n");
             return true;
 
             abandon_gc:
             for(int i = 0; i < clique_size; i++){
-                printf("2. GC pushed in wait queue: %p\n", clique[i]);
+                //printf("2. GC pushed in wait queue: %p\n", clique[i]);
                 PICC_wait_queue_push(sched->wait, clique[i]);
                 PICC_release(clique[i]->lock);
             }
 
             for(int i = 0; i < candidates_size; i++){
-                printf("3. GC pushed in wait queue: %p\n", candidates[i]);
+                //printf("3. GC pushed in wait queue: %p\n", candidates[i]);
                 PICC_wait_queue_push(sched->wait, candidates[i]);
                 PICC_release(candidates[i]->lock);
             }
-            printf("4. GC pushed in wait queue: %p\n", candidate);
+            //printf("4. GC pushed in wait queue: %p\n", candidate);
             PICC_wait_queue_push(sched->wait, candidate);
             PICC_release(candidate->lock);
 
-            printf("<GC no clique found, abandon>\n");
+            //printf("<GC no clique found, abandon>\n");
             PICC_release_all_channels(chans); //-> released one by one in the loop
             free(clique);
             free(candidates);
