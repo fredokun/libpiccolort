@@ -238,7 +238,7 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
 
     #ifdef CONTRACT_POST
         // captures
-        int size_at_pre = ch->outcommits->size;
+        int size_at_pre = ch->incommits->size;
     #endif
 
     ALLOC_ERROR(sub_error);
