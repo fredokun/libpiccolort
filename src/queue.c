@@ -852,6 +852,9 @@ PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq)
         if (wq->old.size == 1) {
             wq->old.tail = NULL;
             wq->old.head = NULL;
+            if (wq->active.size > 0) {
+                wq->active.tail->next = NULL;
+            }
         } else {
             PICC_QueueCell *prev = wq->old.head;
             while (prev != NULL && prev->next != popped_cell) {
@@ -916,7 +919,7 @@ int PICC_wait_queue_size(PICC_WaitQueue *wq)
         PICC_WaitQueue_inv(wq);
     #endif
 
-      #ifdef CONTRACT_POST
+    #ifdef CONTRACT_POST
         // post: size == SUM(wq.active.head => wq.active.tail) + SUM(wq.old.head => wq.old.tail)
         int count = 0;
         PICC_QueueCell *cell = wq->active.head;
@@ -1103,6 +1106,7 @@ void PICC_QueueCell_inv(PICC_QueueCell *cell)
 void PICC_ReadyQueue_inv(PICC_ReadyQueue *queue)
 {
     PICC_Queue_inv(&queue->q);
+    ASSERT(queue->q.tail == NULL || queue->q.tail->next == NULL);
 }
 
 /**
@@ -1114,5 +1118,9 @@ void PICC_ReadyQueue_inv(PICC_ReadyQueue *queue)
 void PICC_WaitQueue_inv(PICC_WaitQueue *queue)
 {
     PICC_Queue_inv(&queue->active);
+    if (queue->old.head == NULL) {
+        ASSERT(queue->active.tail == NULL || queue->active.tail->next == NULL);
+    }
     PICC_Queue_inv(&queue->old);
+    ASSERT(queue->old.tail == NULL || queue->old.tail->next == NULL);
 }
