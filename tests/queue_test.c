@@ -59,6 +59,7 @@ void test_ready_queue_add(PICC_Error *error)
     ASSERT(q->q.size == 2);
     ASSERT(q->q.head->thread == pt1);
     ASSERT(q->q.tail->thread == pt2);
+    PICC_free_ready_queue(q);
 }
 
 void test_ready_queue_pop(PICC_Error *error)

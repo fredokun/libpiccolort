@@ -1062,9 +1062,9 @@ void PICC_free_queue(PICC_Queue *q)
         PICC_QueueCell *tmp;
         while (c != NULL) 
         {
-                tmp = c;
+                tmp = c->next;
                     free(c);
-                c = tmp->next;
+                c = tmp;
         }
     }
 }
