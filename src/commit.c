@@ -40,6 +40,7 @@ PICC_Commit *PICC_create_commitment(PICC_Error *error)
         commit->thread = NULL;
         commit->clock = NULL;
         commit->channel = NULL;
+        commit->content.in = NULL; // will also set commit->content.out to NULL
     }
 
     #ifdef CONTRACT_POST
@@ -113,6 +114,27 @@ PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PIC
     #endif
 
     return clist_elem;
+}
+
+void PICC_reclaim_commitment(PICC_Commit *commit) 
+{
+    if (commit->type == PICC_OUT_COMMIT && commit->content.out != NULL) {
+        free(commit->content.out);
+    }
+    if (commit->type == PICC_IN_COMMIT && commit->content.in != NULL) {
+        free(commit->content.in);
+    }
+    free(commit);
+}
+
+void PICC_reclaim_commit_list(PICC_CommitList *clist, PICC_Error *error) 
+{
+    
+}
+
+void PICC_reclaim_commit_list_element(PICC_CommitListElement *clist_el, PICC_Error *error) 
+{
+    
 }
 
 /**
