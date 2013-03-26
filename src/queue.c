@@ -1054,7 +1054,7 @@ void PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq)
     RELEASE_QUEUE(wq);
 }
 
-void PICC_free_queue(PICC_Queue q)
+void PICC_free_queue(PICC_Queue *q)
 {
     if(q!=NULL)
     {
@@ -1063,7 +1063,7 @@ void PICC_free_queue(PICC_Queue q)
         while (c != NULL) 
         {
                 tmp = c;
-                free(c);
+                    free(c);
                 c = tmp->next;
         }
     }
@@ -1073,8 +1073,8 @@ void PICC_free_wait_queue(PICC_WaitQueue *wq)
 {
     if(wq!=NULL)
     {
-        PICC_free_queue(wq->active);
-        PICC_free_queue(wq->old);
+        PICC_free_queue(&wq->active);
+        PICC_free_queue(&wq->old);
         PICC_lock_free(wq->lock);
         free(wq);
     }
@@ -1086,7 +1086,7 @@ void PICC_free_ready_queue(PICC_ReadyQueue *rq)
 {
     if(rq!=NULL)
     {
-        PICC_free_queue(rq->q);
+        PICC_free_queue(&rq->q);
         PICC_lock_free(rq->lock);
         free(rq);
     }
