@@ -37,6 +37,7 @@
  */
 PICC_KnownSet *PICC_create_knownset(int init_max_size, PICC_Error *error)
 {
+
     // manual set to a minimal value for max_size of SET_INIT_MAXSIZE
     // for autistic definitions like hello world who doesn't have any channels
     #ifdef CONTRACT_PRE
