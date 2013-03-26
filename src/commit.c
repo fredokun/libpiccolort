@@ -24,7 +24,7 @@
     commit->thread = pt; \
     commit->cont_pc = pc; \
     commit->clock = pt->clock; \
-    commit->clockval = pt->clock->val; \
+    commit->clockval = PICC_atomic_int_get(pt->clock->val); \
     commit->channel = ch;
 
 /**
@@ -42,7 +42,7 @@ PICC_Commit *PICC_create_commitment(PICC_Error *error)
         commit->channel = NULL;
     }
 
-    #ifdef CONTRACT_POSt
+    #ifdef CONTRACT_POST
         // post
         ASSERT(commit != NULL);
     #endif
@@ -192,11 +192,11 @@ void PICC_register_output_commitment(PICC_PiThread *pt, PICC_Channel *ch, PICC_E
     #ifdef CONTRACT_POST
         //post
         ASSERT(ch->outcommits->size == (size_at_pre + 1));
-        ASSERT(ch->outcommits->head->commit->type == PICC_OUT_COMMIT);
-        ASSERT(ch->outcommits->head->commit->content.out->eval_func == eval);
-        ASSERT(ch->outcommits->head->commit->thread == pt);
-        ASSERT(ch->outcommits->head->commit->channel == ch);
-        ASSERT(ch->outcommits->head->commit->cont_pc == cont_pc);
+        ASSERT(ch->outcommits->tail->commit->type == PICC_OUT_COMMIT);
+        ASSERT(ch->outcommits->tail->commit->content.out->eval_func == eval);
+        ASSERT(ch->outcommits->tail->commit->thread == pt);
+        ASSERT(ch->outcommits->tail->commit->channel == ch);
+        ASSERT(ch->outcommits->tail->commit->cont_pc == cont_pc);
     #endif
 }
 /**
@@ -238,7 +238,7 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
 
     #ifdef CONTRACT_POST
         // captures
-        int size_at_pre = ch->outcommits->size;
+        int size_at_pre = ch->incommits->size;
     #endif
 
     ALLOC_ERROR(sub_error);
@@ -275,11 +275,11 @@ void PICC_register_input_commitment(PICC_PiThread *pt, PICC_Channel *ch, int ref
     #ifdef CONTRACT_POST
         //post
 		ASSERT(ch->incommits->size == (size_at_pre + 1));
-		ASSERT(ch->incommits->head->commit->type == PICC_IN_COMMIT);
-		ASSERT(ch->incommits->head->commit->content.in->refvar == refvar);
-		ASSERT(ch->incommits->head->commit->thread == pt);
-		ASSERT(ch->incommits->head->commit->channel == ch);
-		ASSERT(ch->incommits->head->commit->cont_pc == cont_pc);
+		ASSERT(ch->incommits->tail->commit->type == PICC_IN_COMMIT);
+		ASSERT(ch->incommits->tail->commit->content.in->refvar == refvar);
+		ASSERT(ch->incommits->tail->commit->thread == pt);
+		ASSERT(ch->incommits->tail->commit->channel == ch);
+		ASSERT(ch->incommits->tail->commit->cont_pc == cont_pc);
     #endif
 
 }
@@ -307,11 +307,11 @@ bool PICC_is_valid_commit(PICC_Commit *commit)
     #endif
 
     bool valid = false;
-    LOCK_CLOCK(commit);
+    //LOCK_CLOCK(commit);
     if (commit->clock == commit->thread->clock
-    && commit->clockval == commit->thread->clock->val)
+            && commit->clockval == PICC_atomic_int_get(commit->thread->clock->val))
         valid = true;
-    RELEASE_CLOCK(commit);
+    //RELEASE_CLOCK(commit);
 
 
     #ifdef CONTRACT_POST_INV
@@ -321,8 +321,9 @@ bool PICC_is_valid_commit(PICC_Commit *commit)
 
     #ifdef CONTRACT_POST
         // post
-        if ((commit->clock == commit->thread->clock) && (commit->clockval == commit->thread->clock->val)) {
-			ASSERT(valid == true);
+        if ((commit->clock == commit->thread->clock) && 
+            (commit->clockval == PICC_atomic_int_get(commit->thread->clock->val))) {
+            ASSERT(valid == true);
         } else {
 			ASSERT(valid == false);
         }
@@ -364,6 +365,9 @@ void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Erro
     #ifdef CONTRACT_POST
 		// capture
 		int size_at_pre = clist->size;
+		int both_null = 0;
+		if(clist->head == NULL && clist->tail == NULL) 
+			both_null = 1;
     #endif
 
     ALLOC_ERROR(create_error);
@@ -372,8 +376,8 @@ void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Erro
         ADD_ERROR(error, create_error, ERR_ADD_COMMIT_TO_LIST);
     } else {
         if(clist->head != NULL && clist->tail != NULL){
-            clist->tail->next = clist_elem;
-            clist->tail = clist_elem;
+			clist->tail->next = clist_elem;
+            clist->tail = clist_elem;            
             clist->size++;
         }
         else{
@@ -391,6 +395,11 @@ void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *commit, PICC_Erro
 
     #ifdef CONTRACT_POST
         //post
+        if(both_null)
+        {
+				ASSERT(clist->tail == clist->head);
+				ASSERT(clist->tail->commit == commit);
+		}
 		ASSERT(clist->size == size_at_pre + 1);
 		ASSERT(clist->tail->commit == commit);
 		ASSERT(clist->tail->next == NULL);
@@ -409,7 +418,7 @@ void PICC_commit_list_remove(PICC_CommitList* clist, PICC_Commit *c){
 	PICC_CommitListElement* prev = clist->head;
 	while(commitEl){
 		if(commitEl->commit == c){
-			if(commitEl == prev){
+			if(commitEl == clist->head){
 				clist->head = commitEl->next;
 			} else {
 				prev->next = commitEl->next;
@@ -422,6 +431,7 @@ void PICC_commit_list_remove(PICC_CommitList* clist, PICC_Commit *c){
                 }
 			}
 			free(commitEl);
+
             --(clist->size);
 			break;
 		}
@@ -513,6 +523,8 @@ PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
     PICC_Commit *fetched = NULL;
     if (!PICC_commit_list_is_empty(clist)) {
         PICC_CommitListElement *commit_list_element = clist->head;
+        fetched  = commit_list_element->commit;
+        PICC_acquire(fetched->thread->lock);
         if(clist->size == 1){
             clist->head = NULL;
             clist->tail = NULL;
@@ -521,11 +533,10 @@ PICC_Commit *PICC_commit_list_fetch(PICC_CommitList *clist)
             clist->head = commit_list_element->next;
         }
         clist->size--;
-        fetched  = commit_list_element->commit;
         commit_list_element->next = NULL;
         commit_list_element->commit = NULL;
         free(commit_list_element);
-
+        PICC_release(fetched->thread->lock);
         //if(fetched == NULL) printf("FETCHED NULL\n");
         //if(head_at_pre == NULL) printf("HEAD AT PRE commit NULL\n");
     }
@@ -574,8 +585,6 @@ PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
         while (current != NULL) {
             if (PICC_is_valid_commit(current)) {
                 return current;
-            } else {
-                PICC_commit_list_remove(current->thread->commits, current);
             }
     	    current = PICC_commit_list_fetch(ch->incommits);
         }
@@ -619,10 +628,7 @@ PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
         current = PICC_commit_list_fetch(ch->outcommits);
         while (current != NULL) {
             if (PICC_is_valid_commit(current)) {
-                fetched = current;
-                break;
-            } else {
-                PICC_commit_list_remove(current->thread->commits, current);
+                return current;
             }
             current = PICC_commit_list_fetch(ch->outcommits);
         }
@@ -665,7 +671,7 @@ void PICC_Commit_inv(PICC_Commit *commit)
 {
     ASSERT(commit->thread != NULL);
     ASSERT(commit->clock != NULL);
-    ASSERT(commit->clockval != NULL);
+    ASSERT(commit->clockval >= 0);
     ASSERT(commit->channel != NULL);
 
     if (commit->type == PICC_IN_COMMIT) {

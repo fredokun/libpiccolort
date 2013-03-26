@@ -26,7 +26,7 @@ static const PICC_Label PICC_DEFAULT_ENTRY_LABEL = 0;
 /**
  * The maximum number of iterations a thread can execute without being scheduled.
  */
-static const int PICC_FUEL_INIT = 358;
+static const int PICC_FUEL_INIT = 10;//358;
 
 /**
  * Invalid position in the program counter.
@@ -80,8 +80,8 @@ struct _PICC_PiThread {
                         may or may not be followed */
     int enabled_length; /** Length of enabeled choices at the next
                             step */
-    PICC_KnownSet *chans; /** The channels curently acquired by this 
-                              thread */
+    /* PICC_KnownSet *chans; /\** The channels curently acquired by this  */
+    /*                           thread *\/ */
     PICC_KnownSet *knowns; /** The channels known by this
                                         thread */
     PICC_Value *env; /**< The local pi-thread variables */

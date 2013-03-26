@@ -38,8 +38,5 @@ int main(int argc, char **argv)
     printf("Run known set tests...\n");
     PICC_test_knownset();
 
-    /* printf("Run runtime tests...\n"); */
-    /* PICC_test_runtime(); */
-
     return 0;
 }

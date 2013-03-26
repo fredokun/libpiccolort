@@ -180,7 +180,13 @@ extern PICC_StringValue *PICC_free_string( PICC_StringValue *string);
 struct _tuple_value_t {
     VALUE_HEADER ;
     PICC_Value ** elements ;
+    int size;
 };
+
+extern void PICC_TupleValue_inv(PICC_TupleValue *tuple);
+extern PICC_TupleValue * PICC_free_tuple_value(PICC_TupleValue * tup);
+extern void PICC_set_tuple_elements(PICC_Value *tuple, PICC_Value **values);
+extern PICC_Value *PICC_get_tuple_element(PICC_Value *val, int index);
 
 /******************
  * Channel values  *
@@ -196,6 +202,9 @@ struct _channel_value_t {
     VALUE_HEADER ;
     PICC_ChannelHandle *data;
 };
+
+
+extern PICC_ChannelValue *PICC_create_empty_channel_value( PICC_ChannelKind kind );
 
 #define PICC_INIT_CHANNEL_VALUE(val, h)					\
     do{									\

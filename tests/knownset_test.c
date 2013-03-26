@@ -25,7 +25,8 @@ void test_knownset_creation(PICC_Error *error)
 
     ks = PICC_create_knownset(5, error);
     ASSERT_NO_ERROR();
-    ASSERT(ks->max_size == 5 && ks->current_size == 0);
+    ASSERT(ks->max_size == SET_INIT_MAXSIZE);
+    ASSERT(ks->current_size == 0);
 }
 
 void test_register(PICC_Error *error)
