@@ -39,6 +39,7 @@ extern void PICC_ready_queue_push(PICC_ReadyQueue *rq, PICC_PiThread *pt);
 extern void PICC_ready_queue_add(PICC_ReadyQueue *rq, PICC_PiThread *pt);
 extern void PICC_wait_queue_push(PICC_WaitQueue *wq, PICC_PiThread *pt);
 
+extern void PICC_free_queue(PICC_Queue *q);
 extern void PICC_free_wait_queue(PICC_WaitQueue *wq);
 extern void PICC_free_ready_queue(PICC_ReadyQueue *rq);
 
