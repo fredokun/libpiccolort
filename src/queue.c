@@ -310,11 +310,14 @@ PICC_PiThread *PICC_ready_queue_pop(PICC_ReadyQueue *rq)
     #endif
 
     PICC_PiThread *popped_thread = NULL;
-
+    
     if (rq->q.size > 0) {
+
         PICC_QueueCell *popped_cell = rq->q.head;
         popped_thread = popped_cell->thread;
+        
         rq->q.head = popped_cell->next;
+        free(popped_cell);
         rq->q.size--;
 
         if (rq->q.size == 0)
@@ -862,6 +865,7 @@ PICC_PiThread *PICC_wait_queue_pop_old(PICC_WaitQueue *wq)
             }
 
             if (prev != NULL) {
+                free(prev->next);
                 prev->next = NULL;
                 wq->old.tail = prev;
             }
@@ -1048,6 +1052,14 @@ void PICC_wait_queue_max_active_reset(PICC_WaitQueue *wq)
     #endif
 
     RELEASE_QUEUE(wq);
+}
+
+void PICC_free_wait_queue(PICC_WaitQueue *wq)
+{
+}
+
+void PICC_free_ready_queue(PICC_ReadyQueue *rq)
+{
 }
 
 // Queue structure invariants //////////////////////////////////////////////////

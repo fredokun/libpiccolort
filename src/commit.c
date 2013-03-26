@@ -600,9 +600,10 @@ PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
 		ASSERT(ch != NULL);
     #endif
 
-    PICC_Commit *fetched = NULL;
+    //PICC_Commit *fetched = NULL;
+    PICC_Commit *current = NULL;
     ALLOC_ERROR(alloc_error);
-    PICC_ALLOC(current, PICC_Commit, &alloc_error) {
+    //PICC_ALLOC(current, PICC_Commit, &alloc_error) {
         current = PICC_commit_list_fetch(ch->incommits);
         while (current != NULL) {
             if (PICC_is_valid_commit(current)) {
@@ -610,7 +611,7 @@ PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
             }
     	    current = PICC_commit_list_fetch(ch->incommits);
         }
-    }
+    //}
 
     if (HAS_ERROR(alloc_error))
         CRASH(&alloc_error);
@@ -620,7 +621,7 @@ PICC_Commit *PICC_fetch_input_commitment(PICC_Channel *ch)
         PICC_Channel_inv(ch);
     #endif
 
-    return fetched;
+    return NULL;
 }
 
 /**
@@ -643,18 +644,17 @@ PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
 		ASSERT(ch != NULL);
     #endif
 
-    PICC_Commit *fetched = NULL;
+    PICC_Commit *current = NULL;
     ALLOC_ERROR(alloc_error);
-    PICC_ALLOC(current, PICC_Commit, &alloc_error)
-    {
-        current = PICC_commit_list_fetch(ch->outcommits);
-        while (current != NULL) {
-            if (PICC_is_valid_commit(current)) {
-                return current;
-            }
-            current = PICC_commit_list_fetch(ch->outcommits);
+
+    current = PICC_commit_list_fetch(ch->outcommits);
+    while (current != NULL) {
+        if (PICC_is_valid_commit(current)) {
+            return current;
         }
+        current = PICC_commit_list_fetch(ch->outcommits);
     }
+
 
     if (HAS_ERROR(alloc_error))
         CRASH(&alloc_error);
@@ -666,7 +666,7 @@ PICC_Commit *PICC_fetch_output_commitment(PICC_Channel *ch)
     #endif
 
 
-    return fetched;
+    return NULL;
 }
 
 PICC_EvalFunction PICC_eval_func_of_output_commitment(PICC_Commit *c){

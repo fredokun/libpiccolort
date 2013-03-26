@@ -75,6 +75,7 @@ PICC_Channel *PICC_create_channel_cn()
  */
 void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
 {
+    PICC_lock_free(channel->lock);
     free(channel->incommits);
     free(channel->outcommits);
     free(channel);
