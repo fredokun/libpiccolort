@@ -132,141 +132,184 @@ void PICC_handle_dec_ref_count(PICC_Handle **h)
 
 bool PICC_GC2(PICC_SchedPool* sched)
 {
-    PICC_PiThread* clique[1000];
-    int clique_size = 0;
-    PICC_PiThread* candidate = PICC_wait_queue_pop_old(sched->wait);
+    int clique_max_size = PICC_init_clique_max_size;
+    PICC_ALLOC_N_CRASH(clique, PICC_PiThread*, clique_max_size) {
+        int clique_size = 0;
+        PICC_PiThread* candidate = PICC_wait_queue_pop_old(sched->wait);
+        if (candidate == NULL) {
+            free(clique);
+            return false;
+        }
 
-    printf("PICC_GC2 - GO !!\n");
-    if(!(PICC_try_acquire(candidate->lock)))
-    {
-        PICC_wait_queue_push(sched->wait, candidate);
-        return false;
-    }
+        if(!(PICC_try_acquire(candidate->lock)))
+        {
+            //printf("1. GC pushed in wait queue: %p\n", candidate);
+            PICC_wait_queue_push(sched->wait, candidate);
+            free(clique);
+            return false;
+        }
 
-    PICC_PiThread* candidates[1000];
-    PICC_KnownSet* chans = PICC_create_empty_knownset();
-	candidates[0] = candidate;
-    int candidates_size = candidate != NULL;
+        int candidates_max_size = PICC_init_candidates_max_size;
+        PICC_ALLOC_N_CRASH(candidates, PICC_PiThread*, candidates_max_size) {
+            PICC_KnownSet* chans = PICC_create_empty_knownset();
+            candidates[0] = candidate;
+            int candidates_size = candidate != NULL;
 
-    while(candidates_size > 0)
-    {
-		// arbitrary choice of a piThread, here the first piThread of candidates
-	    candidate = candidates[0];
-
-		PICC_Commit* commit = NULL;
-		PICC_CommitListElement* commitEl = candidate->commits->head;
-		while(commitEl){
-			commit = commitEl->commit;
-			if(PICC_is_valid_commit(commit)){
-                PICC_Channel* chan = commit->channel;
-                int refs = 1;
-
-                PICC_knownset_add(chans, (PICC_KnownValue*)PICC_create_channel_value(chan));
-                if (!(PICC_try_acquire(chan->lock))) {
-                    goto abandon_gc;
+            while(candidates_size > 0)
+            {
+                // arbitrary choice of a piThread, here the first piThread of candidates
+                candidate = candidates[0];
+                --candidates_size;
+                for (int i = 0; i < candidates_size; ++i) {
+                    candidates[i] = candidates[i + 1];
                 }
-                PICC_Commit *incommit = PICC_fetch_input_commitment(chan);
-                while(incommit) {
-                    if(PICC_is_valid_commit(incommit)){
-                        if(incommit->thread->status != PICC_STATUS_WAIT){
+
+                PICC_Commit* commit = NULL;
+                PICC_CommitListElement* commitEl = candidate->commits->head;
+                //printf("Commits size %d\n", candidate->commits->size);
+                while(commitEl){
+                    commit = commitEl->commit;
+                    if(PICC_is_valid_commit(commit)){
+                        PICC_Channel* chan = commit->channel;
+                        int refs = 1;
+
+                        if (!(PICC_try_acquire(chan->lock))) {
                             goto abandon_gc;
                         }
-                        PICC_wait_queue_fetch(sched->wait, incommit->thread);
+                        PICC_knownset_add(chans, (PICC_KnownValue*)PICC_create_channel_value(chan));
+                        PICC_CommitListElement* incommitEl = chan->incommits->head;
+                        PICC_Commit *incommit = NULL;
+                        while(incommitEl) {
+                            incommit = incommitEl->commit;
+                            if(PICC_is_valid_commit(incommit)){
+                                if (incommit->thread != candidate) {
+                                    if(incommit->thread->status != PICC_STATUS_WAIT){
+                                        goto abandon_gc;
+                                    }
 
-                        if(!(PICC_try_acquire(incommit->thread->lock))){
-                            PICC_wait_queue_push(sched->wait, incommit->thread);
-                            goto abandon_gc;
-                        }
+                                    if(!(PICC_try_acquire(incommit->thread->lock))){
+                                        goto abandon_gc;
+                                    }
+                                    PICC_wait_queue_fetch(sched->wait, incommit->thread);
 
-                        int can_add = 1;
-                        for(int i = 0; i < candidates_size; i++){
-                            if(candidates[i] == incommit->thread){
-                                can_add = 0;
-                                break;
+                                    int can_add = 1;
+                                    for(int i = 0; i < candidates_size; i++){
+                                        if(candidates[i] == incommit->thread){
+                                            can_add = 0;
+                                            break;
+                                        }
+                                    }
+                                    if(can_add){
+                                        refs++;
+                                        if (candidates_size >= candidates_max_size) {
+                                            candidates_max_size *= 2;
+                                            PICC_REALLOC_N_CRASH(candidates, PICC_PiThread*, candidates_max_size) { }
+                                        }
+                                        candidates[candidates_size] = incommit->thread;
+                                        candidates_size++;
+                                    }
+                                }
+                            } else {
+                                PICC_commit_list_remove(chan->incommits, incommit);
                             }
-                        }
-                        if(can_add){
-                            refs++;
-                            candidates[candidates_size] = incommit->thread;
-                            candidates_size++;
-                        }
-                    } else {
-                        PICC_commit_list_remove(chan->incommits, incommit);
-                    }
-                    incommit = PICC_fetch_input_commitment(chan);
-                }
-
-                PICC_Commit *outcommit = PICC_fetch_output_commitment(chan);
-                while(outcommit){
-                    if(PICC_is_valid_commit(outcommit)){
-                        if(outcommit->thread->status != PICC_STATUS_WAIT){
-                            goto abandon_gc;
-                        }
-                        PICC_wait_queue_fetch(sched->wait, outcommit->thread);
-
-                        if(!(PICC_try_acquire(outcommit->thread->lock))){
-                            PICC_wait_queue_push(sched->wait, outcommit->thread);
-                            goto abandon_gc;
+                            incommitEl = incommitEl->next;
                         }
 
-                        int can_add = 1;
-                        for(int i = 0; i < candidates_size; i++){
-                            if(candidates[i] == outcommit->thread){
-                                can_add = 0;
-                                break;
+                        PICC_CommitListElement* outcommitEl = chan->outcommits->head;
+                        PICC_Commit *outcommit = NULL;
+                        while(outcommitEl){
+                            outcommit = outcommitEl->commit;
+                            if(PICC_is_valid_commit(outcommit)){
+                                if (outcommit->thread != candidate) {
+                                    if(outcommit->thread->status != PICC_STATUS_WAIT){
+                                        goto abandon_gc;
+                                    }
+
+                                    if(!(PICC_try_acquire(outcommit->thread->lock))){
+                                        goto abandon_gc;
+                                    }
+                                    PICC_wait_queue_fetch(sched->wait, outcommit->thread);
+
+                                    int can_add = 1;
+                                    for(int i = 0; i < candidates_size; i++){
+                                        if(candidates[i] == outcommit->thread){
+                                            can_add = 0;
+                                            break;
+                                        }
+                                    }
+                                    if(can_add){
+                                        refs++;
+                                        if (candidates_size >= candidates_max_size) {
+                                            candidates_max_size *= 2;
+                                            PICC_REALLOC_N_CRASH(candidates, PICC_PiThread*, candidates_max_size) { }
+                                        }
+                                        candidates[candidates_size] = outcommit->thread;
+                                        candidates_size++;
+                                    }
+                                }
+                            } else {
+                                PICC_commit_list_remove(chan->outcommits, outcommit);
                             }
+                            outcommitEl = outcommitEl->next;
                         }
-                        if(can_add){
-                            refs++;
-                            candidates[candidates_size] = outcommit->thread;
-                            candidates_size++;
+
+                        if(refs < chan->global_rc){
+                            goto abandon_gc;
                         }
-                    } else {
-                        PICC_commit_list_remove(chan->outcommits, outcommit);
                     }
-                    outcommit = PICC_fetch_output_commitment(chan);
+                    commitEl = commitEl->next;
                 }
 
-                if(refs < chan->global_rc){
-                    goto abandon_gc;
+                int can_add = 1;
+                for(int i = 0; i < clique_size; i++){
+                    if(clique[i] == candidate){
+                        can_add = 0;
+                        break;
+                    }
+                }
+                if(can_add){
+                    if (clique_size >= clique_max_size) {
+                        clique_max_size *= 2;
+                        PICC_REALLOC_N_CRASH(clique, PICC_PiThread*, clique_max_size) { }
+                    }
+                    clique[clique_size] = candidate;
+                    clique_size++;
                 }
             }
-			commitEl = commitEl->next;
-		}
 
-		int can_add = 1;
-		for(int i = 0; i < clique_size; i++){
-			if(clique[i] == candidate){
-				can_add = 0;
-				break;
-			}
-		}
-		if(can_add){
-			clique[clique_size] = candidate;
-			clique_size++;
-		}
+            for(int i = 0; i < clique_size; i++){
+                //printf("inserted in clique: %p\n", clique[i]);
+                PICC_reclaim_pi_thread(clique[i]);
+            }
+
+            free(clique);
+            free(candidates);
+            //printf("<GC clique found and freed>\n");
+            return true;
+
+            abandon_gc:
+            for(int i = 0; i < clique_size; i++){
+                //printf("2. GC pushed in wait queue: %p\n", clique[i]);
+                PICC_wait_queue_push(sched->wait, clique[i]);
+                PICC_release(clique[i]->lock);
+            }
+
+            for(int i = 0; i < candidates_size; i++){
+                //printf("3. GC pushed in wait queue: %p\n", candidates[i]);
+                PICC_wait_queue_push(sched->wait, candidates[i]);
+                PICC_release(candidates[i]->lock);
+            }
+            //printf("4. GC pushed in wait queue: %p\n", candidate);
+            PICC_wait_queue_push(sched->wait, candidate);
+            PICC_release(candidate->lock);
+
+            //printf("<GC no clique found, abandon>\n");
+            PICC_release_all_channels(chans); //-> released one by one in the loop
+            free(clique);
+            free(candidates);
+            return false;
+        }
     }
 
-    for(int i = 0; i < clique_size; i++){
-        PICC_reclaim_pi_thread(clique[i]);
-	}
-
-    printf("GC don't release !!\n");
     return true;
-
-    abandon_gc:
-    for(int i = 0; i < clique_size; i++){
-		PICC_wait_queue_push(sched->wait, clique[i]);
-		PICC_release(clique[i]->lock);
-	}
-
-	for(int i = 0; i < candidates_size; i++){
-		PICC_wait_queue_push(sched->wait, clique[i]);
-		PICC_release(clique[i]->lock);
-	}
-
-	printf("GC release all !!\n");
-	PICC_release_all_channels(chans); //-> released one by one in the loop
-	return false;
-
 }

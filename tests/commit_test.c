@@ -21,17 +21,17 @@
     commit->thread = pt; \
     commit->cont_pc = pc; \
     commit->clock = pt->clock; \
-    commit->clockval = pt->clock->val; \
+    commit->clockval = PICC_atomic_int_get(pt->clock->val); \
     commit->channel = ch;
 
 #define ASSERT_NO_ERROR() \
  ASSERT(!HAS_ERROR((*error)))
 
-PICC_Value func(PICC_PiThread* a) { 
-    printf("my eval func !\n"); 
-    PICC_Value v; 
+PICC_Value func(PICC_PiThread* a) {
+    printf("my eval func !\n");
+    PICC_Value v;
     PICC_INIT_NO_VALUE(&v);
-    return v; 
+    return v;
 };
 
 void test_register_outcommits(PICC_Error* error)
@@ -171,17 +171,17 @@ void test_commitlists(PICC_Error *error)
 
     PICC_commit_list_add(clist, c2, error);
     ASSERT_NO_ERROR();
-    ASSERT(clist->head->commit == c);
-    ASSERT(clist->head->next->commit == c2);
     ASSERT(clist->tail->commit == c2);
+    ASSERT(clist->head->next->commit == c2);
+    ASSERT(clist->head->commit == c);
     ASSERT(clist->size == 2);
 
     PICC_commit_list_add(clist, c3, error);
     ASSERT_NO_ERROR();
-    ASSERT(clist->head->commit == c);
+    ASSERT(clist->tail->commit == c3);
     ASSERT(clist->head->next->commit == c2);
     ASSERT(clist->head->next->next->commit == c3);
-    ASSERT(clist->tail->commit == c3);
+    ASSERT(clist->head->commit == c);
     ASSERT(clist->size == 3);
 
     ASSERT(clist->head != NULL);

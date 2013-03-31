@@ -69,7 +69,7 @@ struct _PICC_Commit {
                                     commit */
     PICC_Clock *clock; /** The time when the commitment has
                                 been made */
-    PICC_AtomicInt *clockval; /**< The initial value of the clock */
+    int clockval; /**< The initial value of the clock */
     PICC_Label cont_pc; /** The label where the commit's thread will 
                             execute after it's treatment */
     PICC_Channel *channel; /**< The channel of this commitment */
@@ -111,6 +111,9 @@ struct _PICC_CommitList {
 extern PICC_Commit *PICC_create_commitment(PICC_Error *error);
 extern PICC_CommitList * PICC_create_commit_list(PICC_Error *error);
 extern PICC_CommitListElement *PICC_create_commit_list_element(PICC_Commit *commit, PICC_Error *error);
+extern void PICC_reclaim_commitment(PICC_Commit *commit);
+extern void PICC_reclaim_commit_list(PICC_CommitList *clist, PICC_Error *error);
+extern void PICC_reclaim_commit_list_element(PICC_CommitListElement *clist_el, PICC_Error *error);
 
 extern bool PICC_is_valid_commit(PICC_Commit *commit);
 extern void PICC_commit_list_add(PICC_CommitList *clist, PICC_Commit *c, PICC_Error *error);

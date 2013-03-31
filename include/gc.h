@@ -11,6 +11,9 @@ typedef struct _PICC_Handle PICC_Handle;
 typedef void (*PICC_Reclaimer) (PICC_Handle *handled, PICC_Error *error);
 //see comments in gc_repr.h for more informations
 
+static const int PICC_init_clique_max_size = 1000;
+static const int PICC_init_candidates_max_size = 1000;
+
 extern void PICC_handle_incr_ref_count(PICC_Handle *h);
 extern void PICC_handle_dec_ref_count(PICC_Handle **h);
 

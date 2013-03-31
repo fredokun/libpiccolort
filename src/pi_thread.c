@@ -48,13 +48,14 @@ PICC_PiThread *PICC_create_pithread(int env_length, int knowns_length, int enabl
 	int i;
     PICC_ALLOC_CRASH(thread, PICC_PiThread) {
         ALLOC_ERROR(sub_error);
-        thread->chans = PICC_create_empty_knownset();
+        /* thread->chans = PICC_create_empty_knownset(); */
         thread->knowns = PICC_create_knownset(knowns_length, &sub_error);
+        thread->clock = PICC_create_clock(&sub_error);
         if (HAS_ERROR(sub_error)) {
             CRASH(&sub_error);
         } else {
             PICC_ALLOC_N_CRASH(env, PICC_Value, env_length) {
-                thread->clock = PICC_create_clock(&sub_error);
+                
                 if (HAS_ERROR(sub_error)) {
                     CRASH(&sub_error);
                 } else {
@@ -115,7 +116,7 @@ void PICC_reclaim_pi_thread(PICC_PiThread *pt)
 {
     free(pt->enabled);
     PICC_free_knownset(pt->knowns);
-    PICC_free_knownset(pt->chans);
+    /* PICC_free_knownset(pt->chans); */
     free(pt->env);
     free(pt->clock);
     free(pt->commits);
@@ -154,23 +155,11 @@ PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
     if (!PICC_try_acquire(pt->lock)) {
         status = PICC_CANNOT_ACQUIRE;
 
-    } else if (commit->clock != pt->clock || commit->clockval != commit->clock->val) {
+    } else if (commit->clock != pt->clock || commit->clockval != PICC_atomic_int_get(commit->clock->val)) {
         PICC_release(pt->lock);
         status = PICC_INVALID_COMMIT;
 
-    } else {
-        int clock_val = PICC_atomic_int_get(pt->clock->val);
-        if (clock_val == PICC_CLOCK_MAX_INT) {
-            PICC_reclaim_clock(pt->clock);
-            pt->clock = NULL;
-            ALLOC_ERROR(error);
-            pt->clock = PICC_create_clock(&error);
-            if (HAS_ERROR(error)) {
-                CRASH(&error);
-            }
-        } else {
-            PICC_atomic_int_compare_and_swap(pt->clock->val, clock_val, clock_val + 1);
-        }
+    } else {        
         pt->commit = commit;
         PICC_release(pt->lock);
         status = PICC_VALID_COMMIT;
@@ -183,8 +172,7 @@ PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
 
     #ifdef CONTRACT_POST
         //post
-        if (status == PICC_VALID_COMMIT) {
-            ASSERT(PICC_atomic_int_get(pt->clock->val) <= PICC_CLOCK_MAX_INT);
+        if (status == PICC_VALID_COMMIT) {            
             ASSERT(pt->commit == commit);
         }
     #endif
@@ -208,33 +196,49 @@ PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, PICC_Commit *commit)
  */
 void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Commit *commit)
 {
-    #ifdef CONTRACT_PRE_INV
-        // inv
-        PICC_PiThread_inv(pt);
-        PICC_Commit_inv(commit);
-    #endif
-
     #ifdef CONTRACT_PRE
         // pre
         ASSERT(commit != NULL);
         ASSERT(sched != NULL);
     #endif
-
+    
+    #ifdef CONTRACT_PRE_INV
+        // inv
+        PICC_PiThread_inv(pt);
+        PICC_Commit_inv(commit);
+    #endif
+    
+    PICC_acquire(pt->lock);
+    
     if (pt->commit != commit) {
         CRASH_NEW_ERROR(ERR_INVALID_COMMIT);
     }
-    PICC_wait_queue_fetch(sched->wait, pt);
+    PICC_PiThread *fetched;
+    do {
+        fetched = PICC_wait_queue_fetch(sched->wait, pt);
+    } while (fetched == NULL);
     pt->commit = NULL;
     pt->pc = commit->cont_pc;
-    PICC_commit_list_remove(pt->commits, commit);
-    pt->status = PICC_STATUS_RUN;
-    PICC_ready_queue_push(sched->ready, pt);
+    pt->status = PICC_STATUS_RUN;    
+
+    int clock_val = PICC_atomic_int_get(pt->clock->val);
+    if (clock_val == PICC_CLOCK_MAX_INT) {
+        PICC_reclaim_clock(pt->clock);
+        pt->clock = NULL;
+        ALLOC_ERROR(error);
+        pt->clock = PICC_create_clock(&error);
+        if (HAS_ERROR(error)) {
+            CRASH(&error);
+        }
+    } else {
+        PICC_atomic_int_compare_and_swap(pt->clock->val, clock_val, clock_val + 1);
+    }
 
     #ifdef CONTRACT_POST_INV
         // inv
         PICC_PiThread_inv(pt);
-        PICC_WaitQueue_inv(sched->wait);
-        PICC_ReadyQueue_inv(sched->ready);
+        //PICC_WaitQueue_inv(sched->wait); // problems when more then one real thread
+        //PICC_ReadyQueue_inv(sched->ready); // problems when more then one real thread
     #endif
 
     #ifdef CONTRACT_POST
@@ -242,7 +246,11 @@ void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Commit *commit)
         ASSERT(pt->commit == NULL);
         ASSERT(pt->pc == commit->cont_pc);
         ASSERT(pt->status == PICC_STATUS_RUN);
+        ASSERT(PICC_atomic_int_get(pt->clock->val) <= PICC_CLOCK_MAX_INT);
     #endif
+    
+    PICC_release(pt->lock);
+    PICC_ready_queue_add(sched->ready, pt);
 }
 
 /**
