@@ -1,4 +1,4 @@
-libpiccort — runtime for the the (parallel) piccolo commpiler
+piccolo-rt — runtime for the the (parallel) piccolo commpiler
 =============================================================
 
 To build the library, use make. It will build lib/libpirt.a and the unit tests suite.
