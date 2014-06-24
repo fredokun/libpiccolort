@@ -1151,8 +1151,12 @@ void PICC_print_value(PICC_Value * value)
         case TAG_USER_DEFINED_MANAGED:
             printf("not implemented");
             break;
+    case TAG_RESERVED:
+            printf("reserved tag used (please report)\n");
+            abort();
+            break;
         default:
-            printf("unknown tag\n");
+            printf("unknown tag (please report)\n");
             abort();
             break;
     }
