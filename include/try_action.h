@@ -14,9 +14,9 @@
 #include <pi_thread.h>
 #include <commit.h>
 
-extern PICC_InCommit * PICC_try_output_action(PICC_PiThread *pt, int chan_ref, PICC_ChanSet *chans, PICC_TryStatus * try_result);
+extern PICC_Commit * PICC_try_output_action(PICC_PiThread *pt, int chan_ref, PICC_Channel* chans[], int nbchans, PICC_TryResult * try_result);
 
-extern PICC_OutCommit * PICC_try_input_action(PICC_PiThread *pt, int chan_ref, PICC_ChanSet *chans, PICC_TryStatus * try_result);
+extern PICC_Commit * PICC_try_input_action(PICC_PiThread *pt, int chan_ref, PICC_Channel* chans[], int nbchans, PICC_TryResult * try_result);
 
 
 #endif

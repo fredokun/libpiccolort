@@ -20,6 +20,8 @@
  *  List of all errors defined.
  */
 typedef enum _PICC_ErrorId {
+    ERR_DEAD_CODE_REACHED,
+
     ERR_DEADLOCK,
 
     ERR_ALLOC_QUEUE_CELL,
