@@ -16,6 +16,7 @@
 #include <queue_repr.h>
 #include <value_repr.h>
 #include <atomic_repr.h>
+#include <knownset_repr.h>
 #include <tools.h>
 
 /**
@@ -252,6 +253,43 @@ void PICC_awake(PICC_SchedPool *sched, PICC_PiThread *pt, PICC_Commit *commit)
     PICC_release(pt->lock);
     PICC_ready_queue_add(sched->ready, pt);
 }
+
+/**
+ * End a PiThread.
+ *
+ * @pre pt != NULL
+ * @pre PICC_PiThread_inv(pt) must pass
+ *
+ * @post pt->status == status
+ *
+ * @param pt the PiThread to end
+ * @param status the termination status (Ended or Blocked)
+ */
+void PICC_process_end(PICC_PiThread *pt, PICC_StatusKind status) {
+        
+  PICC_KnownValue chan;
+  PICC_KnownSet* s=PICC_knownset_known( pt->knowns );
+  
+  PICC_KNOWNSET_FOREACH(s, 
+                        chan){
+    PICC_handle_dec_ref_count( &PICC_GET_HANDLE( &chan ) );  
+    PICC_free_knownset(s);
+  }
+      
+  s=PICC_knownset_forget( pt->knowns );
+  PICC_KNOWNSET_FOREACH(s, 
+                        chan){
+    PICC_handle_dec_ref_count( &PICC_GET_HANDLE( &chan ) );
+    
+  }
+
+  PICC_free_knownset(s);
+  
+  pt->status = status;
+
+}
+
+
 
 /**
  * Puts the current posix thread at the end of the system thread queue
