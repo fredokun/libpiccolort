@@ -6,10 +6,14 @@
  *
  * @author Mickaël MENU
  * @author Sergiu TIGANU
+ * @author Aurélien DEHARBE
  */
 
 #ifndef PI_THREAD_H
 #define PI_THREAD_H
+
+#include <stdbool.h>
+#include <channel.h>
 
 // Forward declarations
 struct _PICC_SchedPool;
@@ -53,5 +57,8 @@ extern enum _PICC_CommitStatus PICC_can_awake(PICC_PiThread *pt, struct _PICC_Co
 extern void PICC_awake(struct _PICC_SchedPool *sched, PICC_PiThread *pt, struct _PICC_Commit *commit);
 extern void PICC_process_end(PICC_PiThread *pt, PICC_StatusKind status);
 extern void PICC_low_level_yield();
+extern bool PICC_process_acquire_channel(PICC_PiThread *pt, PICC_Channel *chan);
+extern void PICC_process_yield(PICC_PiThread *pt, struct _PICC_SchedPool *sched);
+extern void PICC_process_wait(PICC_PiThread *pt, struct _PICC_SchedPool *sched);
 
 #endif

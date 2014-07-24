@@ -13,6 +13,7 @@
 #include <error.h>
 
 static const char *PICC_error_messages[PICC_NB_ERRORS] = {
+    "Reached supposed dead code.",
     "Scheduler deadlock.",
 
     "Can't alloc a new queue cell.",

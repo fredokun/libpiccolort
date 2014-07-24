@@ -7,6 +7,7 @@
  * @author Mickaël MENU
  * @author Maxence WO
  * @author Sergiu TIGANU
+ * @author Aurélien DEHARBE
  */
 
 #include <channel_repr.h>
@@ -380,3 +381,51 @@ void PICC_PiThread_inv(PICC_PiThread *pt)
     ASSERT(pt->commits != NULL);
     ASSERT(pt->clock != NULL);
 }
+
+bool PICC_process_acquire_channel(PICC_PiThread *pt, PICC_Channel *chan)
+{
+  while (! (PICC_try_acquire(chan->lock))) {
+    pt->fuel--;
+    if (pt->fuel == 0) return false;
+    PICC_low_level_yield();
+  }
+  return true;
+}
+
+
+void PICC_process_yield(PICC_PiThread *pt, PICC_SchedPool *sched)
+{
+  pt->fuel = PICC_FUEL_INIT;
+  PICC_KnownValue chan;
+  PICC_KnownSet *s = PICC_knownset_forget(pt->knowns);
+
+  // TODO: factorize this loop with the one in PICC_process_wait
+  PICC_KNOWNSET_FOREACH(s, chan) {
+    PICC_handle_dec_ref_count(&PICC_GET_HANDLE(&chan));
+    PICC_knownset_forget_to_unknown(s, &chan);
+  }
+  PICC_free_knownset(s);
+
+  PICC_ready_queue_add(sched->ready, pt);
+}
+
+
+void PICC_process_wait(PICC_PiThread *pt, PICC_SchedPool *sched)
+{
+  pt->pc = PICC_INVALID_PC;
+  pt->fuel = PICC_FUEL_INIT;
+  PICC_KnownValue chan;
+  PICC_KnownSet *s = PICC_knownset_forget(pt->knowns);
+
+  PICC_KNOWNSET_FOREACH(s, chan) {
+    PICC_handle_dec_ref_count(&PICC_GET_HANDLE(&chan));
+    PICC_knownset_forget_to_unknown(s, &chan);
+  }
+  PICC_free_knownset(s);
+
+  pt->status = PICC_STATUS_WAIT;
+  PICC_wait_queue_push(sched->wait, pt);
+  PICC_release(pt->lock);
+}
+
+
