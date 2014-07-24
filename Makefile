@@ -2,50 +2,55 @@
 #
 # This project is released under MIT License.
 #
-# @author Maxence WO
-# @author Mickaël MENU
-# @author Dany SIRIPHOL
 
-CC=gcc
-LCC=ar -rs
-CFLAGS=-g -Wall -std=c99 -I\include -I\tests
-OFLAGS= -lpthread
-NAME=run_tests
-LIB_NAME=pirt
-FULL_LIB_NAME=lib$(LIB_NAME).a
-BIN=bin
-LIB=lib
-INCLUDE=include
-SRC=src
-TESTS=tests
+# tools and options
+CC        = gcc
+LCC       = ar -rs
+CFLAGS    = -g -Wall -std=c99 -I\include
+OFLAGS    = -lpthread
+OFLAGS2   = -L\lib -lpiccolort -lpthread
 
-SRCFILES=$(wildcard $(SRC)/*.c)
-TARG1=$(subst .c,.o, $(SRCFILES))
-LIB_OBJ=$(subst $(SRC), $(LIB), $(TARG1))
-TESTSFILES=$(wildcard $(TESTS)/*.c)
-TARG2=$(subst .c,.o, $(TESTSFILES))
-OBJ=$(LIB_OBJ) $(subst $(TESTS), $(LIB), $(TARG2))
+# targets
+LIBTARG   = libpiccolort.a
+TESTSTARG = picc_tests
 
+# directories
+LIB       = lib
+INC       = include
+SRC       = src
+OBJ       = obj
+BIN       = bin
+TESTS     = tests
 
-all : clean init $(BIN)/$(NAME) $(LIB)/$(FULL_LIB_NAME)
+LIBFILES  = $(wildcard $(SRC)/*.c)
+LIBOBJS   = $(subst .c,.o, $(subst $(SRC),$(OBJ), $(LIBFILES)))
+TESTFILES = $(wildcard $(TESTS)/*.c)
+TESTOBJS  = $(subst .c,.o, $(subst $(TESTS),$(OBJ), $(TESTFILES)))
 
-init :
-	mkdir -p $(LIB)
-	mkdir -p $(TESTS)
-	mkdir -p $(BIN)
+all: init lib tests
 
-$(LIB)/%.o: $(SRC)/%.c $(DEPS)
+init:
+	mkdir -p $(OBJ) $(LIB) $(BIN)
+
+lib: init $(LIB)/$(LIBTARG)
+
+tests: init $(BIN)/$(TESTSTARG)
+
+$(OBJ)/%.o: $(SRC)/%.c
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(LIB)/%.o: $(TESTS)/%.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
-
-$(BIN)/$(NAME): $(OBJ)
-	$(CC) -o $@ $^ $(OFLAGS)
-
-$(LIB)/$(FULL_LIB_NAME): $(LIB_OBJ)
+$(LIB)/$(LIBTARG): $(LIBOBJS)
 	$(LCC) $@ $^
 
+$(OBJ)/%.o: $(TESTS)/%.c
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(BIN)/$(TESTSTARG): $(TESTOBJS)
+	$(CC) -o $@ $^ $(OFLAGS2)
+
 clean:
-	rm -f bin/* lib/*
+	rm -f $(OBJ)/*
+
+cleanall: clean
+	rm -rf $(OBJ) $(LIB) $(BIN)
 

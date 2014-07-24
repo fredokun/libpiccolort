@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <tests.h>
+#include "tests.h"
 
 int main(int argc, char **argv)
 {
