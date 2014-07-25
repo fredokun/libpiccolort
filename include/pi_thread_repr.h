@@ -56,7 +56,8 @@ enum _PICC_StatusKind {
 enum _PICC_TryResult {
     PICC_TRY_ENABLED, /**< The futher execution of the thred enabeled */
     PICC_TRY_DISABLED, /**< The futher execution of the thred disabled */
-    PICC_TRY_COMMIT /**< A commitment has been submited */
+    PICC_TRY_COMMIT, /**< A commitment has been submited */
+    PICC_TRY_ABORT
 };
 
 /**
