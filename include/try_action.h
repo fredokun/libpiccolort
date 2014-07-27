@@ -14,7 +14,8 @@
 #include <channel.h>
 #include <commit.h>
 
-bool PICC_channel_acquire_and_register(PICC_PiThread *pt, PICC_Channel *newchan, PICC_KnownSet *chans, int *nb_chans);
+PICC_Channel** PICC_create_empty_channel_array(int maxsize);
+bool PICC_channel_acquire_and_register(PICC_PiThread *pt, PICC_Channel *newchan, PICC_Channel *chans[], int *nb_chans);
 extern PICC_Commit *PICC_try_output_action(PICC_Channel *out_chan, PICC_TryResult *try_result);
 extern PICC_Commit *PICC_try_input_action(PICC_Channel *in_chan, PICC_TryResult *try_result);
 

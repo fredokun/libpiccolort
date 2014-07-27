@@ -87,13 +87,21 @@ void PICC_reclaim_channel(PICC_Channel *channel, PICC_Error *error)
  * @param chans Set of channels to release
  * @param nb_chans
  */
-void PICC_release_all_channels(PICC_KnownSet *chans)
+void PICC_release_all_channels(PICC_Channel **chans, int nb_chans)
 {
-    // /!\ will release all the managed value (for now channel and string)
-    PICC_KnownValue val;
-    PICC_KNOWNSET_FOREACH(chans, val){
-        RELEASE_CHANNEL(val.handle);
+    int i;
+    for (i = 0 ; i < nb_chans ; i++) {
+      RELEASE_CHANNEL(chans[i]);
     }
+    //free(chans);
+}
+
+void PICC_release_all_channels_from_ks(PICC_KnownSet *chans)
+{
+  PICC_KnownValue val;
+  PICC_KNOWNSET_FOREACH(chans, val){
+    RELEASE_CHANNEL(val.handle);
+  }
 }
 
 /**

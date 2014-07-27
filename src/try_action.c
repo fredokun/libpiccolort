@@ -39,21 +39,27 @@
   return true;
 }*/
 
-bool PICC_channel_acquire_and_register(PICC_PiThread *pt, PICC_Channel *newchan, PICC_KnownSet *chans, int *nb_chans)
+PICC_Channel** PICC_create_empty_channel_array(int maxsize)
 {
-  PICC_KnownElement *elem = NULL;
-  elem = PICC_knownset_get_element(chans, (PICC_KnownValue *)newchan);
-  if (elem != NULL) {
-    return true;
+  PICC_Channel** array = (PICC_Channel**)(malloc(maxsize * sizeof(PICC_Channel*)));
+  return array;
+}
+
+bool PICC_channel_acquire_and_register(PICC_PiThread *pt, PICC_Channel *newchan, PICC_Channel **chans, int *nb_chans)
+{
+  int i;
+  for (i = 0 ; i < *nb_chans ; i++) {
+    if (chans[i] == newchan) {
+      return true;
+    }
   }
-  if (! PICC_process_acquire_channel(pt, newchan)) {
+  if (!(PICC_process_acquire_channel(pt, newchan))) {
     return false;
   }
-  PICC_knownset_add(chans, (PICC_KnownValue *)newchan);
-  *nb_chans = *nb_chans + 1;
+  chans[*nb_chans] = newchan;
+  *nb_chans += 1;
   return true;
 }
-    
 
 PICC_Commit *PICC_try_output_action(PICC_Channel *out_chan, PICC_TryResult *try_result)
 {

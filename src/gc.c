@@ -304,7 +304,7 @@ bool PICC_GC2(PICC_SchedPool* sched)
             PICC_release(candidate->lock);
 
             //printf("<GC no clique found, abandon>\n");
-            PICC_release_all_channels(chans); //-> released one by one in the loop
+            PICC_release_all_channels_from_ks(chans); //-> released one by one in the loop
             free(clique);
             free(candidates);
             return false;

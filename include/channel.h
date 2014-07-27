@@ -25,7 +25,8 @@ typedef struct _PICC_Channel PICC_Channel;
 extern PICC_Channel *PICC_create_channel();
 extern PICC_Channel *PICC_create_channel_cn();
 
-extern void PICC_release_all_channels(PICC_KnownSet *chans);
+void PICC_release_all_channels(PICC_Channel**chans, int nb_chans);
+void PICC_release_all_channels_from_ks(PICC_KnownSet *chans);
 extern void PICC_Channel_inv(PICC_Channel *channel);
 
 #endif
