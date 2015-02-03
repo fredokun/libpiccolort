@@ -1,165 +1,126 @@
-/**
- * @file scheduler.c
- * Schedulers.
- *
- * This project is released under MIT License.
- *
- * @author Maxence WO
- * @author Mickaël MENU
- */
-
-#include <gc.h>
-#include <scheduler_repr.h>
-#include <queue_repr.h>
-#include <pi_thread_repr.h>
-#include <tools.h>
-#include <error.h>
+#include <assert.h>
+#include <stdlib.h>
 #include <stdio.h>
+#include "scheduler_impl.h"
+#include "pithread_impl.h"
+#include "queue_impl.h"
+#include "gc2_impl.h"
+#include "errors_impl.h"
 
-#define LOCK_SCHED_POOL(sp) \
-    PICC_acquire(&(sp->lock));
-
-#define RELEASE_SCHED_POOL(sp) \
-    PICC_release(&(sp->lock));
-
-#define WAIT_SCHED_POOL(sp) \
-    PICC_cond_wait(&(sp->cond), &(sp->lock));
-
-#define SIGNAL_SCHED_POOL(sp, error) \
-    PICC_cond_signal(&(sp->cond), error);
-
-#define BROADCAST_SCHED_POOL(sp, error) \
-    PICC_cond_broadcast(&(sp->cond), error);
-
-/**
- * Creates a new scheduler.
- *
- * @param error Error stack
- * @return Created scheduler
- */
-PICC_SchedPool *PICC_create_sched_pool(PICC_Error *error)
+PICC_SchedPool *PICC_schedpool_alloc()
 {
-    PICC_ALLOC(pool, PICC_SchedPool, error) {
-        ALLOC_ERROR(sub_error);
-        pool->ready = PICC_create_ready_queue(&sub_error);
-        pool->wait = PICC_create_wait_queue(&sub_error);
-        if (HAS_ERROR(sub_error)) {
-            ADD_ERROR(error, sub_error, ERR_SCHED_POOL_CREATE);
-            free(pool);
-            pool = NULL;
+  PICC_SchedPool *sp = malloc(sizeof(PICC_SchedPool));
+  if (sp == NULL)
+    PICC_CRASH(ERR_OUT_OF_MEMORY);
+  sp->ready             = PICC_readyqueue_alloc();
+  sp->wait              = PICC_waitqueue_alloc();
+  sp->lock              = malloc(sizeof(pthread_mutex_t));
+  if (sp->lock == NULL)
+    PICC_CRASH(ERR_OUT_OF_MEMORY);
+  pthread_mutex_init(sp->lock, NULL);
+  sp->cond              = malloc(sizeof(pthread_cond_t));
+  if (sp->cond == NULL)
+    PICC_CRASH(ERR_OUT_OF_MEMORY);
+  pthread_cond_init(sp->cond, NULL);
+  sp->nb_slaves         = 0;
+  sp->nb_waiting_slaves = 0;
+  sp->running           = 0;
+  return sp;
+}
+
+void PICC_schedpool_free(PICC_SchedPool *sp)
+{
+  PICC_readyqueue_free(sp->ready);
+  PICC_waitqueue_free(sp->wait);
+  pthread_mutex_destroy(sp->lock);
+  free(sp->lock);
+  pthread_cond_destroy(sp->cond);
+  free(sp->cond);
+  free(sp);
+}
+
+void PICC_schedpool_master(PICC_SchedPool *sp, int std_gc_fuel,
+                           int quick_gc_fuel, int active_factor)
+{
+  PICC_PiThread *current;
+  int gc_fuel = std_gc_fuel;
+
+  while (sp->running) {
+    while ((current = PICC_readyqueue_pop_front(sp->ready))) {
+      do {
+        current->proc(sp, current);
+      } while (current->status == PICC_STATUS_CALL);
+
+      if (current->status == PICC_STATUS_ENDED) {
+        PICC_pithread_free(current);
+      } else if (current->status == PICC_STATUS_BLOCKED) {
+        if (current->safe_choice) {
+          PICC_pithread_free(current);
+          PICC_CRASH(ERR_DEADLOCK);
         } else {
-            pool->nb_slaves = 0;
-            pool->nb_waiting_slaves = 0;
-            pool->running = false;
+          PICC_pithread_free(current);
         }
-        PICC_init_lock(&(pool->lock));
-        PICC_init_condition(&(pool->cond));
+      }
+
+      gc_fuel--;
+      if (gc_fuel == 0) {
+        int max_active = PICC_waitqueue_active_size(sp->wait);
+        PICC_waitqueue_active_reset(sp->wait);
+        if (PICC_waitqueue_size(sp->wait) > max_active * active_factor) {
+          int gc_ok = PICC_gc2(sp);
+
+          if (!gc_ok || PICC_waitqueue_size(sp->wait) > max_active * active_factor)
+            gc_fuel = quick_gc_fuel;
+          else
+            gc_fuel = std_gc_fuel;
+        } else {
+          gc_fuel = std_gc_fuel;
+        }
+      }
     }
-    return pool;
+
+    pthread_mutex_lock(sp->lock);
+    if (sp->nb_waiting_slaves == sp->nb_slaves) {
+      sp->running = 0;
+      pthread_cond_broadcast(sp->cond);
+    }
+    pthread_mutex_unlock(sp->lock);
+  }
 }
 
-/**
- * Creates a new set of arguments to passe to a scheduler.
- *
- * @param sp Scheduler pool
- * @param err Scheduler error stack
- * @param error Error stack
- * @return Created set of arguments
- */
-PICC_Args *PICC_create_args(PICC_SchedPool *sp, PICC_Error *err, PICC_Error *error)
+void *PICC_schedpool_slave(PICC_SchedPool *sp)
 {
-    PICC_ALLOC(args, PICC_Args, error) {
-        args->sched_pool = sp;
-        args->error = err;
+  PICC_PiThread *current;
+
+  while (sp->running) {
+    while ((current = PICC_readyqueue_pop_front(sp->ready))) {
+      do {
+        current->proc(sp, current);
+      } while (current->status == PICC_STATUS_CALL);
+
+      if (current->status == PICC_STATUS_ENDED) {
+        PICC_pithread_free(current);
+      } else if (current->status == PICC_STATUS_BLOCKED) {
+        if (current->safe_choice) {
+          PICC_pithread_free(current);
+          PICC_CRASH(ERR_DEADLOCK);
+        } else {
+          PICC_pithread_free(current);
+        }
+      }
     }
-    return args;
+
+    pthread_mutex_lock(sp->lock);
+    sp->nb_waiting_slaves++;
+    pthread_cond_wait(sp->cond, sp->lock);
+    sp->nb_waiting_slaves--;
+    pthread_mutex_unlock(sp->lock);
+  }
+
+  return NULL;
 }
 
-/**
- * Handles the behavior of secondary real threads in scheduler pool.
- *
- * @param args Arguments containing the scheduler pool and the error stack
- */
-void PICC_sched_pool_slave(PICC_Args *args)
+PICC_ReadyQueue *PICC_sched_get_readyqueue(PICC_SchedPool *sched)
 {
-    PICC_SchedPool *sched_pool = args->sched_pool;
-    PICC_Error *error = args->error;
-
-    PICC_PiThread *current;
-
-    while(sched_pool->running) {
-        while((current = PICC_ready_queue_pop(sched_pool->ready))) {
-            do {
-                current->proc(sched_pool, current);
-            } while(current->status == PICC_STATUS_CALL);
-
-            if (current->status == PICC_STATUS_BLOCKED) // && safe_choice
-                NEW_ERROR(error, ERR_DEADLOCK);
-        }
-
-        LOCK_SCHED_POOL(sched_pool);
-        sched_pool->nb_waiting_slaves++;
-        WAIT_SCHED_POOL(sched_pool);
-        sched_pool->nb_waiting_slaves--;
-        RELEASE_SCHED_POOL(sched_pool);
-    }
-}
-
-/**
- * Handles the main thread in the scheduler pool after the
- * initialisation in the main entry point
- *
- * @param sp the Scheduler pool
- * @param std_gc_fuel the standard garbedge collector fuel
- * @param quick_gc_fuel the quick garbedge collector fuel
- * @param active_factor contributes somehow in the garbedge collection
- * @param error Error stack
- */
-void PICC_sched_pool_master(PICC_SchedPool *sp, int std_gc_fuel, int quick_gc_fuel, int active_factor, PICC_Error *error)
-{
-    PICC_PiThread *current;
-    int gc_fuel = std_gc_fuel;
-
-    while(sp->running) {
-        while((current = PICC_ready_queue_pop(sp->ready))) {
-
-            if (PICC_ready_queue_size(sp->ready) >= 1 && sp->nb_waiting_slaves > 0) {
-                LOCK_SCHED_POOL(sp);
-                SIGNAL_SCHED_POOL(sp, error);
-                RELEASE_SCHED_POOL(sp);
-            }
-
-            do {
-//		printf("PICC_sched_pool_master :- current->proc(sp, current);\n");
-                current->proc(sp, current);
-            } while(current->status == PICC_STATUS_CALL);
-//	    printf("PICC_sched_pool_master :- current->status != PICC_STATUS_CALL\n");
-
-            if (current->status == PICC_STATUS_BLOCKED) // && safe_choice
-                NEW_ERROR(error, ERR_DEADLOCK);
-
-            gc_fuel--;
-            if(gc_fuel == 0){
-                int max_active = PICC_wait_queue_max_active(sp->wait);
-                PICC_wait_queue_max_active_reset(sp->wait);
-                if ( PICC_wait_queue_size(sp->wait) > max_active * active_factor){
-                    bool gc_ok = PICC_GC2(sp);
-
-                    if (!gc_ok || PICC_wait_queue_size(sp->wait) > max_active * active_factor )
-                        gc_fuel = quick_gc_fuel;
-                    else
-                        gc_fuel = std_gc_fuel;
-                } else {
-                    gc_fuel = std_gc_fuel;
-                }
-            }
-        }
-
-        LOCK_SCHED_POOL(sp);
-        if (sp->nb_waiting_slaves == sp->nb_slaves) {
-            sp->running = false;
-            BROADCAST_SCHED_POOL(sp, error);
-        }
-        RELEASE_SCHED_POOL(sp);
-    }
+  return sched->ready;
 }

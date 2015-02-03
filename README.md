@@ -1,9 +1,12 @@
-piccolo-rt — runtime for the the (parallel) piccolo commpiler
-=============================================================
+piccolo-rt — runtime for the the piccolo compiler
+=================================================
 
-To build the library, use make. It will build lib/libpirt.a and the unit tests suite.
+To build and install the piccolo runtime library:
 
-You can run the unit tests with :
+```
+./configure
+make
+make install
+```
 
-	bin/run_tests
-
+"make install" may require superuser privileges.
