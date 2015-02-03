@@ -4,7 +4,7 @@ piccolo-rt — runtime for the the piccolo compiler
 To build and install the piccolo runtime library:
 
 ```
-./configure
+cmake .
 make
 make install
 ```
