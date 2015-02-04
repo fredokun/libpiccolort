@@ -17,6 +17,20 @@ void corearith_sub(PICC_Value *res, PICC_Value *a, PICC_Value *b)
   PICC_intvalue_init(res, a->data.as_int - b->data.as_int);
 }
 
+void corearith_mul(PICC_Value *res, PICC_Value *a, PICC_Value *b)
+{
+  assert(IS_INTEGER(a));
+  assert(IS_INTEGER(b));
+  PICC_intvalue_init(res, a->data.as_int * b->data.as_int);
+}
+
+void corearith_div(PICC_Value *res, PICC_Value *a, PICC_Value *b)
+{
+  assert(IS_INTEGER(a));
+  assert(IS_INTEGER(b));
+  PICC_intvalue_init(res, a->data.as_int / b->data.as_int);
+}
+
 void corearith_mod(PICC_Value *res, PICC_Value *a, PICC_Value *b)
 {
   assert(IS_INTEGER(a));
